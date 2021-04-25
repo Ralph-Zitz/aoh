@@ -1,0 +1,7 @@
+*.log
+*.o
+.DS_Store
+.vscode*
+*.code-workspace
+log/*
+*.old

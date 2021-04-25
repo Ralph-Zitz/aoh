@@ -3007,6 +3007,7 @@ int valid_exec (string name, object ob, object obfrom)
 #endif
       if (tsfrom)
         ob->transfer_ts(tsfrom);
+	  ob->SetTerminal();
       return 1;
     }
     else {
@@ -3016,6 +3017,7 @@ int valid_exec (string name, object ob, object obfrom)
         ob->transfer_ts(tsfrom);
       if (tsto)
         obfrom->transfer_ts(tsto);
+	  ob->SetTerminal();
       return 1;
     }
   }

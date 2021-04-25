@@ -41,6 +41,7 @@ static varargs void buffer_more_handler( string arg, int left );  /* fwd */
 public varargs void receive( string msg, int class, int indent, int time );
 public varargs int CanSee( object env );       /* std/living/description */
 void print_eor();                              /* std/player/telnet_neg  */
+public mixed query_terminal();                 /* std/player/telnet_neg  */
 /* -------------------------------------------------------------------------
  * Global vars - saved
  * -------------------------------------------------------------------------
@@ -61,6 +62,7 @@ public int * pClassHistory;         /* which message classes should be buf'd */
  */
 
 nosave int nobuf;                   /* no buffering */
+nosave string terminal;             /* the actual terminal used by client */
 nosave string incmsg;               /* Incomplete message to print */
 nosave int promptpend;              /* prompt pending flag */
 nosave mixed ** msgbuf;             /* buffer for output */
@@ -102,6 +104,16 @@ public string SetTTY(string str) {
   return tty = str;
 }
 public string QueryTTY(string str) { return tty; }
+
+public string SetTerminal(string str) {
+  mixed term = query_terminal();
+  if (pointerp(term) && sizeof(term) > 1 && sizeof(term[1]) > 0)
+    terminal = term[1][0];
+  else
+    terminal = str;
+  return terminal;
+}
+public string QueryTerminal() { return terminal; }
 
 /* ---------------------------------------------------------------------- */
 

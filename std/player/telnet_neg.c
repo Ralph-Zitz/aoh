@@ -504,6 +504,11 @@ static int query_telnet(int option, mixed sb) {
   return ts[option, TS_STATE];
 }
 
+public mixed query_terminal() {
+  mixed sb;
+  return query_telnet(TELOPT_TTYPE, &sb) ? sb : 0;
+}
+
 static int has_telnet_option(int option, int remote)
 {
     return remote ? (Q_REMOTE(ts[option, TS_STATE]) == YES) : (Q_LOCAL(ts[option, TS_STATE]) == YES);

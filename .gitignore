@@ -5,5 +5,5 @@
 *.code-workspace
 log/*
 *.old
-*.toplist.*
+save/daemons/*
 WIZLIST

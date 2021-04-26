@@ -222,7 +222,7 @@
   ({ "HOPS",          T_NUMBER           }), \
   ({ "O_MUD",         T_STRING           }), \
   ({ "O_USER",        0                  }), \
-  ({ "D_MUD",         T_STRING           }), \
+  ({ "D_MUD",         T_STRING, 0        }), \
   ({ "D_USER",        0                  }), \
   ({ "ML_MUDLIST_ID", T_NUMBER           }), \
   ({ "ML_INFO",       T_MAPPING          }) })

@@ -250,6 +250,7 @@ protected void Help(string *args);         // Print a help command
 protected void TimeOut();
 protected void PrintWelcome();
 private void transfer_gmcp(object player);
+private void transfer_mxp(object player);
 
 //---------------------------------------------------------------------------
 nomask void create ()
@@ -1117,6 +1118,7 @@ StartPlayer(int guestno)
       if (call_resolved(&tmp, obj, "QueryPlayerStarted") && !tmp)
         obj->start_player(lname, 0);
       transfer_gmcp(obj);
+      transfer_mxp(obj);
       destruct(this_object());
       return;
     }
@@ -1163,6 +1165,7 @@ StartPlayer(int guestno)
     obj->start_player(lname, 0);
   }
   transfer_gmcp(obj);
+  transfer_mxp(obj);
   destruct(this_object());
 }
 
@@ -1505,6 +1508,11 @@ static void receive_gmcp(string data)
 private void transfer_gmcp(object player)
 {
     player->transfer_gmcp(gmcp_messages);
+}
+
+private void transfer_mxp(object player)
+{
+    player->init_mxp();
 }
 
 /***************************************************************************/

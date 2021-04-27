@@ -198,6 +198,8 @@ private string client_encoding; // Configured charset
 
 protected void update_encoding();
 static void ping_no_answer(object ob);
+static int has_telnet_option(int option, int remote);
+public void init_mxp();
 
 // TODO: it's not quite complete
 private string telnet_to_text(int command, int option, int* args) {
@@ -509,9 +511,17 @@ public mixed query_terminal() {
   return query_telnet(TELOPT_TTYPE, &sb) ? sb : 0;
 }
 
+public mixed QueryMXP() {
+  return has_telnet_option(TELOPT_MXP, 1);
+}
+
+public mixed QueryGMCP() {
+  return has_telnet_option(TELOPT_GMCP, 0);
+}
+
 static int has_telnet_option(int option, int remote)
 {
-    return remote ? (Q_REMOTE(ts[option, TS_STATE]) == YES) : (Q_LOCAL(ts[option, TS_STATE]) == YES);
+  return remote ? (Q_REMOTE(ts[option, TS_STATE]) == YES) : (Q_LOCAL(ts[option, TS_STATE]) == YES);
 }
 
 // Telnet protocoll violations end up here
@@ -1768,8 +1778,8 @@ private void start_mxp(int command, int option)
 
     ts[TS_EXTRA, TSE_LOG] += "* Sending MXP initialization\n";
     send(({ IAC, SB, TELOPT_MXP, IAC, SE }));
-    efun::binary_message(to_array("\e[7z")); // Lock to locked mode for now.
-
+//    efun::binary_message(to_array("\e[7z")); // Lock to locked mode for now.
+//    init_mxp();
     this_object()->init_mxp();
 }
 
@@ -1919,8 +1929,8 @@ public string query_telnet_client(int flag_size, int flag_prot)
     }
     else
     {
-        prot = ({int})this_object()->has_mxp()?" MXP":"";
-        prot+= ({int})this_object()->has_gmcp()?" GMCP":"";
+        prot = ({int})this_object()->QueryMXP()?" MXP":"";
+        prot+= ({int})this_object()->QueryGMCP()?" GMCP":"";
     }
     if (!flag_size)
     {

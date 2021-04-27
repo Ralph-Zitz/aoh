@@ -47,6 +47,7 @@ private void char_items_add(string ctrl, mapping mv_infos) ;
 private void char_items_remove(string ctrl, mapping mv_infos);
 static int dump_gmcp_log();
 static int update_points_display();
+public mixed QueryGMCP();
 
 nosave mapping packages = ([:1]);
 nosave mapping editfiles = ([:3]);
@@ -189,15 +190,15 @@ static void receive_gmcp(string data)
   }
 #endif
 }
-
-static int has_gmcp()
+/*
+static int QueryGMCP()
 {
   return ({int})this_object()->has_telnet_option(TELOPT_GMCP, 0);
 }
-
+*/
 static void init_gmcp()
 {
-  if (!has_gmcp())
+  if (!QueryGMCP())
     return;
   send_gmcp("Core", "Hello", ([ "name": MUDNAME ]));
   add_action(#'dump_gmcp_log /*'*/, "gmcp");
@@ -378,7 +379,7 @@ static varargs void process_gmcp(mapping attributes,string package, string messa
 #define PRINT_STAT(x) to_string(x)
 static int update_points_display()
 {
-  if (!interactive() || !has_gmcp() || !member(packages, "char"))
+  if (!interactive() || !QueryGMCP() || !member(packages, "char"))
     return 0;
   int my_sp = ({int})this_object()->Query(P_SP);
   int my_hp = ({int})this_object()->Query(P_HP);

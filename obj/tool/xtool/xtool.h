@@ -8,9 +8,9 @@
 
 #if MUD_NF || MUD_MG || MUD_OSB
 #if MUD_NF || MUD_OSB
-inherit "std/base";
+inherit "/std/thing";
 #else
-inherit "std/thing/properties";
+inherit "/std/thing/properties";
 #endif
 #include <properties.h>
 #include <moving.h>
@@ -237,7 +237,7 @@ int Xupdate(string str);
 int Xwho(string opt);
 int id(string str);
 int inventory();
-int move(mixed dest);
+varargs int move(mixed dest);
 int security();
 int write_newinvobj(object who);
 int write_newenvobj(object who);
@@ -273,8 +273,8 @@ string PlayerRace(object obj, int flag);
 string PlayerSnoop(object obj, int flag);
 string PlayerStats(object obj, int flag);
 string PlayerWho(object obj);
-string QueryLong();
-string QueryShort();
+varargs string QueryLong();
+varargs string QueryShort();
 string VarToFile(string str);
 string VarToPureFile(string str);
 string XFile(string file);

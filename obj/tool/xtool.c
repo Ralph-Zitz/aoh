@@ -979,7 +979,7 @@ void XMsgShout(string str) {
  * own object moving
  */
 
-int move(mixed dest) {
+varargs int move(mixed dest) {
   move_object(TO, cloner?cloner:dest);
   return TRUE;
 }
@@ -1019,7 +1019,7 @@ int id(string str) {
  * short and long description
  */
 
-string QueryShort() {
+varargs string QueryShort() {
   if(cloner) {
     if((!security())&&MODE(MODE_SCANCHK))
       WDLN(CRNAME(RTP)+" scanned you (short) ["+query_verb()+"] "+
@@ -1030,14 +1030,14 @@ string QueryShort() {
   return TOOL_TITLE;
 }
 
-string QueryLong() {
+varargs string QueryLong() {
   if(cloner&&!security()&&MODE(MODE_SCANCHK)) {
     WDLN(CRNAME(RTP)+" scanned you (long) ["+query_verb()+"] "+
 	 (PREV ? ObjFile(PREV) : "[destructed object]"));
   }
   return "Just a simple wizard tool created by Hyp. "+
 #ifdef MUD_OSB
-    "(OSB version).\n"+
+    "(AoH version).\n"+
 #else
 #ifdef MUD_NF
     "(Nightfall version).\n"+
@@ -1080,19 +1080,19 @@ string _query_long() {
 #endif
 
 #if MUD_NF
-string Short() {
+varargs string Short() {
   return QueryShort();
 }
 
-string InvShort() {
+varargs string InvShort() {
   return Short() || "";
 }
 
-string Long() {
+varargs string Long() {
   return QueryLong();
 }
 
-string ExaLong() {
+varargs string ExaLong() {
   return QueryLong();
 }
 #endif
@@ -1207,8 +1207,10 @@ void update_tool(mixed *args, object obj) {
 
 #if MUD_NF || MUD_MG
 void create() {
-#if MUD_NF
+#if !MUD_NF
   base::create();
+#elif MUD_OSB
+  thing::create();
 #endif
   initialize_globals();
   if(member(object_name(), '#')<0)
@@ -1223,7 +1225,8 @@ int clean_up (int refs) {
     return 1;
   if (refs >= 1)
     return 1;
-  return base::clean_up(refs);
+  return thing::clean_up(refs);
+  //return base::clean_up(refs);
 }
 #endif
 #endif

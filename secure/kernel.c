@@ -79,6 +79,7 @@
 #include "/secure/kernel/query_editing.ic"
 #include "/secure/kernel/query_input_pending.ic"
 #include "/secure/kernel/query_idle.ic"
+#include "/secure/kernel/process_mxp.ic"
 #else
 #include "/secure/sparekernel/compat.ic"
 #include "/secure/sparekernel/terminal_colour.ic"
@@ -107,6 +108,7 @@
 #include "/secure/sparekernel/query_editing.ic"
 #include "/secure/sparekernel/query_input_pending.ic"
 #include "/secure/sparekernel/query_idle.ic"
+#include "/secure/sparekernel/process_mxp.ic"
 #endif
 
 /*-------------------------------------------------------------------------*/

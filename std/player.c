@@ -78,6 +78,7 @@ inherit "std/player/objects";
 inherit "std/player/soul";
 inherit "std/player/telnet_neg";
 inherit "std/player/gmcp";
+inherit "std/player/mxp";
 inherit "std/base";
 
 /* *************************************************************************

@@ -190,12 +190,7 @@ static void receive_gmcp(string data)
   }
 #endif
 }
-/*
-static int QueryGMCP()
-{
-  return ({int})this_object()->has_telnet_option(TELOPT_GMCP, 0);
-}
-*/
+
 static void init_gmcp()
 {
   if (!QueryGMCP())

@@ -179,8 +179,10 @@ public varargs mixed LookFor (mixed what, int impl)
     msg = "You did not find as much things as you though you could.\n";
 
   // Construct the message for the items not being located.
-  if (j = sizeof(tmp = found[FOUND_IDS]))
+  if (j = sizeof(tmp = found[FOUND_IDS])) {
     msg = msg+implode_list(tmp, "You don't find ", ".", " or");
+    tmp = ({});
+  }
   else if (!sizeof(what))
   {
     if (Query(P_BLIND)) msg += "Being blind doesn't help you.\n";

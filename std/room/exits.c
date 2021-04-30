@@ -24,9 +24,11 @@
 #include <doors.h>
 #include <moving.h>
 #include <features.h>
+#include <mxp.h>
 
 #define TO           this_object()
 #define TP           this_player()
+#define TPMXP        ({int})this_player()->QueryMXP()
 #define NAME         ({string})TP->QueryName()
 #define PREV         previous_object()
 
@@ -748,7 +750,8 @@ public varargs string MakeExitString (int brief, string * dirs, string kind) {
 
   if (brief) {
     dirs = map(dirs, #'map_brief_exit /*'*/);
-    return implode(dirs, ",");
+    dirs = map(dirs, (: MXPTAG("Ex") + $1 + MXPTAG("/Ex") :));
+    return process_mxp(MXPTAG("RExits") + implode(dirs, ",") + MXPTAG("/RExits"), TPMXP);
   }
 
   tok = QueryExitStrings() || ({});
@@ -756,15 +759,20 @@ public varargs string MakeExitString (int brief, string * dirs, string kind) {
     tok += ({"There is", "exit", "There are", "exits"})[sizeof(tok)..];
 
   switch(s = sizeof(dirs)) {
-    case 0: return tok[2]+" no "+kind+tok[3]+".\n";
-    case 1: return tok[0]+" one "+kind+tok[1]+": " + dirs[0] + ".\n";
+    case 0: return process_mxp(MXPTAG("RExits") +
+              tok[2]+" no "+kind+tok[3]+"." +
+              MXPTAG("/RExits"), TPMXP) + "\n";
+    case 1: return process_mxp(MXPTAG("RExits") +
+              tok[0]+" one "+kind+tok[1]+": " + MXPTAG("Ex") + dirs[0] + MXPTAG("/Ex")+ "." +
+              MXPTAG("/RExits"), TPMXP) + "\n";
     case 2..10:
       str = tok[2]+" "+NUMBER(s)+" "+kind+tok[3]+": ";
       break;
     default:
       str = tok[2]+" many "+kind+tok[3]+": ";
   }
-  return str+implode(dirs[0..<2], ", ")+" and "+dirs[<1]+"."+"\n";
+  dirs = map(dirs, (: MXPTAG("Ex") + $1 + MXPTAG("/Ex") :));
+  return process_mxp(str+implode(dirs[0..<2], ", ")+" and "+dirs[<1]+".", TPMXP)+"\n";
 }
 
 public varargs string MakeDoorString(int brief, object * doors, string kind) {

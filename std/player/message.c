@@ -15,6 +15,7 @@
 #pragma no_range_check
 
 #include <msgclass.h>
+#include <mxp.h>
 #include <properties.h>
 #include <secure/wizlevels.h>
 #include <daemons.h>
@@ -28,6 +29,9 @@
 
 /* the max. size of the user-definable class-dep. history */
 #define MAX_MSG_HISTORY 20
+
+/* Do we support MXP?  */
+#define TOMXP ({int})TO->QueryMXP()
 
 /* -------------------------------------------------------------------------
  * Prototypes
@@ -541,7 +545,7 @@ public mixed print_prompt() {
       value = incmsg + "\n" + value;
       incmsg = 0;
     }
-
+    value = process_mxp(sprintf("%s%s%s", MXPTAG("Prompt"), value, MXPTAG("/Prompt")), TOMXP);
     /* translate the color macros and do the output */
     efun::tell_object( this_object(), translate( value, CMSG_GENERIC, 0 ) );
   }

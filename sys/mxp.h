@@ -3,15 +3,15 @@
 
 /* strings */
 
-#define MXP_BEG "\x03"    /* becomes < */
-#define MXP_END "\x04"    /* becomes > */
-#define MXP_AMP "\x05"    /* becomes & */
+#define MXP_BEG "\x03"
+#define MXP_END "\x04"
+#define MXP_AMP "\x05"
 
 /* characters */
 
-#define MXP_BEGc '\x03'    /* becomes < */
-#define MXP_ENDc '\x04'    /* becomes > */
-#define MXP_AMPc '\x05'    /* becomes & */
+#define MXP_BEGc '\x03'
+#define MXP_ENDc '\x04'
+#define MXP_AMPc '\x05'
 
 /* constructs an MXP tag with < and > around it */
 

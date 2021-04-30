@@ -9,9 +9,11 @@
 #include <properties.h>
 #include <msgclass.h>
 #include <daemons.h>
+#include <mxp.h>
 
 #define TO this_object()
 #define TP this_player()
+#define TPMXP ({int})this_player()->QueryMXP()
 #define THIS this_object()
 
 public string * filterExtra (string prop); // std/thing/description
@@ -55,6 +57,7 @@ public string SetRoomShort(string str) {
          , previous_object()),1);
   return SetIntShort(str);
 }
+
 public string SetRoomLong(string str) {
   CHANNEL_D->SendStr("error", object_name(this_object()),
     sprintf("Obsolete function SetRoomLong() called by %O."
@@ -66,15 +69,21 @@ public string SetRoomLong(string str) {
 
 public varargs string IntLong(string what)  {
   mixed rc;
-  return process_string((pointerp(rc = QueryIntLong()) ? rc[0] : rc)
-         +implode(filterExtra(P_INT_LONG), ""));
+  return process_mxp(MXPTAG("RDesc") +
+           process_string((pointerp(rc = QueryIntLong()) ? rc[0] : rc) +
+           implode(filterExtra(P_INT_LONG), "")) +
+           MXPTAG("/RDesc"), TPMXP);
 }
+
 public varargs string ExaIntLong(string what)  {
   mixed rc;
-  return process_string((pointerp(rc = QueryIntLong()) ? rc[1]
-                                       : "You see nothing special.\n"+rc)
-         +implode(filterExtra(P_INT_LONG), ""));
+  return process_mxp(MXPTAG("RDesc") +
+           process_string((pointerp(rc = QueryIntLong()) ? rc[1]
+                                       : "You see nothing special.\n"+rc) + 
+           implode(filterExtra(P_INT_LONG), "")) +
+           MXPTAG("/RDesc"), TPMXP);
 }
+
 public varargs string IntShort(string what) {
   string sh;
   if (!(sh = QueryIntShort()) || sh == "")
@@ -101,6 +110,7 @@ public varargs string IntNoise(string what)
       return desc != "" ? desc : 0;
    }
 }
+
 public varargs string IntSmell(string what)
 {
    if(what)

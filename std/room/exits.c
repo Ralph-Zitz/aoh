@@ -751,7 +751,8 @@ public varargs string MakeExitString (int brief, string * dirs, string kind) {
   if (brief) {
     dirs = map(dirs, #'map_brief_exit /*'*/);
     dirs = map(dirs, (: MXPTAG("Ex") + $1 + MXPTAG("/Ex") :));
-    return process_mxp(MXPTAG("RExits") + implode(dirs, ",") + MXPTAG("/RExits"), TPMXP);
+    return MXPTAG("RExits") + implode(dirs, ",") + MXPTAG("/RExits");
+//    return process_mxp(MXPTAG("RExits") + implode(dirs, ",") + MXPTAG("/RExits"), TPMXP);
   }
 
   tok = QueryExitStrings() || ({});
@@ -759,12 +760,20 @@ public varargs string MakeExitString (int brief, string * dirs, string kind) {
     tok += ({"There is", "exit", "There are", "exits"})[sizeof(tok)..];
 
   switch(s = sizeof(dirs)) {
+    case 0: return MXPTAG("RExits") +
+              tok[2]+" no "+kind+tok[3]+"." +
+              MXPTAG("/RExits") + "\n";
+    case 1: return MXPTAG("RExits") +
+              tok[0]+" one "+kind+tok[1]+": " + MXPTAG("Ex") + dirs[0] + MXPTAG("/Ex")+ "." +
+              MXPTAG("/RExits") + "\n";
+/*
     case 0: return process_mxp(MXPTAG("RExits") +
               tok[2]+" no "+kind+tok[3]+"." +
               MXPTAG("/RExits"), TPMXP) + "\n";
     case 1: return process_mxp(MXPTAG("RExits") +
               tok[0]+" one "+kind+tok[1]+": " + MXPTAG("Ex") + dirs[0] + MXPTAG("/Ex")+ "." +
               MXPTAG("/RExits"), TPMXP) + "\n";
+*/
     case 2..10:
       str = tok[2]+" "+NUMBER(s)+" "+kind+tok[3]+": ";
       break;
@@ -772,7 +781,8 @@ public varargs string MakeExitString (int brief, string * dirs, string kind) {
       str = tok[2]+" many "+kind+tok[3]+": ";
   }
   dirs = map(dirs, (: MXPTAG("Ex") + $1 + MXPTAG("/Ex") :));
-  return process_mxp(str+implode(dirs[0..<2], ", ")+" and "+dirs[<1]+".", TPMXP)+"\n";
+  return str+implode(dirs[0..<2], ", ")+" and "+dirs[<1]+".\n";
+//  return process_mxp(str+implode(dirs[0..<2], ", ")+" and "+dirs[<1]+".", TPMXP)+"\n";
 }
 
 public varargs string MakeDoorString(int brief, object * doors, string kind) {

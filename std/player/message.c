@@ -401,7 +401,7 @@ public varargs void receive( string msg, int class, int indent, int time ) {
     }
 
     msg = translate( msg, class, indent );
-    efun::tell_object( this_object(), msg );
+    efun::tell_object( this_object(), process_mxp(msg, TOMXP) );
   }
 }
 

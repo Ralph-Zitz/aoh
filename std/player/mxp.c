@@ -14,8 +14,10 @@ public void init_mxp() {
 
   // Switch to "permanent secure" mode, MXP tags now enabled
   efun::write(process_mxp(MXPMODE(6), QueryMXP()));
-  efun::write(process_mxp(MXPMODE(6) + MXPTAG("VERSION"), QueryMXP()));
-  efun::write(process_mxp(MXPMODE(6) + MXPTAG("SUPPORT"), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("VERSION"), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("SUPPORT"), QueryMXP()));
+//  efun::write(process_mxp(MXPMODE(6) + MXPTAG("VERSION") + "\n", QueryMXP()));
+//  efun::write(process_mxp(MXPMODE(6) + MXPTAG("SUPPORT") + "\n", QueryMXP()));
   efun::write(process_mxp(MXPTAG("!-- Set up MXP elements --"), QueryMXP()));
   efun::write(process_mxp(MXPTAG("!ELEMENT RNum FLAG=\"RoomNum\" ATT=\"id\" EMPTY"), QueryMXP()));
   efun::write(process_mxp(MXPTAG("!ELEMENT RName FLAG=\"RoomName\""), QueryMXP()));

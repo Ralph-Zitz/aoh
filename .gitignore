@@ -1,5 +1,6 @@
 *.log
 *.o
+*.back
 .DS_Store
 .vscode*
 *.code-workspace

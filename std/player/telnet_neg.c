@@ -112,6 +112,7 @@
 #include <secure/wizlevels.h>
 #include <driver/driver_info.h>
 #include <driver/debug_message.h>
+#include <driver/regexp.h>
 #include <properties.h>
 #include <msgclass.h>
 
@@ -2034,9 +2035,58 @@ nomask int ping_command(string str)
   return 1;
 }
 
+nomask int mxp_hook(string m)
+{
+  string v;
+  if (stringp(v = query_verb()) && sizeof(v) > 3 && v[0..3] == "\e[1z")
+  {
+    if (sizeof(v) > 5 && v[5..<1] == "SUPPORTS")
+    {
+      string * ena_mxp = ({});
+      string * dis_mxp = ({});
+      string * all_mxp = ({});
+
+      if (m[<1..] == ">")
+        m = m[..<2];
+      all_mxp = explode(m, " ");
+      ena_mxp = map(filter(all_mxp, (: $1[0] == '+' :)), (: $1[1..]:));
+      dis_mxp = map(filter(all_mxp, (: $1[0] == '-' :)), (: $1[1..]:));
+      this_object()->SetEnabledMXPSupportInfo(ena_mxp);
+      this_object()->SetDisabledMXPSupportInfo(dis_mxp);
+      return 1;
+/*
+      msg_write(CMSG_GENERIC, "Enabled MXP features: " +
+              (sizeof(ena_mxp) == 0 ? "None" : implode(ena_mxp, ", ")) + "\n");
+      msg_write(CMSG_GENERIC, "Disabled MXP features: " +
+              (sizeof(dis_mxp) == 0 ? "None" : implode(dis_mxp, ", ")) + "\n" );
+*/
+    }
+    else if (sizeof(v) > 5 && v[5..] == "VERSION") {
+      string * all_exp = ({});
+      string * exp_s = ({});
+      mapping mp = ([]);
+      string patt = "\\b(MXP|VERSION|CLIENT)\\b";
+      
+      if (m[<1..] == ">")
+        m = m[..<2];
+      all_exp = explode(m, " ");
+      all_exp = regexp(all_exp, patt, RE_PCRE);
+      foreach (string s : all_exp) {
+          exp_s = explode(s, "=");
+          mp += ([exp_s[0] : exp_s[1]]);
+      }
+      this_object()->SetMXPVersion(mp);
+      return 1;
+    }
+    return 0;
+  }
+  else return 0;
+}
+
 protected void add_actions()
 {
     add_action("ping_command", "ping");
     add_action("_dumptelnegs", "telneg");
     add_action("set_client_encoding", "encoding");
+    add_action("mxp_hook", "", 1);
 }

@@ -139,8 +139,8 @@ private void remove_data()
   if (! (GetData( MORE_MODE ) & MORE_QUIET) )
   {
     msg_say( CMSG_ROOM,
-      ({string})this_player()->Query(P_NAME)+
-      "'s view focuses again on this reality.\n" );
+      add_gen(({string})this_player()->Query(P_NAME))+
+      " view focuses again on this reality.\n" );
   }
   if ( ! data ) return;
   m_delete( data, ({string})this_player()->Query(P_REALNAME) );
@@ -546,7 +546,7 @@ varargs int more ( mixed fname, int mode, int chunk, int itrans,
   // if we got the flag to show the last eof do not exit right now
   if ( (!(mode & MORE_PROMPTLAST)) &&  (lines<=0) )
   {
-      //msg_write( CMSG_GENERIC|MMSG_DIRECT, "=== EOF.\n" );
+      msg_write( CMSG_GENERIC|MMSG_DIRECT, "=== EOF.\n" );
       remove_data();
       remote_call(fun,ob);
       return 1;
@@ -940,7 +940,7 @@ public void even_more ( string str, int showeof )
 
   if (lines==0)
   {
-      //msg_write( CMSG_GENERIC|MMSG_DIRECT, "=== EOF!\n" );
+      msg_write( CMSG_GENERIC|MMSG_DIRECT, "=== EOF!\n" );
       fun=GetData(MORE_FUNCTION);
       ob=GetData(MORE_OBJECT);
       remove_data();
@@ -949,7 +949,7 @@ public void even_more ( string str, int showeof )
   }
   else if (lines<0 && !showeof)
   {
-      //msg_write( CMSG_GENERIC|MMSG_DIRECT, "=== EOF\n" );
+      msg_write( CMSG_GENERIC|MMSG_DIRECT, "=== EOF\n" );
       fun=GetData(MORE_FUNCTION);
       ob=GetData(MORE_OBJECT);
       remove_data();

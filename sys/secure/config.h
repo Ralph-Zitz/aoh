@@ -31,8 +31,12 @@
 
 /* Define default LPC statements to be incorporated into _every_ program here.
  * These are:
- *   #pragma combine_strings
- *   #pragma verbose_errors
+ *   #pragma strict_types
+ *   #pragma pedantic
+ *   #pragma save_types
+ *   #pragma rtt_checks
+ *   #pragma range_check
+ *   #pragma warn_unused_variables
  *   #define NIGHTFALL 2
  *   #define ONESTEPBEYOND 0
  *   #include "/sys/secure/config.h"

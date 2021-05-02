@@ -2053,13 +2053,11 @@ nomask int mxp_hook(string m)
       dis_mxp = map(filter(all_mxp, (: $1[0] == '-' :)), (: $1[1..]:));
       this_object()->SetEnabledMXPSupportInfo(ena_mxp);
       this_object()->SetDisabledMXPSupportInfo(dis_mxp);
-      return 1;
-/*
       msg_write(CMSG_GENERIC, "Enabled MXP features: " +
               (sizeof(ena_mxp) == 0 ? "None" : implode(ena_mxp, ", ")) + "\n");
       msg_write(CMSG_GENERIC, "Disabled MXP features: " +
               (sizeof(dis_mxp) == 0 ? "None" : implode(dis_mxp, ", ")) + "\n" );
-*/
+      return 1;
     }
     else if (sizeof(v) > 5 && v[5..] == "VERSION") {
       string * all_exp = ({});
@@ -2076,6 +2074,7 @@ nomask int mxp_hook(string m)
           mp += ([exp_s[0] : exp_s[1]]);
       }
       this_object()->SetMXPVersion(mp);
+      msg_write(CMSG_GENERIC, sprintf("Client: %s\n", mp["CLIENT"]));
       return 1;
     }
     return 0;

@@ -6,4 +6,5 @@
 log/*
 *.old
 save/daemons/*
+secure/save/*
 WIZLIST

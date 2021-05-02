@@ -19,7 +19,7 @@
 #define LOCAL_UDP_PORT  query_udp_port()  // usually 4246
 
 /* Ports served by other programs */
-#define FTP_PORT    4243   // login port for mudftp
+#define FTP_PORT    2346   // login port for mudftp
 #define HTTP_PORT   8080   // access port for normal http requests
 
 #endif /* _SECURE_PORTS_ */

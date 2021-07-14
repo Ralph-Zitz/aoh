@@ -693,7 +693,10 @@ ParseInput (string input)
    || "help'" == words[0]
      )
   {
-    return ({ "help" }) + words[1..];
+    if (sizeof(words) > 0)
+      return ({ "help" }) + words[1..];
+    else
+      return ({ "help" });
   }
 
   // Parse for 'create', 'restore' or 'login'

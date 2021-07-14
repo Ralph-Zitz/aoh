@@ -754,7 +754,7 @@ InitialLogin(string input)
 
   // Parse and evaluate the command line.
   cmd = ParseInput(input);
-  if (!sizeof(cmd))
+  if (!sizeof(cmd) || sizeof(cmd[0]) < 2)
   {
     write("Sorry, I don't understand.\n" INITIAL);
     input_to(#'InitialLogin /*'*/, 0);

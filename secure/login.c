@@ -721,7 +721,7 @@ InitialLogin(string input)
 {
   mixed *cmd;
 
-  if (!interactive(this_object()) || retries-- <= 0)
+  if (!interactive(this_object()) || retries-- <= 0 || sizeof(input) == 0)
   {
     destruct(this_object());
     return;

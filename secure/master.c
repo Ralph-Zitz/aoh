@@ -607,8 +607,8 @@ string *full_path_array (string path, string user)
 
 #define PATH_ARRAY(x) (efun::explode(x, "/")-({"","."}))
 
-  if(!path)
-    path="";
+  if(!path || path == "")
+    path=" ";
   switch(path[0]) {
   case '/':
     if(sizeof(path) == 1) return ({});
@@ -651,6 +651,7 @@ string *full_path_array (string path, string user)
     strs=({WDIR})+PATH_ARRAY(path[1..]);
     break;
   default:
+    if(path == " ") path = "";
     if(user && TP && USERNAME(TP) == user)
       strs=PATH_ARRAY(({string})TP->QueryCurrentDir()+"/"+path);
     else

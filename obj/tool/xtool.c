@@ -567,7 +567,7 @@ void MoreFile(string str) {
 
   SECURE1();
   if(str) {
-    if(term) /*W("\e[1m");*/ W("M[1M");
+    if(term) W("\e[1m"); //W("M[1M");
     switch(str[0]) {
     case 'q':
     case 'x':

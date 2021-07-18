@@ -567,7 +567,8 @@ void MoreFile(string str) {
 
   SECURE1();
   if(str) {
-    if(term) W("\e[1m"); //W("M[1M");
+    if(term) W("\e[1m");
+    if(!str) str = " ";
     switch(str[0]) {
     case 'q':
     case 'x':
@@ -588,6 +589,7 @@ void MoreFile(string str) {
     case 'N':
       moreoffset+=morelines;
     case 0:   /* RETURN */
+    case ' ':
     case 'd':
     case 'n':
       if(moreflag) {

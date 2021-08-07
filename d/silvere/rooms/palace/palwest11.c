@@ -86,7 +86,7 @@ string make_rack_string(string weap){
 // look at the racks
 string look_racks() {
   string *str;
-  int i,s;
+  int s;
   string *weapons;
   weapons=({});
   weapons = ({v_sword,v_axe,v_knife,v_cudgel,v_spear});
@@ -149,7 +149,7 @@ string make_shelf_string(string armo){
 // look at the shelves
 string look_shelves() {
   string *str;
-  int i,s;
+  int s;
   string *armour;
   armour=({});
   armour = ({v_mail,v_shield,v_helmet});

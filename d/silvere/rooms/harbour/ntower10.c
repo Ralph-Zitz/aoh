@@ -49,7 +49,7 @@ int PullHandle(string str)
       if(catapult_loaded)
       {
          string desc;
-         object item, room, liv;
+         object room, liv;
 
          if(catapult_aim==0)
          {

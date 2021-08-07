@@ -279,7 +279,7 @@ public void IssueLeaveMessages(object pl, mixed to, int method, mixed extra) {
   case M_GO:
     msgout = ({mixed})pl->QueryMsgOut() || "leaves";
     movemsg += (stringp(msgout) ? msgout : msgout[0]) + moveextra;
-    altmsg = (pointerp(msgout) ? msgout[1] : (altmsg+"disappears"))+altextra;
+    altmsg = ((pointerp(msgout) && sizeof(msgout) > 1) ? msgout[1] : (altmsg+"disappears"))+altextra;
     break;
   case M_TELEPORT:
     msgout = ({mixed})pl->QueryMMsgOut() || "leaves";

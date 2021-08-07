@@ -103,6 +103,7 @@ void create() {
   body::create();
   combat::create();
   restrictions::create();
+  chat::create();
   AddClassId(C_LIVING);
   AddClassId(C_NPC);
   Set(P_HELP_MSG, "");

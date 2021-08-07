@@ -236,7 +236,7 @@ public mapping SetReadMsgs(mapping map);
 public mixed fsky(string str) {
   mixed in;
 
-  if (in = ({int})this_object()->QueryOutdoors())
+  if (in = ({mixed})this_object()->QueryOutdoors())
     return ({mixed})in->QueryStateDesc();
 
   return "What sky? There are just walls!\n";
@@ -245,7 +245,7 @@ public mixed fsky(string str) {
 public mixed fstar(string str) {
   mixed in;
 
-  if (in = ({int})this_object()->QueryOutdoors()) {
+  if (in = ({mixed})this_object()->QueryOutdoors()) {
     switch (({int})in->QueryState()) {
     case ND_NIGHT:
       return "Little spots of light against the black of the universe.\n";

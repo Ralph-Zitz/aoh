@@ -400,7 +400,8 @@ int socket_close(int ufd) {
   if (!intp(ufd)) RAISE_ERROR("Bad argument 1 to socket_close()\n");
   if (PO && PO != ME) {
     if (!m_contains(&fd, used_fd, ufd) || PO != sockets[fd, S_SOCKOBJ])
-      RAISE_ERROR("privilege violation: socket_close()\n");
+        if (!m_contains(&fd, used_fd, ufd)) return 0; //vanished
+    RAISE_ERROR("privilege violation: socket_close()\n");
   } else {
     if (!m_contains(&fd, used_fd, ufd)) return 0; //vanished
   }

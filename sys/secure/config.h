@@ -122,6 +122,6 @@
 #define LOG_KILLS
 
 /* Adjust local time */
-#define TIME_DELTA 7200
+#define TIME_DELTA 0
 
 #endif /* _SECURE_CONFIG_ */

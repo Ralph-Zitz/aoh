@@ -50,7 +50,7 @@ int won(string str) {
      return 1;
   }
   for (i=0; i<sizeof(possible); i++) 
-      if (("/lib/string"->ladjcut(possible[i],3) == str) ||
+      if ((({string})"/lib/string"->ladjcut(possible[i],3) == str) ||
           possible[i] == str) { 
             write("Ok.\n"); 
             turned_on += ({possible[i]}); 
@@ -73,7 +73,7 @@ int woff(string str) {
      return 1;
   }
   for (i=0; i<sizeof(turned_on); i++) 
-      if (("/lib/string"->ladjcut(turned_on[i],3) == str) ||
+      if ((({string})"/lib/string"->ladjcut(turned_on[i],3) == str) ||
           turned_on[i] == str) { 
             write("Ok.\n"); 
             turned_on -= ({turned_on[i]}); 
@@ -109,15 +109,15 @@ from a wizard's directory. Try /obj/tool.\n");
  AddId("wizards belt");
  wsay="Player";
  seteuid(getuid(this_object()));
- wname = this_player()->QueryName() + "'s belt of wizards";
+ wname = add_gen(({string})this_player()->QueryName()) + " belt of wizards";
  if (sizeof(explode(object_name(this_object()),"#"))==2) {
-   if (file_size("/players/"+this_player()->QueryRealName()+"/startup.c")>=0) 
-      call_other("/players/"+this_player()->QueryRealName()+"/startup",
+   if (file_size("/players/"+({string})this_player()->QueryRealName()+"/startup.c")>=0) 
+      call_other("/players/"+({string})this_player()->QueryRealName()+"/startup",
       "startup");
  }
 }
 
-string QueryShort() { return wname; }
+varargs string QueryShort() { return wname; }
 
 void init() {
   ::init();
@@ -177,13 +177,13 @@ int wmacro(string arg) {
 int wquit() {
  object *objs;
  int i;
- if (file_size("/players/"+this_player()->QueryRealName()+"/startup.c")>=0)
-     call_other("/players/"+this_player()->QueryRealName()+"/startup","quit");
+ if (file_size("/players/"+({string})this_player()->QueryRealName()+"/startup.c")>=0)
+     call_other("/players/"+({string})this_player()->QueryRealName()+"/startup","quit");
  objs = deep_inventory(this_player());
  for (i=0; i<sizeof(objs); i++) {
-     if (!objs[i]->Query(P_AUTOOBJECT)) objs[i]->remove();
+     if (!({mixed})objs[i]->Query(P_AUTOOBJECT)) objs[i]->remove();
  }
- if (this_player()->QueryHome())
+ if (({string})this_player()->QueryHome())
      this_player()->move(this_player()->QueryHome(), M_TELEPORT);
  this_player()->command_me("quit");
  return 1;
@@ -233,7 +233,6 @@ int bright(string str) {
 }
 
 int ac(string str) {
-  int i;
   if (!Allowed()) return 1;
 //  if (!str) {write("AC is "+QueryAC()+".\n"); return 1; }
 //  if (sscanf(str,"%d",i)>0) SetAC(i);
@@ -251,7 +250,7 @@ int lsay(string str) {
    string text;
    if (!Allowed()) return 1;
    if (!str) text = ""; else text = str;
-   say(this_player()->QueryName()+" says: "+text+"\n");
+   say(({string})this_player()->QueryName()+" says: "+text+"\n");
    write("Started lsay. Give '.' to stop.\n");
    write("#");
    input_to("lsay_more");
@@ -293,7 +292,7 @@ int wedit(string str) {
   string fname;
   fname = WFindFile(str);
   edit_file = fname;
-  say(this_player()->QueryName()+" starts editing a file. Don't disturb!\n");
+  say(({string})this_player()->QueryName()+" starts editing a file. Don't disturb!\n");
   editor::start_ed(edit_file, this_player());
   return 1;
 }
@@ -316,7 +315,7 @@ void SaveAs(string name, string *lines) {
 }
 
 void end_edit(string *lines, object user) {
-  say(user->QueryName()+" finished editing a file.\n");
+  say(({string})user->QueryName()+" finished editing a file.\n");
   if (sizeof(lines) < 1) {
      write("File is 0 bytes long. It's not saved.\n");
      return;
@@ -332,12 +331,12 @@ void end_edit(string *lines, object user) {
 
 int do_it() {
  object who;
- if (this_player()->QueryEnemies()) who=this_player()->QueryEnemies()[0];
+ if (({object *})this_player()->QueryEnemies()) who=(({object *})this_player()->QueryEnemies())[0];
  if (!who) {call_out("do_it",2); return 1; }
- tell_object(this_player(),"  ["+who->QueryHP()+" hp, ");
- tell_object(this_player(),who->QuerySP()+" sp] ");
- tell_object(this_player()," Yours: ["+this_player()->QueryHP()+" hp, ");
- tell_object(this_player(),this_player()->QuerySP()+" sp]\n");
+ tell_object(this_player(),"  ["+({int})who->QueryHP()+" hp, ");
+ tell_object(this_player(),({int})who->QuerySP()+" sp] ");
+ tell_object(this_player()," Yours: ["+({int})this_player()->QueryHP()+" hp, ");
+ tell_object(this_player(),({int})this_player()->QuerySP()+" sp]\n");
  call_out("do_it",2);
  return 1;
 }
@@ -347,10 +346,10 @@ int check_inv() {
  who=first_inventory(environment(this_player()));
  if (environment(this_player())!=store) {
    while(who) {
-     if (who->QueryName()=="Someone") {
-       say(capitalize(this_player()->QueryName())+"'s belt shoots a ray of strange red light through the room!\n");
-       say("Now you can see "+capitalize(who->QueryRealName())+"'s shadow on the wall!\n");
-       write("Invisible here: "+capitalize(who->QueryRealName())+"!\n");
+     if (({string})who->QueryName()=="Someone") {
+       say(capitalize(({string})this_player()->QueryName())+"'s belt shoots a ray of strange red light through the room!\n");
+       say("Now you can see "+capitalize(({string})who->QueryRealName())+"'s shadow on the wall!\n");
+       write("Invisible here: "+capitalize(({string})who->QueryRealName())+"!\n");
        store=environment(this_player());
      } /* if */
      who=next_inventory(who);
@@ -361,15 +360,14 @@ int check_inv() {
 }
 
 int schalt(string str) {
- string a;
  if (!Allowed()) return 1;
- if (sscanf(str,"%s on",a)==1) {
+ if (sscanf(str,"%~s on")==1) {
     call_out("do_it",2);
     call_out("check_inv",2);
     write("You turn your belt on!\n");
     return 1;
  }
- if (sscanf(str,"%s off",a)==1) {
+ if (sscanf(str,"%~s off")==1) {
     remove_call_out("do_it");
     remove_call_out("check_inv");
     write("You turn your belt off!\n");

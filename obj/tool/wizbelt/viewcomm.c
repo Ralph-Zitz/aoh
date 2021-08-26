@@ -317,7 +317,7 @@ int stat(string str) {
      if (weap[i]) {
         if (on("weapons") && ({string})weap[i]->QueryShort()) 
            aus += "Wielding " + ({string})weap[i]->QueryShort() + "(AC:" + 
-               ({int})weap[i]->QueryAC() + ")\n";
+               ({int})weap[i]->QueryWC() + ")\n";
      }
  aus += "Armourclass: "+acs+"\n";
  gender = ({int})who->QueryGender();

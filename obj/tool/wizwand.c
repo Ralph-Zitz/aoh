@@ -57,12 +57,9 @@ private static mixed *uinfo;
 
 /*-------------------------------------------------------------------------*/
 
-create()
+public void create()
 {
-  string name, foo;
-
-  if (!is_clone(ME)) return;
-
+  if (!clonep(ME)) return;
   thing::create();
   SetShort("the Wand of Wizardhood");
   SetIds(({"wand","wizwand"}));
@@ -77,15 +74,15 @@ create()
   SetNoGet(1);
 }
 
-QueryShort()
+public varargs string QueryShort()
 {
-  return (!PL || IS_PLAYER(PL)) ? "something useless" : ::QueryShort();
+  return (!PL || ({int})IS_PLAYER(PL)) ? "something useless" : ::QueryShort();
 }
 
-QueryHelpMsg()
+public mixed QueryHelpMsg()
 {
   string rc;
-  if (!PL || IS_PLAYER(PL)) return "You don't know anything about it.\n";
+  if (!PL || ({int})IS_PLAYER(PL)) return "You don't know anything about it.\n";
   rc = " -- Wand of Wizardhood "+VER_REV+" ["+REVTAG+"] --\n"
        "This wand is for promotion of immortals and wizards and for direct\n"
        "setting of levels.\n"
@@ -95,20 +92,19 @@ QueryHelpMsg()
   return rc;
 }
 
-QueryLong()
+public varargs mixed QueryLong()
 {
-  string rc;
-  if (!PL || IS_PLAYER(PL)) return "It's dirty, old and useless.\n";
+  if (!PL || ({int})IS_PLAYER(PL)) return "It's dirty, old and useless.\n";
   return QueryHelpMsg();
 }
 
-id(str)
+public mixed id(string str)
 {
-  if (!PL || IS_PLAYER(PL)) return "something useless";
+  if (!PL || ({int})IS_PLAYER(PL)) return "something useless";
   return thing::id(str);
 }
 
-QueryNoGet()
+public mixed QueryNoGet()
 {
   if (!check_euid(1)) return "This wand is not yours.\n";
   return 0;
@@ -153,7 +149,7 @@ varargs int check_euid (int silently, object pl)
 ** check_owner() checks if the right player is trying to use us.
 */
 
-check_owner()
+private int check_owner()
 {
   return PL && IS_IMMORTAL(PL) && PL == environment(ME) && PL == IPL;
 }
@@ -162,7 +158,7 @@ check_owner()
 ** Add and decode our commands.
 */
 
-init()
+public void init()
 {
   if (!check_owner()) return 0;
   thing::init();
@@ -170,12 +166,12 @@ init()
   add_action ("_dispatch" , "", 1);
 }
 
-int _dispatch(string arg)
+public int _dispatch(string arg)
 {
-  string verb, foo;
+  string verb;
   verb = query_verb();
   if (verb && verb != "" && function_exists("f"+verb, ME)) 
-    return (int) call_other(ME, "f"+verb, arg);
+    return ({mixed})call_other(ME, "f"+verb, arg);
   return 0;
 }
 
@@ -197,8 +193,6 @@ void xshout (string msg, object pl)
 
 static void give_scroll (object pl)
 {
-  object scr;
-
   if (present("wizscroll", pl))
   {
     tell_object (pl,"Your scroll receives additional information. Read it.\n");
@@ -216,14 +210,14 @@ static int pro_ancient (string name)
 {
   object pl;
   string wname;
-  wname = capitalize((string)PL->QueryName());
+  wname = capitalize(({string})PL->QueryName());
   name = capitalize(name);
   if (!IS_IMMORTAL(PL)) ERROR("You can't do that.\n");
   if (IS_IMMORTAL(name)) ERROR("Somebody already did that.\n");
   if (!(pl = find_player(lower_case(name))) 
       || (environment(pl) != environment(PL))
       ) ERROR(name+" is not here.\n");
-  if ((int)pl->QueryRealLevel() < 20 || uinfo[USER_LEVEL] >= LVL_ANCIENT)
+  if (({int})pl->QueryRealLevel() < 20 || uinfo[USER_LEVEL] >= LVL_ANCIENT)
     ERROR(name+" is not of high enough level.\n");
 #if 0
   if ((int)pl->QueryXP() < LEARNER_MIN_EXP)
@@ -247,8 +241,8 @@ static int pro_ancient (string name)
 void pro_ancient2 (mixed *data)
 {
   object pl;
-  string wname, name;
-  pl = data[0]; name = data[1]; wname = data[2];
+  string /*wname,*/ name;
+  pl = data[0]; name = data[1]; //wname = data[2];
   tell_object (pl, 
 "The glow fades away, but you feel new powers flowing through you...\n"
 "You are now recognized as seasoned player of OSB!\n"
@@ -273,7 +267,7 @@ static int pro_wizard (string name)
 {
   object pl;
   string wname;
-  wname = capitalize((string)PL->QueryName());
+  wname = capitalize(({string})PL->QueryName());
   name = capitalize(name);
   if (!IS_WIZARD(PL)) ERROR("You can't do that.\n");
   if (IS_WIZARD(name)) ERROR("Somebody already did that.\n");
@@ -296,7 +290,7 @@ static int pro_wizard (string name)
 	      , "Something happens, and the air starts to glow...\n\n"
 	      }), ({ PL, pl }) );
 
-  if (!MASTER->create_wizard (lower_case(name), -1, PL))
+  if (!({string})MASTER->create_wizard (lower_case(name), -1, PL))
     ERROR ("Funny, that failed. Ask somebody knowledgable about it.\n");
 
   call_out ("pro_wizard2", 1, ({ pl, name, wname }));
@@ -312,8 +306,8 @@ static int pro_wizard (string name)
 void pro_wizard2 (mixed *data)
 {
   object pl;
-  string wname, name;
-  pl = data[0]; name = data[1]; wname = data[2];
+  string /*wname,*/ name;
+  pl = data[0]; name = data[1]; //wname = data[2];
   tell_object (pl, 
 "The glow fades away, but you feel new powers flowing through you...\n"
 "You are accepted as Wizard!\n"
@@ -339,7 +333,7 @@ void pro_wizard2 (mixed *data)
 
 int fpromote (string arg)
 {
-  string *args, dname;
+  string *args;
 
   if (!check_owner()) return 0;
   if (!arg || arg == "?")
@@ -361,7 +355,7 @@ int fpromote (string arg)
   if (member(({"ancient","wizard"}),args[0]) == -1) 
     args = ({ "__free__" }) + args;
 
-  if (!(uinfo = (mixed *)MASTER->find_userinfo(args[1]))) 
+  if (!(uinfo = ({mixed *})MASTER->find_userinfo(args[1]))) 
     FAIL("There's no player '"+args[1]+"'.\n");
 
   switch (args[0])
@@ -391,13 +385,13 @@ int fdemote (string arg)
   }
 
   arg = lower_case(arg);
-  if (!(uinfo = (mixed *)MASTER->find_userinfo(arg))) 
+  if (!(uinfo = ({mixed *})MASTER->find_userinfo(arg))) 
     FAIL("There's no player '"+arg+"'.\n");
 
   if (uinfo[USER_LEVEL] != LVL_WIZARD)
     FAIL(capitalize(arg)+" is not a wizard.\n");
 
-  if (!MASTER->change_user_level(arg, LVL_PLAYER))
+  if (!({int})MASTER->change_user_level(arg, LVL_PLAYER))
     ERROR ("Funny, that failed. Ask someone knowledgable about it.\n");
 
   write("You demote "+capitalize(arg)+" from being wizard.\n"
@@ -410,7 +404,7 @@ int fdemote (string arg)
 #endif
     
   if (pl = find_player(arg))
-    tell_object(pl, "--- "+capitalize(PL->QueryRealName())+" demoted you. "
+    tell_object(pl, "--- "+capitalize(({string})PL->QueryRealName())+" demoted you. "
                     +"You are now player again. ---\n"
                );
   return 1;
@@ -438,7 +432,7 @@ int fulevel (string arg)
   if (sizeof(args = explode(arg, " ")) > 2) FAIL("Too much arguments.\n");
 
   args[0] = lower_case(args[0]);
-  if (!(uinfo = (mixed *)MASTER->find_userinfo(args[0]))) 
+  if (!(uinfo = ({mixed *})MASTER->find_userinfo(args[0]))) 
     FAIL("There's no player '"+args[0]+"'.\n");
 
   if (sizeof(args) != 1)
@@ -463,7 +457,7 @@ int fulevel (string arg)
         FAIL ("Illegal argument '"+args[1]+"'.\n");
       }
   
-    if (!MASTER->change_user_level (args[0], level))
+    if (!({int})MASTER->change_user_level (args[0], level))
       ERROR ("Funny, that failed. Ask someone knowledgable about it.\n");
   }
   write (capitalize(args[0])+": "+query_user_level(args[0])+"\n");  

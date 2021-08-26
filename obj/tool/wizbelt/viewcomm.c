@@ -23,7 +23,7 @@ string AdditionalInformation(string name, int flag, int gender);
 int Write(string x) { 
     string text;
     if (text=x) { 
-       "/lib/string"->smore(text,(int)this_player()->QueryPageSize()); 
+       "/lib/string"->smore(text,({int})this_player()->QueryPageSize()); 
        return 1;
     } 
     else return 0;
@@ -37,18 +37,18 @@ int wlist(string str) {
 }
 
 string WFindFile(string str) {
-  string a, b, ret;
+  string a, ret;
   ret = "";
   if (!str) return ret;
   if (str=="$h") return object_name(environment(this_player()));
-  if (this_player() && this_player()->is_dir(str))
-     return this_player()->is_dir(str);
+  if (this_player() && ({string})this_player()->is_dir(str))
+     return ({string})this_player()->is_dir(str);
   if (sscanf(str,"@^%s",a)==1) return object_name(environment(find_living(a)));
   if (sscanf(str,"+%s",a)==1) str="/d/"+a;
   if (sscanf(str,"~",a)==1) str="/players/"+a;
-  ret=this_player()->exp_fname(str); 
-  if (sscanf(ret,"%s/%s",a,b)<1) 
-     ret = this_player()->QueryCurrentDir()+"/"+ret;
+  ret=({string})this_player()->exp_fname(str); 
+  if (sscanf(ret,"%s/%~s",a)<1) 
+     ret = ({string})this_player()->QueryCurrentDir()+"/"+ret;
   if (resolve_file(ret)) return resolve_file(ret);
   return ret;
 }
@@ -59,15 +59,15 @@ string blanks(string str, int i) {
 
    if (!str) str=" ---- no short description ----";
    ret=str;
-   x=strlen(str);
+   x=sizeof(str);
    bla=i-x;
    if (bla>0) {for (x=0; x<bla; x++) {ret=ret+" "; }};
-   x=strlen(str);
+   x=sizeof(str);
    if (x>0) return ret[0..i-1];
 }
 
 string cutlen(string str, int i) {
-   if (i > strlen(str)) return str;
+   if (i > sizeof(str)) return str;
    return str[0..i-1];
 }
 
@@ -93,22 +93,22 @@ int wlook(string str) {
   if (!who && x >= 0) who = clone_object(a);
   if (!who) { write("Can't find file "+a+".\n"); return 1; }
   ausg = "Filename: " + object_name(who) +"\n";
-  if (who->QueryIsNPC() || who->QueryIsPlayer()) 
-     ausg += who->QueryName()+"'s inventory:\n";
-  else if (who->QueryShort()) ausg += who->QueryShort()+" contains:\n";
-  else ausg += who->QueryIntShort()+" contains:\n";
+  if (({int})who->QueryIsNPC() || ({int})who->QueryIsPlayer()) 
+     ausg += ({string})who->QueryName()+"'s inventory:\n";
+  else if (({string})who->QueryShort()) ausg += ({string})who->QueryShort()+" contains:\n";
+  else ausg += ({string})who->QueryIntShort()+" contains:\n";
   ob = first_inventory(who);
   num = 0;
   while (ob) {
     num += 1;
     if (num<10) ausg += " ";
-    ausg += num + ". " + blanks(ob->QueryShort(),38)+" "+
+    ausg += num + ". " + blanks(({string})ob->QueryShort(),38)+" "+
 	        cutlen("["+object_name(ob),35)+"]\n";
-    ausg += " Value:"+ob->QueryValue()+"\t";
-    ausg += "Weight:"+ob->QueryWeight()+"\t";
-    ausg += "AC:"+ob->QueryAC()+"\t";
-    ausg += "WC:"+ob->QueryWC()+"\t";
-    if (ob->QueryInfo()) ausg+=cutlen(explode(ob->QueryInfo(), "\n")[0], 30);
+    ausg += " Value:"+({int})ob->QueryValue()+"\t";
+    ausg += "Weight:"+({int})ob->QueryWeight()+"\t";
+    ausg += "AC:"+({int})ob->QueryAC()+"\t";
+    ausg += "WC:"+({int})ob->QueryWC()+"\t";
+    if (({string})ob->QueryInfo()) ausg+=cutlen(explode(({string})ob->QueryInfo(), "\n")[0], 30);
     ausg += "\n";
     ob=next_inventory(ob);
   }
@@ -181,33 +181,33 @@ int ShowObject(mixed arg) {
  mixed *pids;
  if (stringp(arg)) who=WFindObj(arg,this_player()); else who = arg;
  if (!who) return 0; // Can't find that object
- write(who->QueryShort()+"\n");
- write(who->QueryLong());
- if (who->QueryInfo()) write("Info: "+who->QueryInfo());
- if (who->QueryBright()) write("Bright: "+who->QueryBright()+"\n");
- pids=who->QueryIds();
+ write(({string})who->QueryShort()+"\n");
+ write(({string})who->QueryLong());
+ if (({string})who->QueryInfo()) write("Info: "+({string})who->QueryInfo());
+ if (({int})who->QueryBright()) write("Bright: "+({int})who->QueryBright()+"\n");
+ pids=({string *})who->QueryIds();
  write("Ids: ");
  for (i=0; i<sizeof(pids); i++) {
      if (i < sizeof(pids)-1) write(pids[i]+", ");
      else write(pids[i]+"\n");
  }
- write("Weight: "+who->QueryWeight()+"\n");
- write("Value: "+who->QueryValue()+"\n");
- if (who->QueryAC()) write("AC: "+who->QueryAC()+"\n");
- if (who->QueryWC()) write("WC: "+who->QueryWC()+"\n");
- if (who->QueryNoise()) write("Noise: "+who->QueryNoise());
- if (who->QuerySmell()) write("Smell: "+who->QuerySmell());
- if (who->QueryReadMsg()) write("Engraving: "+who->QueryReadMsg());
- if (who->QueryNoGet()) write("You can't take it.\n");
- if (who->QueryNoDrop()) write("It can't be dropped.\n");
- if (who->QueryNoGive()) write("It can't be given away.\n");
- if (who->Query(P_MAGIC)) write("It is a magical item.\n");
- if (who->QueryWielded()) write("It is wielded.\n");
- if (who->QueryWeaponType()) write("This is a weapon of the type " +
-     who->QueryWeaponType() + ".\n");
- if (who->QueryWorn()) write("It is worn.\n");
- if (who->QueryArmourType()) write("This is an armour of the type  " +
-     who->QueryArmourType() + ".\n");
+ write("Weight: "+({int})who->QueryWeight()+"\n");
+ write("Value: "+({int})who->QueryValue()+"\n");
+ if (({int})who->QueryAC()) write("AC: "+({int})who->QueryAC()+"\n");
+ if (({int})who->QueryWC()) write("WC: "+({int})who->QueryWC()+"\n");
+ if (({string})who->QueryNoise()) write("Noise: "+({string})who->QueryNoise());
+ if (({string})who->QuerySmell()) write("Smell: "+({string})who->QuerySmell());
+ if (({string})who->QueryReadMsg()) write("Engraving: "+({string})who->QueryReadMsg());
+ if (({int})who->QueryNoGet()) write("You can't take it.\n");
+ if (({int})who->QueryNoDrop()) write("It can't be dropped.\n");
+ if (({int})who->QueryNoGive()) write("It can't be given away.\n");
+ if (({int})who->Query(P_MAGIC)) write("It is a magical item.\n");
+ if (({object})who->QueryWielded()) write("It is wielded.\n");
+ if (({string})who->QueryWeaponType()) write("This is a weapon of the type " +
+     ({string})who->QueryWeaponType() + ".\n");
+ if (({object})who->QueryWorn()) write("It is worn.\n");
+ if (({string})who->QueryArmourType()) write("This is an armour of the type  " +
+     ({string})who->QueryArmourType() + ".\n");
  return 1;
 }
 
@@ -218,38 +218,38 @@ int on(string str) {
 }
 
 int stat(string str) {
- mixed *abili;
- mapping abili2;
+ mixed abili;
+ mixed abili2;
  mixed *arm, *weap;
- object who,ob,snp;
+ object who,snp;
  string aus, name;
  int n, i, wizlev, ali, qp, nqp, y, acs, xpgiven, gender;
  if (!Allowed()) return 1;
  if (!str) { write("Missing parameter.\n"); return 1; }
- if (str=="$m") str=this_player()->QueryRealName();
+ if (str=="$m") str=({string})this_player()->QueryRealName();
  who = WFindObj(str, this_player());
  if (who) write(object_name(who)+"\n");
  if (!living(who) && ShowObject(who)) return 1;
  if (!who) { WFinger(str); return 1; }
- wizlev=MASTER->query_user_level(getuid(who));
+ wizlev=({int})MASTER->query_user_level(getuid(who));
  aus = "";
- aus += " * * * "+who->QueryShort()+" * * * \n";
+ aus += " * * * "+({string})who->QueryShort()+" * * * \n";
  if (living(who) && environment(who) && on("environment"))
     aus += "Environment: " + object_name(environment(who)) + "\n";
- if (!who->QueryIsNPC() && on("title")) aus += "Title: "+who->QueryTitle()+"\n";
- aus += "Player-Level: "+who->QueryLevel()+"\t Wiz-Level: "+
+ if (!({int})who->QueryIsNPC() && on("title")) aus += "Title: "+({string})who->QueryTitle()+"\n";
+ aus += "Player-Level: "+({int})who->QueryLevel()+"\t Wiz-Level: "+
 	wizlev+"\n";
- aus += "SP: "+who->QuerySP()+" ("+
-       who->QueryMaxSP()+") , HP: "+
-       who->QueryHP()+" ("+who->QueryMaxHP()+") ,\t";
- aus += "XP: "+who->QueryXP()+"\t";
- xpgiven = who->QueryXP()/35;
+ aus += "SP: "+({int})who->QuerySP()+" ("+
+       ({int})who->QueryMaxSP()+") , HP: "+
+       ({int})who->QueryHP()+" ("+({int})who->QueryMaxHP()+") ,\t";
+ aus += "XP: "+({int})who->QueryXP()+"\t";
+ xpgiven = ({int})who->QueryXP()/35;
  if (xpgiven > 20000)
     xpgiven = 20000+(xpgiven-20000)/10;
  if (xpgiven > 50000)
     xpgiven = 50000+(xpgiven-50000)/100;
  aus += "KillXP: "+xpgiven+"\n";
- abili=who->QueryStats();
+ abili=({mapping})who->QueryStats();
 #if MUD_UL
  abili = ({ ({"Str","Dex","Int","Con","IVision","UVison"}),
          ({who->query("str"), who->query("dex"), 
@@ -262,7 +262,7 @@ int stat(string str) {
    aus += "\n";  }
  if (on("attributes")) {
     aus += "Attributes:     ";
-    abili2=who->QueryAttributes();
+    abili2=({mapping})who->QueryAttributes();
     if (!abili2) aus += "none\n";
     if (abili2) {
        n=6;
@@ -274,7 +274,7 @@ int stat(string str) {
              member(LIVING_ATTRS, abili[i]) < 0) {
              // Ignore builtin attributes ^
              name = abili[i];
-             if (strlen(name) > 3) name = name[0..2];
+             if (sizeof(name) > 3) name = name[0..2];
              if (intp(abili2[abili[i]]))
 	         aus += blanks(name+":"+abili2[abili[i]],11);
              else aus += blanks(name+": skill",11);
@@ -283,50 +283,50 @@ int stat(string str) {
        aus += "\n";
     }
  }
- if (who->QueryIsPlayer()) {
+ if (({int})who->QueryIsPlayer()) {
     /* aus += "Skills: \n";
      * who->flspells("skills");
      */
     aus += "Guild: ";
-    if (who->QueryGuild()) aus += who->QueryGuild()+"\n";
+    if (({string})who->QueryGuild()) aus += ({string})who->QueryGuild()+"\n";
     else aus += "none\n";
  }
- name=who->QueryName();
- aus += "soaked: "+who->QueryDrink()+"\t";
- aus += "stuffed: "+who->QueryFood()+"\t";
- aus += "intoxicated: "+who->QueryAlcohol()+"\n";
- aus += "Race: "+who->QueryRace()+"\tWeight: "+who->QueryWeight()+" ("+
-       who->QueryMaxWeight()+")\n";
+ name=({string})who->QueryName();
+ aus += "soaked: "+({int})who->QueryDrink()+"\t";
+ aus += "stuffed: "+({int})who->QueryFood()+"\t";
+ aus += "intoxicated: "+({int})who->QueryAlcohol()+"\n";
+ aus += "Race: "+({string})who->QueryRace()+"\tWeight: "+({int})who->QueryWeight()+" ("+
+       ({int})who->QueryMaxWeight()+")\n";
  if (on("messages")) {
-    if (stringp(who->QueryMsgIn())) aus+="MSGIN: "+who->QueryMsgIn()+"\n";
-    if (stringp(who->QueryMsgOut())) aus+="MSGOUT: "+who->QueryMsgOut()+"\n";
-    if (stringp(who->QueryMMsgIn())) aus+="MMSGIN: "+who->QueryMMsgIn()+"\n";
-    if (stringp(who->QueryMMsgOut())) aus+="MMSGOUT:"+who->QueryMMsgOut()+"\n";
+    if (stringp(({string})who->QueryMsgIn())) aus+="MSGIN: "+({string})who->QueryMsgIn()+"\n";
+    if (stringp(({string})who->QueryMsgOut())) aus+="MSGOUT: "+({string})who->QueryMsgOut()+"\n";
+    if (stringp(({string})who->QueryMMsgIn())) aus+="MMSGIN: "+({string})who->QueryMMsgIn()+"\n";
+    if (stringp(({string})who->QueryMMsgOut())) aus+="MMSGOUT:"+({string})who->QueryMMsgOut()+"\n";
  }
- arm = who->QueryArmours();
- weap = who->QueryWeapons();
+ arm = ({object *})who->QueryArmours();
+ weap = ({object *})who->QueryWeapons();
  acs = 0;
  if (arm && sizeof(arm)) for (i=0; i<sizeof(arm); i++)
      if (arm[i]) {
-        acs += arm[i]->QueryAC();
-        if (on("armours") && arm[i]->QueryShort()) 
-           aus += "Wearing " + arm[i]->QueryShort() + "(AC:" + 
-               arm[i]->QueryAC() + ")\n";
+        acs += ({int})arm[i]->QueryAC();
+        if (on("armours") && ({string})arm[i]->QueryShort()) 
+           aus += "Wearing " + ({string})arm[i]->QueryShort() + "(AC:" + 
+               ({int})arm[i]->QueryAC() + ")\n";
      }
  if (weap && sizeof(weap)) for (i=0; i<sizeof(weap); i++)
      if (weap[i]) {
-        if (on("weapons") && weap[i]->QueryShort()) 
-           aus += "Wielding " + weap[i]->QueryShort() + "(AC:" + 
-               weap[i]->QueryAC() + ")\n";
+        if (on("weapons") && ({string})weap[i]->QueryShort()) 
+           aus += "Wielding " + ({string})weap[i]->QueryShort() + "(AC:" + 
+               ({int})weap[i]->QueryAC() + ")\n";
      }
  aus += "Armourclass: "+acs+"\n";
- gender = who->QueryGender();
- aus += "Gender: "+who->QueryGenderString()+"\n";
- if (!who->QueryIsNPC() && on("quests")) {
-    aus += "Quests: "+who->QueryQuests()+"\n";
-    qp= QUESTMASTER->QueryQuestPoints(who);
-    y= (int) who->QueryLevel();
-    nqp= QUESTMASTER->QPointLevel(y+1);
+ gender = ({int})who->QueryGender();
+ aus += "Gender: "+({string})who->QueryGenderString()+"\n";
+ if (!({int})who->QueryIsNPC() && on("quests")) {
+    aus += "Quests: "+({string})who->QueryQuests()+"\n";
+    qp= ({int})QUESTMASTER->QueryQuestPoints(who);
+    y= ({int})who->QueryLevel();
+    nqp= ({int})QUESTMASTER->QPointLevel(y+1);
     y=0;
     aus += name+" has "+qp+" questpoints and needs "+nqp+" to advance.\n";
  }
@@ -341,25 +341,25 @@ valid snoop checks are displayed. That means,
 if a wl 30 snoops and a wl 20 queries, this MUST NOT be displayed, e.g.
 */
   snp=0;
-  if (!who->QueryIsNPC()) {  
-    if (who->QueryGhost()) aus += name+" is a ghost.\n";
-    if (who->QueryFrog()) aus += name+" is a frog.\n";
-    if (who->QueryNetdead()) aus += name+" is netdead.\n";
-    if (who->QueryInvis()) aus += name+" is invisible.\n";
+  if (!({int})who->QueryIsNPC()) {  
+    if (({int})who->QueryGhost()) aus += name+" is a ghost.\n";
+    if (({int})who->QueryFrog()) aus += name+" is a frog.\n";
+    if (({int})who->QueryNetdead()) aus += name+" is netdead.\n";
+    if (({int})who->QueryInvis()) aus += name+" is invisible.\n";
     if (snp) aus += name+" is snooped by "+
-             capitalize(snp->QueryRealName())+".\n";
-    ali=who->QueryAlign();
-    aus += "Alignment: "+this_player()->QueryAlignString(ali)+"\n";
+             capitalize(({string})snp->QueryRealName())+".\n";
+    ali=({int})who->QueryAlign();
+    aus += "Alignment: "+({string})this_player()->QueryAlignString(ali)+"\n";
     aus += "IP: "+query_ip_number(who)+"\n";
 #if MUD_NF
-    aus += "Mail: "+who->QueryMailaddr()+"\n";
+    aus += "Mail: "+({string})who->QueryMailaddr()+"\n";
 #endif
 #if MUD_UL
-    aus += "Mail: "+who->QueryMailAddr()+"\n";
+    aus += "Mail: "+({string})who->QueryMailAddr()+"\n";
 #endif
-    aus += "Age: "+daytime(who->QueryAge()*2)+".\n";
-    aus += AdditionalInformation(who->QueryRealName(), 0, gender);
-    if (on("mails") && n = MAILSERVER->FingerMail(str)) 
+    aus += "Age: "+daytime(({int})who->QueryAge()*2)+".\n";
+    aus += AdditionalInformation(({string})who->QueryRealName(), 0, gender);
+    if (on("mails") && n = ({int})MAILSERVER->FingerMail(str)) 
        aus += "There are " + n + " new mails waiting for this player.\n";
  }
  Write(aus);
@@ -386,7 +386,7 @@ string daytime(int sec) {
 
 int ULFinger(string str) {
  string gener, saved, r, name, cap, guild;
- string race, mail, a, b, age;
+ string race, mail, age;
  string *info, *dummy, *stat, aus;
  int idletime, gender, alt;
  if (!str) { notify_fail("No such player.\n"); return 0; }
@@ -408,49 +408,49 @@ int ULFinger(string str) {
  name = cap;
  saved = (regexp(info, "^life_saved")+dummy) [0][12..<2];
  gener = (regexp(info, "^general")+dummy) [0][9..<2];
- sscanf(saved, "%sgender\":%d,%s",a,gender,b);
+ sscanf(saved, "%~sgender\":%d,%~s",gender);
  stat=({});
- sscanf(saved, "%slevel\":%s,%s",a,r,b);
+ sscanf(saved, "%~slevel\":%s,%~s",r);
  stat+=({r});
- sscanf(saved, "%shit_points\":%s,%s",a,r,b);
+ sscanf(saved, "%~shit_points\":%s,%~s",r);
  stat+=({r});
- sscanf(saved, "%sspell_points\":%s,%s",a,r,b);
+ sscanf(saved, "%~sspell_points\":%s,%~s",r);
  stat+=({r});
- sscanf(saved, "%sexperience\":%s,%s",a,r,b);
+ sscanf(saved, "%~sexperience\":%s,%~s",r);
  stat+=({r});
- sscanf(saved, "%smax_hit_points\":%s,%s",a,r,b);
+ sscanf(saved, "%~smax_hit_points\":%s,%~s",r);
  stat+=({r});
- sscanf(saved, "%smax_spell_points\":%s,%s",a,r,b);
+ sscanf(saved, "%~smax_spell_points\":%s,%~s",r);
  stat+=({r});
- sscanf(gener, "%sinfravision\":%s,%s",a,r,b);
+ sscanf(gener, "%~sinfravision\":%s,%~s",r);
  stat+=({r});
- sscanf(gener, "%sultravision\":%s,%s",a,r,b);
+ sscanf(gener, "%~sultravision\":%s,%~s",r);
  stat+=({r});
- sscanf(saved, "%sdrink\":%s,%s",a,r,b);
+ sscanf(saved, "%~sdrink\":%s,%~s",r);
  stat+=({r});
- sscanf(saved, "%sfood\":%s,%s",a,r,b);
+ sscanf(saved, "%~sfood\":%s,%~s",r);
  stat+=({r});
- sscanf(saved, "%salcohol\":%s,%s",a,r,b);
+ sscanf(saved, "%~salcohol\":%s,%~s",r);
  stat+=({r});
- sscanf(saved, "%sage\":%s,%s",a,r,b);
+ sscanf(saved, "%~sage\":%s,%~s",r);
  stat+=({r});
- sscanf(gener, "%scon\":%s,%s",a,r,b);
+ sscanf(gener, "%~scon\":%s,%~s",r);
  stat+=({r});
- sscanf(gener, "%sstr\":%s,%s",a,r,b);
+ sscanf(gener, "%~sstr\":%s,%~s",r);
  stat+=({r});
- sscanf(gener, "%sdex\":%s,%s",a,r,b);
+ sscanf(gener, "%~sdex\":%s,%~s",r);
  stat+=({r});
- sscanf(gener, "%sint\":%s,%s",a,r,b);
+ sscanf(gener, "%~sint\":%s,%~s",r);
  stat+=({r});
- sscanf(gener, "%scalled_from_ip\":\"%s\",%s",a,r,b);
+ sscanf(gener, "%~scalled_from_ip\":\"%s\",%~s",r);
  stat+=({r});
- sscanf(gener, "%spresay\":%s,%s",a,r,b);
+ sscanf(gener, "%~spresay\":%s,%~s",r);
  stat+=({r});
- sscanf(gener, "%stitle\":%s,%s",a,r,b);
+ sscanf(gener, "%~stitle\":%s,%~s",r);
  stat+=({r});
- sscanf(gener, "%srace\":%s,%s",a,race,b);
- sscanf(gener, "%sguild\":%s,%s",a,guild,b);
- sscanf(gener, "%smailaddr\":%s,%s",a,mail,b);
+ sscanf(gener, "%~srace\":%s,%~s",race);
+ sscanf(gener, "%~sguild\":%s,%~s",guild);
+ sscanf(gener, "%~smailaddr\":%s,%~s",mail);
  if (!guild || guild=="" || guild=="0") guild = "none";
  if (!race || race=="0" || race=="") race = "none";
  if (!mail || mail=="0" || mail=="") mail = "none";
@@ -470,7 +470,7 @@ int ULFinger(string str) {
      case 2: aus += "Gender: female\n"; break;
      default: aus += "Gender: neuter\n";
  }
- aus += "Last login was from "+stat[16]+" ["+COUNTRY_D->country(stat[16])+"].\n";
+ aus += "Last login was from "+stat[16]+" ["+({string})COUNTRY_D->country(stat[16])+"].\n";
  aus += "Last logout was on "+ctime(idletime)+".\n";
  aus += "Mail: "+mail+"\n";
  alt = to_int(stat[11]) * 2;
@@ -564,7 +564,7 @@ int WFinger(string str) {
      case 2: aus += "Gender: female\n"; break;
      default: aus += "Gender: neuter\n";
  }
- aus += "Last login was from "+ip+" ["+COUNTRY_D->country(ip)+"].\n";
+ aus += "Last login was from "+ip+" ["+({string})COUNTRY_D->country(ip)+"].\n";
  aus += "Last logout was on "+ctime(idletime)+".\n";
  aus += "Mail: "+mail+"\n";
  alt = to_int(stat[11]) * 2;
@@ -572,7 +572,7 @@ int WFinger(string str) {
  aus += "Age: "+age+".\n";
  cap = lower_case(str);
  aus += AdditionalInformation(cap, 1, gender);
- if (on("mails") && n = MAILSERVER->FingerMail(cap)) 
+ if (on("mails") && n = ({int})MAILSERVER->FingerMail(cap)) 
        aus += "There are " + n + " new mails waiting for this player.\n";
  Write(aus);
  return 1;
@@ -582,7 +582,7 @@ string AdditionalInformation(string name, int flag, int gender) {
   mixed *userinfo;
   string *data, fname, ret;
   int i, wizlev;
-  userinfo = MASTER->find_userinfo(name);
+  userinfo = ({mixed *})MASTER->find_userinfo(name);
   if (!userinfo) return "";
   wizlev = userinfo[2];
   data = userinfo[3];

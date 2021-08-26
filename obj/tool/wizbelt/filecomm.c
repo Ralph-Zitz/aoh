@@ -6,7 +6,7 @@
 #define VOID "/std/void"
 #endif
 
-#define Out(x) "/lib/string"->smore(x,(int)this_player()->QueryPageSize())
+#define Out(x) ({string})"/lib/string"->smore(x,({int})this_player()->QueryPageSize())
 
 string WFindFilename(string str);
 string WGrep(string file, string pat);
@@ -19,7 +19,7 @@ string WReplAll(string file, string find, string repl, int bup);
 string WGrepAll(string str, string pat, int dirs);
 string WHeadAll(string file1, string file2);
 string WRmlAll(int num, string file1);
-string WLoadAll(string str, int clone, int destr);
+int WLoadAll(string str, int clone, int destr);
 string MoveFile(string old, string new);
 string ReplaceWithJoker(string file, string find1, string find2,
                         string repl1, string repl2, int backup);
@@ -30,7 +30,7 @@ string WGrep(string file, string pat) {
    int i, j, k, num;
    string ret, t, *tem, *lines;
    ret = "";
-   if (!(pat && file)) return ret;
+   if (!(pat && file)) retuint;
    for (i=1; t=read_file(file, i, 1000); i+=1000) {
        lines = explode(t, "\n");
        tem = regexp(lines - ({""}), pat);
@@ -70,12 +70,12 @@ string WHead(string lines, string file2) {
 
 string WRepl(string file, string find, string repl, int backup) {
    mixed *res;
-   string ret, path, a, b, c, d;
+   string ret, a, b, c, d;
    ret = "";
    if (!(find && file)) return ret;
-   res = this_player()->parse_fname(file, 0);
+   res = ({mixed *})this_player()->parse_fname(file, 0);
    if (res[3] == -1) return ret += file + " does not exist.\n";
-   path = res[1];
+   /*path = res[1];*/
    if (sscanf(find, "%s*%s", a, b) && sscanf(repl, "%s*%s", c, d)) 
       return ret += ReplaceWithJoker(file, a, b, c, d, backup);
    else return ret += Replace(file, find, repl, backup);
@@ -83,7 +83,7 @@ string WRepl(string file, string find, string repl, int backup) {
 
 string ReplaceWithJoker(string file, string find1, string find2,
                         string repl1, string repl2, int backup) {
-   string beg, end, ret, new, line, find3, rest;
+   string ret, new, line, find3, rest;
    string *lines;
    int i, j;
    ret = "#Changed file: "+file+"\n";
@@ -91,13 +91,12 @@ string ReplaceWithJoker(string file, string find1, string find2,
        lines = explode(line, "\n");
        for (j=0; j<sizeof(lines); j++) {
            new = lines[j];
-           if (sscanf(lines[j], "%s" + find1 + "%s" + find2 + "%s", 
-               beg, rest, end) > 0) { 
+           if (sscanf(lines[j], "%~s" + find1 + "%s" + find2 + "%~s", rest) > 0) { 
               if (sizeof(regexp( ({lines[j]}), find1)))
-                 new="/lib/string"->string_replace(lines[j], find1, repl1);
+                 new=({string})"/lib/string"->string_replace(lines[j], find1, repl1);
               find3 = rest + find2;
               if (sizeof(regexp( ({lines[j]}), find3)))
-                 new="/lib/string"->string_replace(new, find3, rest+repl2);
+                 new=({string})"/lib/string"->string_replace(new, find3, rest+repl2);
               new += "\n";
            }
            if (!write_file(file+".new", new)) {
@@ -120,7 +119,7 @@ string Replace(string file, string find, string repl, int backup) {
        lines = explode(line, "\n");
        for (j=0; j<sizeof(lines); j++) {
            if (sizeof(regexp( ({lines[j]}), find)))
-              new="/lib/string"->string_replace(lines[j], find, repl)+"\n";
+              new=({string})"/lib/string"->string_replace(lines[j], find, repl)+"\n";
               else new=lines[j]+"\n";
            if (!write_file(file+".new", new)) {
               return "Error while trying to write file "+file+
@@ -151,18 +150,18 @@ string MoveFile(string old, string new) {
 }
 
 string WFindFilename(string str) {
-  string a, b, ret;
+  string a, ret;
   ret = "";
   if (!str) return ret;
   if (str=="$h") return object_name(environment(this_player()));
-  if (this_player() && this_player()->is_dir(str))
-     return this_player()->is_dir(str);
+  if (this_player() && ({string})this_player()->is_dir(str))
+     return ({string})this_player()->is_dir(str);
   if (sscanf(str,"@^%s",a) == 1) return object_name(environment(find_living(a)));
   if (sscanf(str,"~/%s",a) == 1) return "/players/" +
-             this_player()->QueryRealName() + "/" + a;
-  ret = this_player()->exp_fname(str);
+             ({string})this_player()->QueryRealName() + "/" + a;
+  ret = ({string})this_player()->exp_fname(str);
   if (sscanf(ret,"/%s", a) < 1) 
-     ret = this_player()->QueryCurrentDir()+"/"+ret;
+     ret = ({string})this_player()->QueryCurrentDir()+"/"+ret;
   if (resolve_file(ret)) return resolve_file(ret);
   return ret;
 }
@@ -208,7 +207,7 @@ int wgrep(string str) {
      ausgabe = WGrepAll(file, pat, dirs);
      if (!logging) Out(ausgabe);
      else {
-       fname = "/players/" + this_player()->QueryRealName() + "/wgrep.log";
+       fname = "/players/" + ({string})this_player()->QueryRealName() + "/wgrep.log";
        write("Writing file to " + fname +".\n");
        if (file_size(fname) > 0) rm(fname); 
        write_file(fname, ausgabe);
@@ -218,7 +217,7 @@ int wgrep(string str) {
   ausgabe = WGrep(file, pat);
   if (!logging) Out(ausgabe);
   else {
-     fname = "/players/" + this_player()->QueryRealName() + "/wgrep.log";
+     fname = "/players/" + ({string})this_player()->QueryRealName() + "/wgrep.log";
      write("Writing file to " + fname +".\n");
      if (file_size(fname) > 0) rm(fname); 
      write_file(fname, ausgabe);
@@ -228,11 +227,11 @@ int wgrep(string str) {
 }
 
 int wload(string str) {
-  string file, a, b;
+  string file, a;
   if (!Allowed()) return 0;
   if (!(file=WFindFilename(str))) return 0;
-  if (sscanf(file, "%s*%s", a, b) > 0) {
-     if (b != ".c") file+=".c";
+  if (sscanf(file, "%~s*%s", a) > 0) {
+     if (a != ".c") file+=".c";
      WLoadAll(file, 0, 0);
      return 1;
   }
@@ -285,23 +284,23 @@ int WClone(string what, int destr) {
            }
        }
     }
-    ret = obj->move(this_player(), M_SILENT);
+    ret = ({int})obj->move(this_player(), M_SILENT);
     if (ret > ME_DESTRUCTED_SELF) {
        if (env = environment(this_player())) return 0;
        if (env == obj) return 0;
-       ret = obj->move(env, M_SILENT);
+       ret = ({int})obj->move(env, M_SILENT);
        if (ret != ME_OK) { obj->remove(); return 0; }
     }
     write("Cloned '"+object_name(obj)+"'.\n");
     return 1;
 }
 
-int is_player(object who) { return who->QueryIsPlayer(); }
+int is_player(object who) { return ({int})who->QueryIsPlayer(); }
 
 int WLoad(string file, int clone, int destr) {
-  int i, f;
+  int i;
   object obj, *inv, vroom;
-  string error, *strs;
+  string error;
   if (obj=find_object(file)) {
      if(catch(call_other(VOID, "???"))) {
         write("Error: cannot find "+VOID+" to rescue players.\n");
@@ -346,22 +345,22 @@ string WFind(string str, string pat) {
   int i;
   string file, path, ausgabe;
   ausgabe = "";
-  ret = this_player()->parse_fname(str, 0);
+  ret = ({mixed *})this_player()->parse_fname(str, 0);
   if (ret[3] == -1) return str+" does not exist.\n";
   path = ret[1];
-  fnames = this_player()->get_flist(ret, 0);
+  fnames = ({mixed})this_player()->get_flist(ret, 0);
   for (i=0; i<sizeof(fnames); i++) {
       file = fnames[i];
-      if (this_player()->is_dir(path+file) &&
+      if (({string})this_player()->is_dir(path+file) &&
           file!="." && file!="..") ausgabe += WFind(path+file+"/*", pat);
-      if (pat == "/lib/string"->ladjcut(file, strlen(pat)))
+      if (pat == ({string})"/lib/string"->ladjcut(file, sizeof(pat)))
          ausgabe += "Found "+file+" in "+path+"\n";
   }
   return ausgabe;
 }
 
 int whead(string str) {
- string *words, ausgabe, file1, file2, lines , a, b;
+ string *words, ausgabe, file1, file2, lines;
  if (!str) {
     notify_fail("whead <headerfile> <file|dir|pattern>\n");
     return 0;
@@ -383,7 +382,7 @@ int whead(string str) {
     return 0;
  }
  lines = read_file(file1);
- if (sscanf(file2, "%s*%s", a, b) > 0) {
+ if (sscanf(file2, "%~s*%~s") > 0) {
      ausgabe = WHeadAll(lines, file2);
      Out(ausgabe);
      return 1;
@@ -397,7 +396,7 @@ int whead(string str) {
 int wrepl(string str) {
  int inpt, flag, bup;
  string *words;
- string find, repl, file, ausgabe, a, b;
+ string find, repl, file, ausgabe;
  if (!str) {
     notify_fail("wrepl [-l] [-b] [-i] <find> <replace> <file|dir|pattern>\n");
     return 0;
@@ -435,7 +434,7 @@ int wrepl(string str) {
     words -= ({ repl });
     find = implode(words, " ");
  }
- if (sscanf(file, "%s*%s", a, b) > 0) {
+ if (sscanf(file, "%~s*%~s") > 0) {
      ausgabe = WReplAll(file, find, repl, bup);
      if (flag) Out(ausgabe); else write("WRepl done.\n");
      return 1;
@@ -452,8 +451,8 @@ int wrepl2(string in, string file, int flag, int bup) {
 }
 
 int wrepl3(string in, string find, string file, int flag, int bup) {
- string a, b, ausgabe;
- if (sscanf(file, "%s*%s", a, b) > 0) {
+ string ausgabe;
+ if (sscanf(file, "%~s*%~s") > 0) {
      ausgabe = WReplAll(file, find, in, bup);
      if (flag) Out(ausgabe); else write("WRepl done.\n");
      return 1;
@@ -469,10 +468,10 @@ string WReplAll(string file, string find, string repl, int bup) {
   int i;
   string fnam, path, ausgabe;
   ausgabe = "";
-  ret = this_player()->parse_fname(file, 0);
+  ret = ({mixed *})this_player()->parse_fname(file, 0);
   if (ret[3] == -1) return file+" does not exist.\n";
   path = ret[1];
-  fnames = this_player()->get_flist(ret, 0);
+  fnames = ({mixed})this_player()->get_flist(ret, 0);
   for (i=0; i<sizeof(fnames); i++) {
       fnam = fnames[i];
       ausgabe += WRepl(path+fnam, find, repl, bup);
@@ -486,10 +485,10 @@ string WHeadAll(string file1, string file2) {
   int i;
   string file, path, ausgabe;
   ausgabe = "";
-  ret = this_player()->parse_fname(file2, 0);
+  ret = ({mixed *})this_player()->parse_fname(file2, 0);
   if (ret[3] == -1) return file2 + " does not exist.\n";
   path = ret[1];
-  fnames = this_player()->get_flist(ret, 0);
+  fnames = ({mixed})this_player()->get_flist(ret, 0);
   for (i=0; i<sizeof(fnames); i++) {
       file = fnames[i];
       ausgabe += WHead(file1, path+file);
@@ -503,10 +502,10 @@ string WRmlAll(int num, string file1) {
   int i;
   string file, path, ausgabe;
   ausgabe = "";
-  ret = this_player()->parse_fname(file1, 0);
+  ret = ({mixed *})this_player()->parse_fname(file1, 0);
   if (ret[3] == -1) return file1 + " does not exist.\n";
   path = ret[1];
-  fnames = this_player()->get_flist(ret, 0);
+  fnames = ({mixed})this_player()->get_flist(ret, 0);
   for (i=0; i<sizeof(fnames); i++) {
       file = fnames[i];
       ausgabe += WRml(num, path+file);
@@ -520,13 +519,13 @@ string WGrepAll(string str, string pat, int dirs) {
   int i;
   string file, path, ausgabe;
   ausgabe = "";
-  ret = this_player()->parse_fname(str, 0);
+  ret = ({mixed *})this_player()->parse_fname(str, 0);
   if (ret[3] == -1) return str+" does not exist.\n";
   path = ret[1];
-  fnames = this_player()->get_flist(ret, 0);
+  fnames = ({mixed})this_player()->get_flist(ret, 0);
   for (i=0; i<sizeof(fnames); i++) {
       file = fnames[i];
-      if (this_player()->is_dir(path+file) && dirs &&
+      if (({string})this_player()->is_dir(path+file) && dirs &&
           file!="." && file!="..") {
          write("Now searching for "+pat+" in "+path+file+"/*\n");
          ausgabe += WGrepAll(path+file+"/*", pat, dirs);
@@ -541,10 +540,10 @@ int WLoadAll(string str, int clone, int destr) {
   string *fnames;
   int i;
   string file, path;
-  ret = this_player()->parse_fname(str, 0);
+  ret = ({mixed *})this_player()->parse_fname(str, 0);
   if (ret[3] == -1) { write(str+" does not exist.\n"); return 1; }
   path = ret[1];
-  fnames = this_player()->get_flist(ret, 0);
+  fnames = ({mixed})this_player()->get_flist(ret, 0);
   for (i=0;  i<sizeof(fnames); i++) {
       file = fnames[i];
       WLoad(path + file, clone, destr);

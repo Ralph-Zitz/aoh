@@ -76,7 +76,7 @@ void two_args(string arg, string *lines, int line, int echo,
 
 string get_header(string str, object who) {
    string name;
-   if (who) name = capitalize(who->QueryRealName());
+   if (who) name = capitalize(({string})who->QueryRealName());
    else name = "Someone";
    return "/* "+str+" made by "+name+" on "+ctime(time())+". */\n";
 }
@@ -154,7 +154,7 @@ void adetail(string arg, string *lines, int line, int echo,
              string *buffer, object user) {
      string *newbuffer;
      if (!arg) arg = "nothing";
-     if (strlen(arg)>1 && arg[0..1] == "({") {
+     if (sizeof(arg)>1 && arg[0..1] == "({") {
          write("  AddDetail("+arg+", \n");
          newbuffer = ({"  AddDetail("+arg+", \n"});
      }
@@ -180,13 +180,13 @@ void list_macros(string pat, mapping macros) {
      else {
        aus = ({});
        for (i=0; i<sizeof(keys); i++)
-           if (pat == "/lib/string"->ladjcut(keys[i], strlen(pat)))
+           if (pat == ({string})"/lib/string"->ladjcut(keys[i], sizeof(pat)))
               aus += ({keys[i]});
      }
      text = "Defined macros are:\n";
      for (i=0; i<sizeof(aus); i++)
          text += aus[i]+": " + macros[aus[i], 0] + "\n";
-     "/lib/string"->smore(text,(int)this_player()->QueryPageSize());
+     "/lib/string"->smore(text,({int})this_player()->QueryPageSize());
 }
 
 void get_num(string arg, string mar, string extra) {
@@ -229,7 +229,7 @@ void yes_or_no(string arg, string mar) {
 
 int macro(string arg) {
     string *keys;
-    if (!arg || strlen(arg) < 3) {
+    if (!arg || sizeof(arg) < 3) {
        notify_fail("Argument must be at least 3 characters long.\n");
        return 0;
     }
@@ -334,14 +334,14 @@ void do_special(string input, string *lines, int line, int echo,
      if (newmacros) spec += newmacros;
      valid1 = m_indices(spec);
      valid2 = ({"mkr", "mkm", "mka", "mkw", "mkt", "ado", "ade", "mac"});
-     if (strlen(input) < 4) { 
+     if (sizeof(input) < 4) { 
         write("No valid command.\n");
         input_to("edit", echo, lines, line, echo, buffer, user);
         write("]");
         return;
      }
      comm = input[1..3];
-     if (strlen(input) > 4) rest = input[4..]; else rest = "";
+     if (sizeof(input) > 4) rest = input[4..]; else rest = "";
      if (rest[0..0] == " ") rest = rest[1..];
      commnum = member(valid1, comm);
      if (commnum > -1) {
@@ -349,7 +349,7 @@ void do_special(string input, string *lines, int line, int echo,
         string para, argum;
         kind = spec[valid1[commnum], 1];
         para = spec[valid1[commnum], 0];
-        argum = "/lib/string"->string_replace(para, "@ARG@", rest);
+        argum = ({string})"/lib/string"->string_replace(para, "@ARG@", rest);
         if (kind==2) two_args(argum, lines, line, echo, buffer, user);
         else one_arg(argum, lines, line, echo, buffer, user); 
         return;
@@ -380,14 +380,14 @@ void do_command(string input, string *lines, int line, int echo,
      int commnum;
      valid=({"a", "b", "c", "d", "e", "h", "i", "p", "q", "r", "s", "w", 
              "t", "y"});
-     if (strlen(input) < 2) { 
+     if (sizeof(input) < 2) { 
         write("No valid command.\n");
         input_to("edit", echo, lines, line, echo, buffer, user);
         write("]");
         return;
      }
      comm = input[1..1];
-     if (strlen(input) > 2) rest = input[2..]; else rest = "";
+     if (sizeof(input) > 2) rest = input[2..]; else rest = "";
      commnum = member(valid, comm);
      if (commnum < 0) {
         write("No such command '"+comm+"'.\n");
@@ -444,7 +444,7 @@ void end_edit(string *lines, object user) {
 void edit(string input, string *lines, int line, int echo, 
           string *buffer, object user) {
     string *start, *rest, *temp, newline;
-    int actline, num, i;
+    int actline, num;
     if (input && input!="" && input[0..0]=="~") {
        do_command(input, lines, line, echo, buffer, user);
        return;
@@ -508,7 +508,7 @@ void change_line(string arg, string *lines, int line, int echo,
 
 void remove_line(string *lines,int line,int echo,string *buffer,object user) {
      string *start, *rest, *temp, *newbuffer;
-     int actline, i;
+     int actline;
      actline = line;
      if (sizeof(lines) < 1) {
         input_to("edit", echo, lines, line, echo, buffer, user);
@@ -589,13 +589,13 @@ void include_file(string arg, string *lines, int line, int echo,
      }
      words = explode(arg, "/");
      if (sizeof(words)<2) {
-        temp = "/players/"+user->QueryRealName()+"/"+arg;
+        temp = "/players/"+({string})user->QueryRealName()+"/"+arg;
         words = explode(temp, "/");
      }
      file = words[sizeof(words)-1];
      words -= ({file});
      path = implode(words, "/");
-     if (!temp = user->is_dir(path)) {
+     if (!temp = ({string})user->is_dir(path)) {
         write("No such directory: "+path+"\n]");
         input_to("edit", echo, lines, line, echo, buffer, user);
         return;
@@ -722,7 +722,7 @@ void substitute(string arg, string *lines, int line, int echo,
      temp = lines;
      for (i=0; i<sizeof(temp); i++) 
          if (sizeof(regexp( ({lines[i]}), find)))
-            temp[i] = "/lib/string"->string_replace(lines[i], find, repl);
+            temp[i] = ({string})"/lib/string"->string_replace(lines[i], find, repl);
      write("]");
      input_to("edit", echo, temp, line, echo, buffer, user);
 }

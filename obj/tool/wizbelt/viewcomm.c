@@ -298,10 +298,10 @@ int stat(string str) {
  aus += "Race: "+({string})who->QueryRace()+"\tWeight: "+({int})who->QueryWeight()+" ("+
        ({int})who->QueryMaxWeight()+")\n";
  if (on("messages")) {
-    if (stringp(({string})who->QueryMsgIn())) aus+="MSGIN: "+({string})who->QueryMsgIn()+"\n";
-    if (stringp(({string})who->QueryMsgOut())) aus+="MSGOUT: "+({string})who->QueryMsgOut()+"\n";
-    if (stringp(({string})who->QueryMMsgIn())) aus+="MMSGIN: "+({string})who->QueryMMsgIn()+"\n";
-    if (stringp(({string})who->QueryMMsgOut())) aus+="MMSGOUT:"+({string})who->QueryMMsgOut()+"\n";
+    if (stringp(({mixed})who->QueryMsgIn())) aus+="MSGIN: "+({string})who->QueryMsgIn()+"\n";
+    if (stringp(({mixed})who->QueryMsgOut())) aus+="MSGOUT: "+({string})who->QueryMsgOut()+"\n";
+    if (stringp(({mixed})who->QueryMMsgIn())) aus+="MMSGIN: "+({string})who->QueryMMsgIn()+"\n";
+    if (stringp(({mixed})who->QueryMMsgOut())) aus+="MMSGOUT:"+({string})who->QueryMMsgOut()+"\n";
  }
  arm = ({object *})who->QueryArmours();
  weap = ({object *})who->QueryWeapons();

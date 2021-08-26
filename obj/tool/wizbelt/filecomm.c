@@ -30,7 +30,7 @@ string WGrep(string file, string pat) {
    int i, j, k, num;
    string ret, t, *tem, *lines;
    ret = "";
-   if (!(pat && file)) retuint;
+   if (!(pat && file)) return ret;
    for (i=1; t=read_file(file, i, 1000); i+=1000) {
        lines = explode(t, "\n");
        tem = regexp(lines - ({""}), pat);

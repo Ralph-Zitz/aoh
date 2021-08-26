@@ -39,6 +39,7 @@
 #define TI this_interactive()
 #define ENV environment
 #define SF(x) #'x //' Emacs-Hack
+#define DBG(x) if(find_player("nostradamus")) tell_object(find_player("nostradamus"), x)
 
 /*#include "log.h"*/
 
@@ -608,29 +609,29 @@ public int wieldme(object ob)
 {
   int i, h;
 
-  if (ob == last_wield_ob)
+  if (ob == last_wield_ob) {
     return 1;
+  }
 
-  if (QueryGhost())
-    {
+  if (QueryGhost()) {
       msg_write( CMSG_GENERIC, "You can't do that in your present state.\n");
       return 0;
-    }
+  }
 
   last_wield_ob = ob;
-  if (!({int})ob->wield(ME))
+  if (!({int})ob->wield(ME)) {
     return last_wield_ob = 0;
+  }
   last_wield_ob = 0;
 
   /* somehow, arrays are returned by reference, ... */
   h = ({int})ob->QueryWeaponHands();
   for (i = sizeof(hands); i-- && h;) if (!hands[i][HAND_WEAPON]) h--;
 
-  if (h)
-    {
-      msg_write(CMSG_GENERIC, "You don't have enough free hands!\n");
-      return 0;
-    }
+  if (h) {
+    msg_write(CMSG_GENERIC, "You don't have enough free hands!\n");
+    return 0;
+  }
   return 1;
 }
 

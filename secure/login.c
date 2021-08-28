@@ -341,10 +341,8 @@ nomask int logon ()
         tls_init_connection(this_interactive());
     }
 #endif
-   if (query_mud_port() == 2348 && tls_available()) {
+  if (query_mud_port() == 2348 && tls_available()) {
     tls_init_connection(); 
-    input_to("InitialLogin", 0); // let the user be able to type ahead.
-    return 1;
   }
   log_file("ENTER", ctime()[4..15]+" login \t"+query_ip_name()+" \t"
                             +to_string(this_object())+"\n");

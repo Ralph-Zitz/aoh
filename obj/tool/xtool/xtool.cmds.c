@@ -49,7 +49,7 @@ int Xcall(string str) {
     if(file_size(file)>0) rm(file);
     if(obj=find_object(LPC_FILE)) Destruct(obj);
 #if MUD_NF || MUD_MG
-    write_file(file, "#pragma verbose_errors\n#include <attributes.h>\n"+
+    write_file(file, "#pragma verbose_errors\n#include <attributes.h>\n#include <daemons.h>\n"+
 #endif
 #if MUD_TA || MUD_BB || MUD_TM
     write_file(file,
@@ -322,7 +322,7 @@ int Xeval(string str) {
   if(file_size(file)>0) rm(file);
   if(obj=find_object(LPC_FILE)) Destruct(obj);
 #if MUD_NF || MUD_MG
-  write_file(file, "#pragma verbose_errors\n#include <attributes.h>\n"+
+  write_file(file, "#pragma verbose_errors\n#include <attributes.h>\n#include <daemons.h>\n"+
 #endif
 #if MUD_TA || MUD_BB || MUD_TM
   write_file(file,
@@ -609,7 +609,7 @@ int Xlpc(string str) {
   if(file_size(file)>0) rm(file);
   if(obj=find_object(LPC_FILE)) Destruct(obj);
 #if MUD_NF || MUD_MG
-  write_file(file, "#pragma verbose_errors\n#include <attributes.h>\n"+
+  write_file(file, "#pragma verbose_errors\n#include <attributes.h>\n#include <daemons.h>\n"+
 #endif
 #if MUD_TA || MUD_BB || MUD_TM
   write_file(file,

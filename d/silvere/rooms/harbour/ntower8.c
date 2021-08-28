@@ -68,7 +68,7 @@ int PushBoulder(string str)
                   if(!({int})QUESTMASTER->QueryQuestSolved(MININAME,TP))
                      QUESTMASTER->SetPlayerQuest(MININAME,TP);
                   msg_write(CMSG_STATUS,
-                     "After moving that much boulders, you feel "
+                     "After moving that many boulders, you feel "
                      "your muscles bulge.\n\n");
                   pstr=({int})TP->Query(P_STR);
                   if(pstr) TP->Set(P_STR,pstr+1);

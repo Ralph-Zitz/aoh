@@ -105,6 +105,31 @@
 #include <msgclass.h>
 #include <daemons.h>
 
+private nosave  object  remotePerson;
+private nosave  string  morestring;
+private nosave  string  last_action;
+private nosave  string  parsed_part;
+private nosave  string  SOUL;
+private nosave  string  verb_string;
+private nosave  string  adverb_string;
+private nosave  string  unparsed_part;
+private nosave  string  uncertain_part;
+private nosave  string  total_list;
+private nosave  string  channel_msg;
+private nosave  mapping brokendown_on_person;
+private nosave  mapping verbs;
+private nosave  mapping adverbs;
+private nosave  mapping how;
+private nosave  mapping bodydata;
+private nosave  mapping defaultbodydata;
+private nosave  mapping messages;
+private nosave  mixed   *       brokendown_data;
+private nosave  int     remoteFeel;
+private         mapping xverbs;
+private         mapping xadverbs;
+private         string  xverb_string;
+private         string  xadverb_string;
+
 private string * my_explode( string a, string b )
 {
     return explode( a, b );
@@ -582,7 +607,7 @@ private mapping get_adverbs( void )
 
 private mapping get_how( void )
 {
-    if ( how && m_sizeof( how ) )
+    if ( how && sizeof( how ) )
         return how;
     return
     ([
@@ -831,7 +856,7 @@ public int do_help( string s )
     case "feelings":
         mymore( "General commands available:\n" );
         mymore( get_verb_string() );
-        if ( m_sizeof( xverbs ) )
+        if ( sizeof( xverbs ) )
         {
             mymore( "Extra commands available:\n" );
             mymore( get_xverb_string() );
@@ -854,7 +879,7 @@ public int do_help( string s )
         mymore( "Adverbs that can be used together with feeling-commands:\n" );
         mymore( get_adverb_string() );
         more_flush();
-        if ( m_sizeof( xadverbs ) )
+        if ( sizeof( xadverbs ) )
         {
             mymore( "Extra adverbs available:\n" );
             mymore( get_xadverb_string() );
@@ -865,7 +890,7 @@ public int do_help( string s )
         {
             res = globber_one_player( verbs );
             this_object() -> set_total_list( res );
-            if ( m_sizeof( xverbs ) )
+            if ( sizeof( xverbs ) )
                 res += "<TRUNCATED> (try again)\n";
             else
                 res += globber_one_player( xverbs );

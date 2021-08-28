@@ -341,12 +341,24 @@ nomask int logon ()
         tls_init_connection(this_interactive());
     }
 #endif
-  if (query_mud_port() == 2348 && tls_available()) {
-    tls_init_connection(); 
-  }
+  input_to("InitialLogin", 0); // let the user be able to type ahead.
   log_file("ENTER", ctime()[4..15]+" login \t"+query_ip_name()+" \t"
                             +to_string(this_object())+"\n");
-  input_to("InitialLogin", 0); // let the user be able to type ahead.
+  if (query_mud_port() == 2348 && tls_available()) {
+    string s = "LDMud " __VERSION__;
+    tls_init_connection();
+    call_out(#'write, 0, "Gamedriver " + s +
+             " -- Lib '" MUDNAME "' "+LIBVERSION+"."+LIBREVISION+"-"+LIBPATCHLEVEL+"\n");
+    call_out(#'PrintWelcome, 1);  // Print the title screen
+    call_out(#'TimeOut, 240);
+    enforce = 0;
+    newplayer = 0;
+    doecho = 0;
+    ignoreclosed = 0;
+    checkedshut = 0;
+    retries = 3;
+    return 1;
+  }
   if (query_mud_port() != WWW_PORT)
   {
     string s;
@@ -358,11 +370,9 @@ nomask int logon ()
     set_telnet(WILL, TELOPT_ECHO); // Start telnet machine
     set_telnet(WONT, TELOPT_ECHO);
     set_telnet(WILL, TELOPT_EOR);  // Fix for some clients
-
     write("Gamedriver " + s +
       " -- Lib '" MUDNAME "' "+LIBVERSION+"."+LIBREVISION+"-"+LIBPATCHLEVEL+"\n"
        );
-
      call_out(#'PrintWelcome, 1);  // Print the title screen
   }
   call_out(#'TimeOut, query_mud_port() == WWW_PORT ? 600 : 240);

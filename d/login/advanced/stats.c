@@ -153,7 +153,7 @@ int cmd_roll(string str)
   "%^BOLD%^%^GREEN%^You roll the dice ...%^RESET%^\n");
   cmd_show("stats");  // show the stats as well
   msg_write(CMSG_GENERIC,
-  "\nType 'accept stats' to get this as your personal stats in OSB or\n"
+  "\nType 'accept stats' to get this as your personal stats in AoH or\n"
   "type 'shift <stat-> <stat+>' to change some stat values.\n");
 
   return 1;

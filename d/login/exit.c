@@ -36,7 +36,7 @@ int cmd_play(string str)
     "picks you up,\n"
     "and throws you off the side of the ship. You fall into the cold water\n"
     "and barly manage to swim toward the shore.\n"
-    "%^BOLD%^%^RED%^Enjoy your time in OSB!%^RESET%^",
+    "%^BOLD%^%^RED%^Enjoy your time in AoH!%^RESET%^",
     }));
 
     return 1;

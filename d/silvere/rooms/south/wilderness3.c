@@ -17,7 +17,7 @@ int prevent_west()
    notify_fail(
       "The path to the west through the fields is not finished yet. "
       "So it is a good idea to wait and check another time, when "
-      "one of that lazy wizards of OSB has done that rooms and added "
+      "one of that lazy wizards of AoH has done that rooms and added "
       "them to the world.\n", NOTIFY_ILL_ARG);
    return 0;
 }

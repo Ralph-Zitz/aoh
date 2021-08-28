@@ -23,9 +23,9 @@ inherit "/std/room";
 public varargs void create(int repl)
 {
   ::create();
-  SetIntShort("Entering One Step Beyond");
+  SetIntShort("Entering Age of Heroes");
   SetIntLong(
-    "                      %^BOLD%^%^WHITE%^Welcome to OSB%^RESET%^\n"
+    "                      %^BOLD%^%^WHITE%^Welcome to AoH%^RESET%^\n"
     "\n"
     "As your sight comes back into focus, "
     "you notice you aren't where you were a moment "
@@ -34,7 +34,7 @@ public varargs void create(int repl)
     "if you are trapped in a hot dog. Knowing this can't be the answer, "
     "you decide to explore and see where it takes you.\n"
     "\n"
-    "To enter OSB, please select one of the following ways to create a character:\n\n"+
+    "To enter AoH, please select one of the following ways to create a character:\n\n"+
 
     ({string})L_STRING->wrap(
     "%^BOLD%^%^WHITE%^normal%^RESET%^   "

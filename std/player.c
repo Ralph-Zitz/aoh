@@ -2076,7 +2076,6 @@ public void illegal_patch(string what) {
 void init() {
   stats::init();
   combat::init();
-  soul::init();
 }
 
 public void create() {

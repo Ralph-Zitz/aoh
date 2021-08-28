@@ -121,6 +121,7 @@ void create() {
   add_putget_cmds();
   add_view_cmds();
   add_npc_cmds();
+  add_soul_cmds();
   /* For statistics */
   // catch("/obj/npcstat"->Add(this_object()));
 }
@@ -132,5 +133,4 @@ varargs void reset() {
 void init() {
   combat::init();
   chat::init();
-  soul::init();
 }

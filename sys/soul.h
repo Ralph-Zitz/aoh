@@ -5,6 +5,7 @@
                         tell_object(find_player("nostradamus"),x)
 #define DEBUG 0
 #define TP              this_player()
+#define TO              this_object()
 #define HAVE_SPRINTF
 #define replace(X,Y,Z)  implode(my_explode(X,Y),Z)
 #define MOVE(X,Y)       move_object(X, Y)

@@ -75,7 +75,7 @@ inherit "std/player/filesys";
 inherit "std/player/misc";
 inherit "std/player/viewcmd";
 inherit "std/player/objects";
-inherit "std/player/soul";
+/* inherit "std/player/soul"; */
 inherit "std/player/telnet_neg";
 inherit "std/player/gmcp";
 inherit "std/player/mxp";
@@ -155,6 +155,29 @@ void vote_delay();
 static varargs void process_gmcp(mapping attributes,string package, string message);
 static int update_points_display();
 static void init_gmcp();
+public void announce_title(int news);
+
+/* Temporary placement */
+string presay;
+
+string SetPresay(string s) {
+#if 1
+  if (   !this_player()
+      || (    this_player() != this_object()
+           && query_user_level(this_player())
+           && !query_user_level(this_object())
+         )
+     )
+    log_file("TITLES", ctime()+" Presay of "+getuid(this_object())+" set to '"
+                      +s+"' by "+(this_player()?getuid(this_player()):"???")
+                      +"\n");
+#endif
+  presay = s;
+  announce_title(0);
+  return presay;
+}
+string QueryPresay() { return presay || ""; }
+
 /* *************************************************************************
  * Builtin properties / read-only
  * *************************************************************************
@@ -769,7 +792,7 @@ static int cmd_password(string str) {
      "Nothing changed.\n",
      NOTIFY_NOT_VALID);
   }
-  write("Please enter old password: ");
+  msg_write(CMSG_GENERIC|MMSG_DIRECT, "Please enter old password: ");
   input_to(#'password_entered, hidden, hidden); /*'*/
   return 1;
 }
@@ -782,9 +805,9 @@ protected void password_entered(string str, int hidden) {
     write("\n");
   if (!str) str == "";
   if (({int})MASTER->update_password(str,str) == 0)
-    return write("Wrong password!\n");
+    return msg_write(CMSG_GENERIC|MMSG_DIRECT, "Wrong password!\n");
   passwold = str;
-  write("Please enter new password: ");
+  msg_write(CMSG_GENERIC|MMSG_DIRECT, "Please enter new password: ");
   input_to(#'new_password_entered /*'*/,hidden,hidden);
 }
 
@@ -793,18 +816,18 @@ protected void password_entered(string str, int hidden) {
 
 protected void new_password_entered(string str, int hidden) {
   if (hidden)
-    write("\n");
+    msg_write(CMSG_GENERIC|MMSG_DIRECT, "\n");
   if ((!str) || str == "")
-    return write("Aborted!\n");
+    return msg_write(CMSG_GENERIC|MMSG_DIRECT, "Aborted!\n");
   if (sizeof(str) < 6)
   {
-    write("Password must have at least 6 characters!\n"
+    msg_write(CMSG_GENERIC|MMSG_DIRECT, "Password must have at least 6 characters!\n"
     "Please enter new password: ");
     input_to(#'new_password_entered,hidden,hidden); /*'*/
     return;
   }
   passw = str;
-  write("To ensure, that you typed the new password correctly please "
+  msg_write(CMSG_GENERIC|MMSG_DIRECT, "To ensure, that you typed the new password correctly please "
   "type it again: ");
   input_to(#'new_password_verified,hidden,hidden); /*'*/
 }
@@ -814,11 +837,11 @@ protected void new_password_entered(string str, int hidden) {
 
 protected void new_password_verified(string str, int hidden) {
   if (hidden)
-    write("\n");
+    msg_write(CMSG_GENERIC|MMSG_DIRECT, "\n");
   if (!str || str != passw)
-    return write("That was different! Password not changed.\n");
+    return msg_write(CMSG_GENERIC|MMSG_DIRECT, "That was different! Password not changed.\n");
   if (({int})MASTER->update_password(passwold,passw))
-    write("Your password has been changed.\n");
+    msg_write(CMSG_GENERIC|MMSG_DIRECT, "Your password has been changed.\n");
 }
 
 /* -------------------------------------------------------------------------
@@ -843,7 +866,7 @@ static int cmd_suicide(string arg) {
       return notify_fail("Usage: suicide [hidden|open]\nNothing changed.\n",
                          NOTIFY_NOT_VALID);
   }
-  write("You are going to commit suicide. Do you really want that?\n"
+  msg_write(CMSG_GENERIC|MMSG_DIRECT, "You are going to commit suicide. Do you really want that?\n"
     "If yes, enter your password as verification.\n"
     "If not, enter something else or just press return to abort.\n"
     "Password? ");
@@ -860,15 +883,15 @@ protected void suicide_verified(string str, int hidden) {
   if (hidden)
     write("\n");
   if (!str || str == "" || !({int})MASTER->update_password(str,str))
-    return write("Well, staying alive is much more fun, isn't it?\n");
+    return msg_write(CMSG_GENERIC|MMSG_DIRECT, "Well, staying alive is much more fun, isn't it?\n");
 
-  write("Well...\n\n");
+  msg_write(CMSG_GENERIC|MMSG_DIRECT, "Well...\n\n");
   rc = ({int})"/secure/remover"->remove_player(getuid(ME));
   if (!rc)
-    write("You can't do it now.\n");
+    msg_write(CMSG_GENERIC|MMSG_DIRECT, "You can't do it now.\n");
   else
   {
-    write(
+    msg_write(CMSG_GENERIC|MMSG_DIRECT,
       "\nWe thank you for visiting " MUDNAME " and hope you "
       "enjoyed it here.\n"
       "\n            === Live Long And Prosper! ===\n\n"
@@ -886,7 +909,7 @@ protected void suicide_verified(string str, int hidden) {
 
 public int cmd_save(string arg) {
   save_me(1, 0);
-  write("Ok.\n");
+  msg_write(CMSG_GENERIC|MMSG_DIRECT, "Ok.\n");
   return 1;
 }
 
@@ -897,7 +920,7 @@ public int cmd_save(string arg) {
 
 public int cmd_quit(string arg) {
   if (arg) return 0;
-  write("Saving "+capitalize(QueryRealName())+".\n");
+  msg_write(CMSG_GENERIC|MMSG_DIRECT, "Saving "+capitalize(QueryRealName())+".\n");
   auto_load = ([]);
   pLastSave = time();
   filter(all_inventory(), SF(save_autoobject), 1 /* destruct them */);
@@ -932,7 +955,7 @@ public int cmd_petrify(string arg) {
   if (arg) return 0;
   if (is_guest) return cmd_quit(0); /* Do not petrify guests */
 
-  write("Saving "+capitalize(QueryRealName())+".\n");
+  msg_write(CMSG_GENERIC|MMSG_DIRECT, "Saving "+capitalize(QueryRealName())+".\n");
   save_me(1,0);
   if (!QueryInvis()) say(capitalize(QueryName()) + " petrifies..\n");
   log_file("ENTER", ctime()[4..15]+" petrify \t"+query_ip_name()+" \t"
@@ -1564,7 +1587,7 @@ protected void move_player_to_start4(string where)
 #endif
   AddHeart(HEART_BODY); // to be sure
   ValidizeHeart();
-  config_soul();
+/*  config_soul(); */
   add_bin_commands();
   add_standard_commands();
   add_view_commands();
@@ -1577,7 +1600,8 @@ protected void move_player_to_start4(string where)
     add_ancient_commands();
     Set(P_CURRENTDIR,WPATH+QueryRealName());
   }
-  if (IS_WIZARD(PL)) add_wiz_commands();
+  if (IS_WIZARD(PL))
+    add_wiz_commands();
   cat("/etc/NEWS");
 
 #ifdef FIX_ARCHWIZ_HOME
@@ -2058,7 +2082,7 @@ public void create() {
 
   base::create();
   heart::create();
-  soul::create(); /* needed to initialize the default verbs/adverbs */
+//  soul::create(); /* needed to initialize the default verbs/adverbs */
   telnet_neg::create();
 
   /* dont mess with the blueprint */

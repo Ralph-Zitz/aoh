@@ -1313,16 +1313,6 @@ private mixed * reduce_verb( string verb,
     return 0;
 }
 
-public int query_prevent_shadow( object ob )
-{
-    return 1;
-}
-
-public void long( void )
-{
-    write( "You can't see it.\n" );
-}
-
 private varargs mixed * webster( string t,
   int offset,
   string channel,

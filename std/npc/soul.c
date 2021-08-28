@@ -700,7 +700,7 @@ private void flush( void )
     messages = ([ ]);
     reset_last_action();
 }
-/*
+
 public void init( void )
 {
    add_action( "do_feel", "", 1 );
@@ -713,8 +713,8 @@ public void init( void )
    add_action( "feeling", "feeling" );
    add_action( "suddenly", "suddenly" );
 }
-*/
 
+/*
 public void config_soul( void )
 {
     add_action( "do_feel", "", 1 );
@@ -727,6 +727,7 @@ public void config_soul( void )
     add_action( "feeling", "feeling" );
     add_action( "suddenly", "suddenly" );
 }
+*/
 
 private int letterorder( string a, string b )
 {

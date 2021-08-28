@@ -1722,7 +1722,7 @@ public int do_feel( string p )
                 return 1;
             default:
                 CHANNEL_D ->
-                SendEmote( parts[ 0 ],
+                SendTell( parts[ 0 ],
                   ({string})TP->QueryRealName(),
                   implode( parts[1..], " " ),
                   0

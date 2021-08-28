@@ -1755,10 +1755,6 @@ public int do_feel( string p )
     v = messages[ TP ];
     e = v[<1];
 
-
-    if( remoteFeel )
-        WRITE(" from afar.\n");
-
     if (e != '.' && e != '?' && e != '!' )
     {
         if ( remoteFeel )

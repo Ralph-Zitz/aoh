@@ -1882,7 +1882,7 @@ public varargs int fail( string p, int chan )
     if ( remoteFeel )
         TELL_OBJECT( remotePerson, " from afar, but fails miserably.\n" );
     if ( chan )
-        make_channel_msg( ", but fail miserably." );
+        make_channel_msg( ", but fails miserably." );
     else
         intsay( ", but fails miserably.\n" );
     if ( !( chan ) )

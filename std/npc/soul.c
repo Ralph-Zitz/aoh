@@ -1687,10 +1687,10 @@ public int do_feel( string p )
                         if ( !( sizeof( msg ) ) )
                             return 0;
                         CHANNEL_D ->
-                        SendChannel( parts[ 0 ],
-                          "",
+                        SendEmote( parts[ 0 ],
+                          // "",
                           msg,
-                          1
+                          0
                         );
                         return 1;
                     }
@@ -1704,26 +1704,26 @@ public int do_feel( string p )
                         return notify_fail( "Can't possibly put that on a "
                           "channel.\n" ), 0;
                     CHANNEL_D ->
-                    SendChannel( parts[ 0 ],
-                      TP,
+                    SendEmote( parts[ 0 ],
+                      ({string})TP->QueryRealName(),
                       msg[1..],
-                      1
+                      0
                     );
                     return 1;
                 }
             case '@':
                 parts[ 1 ] = parts[ 1 ][1..];
                 CHANNEL_D ->
-                SendChannel( parts[ 0 ],
-                  TP,
+                SendEmote( parts[ 0 ],
+                  ({string})TP->QueryRealName(),
                   implode( parts[1..], " " ),
-                  1
+                  0
                 );
                 return 1;
-            default :
+            default:
                 CHANNEL_D ->
-                SendChannel( parts[ 0 ],
-                  TP,
+                SendEmote( parts[ 0 ],
+                  ({string})TP->QueryRealName(),
                   implode( parts[1..], " " ),
                   0
                 );

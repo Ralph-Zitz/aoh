@@ -1595,6 +1595,7 @@ protected void move_player_to_start4(string where)
   add_comm_commands();
   add_npc_cmds();
   add_putget_cmds();
+  add_soul_cmds();
 //  add_abil_commands(); // Softbyte 19nov97
   if (IS_IMMORTAL(PL))
   {

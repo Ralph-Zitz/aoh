@@ -303,7 +303,7 @@ private void set_last_action( string s )
 
 private mapping get_verbs( void )
 {
-    if( verbs )
+    if (verbs)
         return verbs;
     return
     ([
@@ -714,8 +714,7 @@ public void init( void )
    add_action( "suddenly", "suddenly" );
 }
 
-/*
-public void config_soul( void )
+public void add_soul_cmds( void )
 {
     add_action( "do_feel", "", 1 );
     add_action( "do_emote", "emote" );
@@ -727,7 +726,6 @@ public void config_soul( void )
     add_action( "feeling", "feeling" );
     add_action( "suddenly", "suddenly" );
 }
-*/
 
 private int letterorder( string a, string b )
 {

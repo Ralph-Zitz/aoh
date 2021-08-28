@@ -41,6 +41,7 @@ inherit "/std/npc/cmds";
 inherit "/std/npc/putget";
 inherit "/std/living/stats"; // Softbye 19nov97
 inherit "/std/npc/view";
+inherit "/std/npc/soul";
 inherit "/std/base";
 
 #include <config.h>
@@ -95,6 +96,7 @@ public int SetLevel(int lvl) {
 void create() {
   base::create();
   heart::create();
+  soul::create();
   SetIds(({}));
 
   /* dont mess with the blueprint too much */
@@ -130,4 +132,5 @@ varargs void reset() {
 void init() {
   combat::init();
   chat::init();
+  soul::init();
 }

@@ -95,7 +95,7 @@ void config_soul() {
  * blueprint and its clones
  */
 
- mapping qv() {
+mapping qv() {
   if (explode(object_name(PO), "#")[0] != "/std/player" /*object_name(TO)*/)
     return 0;
   return dverbs;

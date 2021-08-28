@@ -1688,7 +1688,7 @@ public int do_feel( string p )
                             return 0;
                         CHANNEL_D ->
                         SendEmote( parts[ 0 ],
-                          // "",
+                          ({string})TP->QueryRealName(),
                           msg,
                           0
                         );

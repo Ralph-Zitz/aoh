@@ -103,7 +103,11 @@
 
 #include <soul.h>
 #include <msgclass.h>
+#include <config.h>
 #include <daemons.h>
+
+public string globber_one_player(mapping ve);
+public varargs string QueryName (mixed true_name); // /std/living/description
 
 private nosave  object  remotePerson;
 private nosave  string  morestring;
@@ -121,7 +125,6 @@ private nosave  mapping verbs;
 private nosave  mapping adverbs;
 private nosave  mapping how;
 private nosave  mapping bodydata;
-private nosave  mapping defaultbodydata;
 private nosave  mapping messages;
 private nosave  mixed   *       brokendown_data;
 private nosave  int     remoteFeel;
@@ -586,7 +589,7 @@ private mapping get_verbs( void )
 
 private string * low_get_adverbs( void )
 {
-    string * q, f = efun::read_file("/obj/living/soul_adverbs" );
+    string * q, f = efun::read_file("/std/npc/soul_adverbs" );
 
     if ( f )
         q = my_explode( f, "\n" ) - ({ "" });
@@ -622,39 +625,8 @@ private mapping get_how( void )
 
 private mapping get_bodydata( void )
 {
-    if ( bodydata )
+    if (bodydata)
         return bodydata;
-    return
-    ([
-      "hand" : (: "on the "+$1->query_hand_desc() :),
-      "forehead" : (: "on the fore"+$1->query_head_desc() :),
-      "head" : (: "on the "+$1->query_head_desc() :),
-      "face" : (: "in the "+$1->query_face_desc() :),
-      "hurts" : "where it hurts",
-      "eye" : "in the eye",
-      "ear" : "on the ear",
-      "stomach" : "in the stomach",
-      "butt" : "on the butt",
-      "behind" : "on the behind",
-      "leg" : (: "on the "+$1->query_leg_desc() :),
-      "foot" : (: "on the "+$1->query_foot_desc() :),
-      "toe" : (: "on the right "+$1->query_toe_desc() :),
-      "nose" : "on the nose",
-      "neck" : (: "in the "+$1->query_neck_desc() :),
-      "back" : (: "on the "+$1->query_back_desc() :),
-      "arm" : (: "on the "+$1->query_arm_desc() :),
-      "chest" : (: "on the "+$1->query_torso_desc() :),
-      "cheek" : "on the cheek",
-      "side" : "in the side",
-      "everywhere" : "everywhere",
-      "shoulder" : "on the shoulder"
-    ]);
-}
-
-private mapping get_defaultbodydata( void )
-{
-    if ( defaultbodydata )
-        return defaultbodydata;
     return
     ([
       "hand" : "on the hand",
@@ -701,7 +673,7 @@ private void my_tell_room( object o, string s, object * a )
 
 private varargs void intsay( string s, object o )
 {
-    my_tell_room( environment( this_player() ), s, ({ this_player(), o }) );
+    my_tell_room( environment(TP), s, ({ TP, o }) );
 }
 
 private string linebreak( string s )
@@ -723,7 +695,7 @@ private void flush( void )
             if( interactive( a[ e ] ) )
                 msg = fast_linebreak( msg, "", 75 );
         }
-        msg_object( a[ e ], "%^SOUL%^", msg );
+        msg_object(a[e], CMSG_EMOTE, msg);
     }
     messages = ([ ]);
     reset_last_action();
@@ -742,6 +714,7 @@ public void init( void )
    add_action( "suddenly", "suddenly" );
 }
 */
+
 public void config_soul( void )
 {
     add_action( "do_feel", "", 1 );
@@ -800,16 +773,13 @@ private string get_xadverb_string( void )
     );
 }
 
-public void soul_reset( int arg )
+public void create()
 {
-    if ( arg )
-        return;
-    SOUL =  "/obj/living/soul";
+    SOUL           = "/std/npc/soul";
     verbs          = get_verbs();
     adverbs        = get_adverbs();
     how            = get_how();
     bodydata       = get_bodydata();
-    defaultbodydata= get_defaultbodydata();
     messages       = ([ ]);
     xverbs         = ([ ]);
     xadverbs       = ([ ]);
@@ -819,27 +789,17 @@ public void soul_reset( int arg )
     channel_msg    = "";
 }
 
-public int get( void )
-{
-    return 1;
-}
-
-public int drop( int silently )
-{
-    return 1;
-}
-
 public int do_emote( string s )
 {
     if( !s || s == "" || !sizeof( s ) )
         return notify_fail( "Emote what?\n" ), 0;
-    msg_write( "%^EMOTE%^", "You emote: " +
-      this_player() -> query_name() + " " + s + "\n"
+    msg_write(CMSG_EMOTE, "You emote: " +
+      ({string})TP -> QueryName() + " " + s + "\n"
     );
-    msg_room( environment(this_player()),
-      "%^EMOTE%^",
-      (string)this_player() -> query_name() + " " + s + "\n",
-      ({ this_player() })
+    msg_room(environment(TP),
+      CMSG_EMOTE,
+      ({string})TP -> QueryName() + " " + s + "\n",
+      ({ TP })
     );
     return 1;
 }
@@ -886,7 +846,7 @@ public int do_help( string s )
         }
         return 1;
     case "feeling list":
-        if ( !( res = (string)SOUL -> query_total_list() ) )
+        if ( !( res = ({string})SOUL -> query_total_list() ) )
         {
             res = globber_one_player( verbs );
             this_object() -> set_total_list( res );
@@ -903,6 +863,7 @@ public int do_help( string s )
         write( "Soul version 1.2, written by hubbe@lysator.liu.se.\n");
         return 1;
     }
+    return 0;
 }
 
 private string get_name( object o )
@@ -927,10 +888,7 @@ private object * get_persons( void )
 
 private object * channel_listeners( string channel )
 {
-    return ( ( (object *)CHANNEL_DAEMON -> QueryChannelListeners( channel ) || ({ }) )
-      //            +
-      //            ( (object *)CHANNEL_DAEMON -> QueryChannelListeners( channel, 1 ) || ({ }) )
-    );
+    return (({object *})CHANNEL_D -> ChannelListeners( channel ) || ({ }));
 }
 
 private mixed prefix( string * dum, string pr, string errm )
@@ -956,14 +914,14 @@ private string WHO( object o, object who )
 {
     if ( who == o )
     {
-        if ( o == this_player() )
+        if ( o == TP )
             return "yourself";
         else
             return "you";
     }
     else
     {
-        if ( o == this_player() )
+        if ( o == TP )
             return OBJECTIVE( o ) + "self";
         else
             return CAP_NAME( o );
@@ -974,14 +932,14 @@ private string POSS( object o, object who )
 {
     if ( who == o )
     {
-        if ( o == this_player() )
+        if ( o == TP )
             return "your own";
         else
             return "your";
     }
     else
     {
-        if ( o == this_player() )
+        if ( o == TP )
             return POSSESSIVE( o ) + " own";
         else
         {
@@ -1013,31 +971,31 @@ private string gloerp( string q, object * t, mixed who, int prev )
         }
         else if ( sscanf( s[ e ], "YOUR%s", b ) )
         {
-            if( this_player() == who )
+            if( TP == who )
                 mess += "your" + b;
             else
-                mess += POSSESSIVE( this_player() ) + b;
+                mess += POSSESSIVE( TP ) + b;
         }
         else if ( sscanf( s[ e ], "YOU%s", b ) )
         {
-            if( this_player() == who )
+            if( TP == who )
                 mess += "you" + b;
             else
-                mess += OBJECTIVE( this_player() ) + b;
+                mess += OBJECTIVE( TP ) + b;
         }
         else if ( sscanf( s[ e ], "MY%s", b ) )
         {
-            if ( this_player() == who )
+            if ( TP == who )
                 mess += "your" + b;
             else
-                mess += OBJECTIVE( this_player() ) + b;
+                mess += OBJECTIVE( TP ) + b;
         }
         else if ( sscanf( s[ e ], "PRON%s", b ) )
         {
-            if ( this_player() ==who )
+            if ( TP == who )
                 mess += "you" + b;
             else
-                mess += PRONOUN( this_player() ) + b;
+                mess += PRONOUN( TP ) + b;
         }
         else if ( sscanf( s[ e ], "THEIR%s", b )
           ||
@@ -1073,15 +1031,15 @@ private string gloerp( string q, object * t, mixed who, int prev )
             {
                 if ( t[ 0 ] == who )
                 {
-                    if ( who == this_player() )
+                    if ( who == TP )
                         mess += "yourself" + b;
                     else
                         mess += "you" + b;
                 }
                 else
                 {
-                    if( t[ 0 ] == this_player() )
-                        mess += OBJECTIVE( this_player() ) + "self" + b;
+                    if( t[ 0 ] == TP )
+                        mess += OBJECTIVE( TP ) + "self" + b;
                     else
                         mess += OBJECTIVE( t[ 0 ] ) + b;
                 }
@@ -1133,7 +1091,6 @@ private string query_channel_msg( void )
 private void feel( mixed * d, int flag )
 {
     int prev;
-    object tp;
     mixed * q = ({ });
     for ( int e = 0; e < sizeof( d ); e++ )
     {
@@ -1141,33 +1098,33 @@ private void feel( mixed * d, int flag )
         &&
         !sizeof( SUB_ARRAY( d[ e ][ 0 ], q ) )
         &&
-        -1 == member_array( this_player(), q );
+        -1 == member( q, TP );
         q = d[ e ][ 0 ];
         make_channel_msg( gloerp( d[ e ][ 3 + flag * 3 ], q, 0, prev ) );
 
         if(!remoteFeel)
-            my_tell_room( environment( this_player() ),
+            my_tell_room( environment( TP ),
               gloerp( d[ e ][ 3 + flag * 3 ], q , 0, prev ),
-              q + ({ this_player() })
+              q + ({ TP })
             );
 
         for ( int w = 0; w < sizeof( q ); w++ )
         {
-            if( this_player() != q[ w ] && w == member_array( q[ w ], q ) )
+            if( TP != q[ w ] && w == member_array( q[ w ], q ) )
                 TELL_OBJECT( q[ w ], gloerp( d[ e ][ 2 + flag * 3 ], q, q[ w ], prev )
                 );
         }
-        WRITE( gloerp( d[ e ][ 1 + flag * 3 ], q, this_player(), prev ) );
+        WRITE( gloerp( d[ e ][ 1 + flag * 3 ], q, TP, prev ) );
         switch( sizeof( d ) - e )
         {
         default:
             if(!remoteFeel)
-                my_tell_room( environment( this_player() ), ",", ({ }) );
+                my_tell_room( environment( TP ), ",", ({ }) );
             make_channel_msg( "," );
             break;
         case 2:
             if(!remoteFeel)
-                my_tell_room( environment( this_player() ), " and", ({ }) );
+                my_tell_room( environment( TP ), " and", ({ }) );
             make_channel_msg( " and" );
             break;
         case 1:
@@ -1188,12 +1145,12 @@ private mixed * reduce_verb( string verb,
   string * body )
 {
     mixed * q;
-    string how, a, b, c, d, * aa;
+    string how, a, b, * aa;
     string where, msg;
     int e;
 
     if ( objectp( verbdata ) || stringp( verbdata ) )
-        return (mixed *)verbdata -> reduce_verb( verb, who, adverb, mess, body );
+        return ({mixed *})verbdata -> reduce_verb( verb, who, adverb, mess, body );
     if ( pointerp( q = verbdata[ 1 ] ) )
     {
         if ( !sizeof( adverb ) && sizeof( q ) > 0 && q[ 0 ] )
@@ -1251,13 +1208,13 @@ private mixed * reduce_verb( string verb,
             a = replace( a," \nAT", verbdata[ 3 ] + " \nWHO" );
         else
             a = replace( a, " \nAT", "" );
-        if ( !sizeof( who ) && ( sscanf( a, "%s\nWHO", c )
+        if ( !sizeof( who ) && ( sscanf( a, "%~s\nWHO" )
             ||
-            sscanf( a, "%s\nPOSS", c )
+            sscanf( a, "%~s\nPOSS" )
             ||
-            sscanf( a, "%s\nTHEIR", c )
+            sscanf( a, "%~s\nTHEIR" )
             ||
-            sscanf( a, "%s\nOBJ",c ) )
+            sscanf( a, "%~s\nOBJ" ) )
         )
             return notify_fail( "Need person for verb " + verb + ".\n" ), 0;
         if( how == "" )
@@ -1275,13 +1232,13 @@ private mixed * reduce_verb( string verb,
     case DEUX:
         a = verbdata[ 2 ];
         b = verbdata[ 3 ];
-        if ( !sizeof( who ) && ( sscanf( a, "%s\nWHO", c )
+        if ( !sizeof( who ) && ( sscanf( a, "%~s\nWHO" )
             || 
-            sscanf( a, "%s\nPOSS", c )
+            sscanf( a, "%~s\nPOSS" )
             ||
-            sscanf( a, "%s\nTHEIR", c )
+            sscanf( a, "%~s\nTHEIR" )
             ||
-            sscanf( a, "%s\nOBJ", c ) )
+            sscanf( a, "%~s\nOBJ" ) )
         )
             return notify_fail( "Need person for verb " +verb + ".\n" ), 0;
         a = replace( a, " \nWHERE", where );
@@ -1352,7 +1309,8 @@ private mixed * reduce_verb( string verb,
                 aa[ e ] = replace( aa[ e ], " \nHOW", " " + how );
         }
         return ({ ({ who }) + aa });
-    }  
+    }
+    return 0;
 }
 
 public int query_prevent_shadow( object ob )
@@ -1377,8 +1335,6 @@ private varargs mixed * webster( string t,
     object * who = ({ }), * people, ob;
     mixed p, * verbdata, * Y = ({ });
     mapping persons;
-    object the_player;
-
 
     for( int e = 0; e < sizeof( q ); e++ )
     {
@@ -1424,9 +1380,9 @@ private varargs mixed * webster( string t,
         case "myself":
         case "I":
             if ( except )
-                who = SUB_ARRAY( who, ({ this_player() }) );
+                who = SUB_ARRAY( who, ({ TP }) );
             else
-                who += ({ this_player() });
+                who += ({ TP });
             break;
         case "them":
         case "him":
@@ -1463,7 +1419,7 @@ private varargs mixed * webster( string t,
                     people = get_persons();
                 else if( !people && channel )
                     people = channel_listeners( channel );
-                who += SUB_ARRAY( people, ({ this_player() }) );
+                who += SUB_ARRAY( people, ({ TP }) );
             }
             break;
         case "except":
@@ -1485,7 +1441,7 @@ private varargs mixed * webster( string t,
                 ( ob = people[ member_array( t, people ) ] )
               )
               ||
-              ( ob = present( t, environment( this_player() ) ) )
+              ( ob = present( t, environment( TP ) ) )
               &&
               isplay( ob )
               ||
@@ -1494,7 +1450,6 @@ private varargs mixed * webster( string t,
               ob = find_player( t )
             )
             {
-                the_player = ob;
                 if ( except )
                     who = SUB_ARRAY( who, ({ ob }) );
                 else
@@ -1536,24 +1491,8 @@ private varargs mixed * webster( string t,
                     adv += ({ t });
                 break;
             }
-            //uuga
-            //made this use closures
-            if ( bodydata[ t ] )
+            if (p = bodydata[ t ])
             {
-                if( the_player && objectp(the_player) )
-                {
-                    if(closurep( bodydata[ t ] ))
-                    {
-                        p = funcall(bodydata[ t ], the_player);	
-                    } else 
-                        p = bodydata[ t ];            		
-
-                } else {
-                    p = defaultbodydata[ t ];
-                }
-
-
-
                 body += ({ p });
                 break;
             }
@@ -1707,8 +1646,8 @@ public int do_feel( string p )
     }
     // Channel handling - Nosty
     if ( member(
-        ( (string *)this_player() ->
-          query_active_channels() || ({ }) ), v ) != -1 )
+        ( ({string *})TP ->
+          QueryChannels() || ({ }) ), v ) != -1 )
     {
         string command = query_command();
         string * parts = explode( command, " " );
@@ -1727,9 +1666,9 @@ public int do_feel( string p )
                     // Handle the 'bofh' channel seperately
                     if ( parts[ 0 ] == "bofh" )
                     {
-                        CHANNEL_DAEMON ->
+                        CHANNEL_D ->
                         SendChannel( parts[ 0 ],
-                          this_player(),
+                          TP,
                           implode( parts[1..], " " ),
                           0
                         );
@@ -1753,7 +1692,7 @@ public int do_feel( string p )
 
                         if ( !( sizeof( msg ) ) )
                             return 0;
-                        CHANNEL_DAEMON ->
+                        CHANNEL_D ->
                         SendChannel( parts[ 0 ],
                           "",
                           msg,
@@ -1770,9 +1709,9 @@ public int do_feel( string p )
                     if ( msg && !sizeof( msg ) )
                         return notify_fail( "Can't possibly put that on a "
                           "channel.\n" ), 0;
-                    CHANNEL_DAEMON ->
+                    CHANNEL_D ->
                     SendChannel( parts[ 0 ],
-                      this_player(),
+                      TP,
                       msg[1..],
                       1
                     );
@@ -1780,17 +1719,17 @@ public int do_feel( string p )
                 }
             case '@':
                 parts[ 1 ] = parts[ 1 ][1..];
-                CHANNEL_DAEMON ->
+                CHANNEL_D ->
                 SendChannel( parts[ 0 ],
-                  this_player(),
+                  TP,
                   implode( parts[1..], " " ),
                   1
                 );
                 return 1;
             default :
-                CHANNEL_DAEMON ->
+                CHANNEL_D ->
                 SendChannel( parts[ 0 ],
-                  this_player(),
+                  TP,
                   implode( parts[1..], " " ),
                   0
                 );
@@ -1817,36 +1756,33 @@ public int do_feel( string p )
     WRITE( "You" );
     if ( remoteFeel )
     {
-        //my_tell_room( environment( this_player() ), query_name(), ({ TP }) );
-        TELL_OBJECT( remotePerson, query_name() );
+        my_tell_room( environment( this_player() ), QueryName(), ({ TP }) );
+        TELL_OBJECT( remotePerson, QueryName() );
     } else
-        intsay( CAP_NAME( this_player() ) );
+        intsay( CAP_NAME( TP ) );
     feel( q, 0 );
     if ( remoteFeel )
         TELL_OBJECT( remotePerson, " from afar.\n" );
-    v = messages[ this_player() ];
+    v = messages[ TP ];
     e = v[<1];
 
 
     if( remoteFeel )
         WRITE(" from afar.\n");
 
-    //Uuga disabled remote room messages
     if (e != '.' && e != '?' && e != '!' )
     {
-        //if ( remoteFeel )
-        //    my_tell_room( environment( this_player() ), " from afar.\n", ({ }) );
-        //else
-        if ( !remoteFeel )
-            my_tell_room( environment( this_player() ), ".\n", ({ }) );
+        if ( remoteFeel )
+            my_tell_room( environment( TP ), " from afar.\n", ({ }) );
+        else
+            my_tell_room( environment( TP ), ".\n", ({ }) );
     }
     else
     {
-        //if ( remoteFeel )
-        //    my_tell_room( environment( this_player() ), " from afar\n", ({ }) );
-        //else
-        if ( !remoteFeel )
-            my_tell_room( environment( this_player() ), "\n", ({ }) );
+        if ( remoteFeel )
+            my_tell_room( environment( TP ), " from afar\n", ({ }) );
+        else
+            my_tell_room( environment( TP ), "\n", ({ }) );
     }
     flush(); 
     return 1;
@@ -1872,25 +1808,25 @@ public varargs int suddenly( string p, int chan )
     else
         intsay( "Suddenly, " + CAP_NAME( this_object() ) );
     if ( remoteFeel )
-        TELL_OBJECT( remotePerson, "Suddenly, " + query_name() );
+        TELL_OBJECT( remotePerson, "Suddenly, " + QueryName() );
     feel( q, 0 );
     if ( remoteFeel )
         TELL_OBJECT( remotePerson, " from afar.\n" );
-    v = messages[ this_player() ];
+    v = messages[ TP ];
     e = v[<1];
     if( e != '.' && e != '?' && e != '!' )
     {
         if ( remoteFeel )
-            my_tell_room( environment( this_player() ), " from afar.\n", ({ }) );
+            my_tell_room( environment( TP ), " from afar.\n", ({ }) );
         else
-            my_tell_room( environment( this_player() ), ".\n", ({ }) );
+            my_tell_room( environment( TP ), ".\n", ({ }) );
     }
     else
     {
         if ( remoteFeel )
-            my_tell_room( environment( this_player() ), " from afar\n", ({ }) );
+            my_tell_room( environment( TP ), " from afar\n", ({ }) );
         else
-            my_tell_room( environment( this_player() ), "\n", ({ }) );
+            my_tell_room( environment( TP ), "\n", ({ }) );
     }
     if ( !( chan ) )
         flush();
@@ -1899,7 +1835,6 @@ public varargs int suddenly( string p, int chan )
 
 public varargs int again( string p, int chan )
 {
-    string v;
     mixed * q;
 
     if ( !p )
@@ -1913,7 +1848,7 @@ public varargs int again( string p, int chan )
 
     WRITE( "You" );
     if ( remoteFeel )
-        TELL_OBJECT( remotePerson, query_name() );
+        TELL_OBJECT( remotePerson, QueryName() );
     if ( chan )
         make_channel_msg( CAP_NAME( this_object() ) );
     else
@@ -1921,7 +1856,7 @@ public varargs int again( string p, int chan )
     feel( q, 0 );
     if ( remoteFeel )
         TELL_OBJECT( remotePerson, " again from afar.\n" );
-    my_tell_room( environment( this_player() ), " again.\n", ({ }) );
+    my_tell_room( environment( TP ), " again.\n", ({ }) );
     if ( chan )
         make_channel_msg( " again." );
     if ( !( chan ) )
@@ -1931,7 +1866,6 @@ public varargs int again( string p, int chan )
 
 public varargs int fail( string p, int chan )
 {
-    string v;
     mixed * q;
 
     if(!p)
@@ -1945,7 +1879,7 @@ public varargs int fail( string p, int chan )
 
     WRITE( "You try to" );
     if ( remoteFeel )
-        TELL_OBJECT( remotePerson, query_name() + " tries to");
+        TELL_OBJECT( remotePerson, QueryName() + " tries to");
     if ( chan )
         make_channel_msg( CAP_NAME( this_object() ) + " tries to" );
     else
@@ -1965,7 +1899,6 @@ public varargs int fail( string p, int chan )
 
 public varargs int dont( string p, int chan )
 {
-    string v;
     mixed * q;
 
     if ( !p )
@@ -1979,7 +1912,7 @@ public varargs int dont( string p, int chan )
 
     WRITE( "You try not to" );
     if ( remoteFeel )
-        TELL_OBJECT( remotePerson, query_name() + " tries not to" );
+        TELL_OBJECT( remotePerson, QueryName() + " tries not to" );
     if ( chan )
         make_channel_msg( CAP_NAME( this_object() ) + " tries not to" );
     else
@@ -2013,14 +1946,14 @@ public int feeling( string p )
     messages = ([ ]);
 
     WRITE( "You" );
-    intsay( CAP_NAME( this_player() ) );
+    intsay( CAP_NAME( TP ) );
     feel( q, 0 );
-    v = messages[ this_player() ];
+    v = messages[ TP ];
     e = v[<1];
     if ( e != '.' && e != '?' && e != '!' )
-        my_tell_room( environment( this_player() ), ".\n", ({ }) );
+        my_tell_room( environment( TP ), ".\n", ({ }) );
     else
-        my_tell_room( environment( this_player() ), "\n", ({ }) );
+        my_tell_room( environment( TP ), "\n", ({ }) );
     flush();
     return 1;
 }
@@ -2040,7 +1973,7 @@ public void remove_verb( string * v )
  * verb_type is one of the defines in the beginning, you have to look
  *   at the examples to what they actually do.
  * defaults is zero or an array containing:
- *        ({defaultadverb,defaultwhat,defaultbodypart})
+ *        ({defaultadverb,defaultwhat,bodypart})
  * Data has to do with what type of verb it is, again: see the examples,
  *  there should be enogh of them.
  */
@@ -2081,8 +2014,7 @@ public mapping query_xverbs( void )
 
 private string feel_to_this_player( mixed * d, int flag )
 {
-    int w, prev;
-    object tp;
+    int prev;
     mixed * q = ({ });
     string res = "";
 
@@ -2092,9 +2024,9 @@ private string feel_to_this_player( mixed * d, int flag )
         &&
         !sizeof( SUB_ARRAY( d[ e ][ 0 ], q ) )
         &&
-        -1 == member_array( this_player(), q );
+        -1 == member_array( TP, q );
         q = d[ e ][ 0 ];
-        res += gloerp( d[ e ][ 1 + flag * 3 ], q, this_player(), prev );
+        res += gloerp( d[ e ][ 1 + flag * 3 ], q, TP, prev );
         switch ( sizeof( d ) - e )
         {
         default:
@@ -2131,7 +2063,7 @@ public string globber_one_player( mapping ve )
         q = reduce_verb( foo[ e ], bar[ e ], ({ }), ({ }), "", ({ }) );
         if ( !q )
         {
-            q = reduce_verb( foo[ e ], bar[ e ], ({ this_player() }),
+            q = reduce_verb( foo[ e ], bar[ e ], ({ TP }),
               ({ }), "", ({ })
             );
         }

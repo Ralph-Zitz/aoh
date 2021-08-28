@@ -4,22 +4,23 @@
 #define NOSTY(x)        if(find_player("nostradamus")) \
                         tell_object(find_player("nostradamus"),x)
 #define DEBUG 0
+#define TP              this_player()
 #define HAVE_SPRINTF
-#define replace(X,Y,Z)  implode( my_explode( X, Y ), Z )
-#define MOVE(X,Y)       move_object( X, Y )
-#define PNAME(X)        lower_case( ({string})( X ) -> query_name() || "")
-#define CAP_NAME(X)     ({string})( ( X ) -> query_name() )
+#define replace(X,Y,Z)  implode(my_explode(X,Y),Z)
+#define MOVE(X,Y)       move_object(X, Y)
+#define PNAME(X)        lower_case(({string})(X) -> QueryName() || "")
+#define CAP_NAME(X)     ({string})((X) -> QueryName())
 #define ISLIVING(X)     living( X )
-#define ISVISIBLE(X)    ( ({int})(X) -> query_invis() == 0 )
+#define ISVISIBLE(X)    (({int})(X) -> QueryInvis() == 0)
 #define FORCE_SELF(X)   command( ( X ) )
-#define POSSESSIVE(X)   ({string})(X) -> query_possessive()
-#define OBJECTIVE(X)    ({string})(X) -> query_objective()
-#define PRONOUN(X)      ({string})(X) -> query_pronoun()
-#define MORE_ROWS()     (({int})this_player() -> query_screenheight() )
-#define MORE_WIDTH()    (({int})this_player() -> query_screenwidth() )
-#define SORT(X)         sort_array( ( X ), #'letterorder )
-#define SUB_ARRAY(X,Y)  ( ( X ) - ( Y ) )
-#define WRITE(X)        TELL_OBJECT( this_player(),( X ) )
+#define POSSESSIVE(X)   ({string})(X) -> QueryPossessive()
+#define OBJECTIVE(X)    ({string})(X) -> QueryObjective()
+#define PRONOUN(X)      ({string})(X) -> QueryPronoun()
+#define MORE_ROWS()     (({int})TP -> QueryPageSize())
+#define MORE_WIDTH()    (({int})TP -> QueryPageWidth())
+#define SORT(X)         sort_array(X, #'letterorder /*'*/)
+#define SUB_ARRAY(X,Y)  ((X) - (Y))
+#define WRITE(X)        TELL_OBJECT(TP, X)
 
 #define SIMP 0
 #define DEFA 1

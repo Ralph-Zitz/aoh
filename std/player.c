@@ -68,6 +68,7 @@ inherit "std/living/attributes";
 
 inherit "std/npc/putget";
 inherit "std/npc/cmds";
+inherit "std/npc/soul";
 
 inherit "std/player/message";
 inherit "std/player/comm";
@@ -2074,6 +2075,7 @@ public void illegal_patch(string what) {
 void init() {
   stats::init();
   combat::init();
+  soul::init();
 }
 
 public void create() {
@@ -2082,7 +2084,7 @@ public void create() {
 
   base::create();
   heart::create();
-//  soul::create(); /* needed to initialize the default verbs/adverbs */
+  soul::create(); /* needed to initialize the default verbs/adverbs */
   telnet_neg::create();
 
   /* dont mess with the blueprint */

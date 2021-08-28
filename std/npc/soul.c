@@ -700,7 +700,7 @@ private void flush( void )
     messages = ([ ]);
     reset_last_action();
 }
-
+/*
 public void init( void )
 {
    add_action( "do_feel", "", 1 );
@@ -713,7 +713,7 @@ public void init( void )
    add_action( "feeling", "feeling" );
    add_action( "suddenly", "suddenly" );
 }
-
+*/
 public void add_soul_cmds( void )
 {
     add_action( "do_feel", "", 1 );
@@ -793,11 +793,11 @@ public int do_emote( string s )
     if( !s || s == "" || !sizeof( s ) )
         return notify_fail( "Emote what?\n" ), 0;
     msg_write(CMSG_EMOTE, "You emote: " +
-      ({string})TP -> QueryName() + " " + s + "\n"
+      ({string})TP->QueryName() + " " + s + "\n"
     );
     msg_room(environment(TP),
       CMSG_EMOTE,
-      ({string})TP -> QueryName() + " " + s + "\n",
+      ({string})TP->QueryName() + " " + s + "\n",
       ({ TP })
     );
     return 1;
@@ -848,7 +848,7 @@ public int do_help( string s )
         if ( !( res = ({string})SOUL -> query_total_list() ) )
         {
             res = globber_one_player( verbs );
-            this_object() -> set_total_list( res );
+            TO -> set_total_list( res );
             if ( sizeof( xverbs ) )
                 res += "<TRUNCATED> (try again)\n";
             else
@@ -880,7 +880,7 @@ private int isplay( object o )
 
 private object * get_persons( void )
 {
-    return filter( all_inventory( environment( this_object() ) ),
+    return filter( all_inventory( environment( TO ) ),
       #'isplay
     );
 }
@@ -1002,7 +1002,7 @@ private string gloerp( string q, object * t, mixed who, int prev )
         {
             if( sizeof( t ) > 1 )
             {
-                if( member_array( who, t ) != -1 )
+                if( member( t, who ) != -1 )
                     mess += "your" + b;
                 else
                     mess += "their" + b;
@@ -1021,7 +1021,7 @@ private string gloerp( string q, object * t, mixed who, int prev )
         {
             if ( sizeof( t ) > 1 )
             {
-                if ( member_array( who, t ) !=-1 )
+                if ( member( t, who ) !=-1 )
                     mess += "all of you" + b;
                 else
                     mess += "them" + b;
@@ -1048,7 +1048,7 @@ private string gloerp( string q, object * t, mixed who, int prev )
         {
             if ( sizeof( t ) > 1 )
             {
-                if ( member_array( who, t ) != -1 )
+                if ( member( t, who ) != -1 )
                     mess += "you" + b;
                 else
                     mess += "they" + b;
@@ -1063,7 +1063,7 @@ private string gloerp( string q, object * t, mixed who, int prev )
         }
         else if ( sscanf( s[ e ], "IS%s", b ) )
         {
-            if ( member_array( who, t ) != -1 )
+            if ( member( t, who ) != -1 )
                 mess += "are" + b;
             else if ( sizeof( t ) <= 1 )
                 mess += "is" + b;
@@ -1109,7 +1109,7 @@ private void feel( mixed * d, int flag )
 
         for ( int w = 0; w < sizeof( q ); w++ )
         {
-            if( TP != q[ w ] && w == member_array( q[ w ], q ) )
+            if( TP != q[ w ] && w == member( q, q[ w ] ) )
                 TELL_OBJECT( q[ w ], gloerp( d[ e ][ 2 + flag * 3 ], q, q[ w ], prev )
                 );
         }
@@ -1325,6 +1325,7 @@ private varargs mixed * webster( string t,
     mixed p, * verbdata, * Y = ({ });
     mapping persons;
 
+    remote = 0;
     for( int e = 0; e < sizeof( q ); e++ )
     {
         t = q[ e ];
@@ -1426,8 +1427,8 @@ private varargs mixed * webster( string t,
                 people = channel_listeners( channel );
             if ( ( persons && ( ob = persons[ t ] ) )
               ||
-              ( people && member_array( t, people ) != -1 &&
-                ( ob = people[ member_array( t, people ) ] )
+              ( people && member( people, t ) != -1 &&
+                ( ob = people[ member( people, t ) ] )
               )
               ||
               ( ob = present( t, environment( TP ) ) )
@@ -1443,10 +1444,14 @@ private varargs mixed * webster( string t,
                     who = SUB_ARRAY( who, ({ ob }) );
                 else
                     who += ({ ob });
-                if ( !present( ob, environment( this_object() ) ) )
+                if ( !present( ob, environment( TO ) ) )
                 {
                     remote = 1;
                     remotePerson = ob;
+                }
+                else {
+                    remote = 0;
+                    remotePerson = 0;
                 }
                 break;
             }
@@ -1670,7 +1675,7 @@ public int do_feel( string p )
                         set_last_action( parts[ 1 ][1..] );
                         q = webster( implode( parts[2..], " " ), 2 );
                         messages = ([ ]);
-                        cl = symbol_function( parts[ 1 ][1..], this_object() );
+                        cl = symbol_function( parts[ 1 ][1..], TO );
                         if ( cl )
                             funcall( cl, implode( parts[2..], " " ), 1 );
                         msg = query_channel_msg();
@@ -1745,8 +1750,8 @@ public int do_feel( string p )
     WRITE( "You" );
     if ( remoteFeel )
     {
-        my_tell_room( environment( this_player() ), QueryName(), ({ TP }) );
-        TELL_OBJECT( remotePerson, QueryName() );
+//        my_tell_room( environment( this_player() ), QueryName(), ({ TP }) );
+        TELL_OBJECT( remotePerson, ({string})TP->QueryName() );
     } else
         intsay( CAP_NAME( TP ) );
     feel( q, 0 );
@@ -1754,7 +1759,10 @@ public int do_feel( string p )
         TELL_OBJECT( remotePerson, " from afar.\n" );
     v = messages[ TP ];
     e = v[<1];
-
+/*
+    if (remoteFeel)
+        WRITE(" from afar.\n");
+*/
     if (e != '.' && e != '?' && e != '!' )
     {
         if ( remoteFeel )
@@ -1789,11 +1797,11 @@ public varargs int suddenly( string p, int chan )
 
     WRITE( "Suddenly, you" );
     if ( chan )
-        make_channel_msg( "Suddenly, " + CAP_NAME( this_object() ) );
+        make_channel_msg( "Suddenly, " + CAP_NAME( TO ) );
     else
-        intsay( "Suddenly, " + CAP_NAME( this_object() ) );
+        intsay( "Suddenly, " + CAP_NAME( TP ) );
     if ( remoteFeel )
-        TELL_OBJECT( remotePerson, "Suddenly, " + QueryName() );
+        TELL_OBJECT( remotePerson, "Suddenly, " + ({string})TP->QueryName() );
     feel( q, 0 );
     if ( remoteFeel )
         TELL_OBJECT( remotePerson, " from afar.\n" );
@@ -1833,11 +1841,11 @@ public varargs int again( string p, int chan )
 
     WRITE( "You" );
     if ( remoteFeel )
-        TELL_OBJECT( remotePerson, QueryName() );
+        TELL_OBJECT( remotePerson, ({string})TP->QueryName() );
     if ( chan )
-        make_channel_msg( CAP_NAME( this_object() ) );
+        make_channel_msg( CAP_NAME( TO ) );
     else
-        intsay( CAP_NAME( this_object() ) );
+        intsay( CAP_NAME( TO ) );
     feel( q, 0 );
     if ( remoteFeel )
         TELL_OBJECT( remotePerson, " again from afar.\n" );
@@ -1864,11 +1872,11 @@ public varargs int fail( string p, int chan )
 
     WRITE( "You try to" );
     if ( remoteFeel )
-        TELL_OBJECT( remotePerson, QueryName() + " tries to");
+        TELL_OBJECT( remotePerson, ({string})TP->QueryName() + " tries to");
     if ( chan )
-        make_channel_msg( CAP_NAME( this_object() ) + " tries to" );
+        make_channel_msg( CAP_NAME( TO ) + " tries to" );
     else
-        intsay( CAP_NAME( this_object() ) + " tries to" );
+        intsay( CAP_NAME( TO ) + " tries to" );
     feel( q, 1 );
     WRITE( ", but fail miserably.\n" );
     if ( remoteFeel )
@@ -1897,11 +1905,11 @@ public varargs int dont( string p, int chan )
 
     WRITE( "You try not to" );
     if ( remoteFeel )
-        TELL_OBJECT( remotePerson, QueryName() + " tries not to" );
+        TELL_OBJECT( remotePerson, ({string})TP->QueryName() + " tries not to" );
     if ( chan )
-        make_channel_msg( CAP_NAME( this_object() ) + " tries not to" );
+        make_channel_msg( CAP_NAME( TO ) + " tries not to" );
     else
-        intsay( CAP_NAME( this_object() ) + " tries not to" );
+        intsay( CAP_NAME( TO ) + " tries not to" );
     feel( q, 1 );
     WRITE( ", but fail miserably.\n" );
     if ( remoteFeel )
@@ -2009,7 +2017,7 @@ private string feel_to_this_player( mixed * d, int flag )
         &&
         !sizeof( SUB_ARRAY( d[ e ][ 0 ], q ) )
         &&
-        -1 == member_array( TP, q );
+        -1 == member( q, TP );
         q = d[ e ][ 0 ];
         res += gloerp( d[ e ][ 1 + flag * 3 ], q, TP, prev );
         switch ( sizeof( d ) - e )

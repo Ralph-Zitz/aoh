@@ -123,6 +123,7 @@ protected int max_port() {
 protected int next_port() {
   object *cust;
   string *ports_to_support;
+  int *rng_port = ({});
 
   if (!sizeof(m_values(QueryPorts())))
     return -1;
@@ -134,9 +135,12 @@ protected int next_port() {
       // We have no passengers, i. e. we can directly sail to our customers.
       ports_to_support = map(map(cust, SF(environment)), SF(object_name));
       foreach (int key, string val : QueryPorts()) {
-        if (member(ports_to_support, val) != -1)
-          return key;
+        if (member(ports_to_support, val) != -1) {
+          rng_port += ({ key });
+        }
       }
+      if (sizeof(rng_port) > 0)  
+        return rng_port[random(sizeof(rng_port))];
     }
   }
   return (Pcurrent_port + 1) % sizeof(m_indices(QueryPorts()));

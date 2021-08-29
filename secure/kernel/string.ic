@@ -180,7 +180,7 @@ public string add_gen (string str)
 {
   if (!stringp(str))
     raise_error(sprintf("Illegal argument to add_gen(): %O\n", str));
-  return str + ((member("sxy",str[<1]) != -1)?"'":"'s");
+  return str + ((member("sxz",str[<1]) != -1)?"'":"'s");
 }
 
 /*-------------------------------------------------------------------------*/

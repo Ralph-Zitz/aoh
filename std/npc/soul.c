@@ -219,6 +219,12 @@ private void mymore( string str )
     morestring += str;
 }
 
+public varargs void more_flush(string str)
+{
+    MORE->smore(morestring);
+}
+
+#if 0
 public varargs void more_flush( string str )
 {
     int rows = MORE_ROWS();
@@ -254,6 +260,7 @@ public varargs void more_flush( string str )
         input_to( "more_flush" );
     }
 }
+#endif
 
 protected mixed * query_brokendown_data( void )
 {
@@ -589,7 +596,7 @@ private mapping get_verbs( void )
 
 private string * low_get_adverbs( void )
 {
-    string * q, f = efun::read_file("/std/npc/soul_adverbs" );
+    string * q, f = efun::read_file(SOUL_ADVERBS);
 
     if ( f )
         q = my_explode( f, "\n" ) - ({ "" });

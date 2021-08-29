@@ -1,6 +1,8 @@
 #ifndef _SOUL_H_
 #define _SOUL_H_
 
+#include <driver/regexp.h>
+
 #define SOUL_ADVERBS    "/std/npc/soul_adverbs"
 #define DEBUG           0
 #define NOSTY(x)        if(find_player("nostradamus") && DEBUG) \
@@ -8,7 +10,8 @@
 #define TP              this_player()
 #define TO              this_object()
 #define HAVE_SPRINTF
-#define replace(X,Y,Z)  implode(my_explode(X,Y),Z)
+#define replace(X,Y,Z)  regreplace(X, Y, Z, RE_GLOBAL|RE_PCRE)
+//#define replace(X,Y,Z)  implode(my_explode(X,Y),Z)
 #define MOVE(X,Y)       move_object(X, Y)
 #define PNAME(X)        lower_case(({string})(X) -> QueryName() || "")
 #define CAP_NAME(X)     ({string})((X) -> QueryName())

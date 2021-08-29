@@ -1233,8 +1233,8 @@ private mixed * reduce_verb( string verb,
         a = replace( a, " \nWHAT", mess );
         a = replace( a, " \nMSG", msg );
         b = a;
-        a = replace( a, "$", "" );
-        b = replace( b, "$", "s" );
+        a = replace( a, "\\$", "" );
+        b = replace( b, "\\$", "s" );
         return ({ ({ who, a, b, b, a, a, a }) });
     case DEUX:
         a = verbdata[ 2 ];

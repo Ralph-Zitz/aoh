@@ -1,9 +1,10 @@
 #ifndef _SOUL_H_
 #define _SOUL_H_
 
-#define NOSTY(x)        if(find_player("nostradamus")) \
+#define SOUL_ADVERBS    "/std/npc/soul_adverbs"
+#define DEBUG           0
+#define NOSTY(x)        if(find_player("nostradamus") && DEBUG) \
                         tell_object(find_player("nostradamus"),x)
-#define DEBUG 0
 #define TP              this_player()
 #define TO              this_object()
 #define HAVE_SPRINTF

@@ -425,11 +425,9 @@ public void notify_enter(mixed from, int method, mixed extra) {
   // We call the RelayCall function with the argument skill
   // to forward the call to the skill modules itself
   // Looks complicated but is not.
-  // Do it onlyif secrets are defined...maybe change this TODO
-  if (({mapping})THIS->Query(P_ROOM_SECRETS) )
-    call_other(SKILLSERVER,"RelayCall",SK_DETECT,
-                "EnterRoom",TP,THIS,method);
-
+  // Do it only if secrets are defined...maybe change this TODO
+  if (({mapping})THIS->Query(P_ROOM_SECRETS))
+    call_other(SKILLSERVER,"RelayCall",SK_DETECT,"EnterRoom",TP,THIS,method);
 }
 
 //--- find something or more in the room -------------------------------------

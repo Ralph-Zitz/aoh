@@ -668,7 +668,7 @@ private void my_tell_room( object o, string s, object * a )
         a = SUB_ARRAY( all_inventory( o ), a );
     else
         a = all_inventory( o );
-    map( a, #'TELL_OBJECT, s );
+    map( a, #'TELL_OBJECT /*'*/, s );
 }
 
 private varargs void intsay( string s, object o )
@@ -678,7 +678,7 @@ private varargs void intsay( string s, object o )
 
 private string linebreak( string s )
 {
-    return big_linebreak( s,"   ",75 );
+    return big_linebreak( s, "   ", 75 );
 }
 
 private void flush( void )
@@ -791,7 +791,7 @@ public void create()
 public int do_emote( string s )
 {
     if( !s || s == "" || !sizeof( s ) )
-        return notify_fail( "Emote what?\n" ), 0;
+        return notify_fail("Emote what?\n", NOTIFY_ILL_ARG);
     msg_write(CMSG_EMOTE, "You emote: " +
       ({string})TP->QueryName() + " " + s + "\n"
     );
@@ -808,7 +808,7 @@ public int do_help( string s )
     string res;
 
     if ( !s )
-        return 0;
+        return notify_fail("Help <topic>\n", NOTIFY_ILL_ARG);
     morestring = "";
     switch ( s )
     {
@@ -842,6 +842,7 @@ public int do_help( string s )
         {
             mymore( "Extra adverbs available:\n" );
             mymore( get_xadverb_string() );
+            more_flush();
         }
         return 1;
     case "feeling list":
@@ -859,7 +860,7 @@ public int do_help( string s )
         more_flush();
         return 1;
     case "soul version":
-        write( "Soul version 1.2, written by hubbe@lysator.liu.se.\n");
+        msg_write(CMSG_EMOTE, "Soul version 1.2, written by hubbe@lysator.liu.se.\n");
         return 1;
     }
     return 0;
@@ -881,7 +882,7 @@ private int isplay( object o )
 private object * get_persons( void )
 {
     return filter( all_inventory( environment( TO ) ),
-      #'isplay
+      #'isplay /*'*/
     );
 }
 
@@ -962,11 +963,11 @@ private string gloerp( string q, object * t, mixed who, int prev )
     {
         if ( !prev && sscanf( s[ e ], "WHO%s", b ) )
         {
-            mess += implode_nicely( map( t, #'WHO, who ) ) + b;
+            mess += implode_nicely( map( t, #'WHO /*'*/, who ) ) + b;
         }
         else if ( !prev && sscanf( s[ e ], "POSS%s", b ) )
         {
-            mess += implode_nicely( map( t, #'POSS, who ) ) + b;
+            mess += implode_nicely( map( t, #'POSS /*'*/, who ) ) + b;
         }
         else if ( sscanf( s[ e ], "YOUR%s", b ) )
         {
@@ -1493,7 +1494,7 @@ private varargs mixed * webster( string t,
             if ( !people )
                 people = get_persons();
             if ( !persons )
-                persons = mkmapping( map( people, #'get_name ), people );
+                persons = mkmapping( map( people, #'get_name /*'*/), people );
             if ( p = prefix( m_indices( persons ), t, "Who do you mean?" ) )
             {
                 if ( p == -1 )

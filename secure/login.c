@@ -1095,7 +1095,7 @@ StartPlayer(int guestno)
 
   // Are we already playing?
   // We can't use find_player() since it relies on the property
-  // P_NAME which can be compromitted.
+  // P_NAME which can be compromised.
   obj = 0;
   for (i = sizeof(users()); i--; )
     if (getuid(users()[i]) == lname)

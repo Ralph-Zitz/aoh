@@ -1483,7 +1483,7 @@ public void restart_player(string name) {
   if (IS_IMMORTAL(ME)) pIsWizard=1;
   else pIsWizard=0;
   call_out("vote_delay",1);
-  init_gmcp();
+  call_out(#'init_gmcp, 1);
   call_out(function void()
   {
     process_gmcp(

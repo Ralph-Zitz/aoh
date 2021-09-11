@@ -181,9 +181,6 @@ public varargs int SetStandard(int type, string name, int strength,
   return 1;
 }
 
-
-
-
 // ----------------------------------------------------------------------
 // Optional you can change the look of the herb when a skilled player
 // looks at it which has a skill between minskill and maxskill
@@ -211,9 +208,6 @@ varargs int	AddHerbInfo(int minskill, string long, string plurallong)
 public string GetHerbInfo(int skill,int pluralflag)
 {
   int i, tmp;
-  string long;
-
-  long = "";
 
   if(!is_sorted)
   {

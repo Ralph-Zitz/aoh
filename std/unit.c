@@ -101,7 +101,6 @@ public int SetLight(int l)
 
 public int QueryLight()
 {
-  int amount;
   if (!QueryLastId())
     SetLastAmount(QueryAmount());
   return QueryBrightPerUnit()*QueryLastAmount();
@@ -115,7 +114,6 @@ public int SetBright(int l)
 
 public int QueryBright()
 {
-  int amount;
   if (!QueryLastId())
     SetLastAmount(QueryAmount());
   return QueryBrightPerUnit()*QueryLastAmount();
@@ -130,7 +128,6 @@ public int SetWeight(int w)
 
 public varargs int QueryWeight()
 {
-  int amount;
   if (!QueryLastId())
     SetLastAmount(QueryAmount());
   return QueryWeightPerUnit()*QueryLastAmount();
@@ -145,7 +142,6 @@ public int SetValue(int v)
 
 public varargs int QueryValue()
 {
-  int amount;
   if (!QueryLastId())
     SetLastAmount(QueryAmount());
   return QueryValuePerUnit()*QueryLastAmount();
@@ -392,8 +388,8 @@ public varargs int move(mixed dest, int method, mixed extra)
 {
   object otherob;
   int old_amount;
-  int ret, i;
-  object *inv, env;
+  int ret;
+  object env;
 
   if (!QueryLastId())
   // If 'id' wasn't called up to now (e. g. when something is
@@ -401,43 +397,43 @@ public varargs int move(mixed dest, int method, mixed extra)
     SetLastAmount(QueryAmount());
 
   if (method != M_NOCHECK && query_verb() && query_verb() != QueryLastVerb())
-    {
-      SetLastVerb(query_verb());
-      SetLastAmount(QueryAmount());
-    }
+  {
+    SetLastVerb(query_verb());
+    SetLastAmount(QueryAmount());
+  }
 
   if (   method == M_NOCHECK
       || !environment()
       || QueryLastAmount() == QueryAmount())
     ret = (::move (dest, method, extra));
   else
+  {
+    // backup old value
+    old_amount = QueryAmount();
+
+    // clone another instance
+    // Configure it to the rest amount of units
+    otherob = SplitOff(QueryAmount()-QueryLastAmount());
+
+    // move me to the new destination
+    env = environment();
+    ret = (::move(dest, method, extra));
+
+    // If failed, restore me and destruct other instance
+    if ((ret != ME_OK) && (ME != otherob))
     {
-      // backup old value
-      old_amount = QueryAmount();
-
-      // clone another instance
-      // Configure it to the rest amount of units
-      otherob = SplitOff(QueryAmount()-QueryLastAmount());
-
-      // move me to the new destination
-      env = environment();
-      ret = (::move(dest, method, extra));
-
-      // If failed, restore me and destruct other instance
-      if ((ret != ME_OK) && (ME != otherob))
-        {
-          SetAmount(old_amount);
-          if (otherob)
-            destruct(otherob);  // Do it the hard way.
-          return ret;
-        }
-      // our move succeeded, now move new ob (if there is one)
-      // into old environ
+      SetAmount(old_amount);
       if (otherob)
-        otherob->move(env,M_SILENT);
-      // This moved with M_NOCHECK before! This way the weight
-      // didn't get updated.
+        destruct(otherob);  // Do it the hard way.
+      return ret;
     }
+    // our move succeeded, now move new ob (if there is one)
+    // into old environ
+    if (otherob)
+      otherob->move(env,M_SILENT);
+    // This moved with M_NOCHECK before! This way the weight
+    // didn't get updated.
+  }
 
   if (ret == ME_OK)
     filter(all_inventory(environment()),SF(JoinWith));

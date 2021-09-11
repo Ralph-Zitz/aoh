@@ -19,16 +19,15 @@
 
 private string ResolveVItem(string vitem,object ob)
 {
-mixed mx;
+  mixed mx;
 
   if (ob || !vitem) return "";
-  mx=ob->VQuery(vitem,P_SHORT);
-  if (!mx) mx=ob->VQuery(vitem,P_IDS);
+  mx=({mixed})ob->VQuery(vitem,P_SHORT);
+  if (!mx) mx=({mixed})ob->VQuery(vitem,P_IDS);
   if (!mx) return vitem;
   if (pointerp(mx)) mx=mx[0];
   if (!stringp(mx)) return "";
   return mx;
-
 }
 
 // ========================= Special skill functions ========================
@@ -36,13 +35,11 @@ mixed mx;
 // TODO: Searching reduced 'physical endurance'
 mixed OnSucceedSearching(object who, int skill, string arg, mixed extra,mixed p)
 {
-int i,cnt;
-mapping s_map;
-mapping props;
-object ob;
-string err;
-string *idx;
-mixed mx;
+  int i,cnt;
+  mapping s_map, props;
+  object ob;
+  string err, *idx;
+  mixed mx;
 
 // printf("On succeed serching arg=%O\n",arg);
   if (!p) // No argument given  standard handling
@@ -61,21 +58,21 @@ mixed mx;
       if (s_map[idx[i],1]>0)  // not yet empty
       {
         s_map[idx[i],1]--;
-	err=catch(ob=clone_object(s_map[idx[i],0]));   // clone it
+        err=catch(ob=clone_object(s_map[idx[i],0]));   // clone it
         if (err)
-	{
-	  msg_write(CMSG_GENERIC,"Error...please report to a wizard:\n");
-	  msg_write(CMSG_ERROR,err+".\n");
-	}
-	else
-	{
-	  props=s_map[idx[i],3]; // properies
+        {
+          msg_write(CMSG_GENERIC,"Error...please report to a wizard:\n");
+          msg_write(CMSG_ERROR,err+".\n");
+        }
+        else
+        {
+          props=s_map[idx[i],3]; // properies
           if (props && mappingp(props)) ob->SetProperties(props);	
-	  ob->move(environment(who),M_SILENT);
-	  msg_write(CMSG_GENERIC,
-             "You search ... and find "+(ob->QueryShort()||"something")+".\n");
-	}
-        return 1;                // break loop to speed up
+            ob->move(environment(who),M_SILENT);
+          msg_write(CMSG_GENERIC,
+            "You search ... and find "+(({string})ob->QueryShort()||"something")+".\n");
+        }
+        return 1; // break loop to speed up
       }
     }
   }
@@ -85,9 +82,10 @@ mixed mx;
      "You search "+mx+"but cannot find anything more.\n");
   return 1;
 }
+
 mixed OnFailSearching(object who, int skill, string arg, mixed extra,mixed p)
 {
-string mx;
+  string mx;
 
   seteuid(getuid());
 
@@ -97,7 +95,4 @@ string mx;
      "You search "+mx+"but find nothing.\n");
   return 1;
 }
-
-
-
 

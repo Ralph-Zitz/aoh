@@ -113,7 +113,7 @@ int security() {
 
 void Write(string str) {
   if(!cloner) efun::write(str);
-  else efun::tell_object(cloner, str);
+  else efun::tell_object(cloner, process_mxp(str, TOMXP));
 }
 
 /*----------------------------------------------------------------------

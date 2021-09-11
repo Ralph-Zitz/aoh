@@ -42,20 +42,20 @@ varargs void create()
   // Initialisation of the herb - all but SetStandard is optional
 
 
-	AddHerbInfo(20,
-	   "The light green leaf seem to be some useful herb.\n",
-	   "The light green leaves seem to be some useful herbs.\n");
-	AddHerbInfo(40,
-	   "The light green leaf seems to be a herb against illness.\n",
-	   "The light green leaves seems to be herbs against illness.\n");
-	AddHerbInfo(60,
-	   "The light green leaf is able to cure mild forms of the flu.\n",
-	   "The light green leaves are able to cure mild forms of the flu.\n");
+  AddHerbInfo(20,
+    "The light green leaf seem to be some useful herb.\n",
+    "The light green leaves seem to be some useful herbs.\n");
+  AddHerbInfo(40,
+    "The light green leaf seems to be a herb against illness.\n",
+    "The light green leaves seems to be herbs against illness.\n");
+  AddHerbInfo(60,
+    "The light green leaf is able to cure mild forms of the flu.\n",
+    "The light green leaves are able to cure mild forms of the flu.\n");
 }
 
 public void NotifyEat(object pl)
 {
-object ob;
+  object ob;
   ob=present("_flu",pl);
   if (!ob)
   {

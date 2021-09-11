@@ -20,8 +20,6 @@
 public mixed Query(string arg); // std/base
 public varargs mixed Set(string pn, mixed arg, int sc); // std/base
 
-
-
 // ========================= Special skill functions ========================
 // ************************    Detecting     ********************************
 // Check whether the player detects a new secret or when the player
@@ -29,11 +27,11 @@ public varargs mixed Set(string pn, mixed arg, int sc); // std/base
 private void CheckSecret(string secret,mixed desc,int difficulty,
                           object *finder,object who,object where,int method)
 {
-int value;
-int nr;
-string s;
+  int value;
+  int nr;
+  string s;
 
-printf("CheckSecret\n");
+  printf("CheckSecret\n");
 
   if (member(finder, who)>=0)
   {
@@ -42,7 +40,7 @@ printf("CheckSecret\n");
     return;
   }
   
-  value=who->UseSkill(SK_DETECT,difficulty);
+  value=({int})who->UseSkill(SK_DETECT,difficulty);
   if (value<=0) return;  // failed skill check
 
   if (!desc) return;   // wrong arguments
@@ -73,25 +71,20 @@ printf("CheckSecret\n");
     msg_object(who,CMSG_GENERIC,process_string(s));
     finder+=({who});
   }
-  return;
-
 }
-
 
 // Will be called a bit delayed when entering the room
 void EnterRoomDelayed(object who, object where, int method)
 {
-mapping m_secret;
+  mapping m_secret;
   if (environment(who)!=where) return; // player left room
 
-   m_secret=where->Query(P_ROOM_SECRETS);
+   m_secret=({mapping})where->Query(P_ROOM_SECRETS);
    if (!m_secret) return;              // no secrets
 
-   walk_mapping(m_secret,#'CheckSecret,who,where,method);
-
-
-
+   walk_mapping(m_secret,#'CheckSecret /*'*/,who,where,method);
 }
+
 // This function will be called by the notify_enter of the room
 int EnterRoom(object who, object where, int method)
 {

@@ -293,9 +293,9 @@ int SetHerbStrength(int strength)
    return pHerbStrength = strength;
 }
 
-string QueryHerbStrength()
+int QueryHerbStrength()
 {
-   return pHerbStrength || "";
+   return pHerbStrength;
 }
 
 string SetHerbFun(string fun)

@@ -176,7 +176,7 @@ inherit "/std/thing/properties";
                      if((x)=="?") return FALSE;
 #define USAGE2(x,y)  notify_fail("Usage: "+(y)+"\n");\
                      if((!(x))||((x)=="?")) return FALSE;
-#define TOMXP        ({int})TO->QueryMXP()
+#define TOMXP        ({int})TP->QueryMXP()
 
 int CatFile();
 int Command(string str);

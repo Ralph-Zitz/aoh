@@ -25,7 +25,7 @@
 inherit "/std/room";
 
 #define IS_DAY()        ({int})NIGHTDAY->IsDay()
-#define IS_WINTER()     (({string})NIGHTDAY->Query(P_SEASON)=="winter")
+#define IS_WINTER()     (({string})NIGHTDAY->QuerySeasonString()=="winter")
 
 //************************************************************************ 
 //                   Special details        

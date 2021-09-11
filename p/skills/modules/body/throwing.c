@@ -25,12 +25,12 @@
 // ************************    Throwing     *********************************
 mixed OnSucceedThrowing(object who, int skill, string arg, string extra,mixed p)
 {
-string dir,whom;
-object ob,dest,we;
-int modus;
-mixed exit;
-int dist,maxdist;
-mixed dam;
+  string dir,whom;
+  object ob,we;
+  int modus;
+  mixed exit;
+  int dist,maxdist;
+  mixed dam;
 
   seteuid(getuid());
   //printf("OnSucceedThrowing:: id=%s extra=%s\n",arg||"NULL",extra||"NULL");
@@ -59,7 +59,7 @@ mixed dam;
   }
   if (whom)
   {
-    ob=who->CanSeeLiving(whom,-1);
+    ob=({object})who->CanSeeLiving(whom,-1);
   }
   else ob=0;
 
@@ -68,7 +68,7 @@ mixed dam;
   else maxdist=0;
 
   // The exit where we plan to throw
-  if (dir) exit=environment(who)->QueryExit(dir);
+  if (dir) exit=({mixed})environment(who)->QueryExit(dir);
   else exit=0;
 
   if (modus==0) // Throw in neighboring room
@@ -81,7 +81,7 @@ mixed dam;
     else if (stringp(exit[0]))
 	{
 	  exit=load_object(exit[0]);
-	  dist=call_other(L_DISTANCE,"dist",environment(who),exit);
+	  dist=({int})call_other(L_DISTANCE,"dist",environment(who),exit);
 	  if (dist>maxdist && maxdist>=0)
 	    return "You can't throw that far.\n";
 	  else 
@@ -118,7 +118,7 @@ mixed dam;
 
       // distance calulation not necessary if the room is equal
       if (maxdist!=0)
-	    dist=call_other(L_DISTANCE,"dist",environment(who),environment(ob));
+	    dist=({int})call_other(L_DISTANCE,"dist",environment(who),environment(ob));
       else
 	    dist=0;
 
@@ -134,15 +134,15 @@ mixed dam;
 		else
 		{
 	      msg_write(CMSG_GENERIC,
-	        "You throw "+we->QueryShort()+" to "+whom+
+	        "You throw "+({string})we->QueryShort()+" to "+whom+
 			". It flies "+dist+"m.\n"); 
 	      msg_object(ob,CMSG_GENERIC,
-	        capitalize(we->QueryShort())+" is thrown to you.\n");
+	        capitalize(({string})we->QueryShort())+" is thrown to you.\n");
           msg_room(environment(ob),CMSG_GENERIC,
-           capitalize(we->QueryShort())+" is thrown to "+ob->QueryName()+".\n",
+           capitalize(({string})we->QueryShort())+" is thrown to "+({string})ob->QueryName()+".\n",
 		   ({ob,who}));
 	      msg_room(environment(who),CMSG_GENERIC,
-	       capitalize(we->QueryShort())+" is thrown from "+who->QueryName()+
+	       capitalize(({string})we->QueryShort())+" is thrown from "+({string})who->QueryName()+
 		   ".\n",({ob,who}));
 		}
         we->move(ob,M_SILENT);
@@ -170,18 +170,18 @@ mixed dam;
 	else
 	{
 	  msg_write(CMSG_GENERIC,
-		"You throw "+we->QueryShort()+" hard at "+whom+ ".\n"); 
+		"You throw "+({string})we->QueryShort()+" hard at "+whom+ ".\n"); 
 	  msg_object(ob,CMSG_GENERIC,
-		capitalize(we->QueryShort())+" is thrown hard at you.\n");
+		capitalize(({string})we->QueryShort())+" is thrown hard at you.\n");
 	  msg_room(environment(ob),CMSG_GENERIC,
-	   capitalize(who->QueryName())+" throws "+we->QueryShort()+
-	   " hard at "+ob->QueryName()+".\n", ({ob,who}));
+	   capitalize(({string})who->QueryName())+" throws "+({string})we->QueryShort()+
+	   " hard at "+({string})ob->QueryName()+".\n", ({ob,who}));
 	}
 	we->move(environment(ob),M_SILENT);
 	if (dam>0)
 	{
 	  // Do NOT hurt players
-	  if (!ob->QueryIsPlayer())
+	  if (!({int})ob->QueryIsPlayer())
 	    ob->Defend(dam,DT_BLUDGEON,this_object());
 	}
 	if (who==ob) 
@@ -190,11 +190,11 @@ mixed dam;
   }
   return 1;
 }
+
 mixed OnFailThrowing(object who, int skill, string arg, string extra,mixed p)
 {
-object ob;
-int chance;
-closure fun;
+  int chance;
+  closure fun;
   if (!arg) return 0;
   seteuid(getuid());
   msg_write(CMSG_GENERIC,
@@ -217,10 +217,7 @@ closure fun;
 // Check whether it is possible to throw this thing
 string CannotThrowing(object who,int diff,string id_str,string extra ,mixed p)
 {
-  if (S_PO->Query(P_NODROP))
+  if (({int})S_PO->Query(P_NODROP))
     return "This can't be thrown.\n";
 }
-
-
-
 

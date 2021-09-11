@@ -25,9 +25,9 @@
 // ************************    Climbing     *********************************
 mixed OnSucceedClimbing(object who, int skill, string arg, string extra,mixed p)
 {
-mixed dest;
-mixed text;
-string prev;
+  mixed dest;
+  mixed text;
+  string prev;
   if (!arg || !p) return 0;
   
   dest=p[P_SK_CLIMB_DEST];
@@ -50,7 +50,7 @@ string prev;
   
   if (text) // special move 
   { 
-    if (ME_OK!=who->move(dest,M_SPECIAL,text))
+    if (ME_OK!=({int})who->move(dest,M_SPECIAL,text))
     {
       msg_object(who,CMSG_ERROR,"Hmm, cannot move there.\n");
       return 1;
@@ -58,7 +58,7 @@ string prev;
   }
   else
   {
-    if (ME_OK!=who->move(dest,M_GO))
+    if (ME_OK!=({int})who->move(dest,M_GO))
     {
       msg_object(who,CMSG_ERROR,"Hmm, cannot move there.\n");
       return 1;
@@ -66,9 +66,10 @@ string prev;
   }
   return 1;
 }
+
 mixed OnFailClimbing(object who, int skill, string arg, string extra,mixed p)
 {
-mixed hurt;
+  mixed hurt;
   if (!arg) return 0;
   msg_write(CMSG_GENERIC,
   "Trying to climb "+arg+" you fall down again. Ouch, that hurt.\n");
@@ -85,7 +86,4 @@ mixed hurt;
   }
   return 1;
 }
-
-
-
 

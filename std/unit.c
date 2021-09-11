@@ -22,9 +22,9 @@ inherit "/std/thing";
 //--- global variables ------------------------------------------------------
 
 private nosave string *Ppids;
-private nosave int Pamount, Pvaluepu, Pbrightpu, Pweightpu, Pplurallg;
+private nosave int Pamount, Pvaluepu, Pbrightpu, Pweightpu;
 private nosave string Ppluralpattern;
-private nosave mixed Ppluralsh;
+private nosave mixed Ppluralsh, Pplurallg;
 private nosave int Plastamount;
 private nosave int lasttime;
 private nosave object lastpl;

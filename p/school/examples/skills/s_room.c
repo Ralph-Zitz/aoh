@@ -8,7 +8,7 @@
 
 inherit "/std/room";
 
-create()
+public varargs void create()
 {
   ::create();
   SetIntShort("over the lake");

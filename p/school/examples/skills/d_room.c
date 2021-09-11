@@ -24,15 +24,15 @@
 
 inherit "/std/room";
 
-#define IS_DAY()        NIGHTDAY->IsDay()
-#define IS_WINTER()     (NIGHTDAY->Query(P_SEASON)=="winter")
+#define IS_DAY()        ({int})NIGHTDAY->IsDay()
+#define IS_WINTER()     (({string})NIGHTDAY->Query(P_SEASON)=="winter")
 
 //************************************************************************ 
 //                   Special details        
 //************************************************************************ 
 string look_lake()
 {
-int temperature;
+  int temperature;
   temperature=Query(P_TEMPERATURE);
   if (temperature<=0) return 
     "A small frozen lake. Maybe you can walk over the ice.\n";
@@ -51,23 +51,23 @@ string look_trees()
 // Demonstration only
 string look_weather()
 {
-string s;
+  string s;
   s="Current Weather data:\n";
-  if (IS_DAY()) s+="- It is day and "+NIGHTDAY->QueryTimeString()+"\n";
-  else s+="- It is night and "+NIGHTDAY->QueryTimeString()+"\n";
+  if (IS_DAY()) s+="- It is day and "+({string})NIGHTDAY->QueryTimeString()+"\n";
+  else s+="- It is night and "+({string})NIGHTDAY->QueryTimeString()+"\n";
   if (IS_WINTER()) s+="- It is winter\n";
-  s+="- It is the "+NIGHTDAY-> QuerySeasonString()+" season\n";;
-  s+="- Temperature is "+Query(P_TEMPERATURE)+" degree\n";
+  s+="- It is the "+({string})NIGHTDAY-> QuerySeasonString()+" season\n";;
+  s+="- Temperature is "+({int})Query(P_TEMPERATURE)+" degree\n";
   return s;
 }
 
 //************************************************************************ 
 //                   Nifty long description
 //************************************************************************ 
-string QueryIntLong()
+varargs string QueryIntLong()
 {
-string s;
-int temperature;
+  string s;
+  int temperature;
   temperature=Query(P_TEMPERATURE);
 
   s=
@@ -103,11 +103,11 @@ int temperature;
 //************************************************************************ 
 int walk_on_ice()
 {
-int temperature;
+  int temperature;
   temperature=Query(P_TEMPERATURE);
   if (temperature<=0)
   {
-    msg_write(
+    msg_write(CMSG_GENERIC,
 	"You carefully try out the stability of the ice and then start walking "
 	"over the lake.\n");
 
@@ -115,12 +115,12 @@ int temperature;
 
     return 1;
   }
-  else return (int)notify_fail("Walk on the lake?\n");
+  else return notify_fail("Walk on the lake?\n");
 }
 //************************************************************************ 
 //                   Main create
 //************************************************************************ 
-create()
+public varargs void create()
 {
   ::create();
   SetIntShort("a small clearing");
@@ -164,11 +164,12 @@ create()
 //************************************************************************ 
 string CannotSwimmingLake()
 {
-int temperature;
+  int temperature;
   temperature=Query(P_TEMPERATURE);
   if (temperature<=0) return "Do you really intend to swim the ICE...\n";
   return 0;
 }
+
 int OnSucceedSwimmingLake(object who)
 {
   msg_write(CMSG_GENERIC,
@@ -178,6 +179,7 @@ int OnSucceedSwimmingLake(object who)
         ({"swims in","swims out","swim out"}));
   return 1;
 }
+
 int OnFailSwimmingLake(object who)
 {
   msg_write(CMSG_GENERIC,
@@ -198,6 +200,7 @@ string CannotSearchingHole()
     return "Seems the hole is already empty.\n";
   return 0;
 }
+
 int OnSucceedSearchingBushes()
 {
   msg_write(CMSG_GENERIC,
@@ -206,6 +209,7 @@ int OnSucceedSearchingBushes()
   Set("can_search_hole",1);
   return 1;
 }
+
 int OnFailSearchingBushes()
 {
   msg_write(CMSG_GENERIC,
@@ -215,7 +219,7 @@ int OnFailSearchingBushes()
 
 int OnSucceedSearchingHole()
 {
-object ob;
+  object ob;
   msg_write(CMSG_GENERIC,
   "You search the hole and fine a small amulet.\n");
   ob=clone_object("/std/thing");
@@ -232,7 +236,7 @@ object ob;
 //************************************************************************ 
 public void notify_leave(mixed to, int method, mixed extra)
 { 
-int d;
+  int d;
   ::notify_leave(to,method,extra);
 
   if (this_player()!=previous_object()) return;
@@ -240,7 +244,7 @@ int d;
 
   if (to==this_object()) return;
 
-  d=L_DISTANCE->dist(to,this_object());
+  d=({int})L_DISTANCE->dist(to,this_object());
   if (d>0)
     write("You walk "+d+" m.\n");
 }

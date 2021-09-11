@@ -28,7 +28,7 @@ inherit "/std/room";
 //************************************************************************ 
 //                   Main create
 //************************************************************************ 
-create()
+public varargs void create()
 {
   ::create();
   SetIntShort("another small clearing");
@@ -66,8 +66,6 @@ create()
    ([P_SK_CLIMB_MSG:({"climbs the pole","climbs in","climb the pole"}),
      P_SK_CLIMB_DEST:"./climb2_room",
      P_SK_CLIMB_HURTHP:5]) );
-
-  
 }
 
 //************************************************************************ 
@@ -78,6 +76,7 @@ string CannotClimbingTree()
   // Alwys be able to climb   
   return 0;
 }
+
 int OnSucceedClimbingTree(object who, int value,string id,string extra,mixed map,mixed props)
 {
   msg_write(CMSG_GENERIC,
@@ -86,6 +85,7 @@ int OnSucceedClimbingTree(object who, int value,string id,string extra,mixed map
         ({"climbs the tree","climbs in","climb the tree"}));
   return 1;
 }
+
 int OnFailClimbingTree(object who)
 {
   msg_write(CMSG_GENERIC,

@@ -26,20 +26,20 @@ inherit "/std/thing";
 // throwing messages and is specified via P_SK_THROW_MSG
 void throw_msg(object from,object to,string id, int modus)
 {
-int dist;
-  dist=call_other(L_DISTANCE,"dist",environment(from),environment(to));
+  int dist;
+  dist=({int})call_other(L_DISTANCE,"dist",environment(from),environment(to));
   msg_object(from,CMSG_GENERIC,
-  "You throw the red ball to "+to->QueryName()+". After tiring "+dist+
+  "You throw the red ball to "+({string})to->QueryName()+". After tiring "+dist+
   "m it arrives there.\n");
   if (to!=from)
     msg_object(to,CMSG_GENERIC,
-    capitalize(from->QueryName())+" throws a small red ball to you. "+
+    capitalize(({string})from->QueryName())+" throws a small red ball to you. "+
     dist+"m later it arrives in your hands.\n");
   msg_room(environment(to),CMSG_GENERIC,
-  "A small red ball is thrown to "+to->QueryName()+".\n",({to,from}));
+  "A small red ball is thrown to "+({string})to->QueryName()+".\n",({to,from}));
   if (environment(to)!=environment(from))
     msg_room(environment(from),CMSG_GENERIC,
-    "A small red ball is thrown away from "+from->QueryName()+".\n",({to,from}));
+    "A small red ball is thrown away from "+({string})from->QueryName()+".\n",({to,from}));
 }
 
 // This function is called when the ball breaks due a skill fail 
@@ -48,7 +48,7 @@ int dist;
 // The person who threw the ball is 'from'
 void throw_break(string id,object from)
 {
-object ob;
+  object ob;
   msg_room(environment(from),CMSG_GENERIC,
   "The crystal ball breaks into dozends of pieces.\n");
   seteuid(getuid());
@@ -65,7 +65,7 @@ object ob;
   remove();
 }
 
-create()
+public varargs void create()
 {
   ::create();
 

@@ -25,9 +25,9 @@ inherit "/std/room";
 //************************************************************************ 
 //                   Main create
 //************************************************************************ 
-create()
+public varargs void create()
 {
-string vitem;
+  string vitem;
   ::create();
 
   SetIntShort("a nice meadow");
@@ -83,7 +83,7 @@ string vitem;
 
 mixed OnSucceedSearchingBushes()
 {
-object ob;
+  object ob;
   msg_write(CMSG_GENERIC,
   "You search through the bushes but find nothing of interest. "
   "But just as you want to stop you notice a small amulet there.\n");
@@ -95,6 +95,7 @@ object ob;
   ob->move(this_object());
   return 1;
 }
+
 mixed OnFailSearchingBushes()
 {
   msg_write(CMSG_GENERIC,

@@ -7,7 +7,7 @@
 
 inherit "/std/room";
 
-create()
+public varargs void create()
 {
   ::create();
   SetIntShort("on a huge tree");

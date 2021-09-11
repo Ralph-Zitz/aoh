@@ -12,6 +12,7 @@
 inherit "/std/room";
 
 static int my_cmd(string s);
+static int my_efun(string s);
 
 public varargs void create () {
   ::create();
@@ -21,8 +22,20 @@ public varargs void create () {
      "Since " NAME " is just a new wizard, it is completely empty, but "
      "nevertheless quite comfortable.\n"
   );
-  AddRoomCmd("hosts", #'my_cmd);
+  AddRoomCmd("hosts", #'my_cmd /*'*/);
+  AddRoomCmd("efun", #'my_efun /*'*/);
   AddExit("out", STARTROOM);
+}
+
+static void my_test(string s) {
+  if (s) {
+    write(s);
+  }
+}
+
+static int my_efun(string s) {
+  python_exec(s, #'my_test);
+  return 1;
 }
 
 static int my_cmd(string s) {

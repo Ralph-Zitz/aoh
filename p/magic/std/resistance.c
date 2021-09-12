@@ -41,19 +41,19 @@
 // Returns: 1: Enemy is resistant, 0: enemy is not resistant
 varargs int IsResistant(mixed sptype,object enemy)
 {
-int mdefence,mresistance;
-int protection;
-int chance;
+  int mdefence,mresistance;
+  int protection;
+  int chance;
 
   if (!enemy) enemy=TP;
   if (!enemy) return 0;
 
   // Get the general resistance against magic
-  mdefence = enemy->QueryAttr("MagicDefence");
+  mdefence = ({int})enemy->QueryAttr("MagicDefence");
 
   // Get any particular reistance against a type of magic or a spell
   mresistance=0;
-  if (sptype) mresistance+=enemy->Resistance(sptype);
+  if (sptype) mresistance+=({int})enemy->Resistance(sptype);
 
   protection=mdefence+mresistance;
 
@@ -81,24 +81,24 @@ int chance;
 //         due to (string)
 varargs string CannotCast(mixed sptype,object caster,int spellpoints)
 {
-mixed res;
-int sp;
+  mixed res;
+  int sp;
   if (!caster) caster=TP;
   if (!caster)
     return "Who should do that?\n";
 
   if (!sptype) sptype=ST_ALL;
 
-  if (caster->QueryGhost())
+  if (({int})caster->QueryGhost())
     return "You can't do that in your current state.\n";
 
-  if (caster->QueryCombatDelay()>0)
-    return ("You can't do that: "+(caster->QueryCombatDelayMsg()||"You are unconcious.\n"));
+  if (({int})caster->QueryCombatDelay()>0)
+    return ("You can't do that: "+(({string})caster->QueryCombatDelayMsg()||"You are unconcious.\n"));
  
- if (res = environment(caster)->QueryIsMagicForbidden(sptype))
+ if (res = ({mixed})environment(caster)->QueryIsMagicForbidden(sptype))
     return res;
 
-  sp=caster->QuerySP();
+  sp=({int})caster->QuerySP();
   if (spellpoints>sp)
     return "You don't have enough spellpoints left.\n";
 

@@ -70,23 +70,23 @@ void Debug(string str)
 
 varargs void LogCast(object caster,object target,string str)
 {
-string spname;
-string c_level,t_level;
-int i;
+  string spname;
+  string c_level,t_level;
+  int i;
   spname=str||this_spell()||"a spell";
   if (!caster) caster=TP;
   if (!target || (target==caster)) return;
   if (!query_once_interactive(target)) return;
 
   if (i=query_user_level(caster)) c_level = "w"+i;
-  else c_level = caster->QueryLevel()+
-         "/"+(RACEMASTER->XPtoLevel(caster->QueryXP()));
+  else c_level = ({int})caster->QueryLevel()+
+         "/"+(({int})RACEMASTER->XPtoLevel(caster->QueryXP()));
   if (i=query_user_level(target)) t_level = "w"+i;
-  else t_level = target->QueryLevel()+
+  else t_level = ({int})target->QueryLevel()+"";
 
   log_file("AGGRESSORS",ctime()+": "+
-     (caster->QueryRealName()||getuid(caster))+" ("+c_level+")"+
-     " attacked "+(target->QueryRealName()||getuid(target)||"something")+
+     (({string})caster->QueryRealName()||getuid(caster))+" ("+c_level+")"+
+     " attacked "+(({string})target->QueryRealName()||getuid(target)||"something")+
      " ("+t_level+")"+
      " using '"+spname+"'.\n");
 }
@@ -100,23 +100,21 @@ int i;
 /* percentage value, i.e. 75 reduces the effect of magic by 25%  */
 int ModifyMagic(int effect)
 {
-int i;
-object env;
+  int i;
+  object env;
 
-int old;
-old=effect;
   if (!TP) return effect;
   env=environment(TP);
   if (i=Query(P_MODIFYMAGIC)) effect=effect*i/100;
-  if (i=TP->Query(P_MODIFYMAGIC)) effect=effect*i/100;
-  if (env && i=env->Query(P_MODIFYMAGIC)) effect=effect*i/100;
+  if (i=({int})TP->Query(P_MODIFYMAGIC)) effect=effect*i/100;
+  if (env && i=({int})env->Query(P_MODIFYMAGIC)) effect=effect*i/100;
   return effect;
 }
 
 /* sets this_spell() and returns the old this_spell() */
 string SetThisSpell(string str) 
 {
-string s;
+  string s;
   s=actualspell;
   actualspell=str;
   return s;
@@ -132,12 +130,12 @@ int IsSpell(string spname)
 /* returns the number of spells stored in this object */
 int QueryNumberOfSpells()
 {
- return sizeof(m_indices(spells)||({}));
+  return sizeof(m_indices(spells)||({}));
 }
 /* returns all spnames */
 string *QueryAllSpells()
 {
- return m_indices(spells)||({});
+  return m_indices(spells)||({});
 }
 
 /* Switches the castmode: DisableCast does not allow the commandn */
@@ -168,9 +166,9 @@ int SetSpellStrength(int i) {Strength=i; return i;}
 /*          - ({sa,sb,({o1,o2,..}),({s1,s2,...})                        */
 void Message(mixed res)
 { 
-object *obp;
-string *strp;
-int i;
+  object *obp;
+  string *strp;
+  int i;
   if (!res) return;  /* no output if no message */
   if (stringp(res)) write(capitalize(res));
   else if (pointerp(res))
@@ -217,7 +215,7 @@ varargs string SetLongName(string long,string spname)
 /* returns the cost of the spell (spname) in SP    */
 varargs int QueryCastCost(string spname)
 {
-mixed SPcost;
+  mixed SPcost;
   if (!spname) spname=this_spell();
   if (!IsSpell(spname)) return 0;
   SPcost=spells[spname,_SPMAP_COST];
@@ -238,7 +236,7 @@ varargs int SetCastCost(mixed cost,string spname)
 /* returns the backfire chance of the spell (spname) in %    */
 varargs int QueryBackfireChance(string spname)
 {
-mixed back;
+  mixed back;
   if (!spname) spname=this_spell();
   if (!IsSpell(spname)) return 0;
   back=spells[spname,_SPMAP_BACKFIRE];
@@ -288,7 +286,7 @@ varargs int SetCastFunction(closure fun,string spname)
 
 varargs int QueryFailChance(string spname)
 {
-mixed failchance;
+  mixed failchance;
   if (!spname) spname=this_spell();
   if (!IsSpell(spname)) return 0;
   failchance=spells[spname,_SPMAP_FAILCHANCE];
@@ -333,7 +331,6 @@ varargs closure QuerySuccessFunction(string spname)
 }
 varargs int SetSuccessFunction(closure fun,string spname)
 {
-closure *old;
   if (!spname) spname=this_spell();
   if (!spname) return 0;
   success-=([spname]);
@@ -349,40 +346,40 @@ closure *old;
 /* return ({s1,s2}) for writing to the player and its environment */
 varargs mixed NotifySpellFail(object enemy,object caster,string spname)
 {
-int i;
-string s1,s2,s3;
+  int i;
+  string s1,s2,s3;
   if (enemy==0)   /* Failed */
   {
     s1="You "+castverb+" "+add_a(QueryLongName(spname))+" "+spellnoun+".\nFizzle!\n";
-    s2=TP->QueryName()+" "+castverb+"s "+add_a(QueryLongName(spname))+
+    s2=({string})TP->QueryName()+" "+castverb+"s "+add_a(QueryLongName(spname))+
        " "+spellnoun+".\nFizzle!\n";
     return ({s1,s2});
   }
   else if (enemy==TP)  /* backfired and repulsed by ourself */
   {
      s1="Luckily you are protected against backfiring "+spellnoun+"s.\n";
-     s2=TP->QueryName()+" is not affected by "+add_a(QueryLongName(spname))+
+     s2=({string})TP->QueryName()+" is not affected by "+add_a(QueryLongName(spname))+
        " "+spellnoun+".\n";
      return ({s1,s2});
   }
   else  /* backfired */
   {
-     s1=(enemy->QueryName()||enemy->QueryShort())+
+     s1=(({string})enemy->QueryName()||({string})enemy->QueryShort())+
         " is protected against your "+spellnoun+".\n";
-     s2=(enemy->QueryName()||enemy->QueryShort())+" is not affected by "+
-         add_gen(TP->QueryName())+" "+spellnoun+".\n";
-    s3="Luckily you are protected against "+add_gen(TP->QueryName())+
+     s2=(({string})enemy->QueryName()||({string})enemy->QueryShort())+" is not affected by "+
+         add_gen(({string})TP->QueryName())+" "+spellnoun+".\n";
+    s3="Luckily you are protected against "+add_gen(({string})TP->QueryName())+
       " "+spellnoun+".\n";
     Message( ({ s1,s2,({enemy}),({s3}) }) );
-    if (random(100)<QueryBackfireChance(spname))  
+    if (random(100)<QueryBackfireChance(spname))
     {
       i=Query(P_MODIFYMAGIC);
       if (i) Set(P_MODIFYMAGIC,i/2);
       else Set(P_MODIFYMAGIC,50);
       s1="The "+spellnoun+" backfires!\n";
-      s2="The "+spellnoun+" backfires at "+TP->QueryName()+".\n";
+      s2="The "+spellnoun+" backfires at "+({string})TP->QueryName()+".\n";
       Message( ({ s1,s2 }) );
-      funcall(QueryCastFunction(spname),TP->QueryName(),spname,1);
+      funcall(QueryCastFunction(spname),({string})TP->QueryName(),spname,1);
       if (i) Set(P_MODIFYMAGIC,i);
       else Set(P_MODIFYMAGIC,0);
      }
@@ -407,16 +404,14 @@ string s1,s2,s3;
 */
 varargs mixed CheckWisdom(string spname)
 {
-int failchance;
-int wis;
-int chan;
-string s1,s2;
-mixed tmp;
+  int failchance, wis, chan;
+  string s1,s2;
+  mixed tmp;
   if (!spname) spname=this_spell();
   if (!spname) return 0;
   failchance=QueryFailChance(spname);
   if (failchance==0) return 0;  /* Always works with failchance ==0 */
-  wis=TP->QueryAttr("Wis");
+  wis=({int})TP->QueryAttr("Wis");
   if (wis>M_MAXWIS) wis=M_MAXWIS;
 
   /* Magic formula ! */
@@ -427,7 +422,7 @@ mixed tmp;
 
   s1="You fail to "+castverb+" a "+spellnoun+" named "+
       (QueryLongName(spname)||spname)+".\n";
-  s2=TP->QueryName()+" fails to "+castverb+" a "+spellnoun+" named "+
+  s2=({string})TP->QueryName()+" fails to "+castverb+" a "+spellnoun+" named "+
       (QueryLongName(spname)||spname)+".\n";
   tmp=NotifySpellFail(0,TP,spname);
   if (tmp) return tmp;
@@ -444,7 +439,7 @@ varargs closure *QueryFailChecks(string spname)
 /* Add a failcheckfunction for a spell         */
 varargs int AddFailCheck(closure failfun,string spname)
 {
-closure *old;
+  closure *old;
   if (!spname) spname=this_spell();
   if (!spname) return 0;
   old=fails[spname]||({});
@@ -456,7 +451,6 @@ closure *old;
 /* Set all failcheckfunctions for a spell      */
 varargs int SetFailChecks(closure *failfuns,string spname)
 {
-closure *old;
   if (!spname) spname=this_spell();
   if (!spname) return 0;
   fails-=([spname]);
@@ -471,8 +465,12 @@ varargs string QuerySpellDescription(string spname)
   if (0==member(description,spname)) return 0;
   return description[spname,_SPMAP_DESC];
 }
+
 varargs string QuerySpellDesc(string spname)
- {return QuerySpellDescription(spname);}
+{
+  return QuerySpellDescription(spname);
+}
+
 varargs int SetSpellDescription(string desc,string spname)
 {
   if (!spname) spname=this_spell();
@@ -483,10 +481,13 @@ varargs int SetSpellDescription(string desc,string spname)
   return 1;
 }
 varargs int SetSpellDesc(string desc,string spname) 
-{return SetSpellDescription(desc,spname);}
+{
+  return SetSpellDescription(desc,spname);
+}
+
 varargs string QuerySpellUsage(string spname) 
 {
-mixed usage;
+  mixed usage;
   if (!spname) spname=this_spell();
   if (!spname) return 0;
   if (0==member(description,spname)) return 0;
@@ -543,22 +544,21 @@ varargs int AddSpell(string spname,mixed spelltype,mixed SPcost,closure castfun,
 /* to players SP                                              */
 varargs int RestoreSP(int amount)
 {
-int sp;
-  if (amount) sp=TP->QuerySP()+amount;
+  int sp;
+  if (amount) sp=({int})TP->QuerySP()+amount;
   else if (!oldSP) return 0;
   else sp=oldSP;
-  return TP->SetSP(sp);
+  return ({int})TP->SetSP(sp);
 }
 /* compatibility only */
-int ReduceSP() { return TP->ReduceSP(QueryCastCost()); }
+int ReduceSP() { return ({int})TP->ReduceSP(QueryCastCost()); }
 
 /* Returns a string that is the description and usage of a   */
 /* spell (spname). Can be used into QueryReadMsg() too !     */
 varargs string QuerySpellMsg(string spname)
 {
-string res;
-string desc;
-mixed usage;
+  string res, desc;
+  mixed usage;
   if (!spname) spname=this_spell();
   if (!spname) return "";
   if (0==member(description,spname)) return "";
@@ -593,40 +593,36 @@ varargs mixed QueryCastActionMessage(string spname,string longname,object who)
   if (!spname) return 0;
   if (!who) who=TP;
   if (!longname) longname=QueryLongName(spname)||spname;
-  if (who->QueryInvis())
+  if (({int})who->QueryInvis())
       return ("You prepare "+add_a(longname)+ " spell.\n");
   return (({"You prepare "+add_a(longname)+ " spell.\n",
-            who->QueryName()+" prepares "+add_a(longname)+" spell.\n"}));
+            ({string})who->QueryName()+" prepares "+add_a(longname)+" spell.\n"}));
 }
 
 
 varargs mixed QueryCastDamage(int damage,object enemy,mixed damtype,string spname,object me)
 {
-string s1,s2,s3;
-string vicmsg,plmsg,envmsg;
-string name,names,cname;
-string lname;
-string noun;
+  string s1,s2,s3,vicmsg,plmsg,envmsg,name,names,cname,lname,noun;
   if (!me) me=TO;
   if (!spname) spname=this_spell();
   if (!enemy) enemy=TP;
-  if (spname) lname=add_a(me->QueryLongName(spname)||spname);
+  if (spname) lname=add_a(({string})me->QueryLongName(spname)||spname);
   else lname="";
-  if (spname && !damtype) damtype=me->QuerySpellType(spname);
+  if (spname && !damtype) damtype=({mixed})me->QuerySpellType(spname);
   if (!damtype) damtype=DEFAULT_DAMAGE;
-  noun=me->QuerySpellNoun();
+  noun=({string})me->QuerySpellNoun();
 
   if (enemy==TP)
   {
-     name=TP->QueryObjective()+"self";
-     names=TP->QueryPossessive();
+     name=({string})TP->QueryObjective()+"self";
+     names=({string})TP->QueryPossessive();
   }
   else
   {
-    name=capitalize(enemy->QueryName()||enemy->QueryShort()||"someone");
+    name=capitalize(({string})enemy->QueryName()||({string})enemy->QueryShort()||"someone");
     names=add_gen(name);
   }
-  cname=capitalize(TP->QueryName()||TP->QueryShort()||"someone");
+  cname=capitalize(({string})TP->QueryName()||({string})TP->QueryShort()||"someone");
   
   switch(damtype)
   {
@@ -790,16 +786,15 @@ string noun;
 /* me allows calls without inherting this object */
 varargs int Repulse(object enemy,object caster,mixed sptype,string spname,object me)
 {
-int res;
-int resistance;
-mixed tmp;
-string s1,s2,s3;
+  int res;
+  mixed tmp;
+  string s1,s2,s3;
   if (!me) me=TO;
   if (!enemy) enemy=TP;
   if (!caster) caster=TP;
-  if (!spname) spname=me->this_spell();
+  if (!spname) spname=({string})me->this_spell();
   if (!caster || !enemy || !spname) return 0;
-  if (!sptype) sptype=me->QuerySpellType(spname);
+  if (!sptype) sptype=({mixed})me->QuerySpellType(spname);
   if (!sptype) sptype=ST_ALL;   /* default */
 
   res=IsResistant(sptype,enemy);  
@@ -807,18 +802,18 @@ string s1,s2,s3;
   if (res)  // repulsed ... maybe we want some action now
   {
     /* maybe the user wants to do something other then the default */
-    tmp=me->NotifySpellFail(enemy,caster,spname);
+    tmp=({mixed})me->NotifySpellFail(enemy,caster,spname);
     if (tmp) Message(tmp);
     else if (caster==enemy)
       Message("Luckily you are protected against backfiring "+
          spellnoun+"s.\n");
     else 
     {
-      s1=(enemy->QueryName()||enemy->QueryShort())+
+      s1=(({string})enemy->QueryName()||({string})enemy->QueryShort())+
          " is not affected by your "+spellnoun+".\n";
-      s2=(enemy->QueryName()||enemy->QueryShort())+" is not affected by "+
-         add_gen(TP->QueryName())+" "+spellnoun+".\n";
-      s3="Luckily you are protected against "+add_gen(TP->QueryName())+
+      s2=(({string})enemy->QueryName()||({string})enemy->QueryShort())+" is not affected by "+
+         add_gen(({string})TP->QueryName())+" "+spellnoun+".\n";
+      s3="Luckily you are protected against "+add_gen(({string})TP->QueryName())+
          " "+spellnoun+".\n";
       Message( ({ s1,s2,({enemy}),({s3}) }) );
     }
@@ -846,7 +841,7 @@ int do_describe(string spname)
 /* will be called in heartbeat of std/living/combat */
 int CastOn() 
 {
-  if (PO->QueryCombatDelay()<1) 
+  if (({int})PO->QueryCombatDelay()<1)
   {
     PO->SetCastObj(oldmagicobj);
     return 1;  /* drop Heart */
@@ -860,13 +855,14 @@ int ind_cast(string str)
   if (str) return do_cast(VERB+" "+str);
   else return do_cast(VERB);
 }
+
 int do_cast(string str)
 {
-string spname,target,tmpstr;
-closure castsuccess;    /* This function is called after the cast */
-closure *failfuns;  /* test for failing when casted, they can do appropriate damage as well... */
-int i,tmp;
-mixed res;
+  string spname,target,tmpstr;
+  closure castsuccess;    /* This function is called after the cast */
+  closure *failfuns;  /* test for failing when casted, they can do appropriate damage as well... */
+  int i,tmp;
+  mixed res;
   SetCastResult(CAST_ALLOW_FAIL);
   if (castmode==1) return 0;       /* No cast allowed */
   if (sizeof(spells)==0) return 0;  /* No spells defined */
@@ -893,8 +889,8 @@ mixed res;
     return notify_fail(tmpstr, NOTIFY_NOT_VALID),0;
 
   /* Cost can be derived from a function or be fixed */
-  oldSP=TP->QuerySP();
-   if (QueryCastCost(spname) && !TP->ReduceSP(QueryCastCost(spname)))
+  oldSP=({int})TP->QuerySP();
+   if (QueryCastCost(spname) && !({int})TP->ReduceSP(QueryCastCost(spname)))
   {
     return notify_fail("You don't have enough spellpoints to "+QueryCastVerb()+
              " "+add_a(QueryLongName(spname))+" "+spellnoun+".\n",
@@ -920,9 +916,9 @@ mixed res;
   /* write you cast a xxx spell */
   Message(QueryCastActionMessage(spname,QueryLongName(spname)));
   /* Now do the actual cast ! */
-  oldmagicobj=TP->QueryCastObj();  /* save old object */
+  oldmagicobj=({object})TP->QueryCastObj();  /* save old object */
   TP->SetCastObj(TO);
-  tmp=funcall(QueryCastFunction(spname),target,spname,0);
+  tmp=({int})funcall(QueryCastFunction(spname),target,spname,0);
   SetCastResult(tmp);
   if (tmp<0)  /* <0: failed */
   {
@@ -935,7 +931,7 @@ mixed res;
         GL_SPELLMASTER->RecordSpell(spname,"success");
 
   if (tmp==CAST_FAIL_MSG) 
-     Message(({"Failed!\n",TP->QueryName()+" failed!\n"}));
+     Message(({"Failed!\n",({string})TP->QueryName()+" failed!\n"}));
   /* Any action after the cast, like remove the scroll */
   castsuccess=QuerySuccessFunction(spname);
   if (castsuccess) funcall(castsuccess,tmp,spname);
@@ -945,9 +941,9 @@ mixed res;
 
 void init()
 {
-string *sp;
-int i;
- ::init();
+  string *sp;
+  int i;
+  ::init();
   if (castmode==0) add_action("do_cast", castverb); /* use case <spname> */
   else if (castmode==2)        /* use <spname> */
   {
@@ -956,6 +952,7 @@ int i;
   }
   add_action("do_describe", "describe");
 }
+
 void create()
 {
   ::create(); 

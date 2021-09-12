@@ -93,23 +93,23 @@ void TransportOk()
 
 /*-------------------------------------------------------------------------*/
 void catch_tell(string str) {
-  string who, what, msg;
+  string what, msg;
   int    tleft, seconds;
-  object ob, shut;
+  object shut;
 
-  if (sscanf(str, "%s tells you: %s", who, what) < 1)
+  if (sscanf(str, "%~s tells you: %s", what) < 1)
     return;
 
   shut = find_object(SHUTDEMON);
   if (-1 != strstr(what, "time") || -1 != strstr(what, "shutdown"))
   {
-    if (!shut || !shut->query_progress())
+    if (!shut || !({int})shut->query_progress())
       tell_object(this_player()
                  , "Armageddon tells you: There is no shutdown in progress.\n"
                  );
     else
     {
-        seconds = shut->query_time_left();
+      seconds = ({int})shut->query_time_left();
       tleft = (seconds * 3 / 4 - 10) + tleft;
       msg = "";
       if (seconds > 59) {

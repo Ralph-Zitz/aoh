@@ -133,7 +133,7 @@ public varargs string VicPronoun(string cap)
   if (sizeof(vics = QueryVictims())>1)
     res = "they";
   else
-    res = vics[<1]->QueryPronoun();
+    res = ({string})vics[<1]->QueryPronoun();
   return cap?capitalize(res):res;
 }
 
@@ -148,7 +148,7 @@ public varargs string VicPossessive(string cap)
   if (sizeof(vics = QueryVictims())>1)
     res = "their";
   else
-    res = vics[<1]->QueryPossessive();
+    res = ({string})vics[<1]->QueryPossessive();
   return cap?capitalize(res):res;
 }
 
@@ -163,7 +163,7 @@ public varargs string VicObjective(string cap)
   if (sizeof(vics = QueryVictims())>1)
     res = "their";
   else
-    res = vics[<1]->QueryObjective();
+    res = ({string})vics[<1]->QueryObjective();
   return cap?capitalize(res):res;
 }
 
@@ -212,7 +212,7 @@ protected string parse_string(string str)
   string res;
   if (str=="") return "";
   res = process_string(str);
-  res = "  "+STR->wrap(res,75,2);
+  res = "  "+({string})STR->wrap(res,75,2);
   if (res[<1]!='\n') res+="\n";
   return res;
 }
@@ -250,7 +250,7 @@ protected int get_free_id()
   int *idx;
   idx = filter(m_indices(QuerySpells()),SF(intp));
   if (!sizeof(idx)) return 0;
-  return NMB->max(idx)+1;
+  return ({int})NMB->max(idx)+1;
 }
 
 /*
@@ -467,7 +467,7 @@ protected status check_cast(mixed id)
     {
       sp = QuerySpells();
       if (QuerySP()-sp[id][S_SP]<0) return 0;
-      if (QueryHP()-sp[id][S_HP]<(int)QueryWimpy()) return 0;
+      if (QueryHP()-sp[id][S_HP]<QueryWimpy()) return 0;
       if (closurep(sp[id][S_CHECKFUN]))
 	return funcall(sp[id][S_CHECKFUN]);
       return 1;
@@ -511,8 +511,8 @@ protected int get_damage( object victim, mapping sp ) {
 protected status valid_victim(object vic)
 {
   return vic
-    && !vic->QueryGhost()
-    && vic->QueryHP()>=0;
+    && !({int})vic->QueryGhost()
+    && ({int})vic->QueryHP()>=0;
 }
 
 public varargs object *GetVictims(int nr_victims,
@@ -597,8 +597,8 @@ public status CastSpell(mixed id)
 	  show_room(env,map(msg,SF(parse_string)),({vic[i]}));
 	}
       if (dam && dam[i] >= 0)
-	vic[i]->Defend(dam[i],sp[S_DAMTYPE]||DT_FIRE,DEFEND_F_NOMSG);
-      if (!vic[i]||vic[i]->QueryHP()<0)
+        vic[i]->Defend(dam[i],sp[S_DAMTYPE]||DT_FIRE,DEFEND_F_NOMSG);
+      if (!vic[i]||({int})vic[i]->QueryHP()<0)
 	{
 	  if (vic[i]&&member(sp,S_VICMSG)&&member(sp[S_VICMSG],MSG_DEAD))
 	    {
@@ -608,7 +608,8 @@ public status CastSpell(mixed id)
 	  if (member(sp,S_ENVMSG)&&member(sp[S_ENVMSG],MSG_DEAD))
 	    {
 	      if (stringp(msg = sp[S_ENVMSG][MSG_DEAD])) msg = ({msg,msg});
-	      show_object(env,map(msg,SF(parse_string)),({vic[i]}));
+          show_room(env,map(msg,SF(parse_string)),({vic[i]}));
+	      //show_object(env,map(msg,SF(parse_string)),({vic[i]}));
 	    }
 	}
     }

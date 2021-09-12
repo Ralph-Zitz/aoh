@@ -21,10 +21,10 @@
 #include <properties.h> // P_...
 #include <secure/wizlevels.h> // IS_IMMORTAL
 
-private static mapping rooms;
-private static status getexitcall; // communication between GetExitDest and
+private nosave mapping rooms;
+private nosave status getexitcall; // communication between GetExitDest and
                                    // MovePlayer
-private static status compile_error;
+private nosave status compile_error;
 
 protected int *build_coor(int *coor)
 // Return the co-ordinates in the correct form, i. e. an array
@@ -148,7 +148,7 @@ public varargs mixed MovePlayer(object pl,string label, int *coor,
   if (!pl) return 0;
   if (!coor = build_coor(coor))
     raise_error("MovePlayer: Wrong room-coordinates: "+
-	        STR->mixed_to_string(coor)+"\n");
+	        ({string})STR->mixed_to_string(coor)+"\n");
 //    MASTER->runtime_error("MovePlayer: Wrong room-coordinates: "+
 //                          STR->mixed_to_string(coor)+"\n",
 //                          blueprint(ME),object_name(ME),-1);
@@ -165,13 +165,13 @@ public varargs mixed MovePlayer(object pl,string label, int *coor,
   if (IS_IMMORTAL(pl)&&interactive(pl))
     printf("Maze: Label: %s  X: %d Y: %d Z: %d\n",label,coor[X],coor[Y],
            coor[Z]);
-  return pl->move(create_room(label,coor),method,
+  return ({int})pl->move(create_room(label,coor),method,
     extra?extra:(method==M_GO?query_verb():0));
 }
 
 public void scan_error(string file,int line)
 {
-  string *li,*fit,h;
+  string *li,*fit;
   int i;
   file = blueprint(ME)[1..]+".c";
 
@@ -179,7 +179,7 @@ public void scan_error(string file,int line)
   fit = regexp(li,"^.* "+file+" line [0..9]*");
   if (sizeof(fit))
     for(i=member(li,fit[0]);i<sizeof(li);i++)
-      if (sscanf(li[i],"%s cstring0 %sline %d",h,h,line))
+      if (sscanf(li[i],"%~s cstring0 %~sline %d",line))
         break;
   if (!line) line = -1;
 }
@@ -281,8 +281,8 @@ public mixed GetExitDest(object room,string dir)
   mapping exits;
 
   if (!room) return 0;
-  label = room->Query(P_LABEL);
-  coor = room->Query(P_COOR);
+  label = ({string})room->Query(P_LABEL);
+  coor = ({int *})room->Query(P_COOR);
   i = sizeof(props =
              rooms[label][coor[Z]][coor[Y]][coor[X],ROOM_PROPERTIES]);
   exits = ([]);
@@ -340,8 +340,7 @@ public void AddDoor(string label,int *coor,
 {
   string   doorobj,doorshort,file;
   mixed    keycode,props;
-  object  *door;
-  int i,line;
+  int line;
 
   if (!coor = build_coor(coor))
     {
@@ -370,7 +369,7 @@ public void AddDoor(string label,int *coor,
       dprops = doorid;
       doorobj = to_string(doorlong || MAZE("mazedoor"));
       ids = ( (dprops[P_IDS] || ({ })) 
-              + (doorobj->QueryIds() || ({}))
+              + (({string *})doorobj->QueryIds() || ({}))
               + ({ dprops[P_DOORCODE] })
             ) - ({ 0, "" });
       if (sizeof(ids))
@@ -455,33 +454,32 @@ public void print_rooms()
   string *labels;
   int i;
   if (rooms)
+  {
+    i = sizeof(labels = m_indices(rooms));
+    while(i--)
     {
-      i = sizeof(labels = m_indices(rooms));
-      while(i--)
-	{
-	  int zc,*zs;
-	  zc = sizeof(zs = m_indices(rooms[labels[i]]));
-	  while(zc--)
-	    {
-	      int yc,*ys;
-	      yc = sizeof(ys = m_indices(rooms[labels[i]][zs[zc]]));
-	      while(yc--)
-		{
-		  int xc,*xs;
-		  xc = sizeof(xs = m_indices(rooms[labels[i]][zs[zc]][ys[yc]]));
-		  while(xc--)
-		    {
-		      write(labels[i]+" ("+xs[xc]+","+ys[yc]+","+zs[zc]+"): "+
-                            STR->mixed_to_string(
-                                 rooms[labels[i]][zs[zc]][ys[yc]][xs[xc],
-                                 ROOM_OBJECT])+"\n");
-                      write("Props: "+STR->mixed_to_string(
-			   QueryRoomProps(labels[i],
-                                          ({xs[xc],ys[yc],zs[zc]})))+"\n");
-		    }
+      int zc,*zs;
+      zc = sizeof(zs = m_indices(rooms[labels[i]]));
+      while(zc--)
+      {
+        int yc,*ys;
+        yc = sizeof(ys = m_indices(rooms[labels[i]][zs[zc]]));
+        while(yc--)
+        {
+          int xc,*xs;
+          xc = sizeof(xs = m_indices(rooms[labels[i]][zs[zc]][ys[yc]]));
+          while(xc--)
+          {
+            write(labels[i]+" ("+xs[xc]+","+ys[yc]+","+zs[zc]+"): "+
+              ({string})STR->mixed_to_string(
+              rooms[labels[i]][zs[zc]][ys[yc]][xs[xc],
+              ROOM_OBJECT])+"\n");
+            write("Props: "+({string})STR->mixed_to_string(
+              QueryRoomProps(labels[i],({xs[xc],ys[yc],zs[zc]})))+"\n");
+		  }
 		}
-	    }
-	}
+	  }
     }
+  }
 }
   

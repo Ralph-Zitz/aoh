@@ -982,9 +982,6 @@ public int wiz_funcs(string str)
 // Called with action 'guild'. These are special commands for wizards to check
 // this and other guilds.
 {
-  int i, number;
-  string *rega;
-
   if (!str) str = "help";
   str = lower_case(str);
 

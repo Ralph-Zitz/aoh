@@ -418,7 +418,6 @@ public varargs int DoActionFor (int action, int type, object *keys, int kix)
 public varargs int fopen (string str, int where) {
   object *keys;
   mixed rc;
-  string sh;
   int i;
 
   if (!(rc = ParseArgs (str, 0, where)))
@@ -475,7 +474,6 @@ public varargs int fopen (string str, int where) {
         break;
     }
   }
-
   return 1;
 }
 
@@ -497,7 +495,6 @@ public varargs int fopen (string str, int where) {
 */
 
 public varargs int flock (string str, int where) {
-  string sh;
   object *keys;
   mixed rc;
   int i;
@@ -567,7 +564,6 @@ public varargs int flock (string str, int where) {
         break;
     }
   }
-
   return 1;
 }
 

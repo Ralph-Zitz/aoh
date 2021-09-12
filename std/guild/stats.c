@@ -222,7 +222,7 @@ public int CanAdvance(object pl,string stat)
 // ADV_TOO_HIGH, ADV_OK
 {
   int sval, mval;
-  string minstat,maxstat;
+  string minstat;
   closure maxfun;
 
   maxfun = ({int})pl->QueryLevel()<20?symbol_function("QueryMaxStat",ME)
@@ -462,7 +462,7 @@ public mapping AddMinStat(string stat,int value)
 public varargs mapping QueryMaxStats(object pl)
 {
   string *s;
-  int i, tmp, summe;
+  int i, summe;
   mapping stats;
 
   stats = copy(Pmaxstats||G_MAXSTATS);

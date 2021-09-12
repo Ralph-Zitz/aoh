@@ -20,7 +20,6 @@ private nosave int mutex2;       // To lock Aloha
 private nosave string Pdir;      // the command, also adjective
 private nosave object Proom;     // the room of the door; used as flag
 private nosave string Poroom;    // filename of the remote room
-private nosave string Podoor;    // filename of the remote door
 private nosave string Pdoorcode; // door id
 private nosave int Phidedoor, Phideexit;  // non-obviousility
 private nosave int Pchkdoor;     // non-useability

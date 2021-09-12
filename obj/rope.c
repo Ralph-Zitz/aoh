@@ -91,19 +91,18 @@ public string MyShort()
 
    ret = "";
    if (tied_here && tied_here != THIS)
-       ret = tied_here->QueryName() || tied_here->Short()
-             || tied_here->Query("Fastening")[whTOb];
+       ret = ({string})tied_here->QueryName() || ({string})tied_here->Short()
+             || (({mapping})tied_here->Query("Fastening"))[whTOb];
 
    if (tied_here && tied_there && tied_here != THIS && tied_there != THIS)
-     ret += " and to "+(  tied_there->QueryName()
-                        ||tied_there->Short()
-                       || tied_there->Query("Fastening")[whTOb] );
+     ret += " and to "+(  ({string})tied_there->QueryName()
+                        ||({string})tied_there->Short()
+                       || (({mapping})tied_there->Query("Fastening"))[whTOb] );
    return ret;
 }
 
 public varargs string Short (string what)
 {
-  string rc;
   return ::Short(what)+((tied_here || tied_there) ? (" tied to "+MyShort()) : "");
 }
 
@@ -136,7 +135,7 @@ public mapping AddFastening(mixed id, string descr)
   if (!id) return objdet;
   if (stringp(id)) id = ({id});
   i = sizeof(id);
-  if (!objdet=environment(TP)->Query("Fastening")) objdet = ([]);
+  if (!objdet=({mapping})environment(TP)->Query("Fastening")) objdet = ([]);
   while (i--) {
     objdet[id[i]] = descr;
   }
@@ -164,21 +163,21 @@ public void follow (mixed dest, int method, mixed extra)
     }
     else if ((   (living(tied_here) && tied_there)
             || (living(tied_there) && tied_here))
-           && dest != storeenv && dest != storeenv->Query("VisibleRoom")
+           && dest != storeenv && dest != ({string})storeenv->Query("VisibleRoom")
           )
     {
       TP->move(storeenv,M_SILENT);
       write("You can't leave this room while beeing tied.\n");
-      show(TP->QueryName()+" fails to leave the room still beeing tied.\n");
+      show(({string})TP->QueryName()+" fails to leave the room still beeing tied.\n");
       sema=0;
       return;
     }
   }
-  if (dest == storeenv->Query("VisibleRoom")) {
+  if (dest == ({string})storeenv->Query("VisibleRoom")) {
     /* Change the tied object from source to destination room */
-    if (storeenv == tied_here) tied_here = find_object(storeenv->Query("VisibleRoom"));
-    else if (storeenv == tied_there) tied_there = find_object(storeenv->Query("VisibleRoom"));
-    storeenv=find_object(storeenv->Query("VisibleRoom"));
+    if (storeenv == tied_here) tied_here = find_object(({string})storeenv->Query("VisibleRoom"));
+    else if (storeenv == tied_there) tied_there = find_object(({string})storeenv->Query("VisibleRoom"));
+    storeenv=find_object(({string})storeenv->Query("VisibleRoom"));
   }
 
   THIS->move(dest,M_SILENT,extra); /* move the rope :-) */
@@ -208,10 +207,10 @@ public int TieTo (object ob)
     return 1;
   }
 
-  obd = ob->QueryName() || ob->Short()
-        || ob->Query("Fastening")[whTOb];
+  obd = ({string})ob->QueryName() || ({string})ob->Short()
+        || (({mapping})ob->Query("Fastening"))[whTOb];
 
-  if ((rc = ob->Query(P_NO_TIE))) {
+  if ((rc = ({mixed})ob->Query(P_NO_TIE))) {
     notify_fail(stringp(rc) ? rc
                             : "You can't tie the "+::Short()+" to "+obd+".\n"
                , NOTIFY_NOT_VALID);
@@ -239,8 +238,8 @@ public int UntieFrom (object ob)
   string obd;
   mixed  rc;
 
-  obd = ob->QueryName() || ob->Short()
-        || ob->Query("Fastening")[whTOb];
+  obd = ({string})ob->QueryName() || ({string})ob->Short()
+        || (({mapping})ob->Query("Fastening"))[whTOb];
 
   if (ob != tied_here && ob != tied_there) {
     notify_fail( "The "+::Short()+" is not tied to "+obd+".\n"
@@ -248,7 +247,7 @@ public int UntieFrom (object ob)
     return 1;
   }
 
-  if ((rc = ob->Query(P_NO_UNTIE))) {
+  if ((rc = ({mixed})ob->Query(P_NO_UNTIE))) {
     notify_fail(stringp(rc) ? rc
                           : "You can't untie the "+::Short()+" from "+obd+".\n"
                , NOTIFY_NOT_VALID);
@@ -272,7 +271,7 @@ public int UntieFrom (object ob)
 /*-------------------------------------------------------------------------*/
 public string dtie(string arg)
 {
-    allowTOb=environment(TP)->Query("Fastening");
+    allowTOb=({mapping})environment(TP)->Query("Fastening");
     if  (allowTOb==([]) || !allowTOb || !member(allowTOb,arg)) return 0;
     return arg;
 }
@@ -285,14 +284,14 @@ public int ftie (string arg)
 
   if (   !arg
       || 2 != sscanf(arg, "%s to %s", t1, t2)
-      || THIS != TP->WSearchEnvInv(t1)
+      || THIS != ({object})TP->WSearchEnvInv(t1)
      )
   {
     notify_fail("What do you want to tie?\n", NOTIFY_NOT_OBJ);
     return 0;
   }
 
-  if (!(ob = TP->WSearchEnvInv(t2)) && !(whTOb=dtie(t2)))
+  if (!(ob = ({object})TP->WSearchEnvInv(t2)) && !(whTOb=dtie(t2)))
   {
     notify_fail("What do you want to tie it to?\n", NOTIFY_NOT_VALID);
     return 0;
@@ -303,15 +302,15 @@ public int ftie (string arg)
   if (TieTo(ob))
     return 0;
 
-  t1 = ob->QueryName() || ob->Short();
+  t1 = ({string})ob->QueryName() || ({string})ob->Short();
   if (t1=="nobody") t1=0;
-  if (!t1 && sizeof(ob->Query("Fastening")))
-    t1 = ob->Query("Fastening")[whTOb];
-  else if (!t1 && !sizeof(ob->Query("Fastening")))
+  if (!t1 && sizeof(({mapping})ob->Query("Fastening")))
+    t1 = (({mapping})ob->Query("Fastening"))[whTOb];
+  else if (!t1 && !sizeof(({mapping})ob->Query("Fastening")))
     t1 = "something";
 
   write("You tie "+::Short()+" to "+t1+".\n");
-  show(TP->QueryName()+" ties "+::Short()+" to "+t1+".\n");
+  show(({string})TP->QueryName()+" ties "+::Short()+" to "+t1+".\n");
 
   return 1;
 }
@@ -324,14 +323,14 @@ public int funtie (string arg)
 
   if (   !arg
       || 2 != sscanf(arg, "%s from %s", t1, t2)
-      || THIS != TP->WSearchEnvInv(t1)
+      || THIS != ({object})TP->WSearchEnvInv(t1)
      )
   {
     notify_fail("What do you want to untie?\n", NOTIFY_NOT_OBJ);
     return 0;
   }
 
-  if (!(ob = TP->WSearchEnvInv(t2)) && !(whTOb=dtie(t2)))
+  if (!(ob = ({object})TP->WSearchEnvInv(t2)) && !(whTOb=dtie(t2)))
   {
     notify_fail("From what do you want to untie?\n", NOTIFY_NOT_VALID);
     return 0;
@@ -342,8 +341,8 @@ public int funtie (string arg)
   if (UntieFrom(ob))
     return 0;
 
-  write("You untie "+::Short()+" from "+(ob->Short()||ob->Query("Fastening")[whTOb])+".\n");
-  show(TP->QueryName()+" unties "+::Short()+" from "+(ob->Short()||ob->Query("Fastening")[whTOb])+".\n");
+  write("You untie "+::Short()+" from "+(({string})ob->Short()||(({mapping})ob->Query("Fastening"))[whTOb])+".\n");
+  show(({string})TP->QueryName()+" unties "+::Short()+" from "+(({string})ob->Short()||(({mapping})ob->Query("Fastening"))[whTOb])+".\n");
 
   if (ob==environment()) whTOb=0;
   return 1;

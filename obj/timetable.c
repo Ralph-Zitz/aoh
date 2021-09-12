@@ -28,7 +28,7 @@ string CheckQuay(string str)
 {
   if(str[0] != '/') str = QueryPath() + str;
   if(catch(call_other(str,"???"))) return str;
-  if(!str->QueryTable()) return 0;
+  if(!({mapping})str->QueryTable()) return 0;
   return str;
 }
 
@@ -59,12 +59,10 @@ varargs string *AddAllQuays(mixed m)
 
 private string get_single_quay(string ship, int *param)
 {
-  mixed tmp;
-
   return sprintf("%s %-35s -> %s\n",
 		 param[1]++?"         ":sprintf("Quay %3d:",param[0]),
-		 ship->QueryShort()[0..34],
-     ship->QueryPortName((tmp = QueryQuays()[param[0]-1]->
+		 (({string})ship->QueryShort())[0..34],
+     ({string})ship->QueryPortName((({mapping})(QueryQuays()[param[0]-1])->
 				      QueryTable())[1]
 				     [member( QueryQuays()[param[0]-1],
 						   QueryTable()[0])]+1), ship);
@@ -75,7 +73,7 @@ private string get_ships(string path, int number)
   int *j;
 
   j = ({++number,0});
-  return implode(map((path->QueryTable()||({({})}))[0],
+  return implode(map((({mapping})path->QueryTable()||({({})}))[0],
 			   #'get_single_quay /*'*/,&j),"");
 }
   

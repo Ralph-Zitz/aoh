@@ -59,7 +59,7 @@ varargs string QueryLong() {
 void Setup(object tent, object player) {
   tentname = explode(object_name(tent), "#")[0];
   envname = explode(object_name(ENV(tent)), "#")[0];
-  oldhome = player->QueryHome();
+  oldhome = ({string})player->QueryHome();
 }
 
 mixed QueryAutoObject() {
@@ -92,30 +92,30 @@ void SetAutoObject (mixed args) {
     tent = 0;
     inv = filter_objects(all_inventory(env), "id", "tent");
     for (i = 0; i < sizeof(inv); i++)
-      if (inv[i]->Query("TentIsUsed") == TP->QueryName()) {
+      if (({string})inv[i]->Query("TentIsUsed") == ({string})TP->QueryName()) {
         tent = inv[i];
         break;
       }
     if (!tent) {
       tent = clone_object(TENT);
       tent->SetBuildup(1);
-      if (catch(i = tent->move(env)) || i != ME_OK)
+      if (catch(i = ({int})tent->move(env)) || i != ME_OK)
         break;
       show_room(env, "You suddenly notice a tent standing here.\n");
       newtent = 1;
     }
-    map_objects( filter_objects(all_inventory(tent), "id", TP->QueryName())
+    map_objects( filter_objects(all_inventory(tent), "id", ({string})TP->QueryName())
                , "remove");
     tent->Set("TentIsUsed", 0);
-    if (catch(i = TP->move( tent
+    if (catch(i = ({int})TP->move( tent
                           , M_SPECIAL
                           , ({ ""
-                             , "opens "+TP->QueryObjective()+" eyes"
+                             , "opens "+({string})TP->QueryObjective()+" eyes"
                              , "open your eyes and look around" 
                             })))
         || i != ME_OK)
       break;
-    show_room(tent, TP->QueryName()+" opens "+TP->QueryObjective()
+    show_room(tent, ({string})TP->QueryName()+" opens "+({string})TP->QueryObjective()
                     +" eyes and looks around.\n", ({ TP }));
     if (newtent)
       write("But this is not the same tent in which you fell asleep...\n");
@@ -124,7 +124,7 @@ void SetAutoObject (mixed args) {
   }
 
   if (!ok)
-    if (catch(i = TP->move(oldhome||defaulthome, M_TELEPORT)) || i != ME_OK)
+    if (catch(i = ({int})TP->move(oldhome||defaulthome, M_TELEPORT)) || i != ME_OK)
       TP->move(defaulthome, M_TELEPORT);
 
   // Success or failure: in both cases we are no longer needed

@@ -143,19 +143,18 @@ public string QueryShow() { return Pverb_show; }
 public varargs string SkShort(int cap)
 {
   if (cap) {
-    if (ME->QueryNoShopkeeper()) return "The shopkeeper";
-    return capitalize(ME->QueryShort());
+    if (({int})ME->QueryNoShopkeeper()) return "The shopkeeper";
+    return capitalize(({string})ME->QueryShort());
   }
-  if (ME->QueryNoShopkeeper()) return "the shopkeeper";
-  return ME->QueryShort();
+  if (({int})ME->QueryNoShopkeeper()) return "the shopkeeper";
+  return ({string})ME->QueryShort();
 }
 
-protected object GetShopObject(string shopobj)
+protected object|int GetShopObject(string shopobj)
 // Gets the object shopobj from the shop
 // This must be the shop where the shopkeeper resides
 {
-  object shop,sobj;
-  int i;
+  object shop;
   object found;
   string msg;
 
@@ -167,11 +166,11 @@ protected object GetShopObject(string shopobj)
           ({SF(SkSay),
             "Oh sorry, I'm not in my shop and can't help you further.\n"
           })),
-        NOTIFY_NOT_VALID),0;
+        NOTIFY_NOT_VALID);
     }
-  found = search(shop->GetStore(), shopobj,
+  found = search(({object})shop->GetStore(), shopobj,
                   SM_LOCATE|SM_OBJECT,
-                  symbol_function("CheckList",shop->GetStore()));
+                  symbol_function("CheckList",({object})shop->GetStore()));
   if (!found)
     {
       msg = "I don't have "+shopobj+" to sell.\n";
@@ -179,7 +178,7 @@ protected object GetShopObject(string shopobj)
         lambda(0,
           ({SF(SkSay),
             msg
-          })),NOTIFY_NOT_VALID),0;
+          })),NOTIFY_NOT_VALID);
     }
 
   if (!shopobjects) shopobjects=({});
@@ -201,15 +200,15 @@ protected varargs int buy_routine(object ob,int force)
           ({SF(SkSay),
             "Oh sorry, I'm not in my shop and can't help you further.\n"
           })),
-        NOTIFY_NOT_VALID),0;
+        NOTIFY_NOT_VALID);
     }
 
   // Test coins of customer.
-  if (!shop->check_money(shop->GetPrice(ob), 1,force))
+  if (!({int})shop->check_money(({int})shop->GetPrice(ob), 1,force))
     return 0;
 
   // Get coins from customer.
-  if(!shop->check_money(shop->GetPrice(ob),0,force))
+  if(!({int})shop->check_money(({int})shop->GetPrice(ob),0,force))
     return 0;
 
   return 1;
@@ -237,30 +236,30 @@ protected int pay_service(string scomm,string cobj,int force)
           ({SF(SkSay),
             "Oh sorry, I'm not in my shop and can't help you further.\n"
           })),
-        NOTIFY_NOT_VALID),0;
+        NOTIFY_NOT_VALID);
     }
 
   // Test coins of customer.
-  if (!shop->check_money(QueryServPrice(scomm,cobj), 1,force))
+  if (!({int})shop->check_money(QueryServPrice(scomm,cobj), 1,force))
     return 0;
 
   // Get coins from customer.
-  if(!shop->check_money(QueryServPrice(scomm,cobj),0,force))
+  if(!({int})shop->check_money(QueryServPrice(scomm,cobj),0,force))
     return 0;
 
    // Finally clean up
    for (i=0; i<sizeof(shopobjects); i++)
-     if (!shopobjects[i]->Query(P_NORMV))
+     if (!({int})shopobjects[i]->Query(P_NORMV))
        shopobjects[i]->remove();  // destruct object, it is used to form another object
 
    return 1;
 }
 
-public object do_service(string str2)
+public object|int do_service(string str2)
 // This is called when the customer calls a service
 {
   string h,str1;
-  int number, force, count, count2, i;
+  int force;
   object ob;
 
   str1=query_verb();
@@ -293,13 +292,13 @@ public object do_service(string str2)
           NOTIFY_ILL_ARG),0;
 
        // Check if player can carry the item.
-       if(!TP->MayAddWeight(ob->QueryWeight())) {
+       if(!({int})TP->MayAddWeight(({int})ob->QueryWeight())) {
          if (!member(shopobjects,ob)) ob->remove(); // no shopobject
          return notify_fail(
            lambda(0,
              ({SF(SkSay),
                CustomerName()+", you can't carry that much.\n"
-             })),NOTIFY_NOT_VALID),0;
+             })),NOTIFY_NOT_VALID);
        }
        if (!pay_service(str1,str2,force)) // Try to pay service (and objects)
        {
@@ -312,7 +311,7 @@ public object do_service(string str2)
           lambda(0,
             ({SF(SkSay),
               CustomerName()+", something went wrong. Please inform a Wizard.\n"
-            })),NOTIFY_NOT_VALID),0;
+            })),NOTIFY_NOT_VALID);
 
        ob->move(TP,M_SILENT);
        return ob;
@@ -324,7 +323,7 @@ public object do_service(string str2)
             ({SF(SkSay),
                "I don't offer the service "+str1+" for you\n"
             })),
-          NOTIFY_NOT_VALID),0;
+          NOTIFY_NOT_VALID);
     }
 }
 
@@ -357,8 +356,8 @@ public int do_show(string scomm)
 public int do_list(string str)
 // Called whenever a customer types 'list service(s)' in here.
 {
-  int i,j,ct;
-  string short,linelist,*clist,*idx,*idy,*res;
+  int j,ct;
+  string short,linelist,*idx,*idy,*res;
 
   if (!str || (str!="service" && str!="services")) return  0;
   dtell("suamor",str+"\n");
@@ -381,7 +380,7 @@ public int do_list(string str)
       return 0;
     }
   Say(SkShort(1)+" shows a service list to "+CustomerName()+".\n",({TP}));
-  if (TP->CanSee())
+  if (({int})TP->CanSee())
     {
       linelist="";
       idx = sort_array(m_indices(QueryServices()),SF(>));
@@ -394,9 +393,9 @@ public int do_list(string str)
             for (j=0;j<sizeof(idy);j++)
             {
               short=idx[i]+" "+idy[j];
-              linelist+=STR->wrap(" "+STR->radjcut(to_string(ct), 3)+". "+
-               "  "+STR->ladjcut(strip_article(short),20)
-                   +STR->radjcut(to_string(convert_value(
+              linelist+=({string})STR->wrap(" "+({string})STR->radjcut(to_string(ct), 3)+". "+
+               "  "+({string})STR->ladjcut(strip_article(short),20)
+                   +({string})STR->radjcut(to_string(convert_value(
                              QueryServPrice(idx[i],idy[j]))),6)+"\n",39,14);
               ct++;
             }
@@ -404,9 +403,9 @@ public int do_list(string str)
         else
           {
             short=idx[i];
-            linelist+=STR->wrap(" "+STR->radjcut(to_string(ct), 3)+". "+
-                  "  "+STR->ladjcut(strip_article(short),20)+
-                  STR->radjcut(to_string(convert_value(
+            linelist+=({string})STR->wrap(" "+({string})STR->radjcut(to_string(ct), 3)+". "+
+                  "  "+({string})STR->ladjcut(strip_article(short),20)+
+                  ({string})STR->radjcut(to_string(convert_value(
                              QueryServPrice(idx[i],0))),6)+"\n",39,14);
             ct++;
           }
@@ -422,7 +421,7 @@ public int do_list(string str)
     }
   else
     res = ({SkShort(1)+" does something."});
-  STR->smore(res,TP->QueryPageSize());
+  STR->smore(res,({int})TP->QueryPageSize());
   return 1;
 }
 
@@ -430,7 +429,7 @@ string do_shrug()
 {
   if (member(inherit_list(environment(this_player())), "std/shop.c")==-1)
     return 0; // Shopkeeper is not in the shop
-  return "The joiner says: Sorry, "+environment(ME)->CustomerName()+", I don't offer such an service.\n";
+  return "The joiner says: Sorry, "+({string})environment(ME)->CustomerName()+", I don't offer such an service.\n";
 }
 
 void add_comm(string comm)

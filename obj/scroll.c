@@ -49,11 +49,11 @@ void NoSell() { Set(P_NOSELL,1); }
 /* Draw a random enemy for attack spells (if no target given) */
 public varargs object GetEnemy(object caster)
 {
-object *enem;
-   if (!caster) caster=this_player();
-   enem = caster->QueryEnemies();
-   if (sizeof(enem)) return enem[random(sizeof(enem))];
-   return 0;
+  object *enem;
+  if (!caster) caster=this_player();
+  enem = ({object *})caster->QueryEnemies();
+  if (sizeof(enem)) return enem[random(sizeof(enem))];
+  return 0;
 }
 
 /* Checks whether a ScrollObject is defined and contains a function  */
@@ -61,8 +61,8 @@ object *enem;
 /* allows the scrollobject to directly call the function in this ob  */
 object ScrollObject(string funname)
 {
-object s_obj;
-  if ( ( TP && s_obj=TP->Query(P_SCROLLOBJ)) && (s_obj!=PO) &&
+  object s_obj;
+  if ( ( TP && s_obj=({object})TP->Query(P_SCROLLOBJ)) && (s_obj!=PO) &&
         function_exists(funname, s_obj) ) return s_obj;
   return 0;
 }
@@ -89,9 +89,9 @@ string *ResolveMacro(string str)
 /* processed by ResolveMacro() allowing shortcuts like "all",...     */
 varargs mapping ResolveMapping(mapping toadd,mapping old)
 {
-string *ind;
-string *strs;
-int i,j,lev;
+  string *ind;
+  string *strs;
+  int i,j,lev;
   if (!toadd) return ([]);
   if (!old) old=([]);
   ind=m_indices(toadd);
@@ -114,8 +114,8 @@ int i,j,lev;
 /* (["guild1":level1,"guild2":level2)]                                */
 varargs int SetMemoLevel(mixed arg1,int arg2)
 {
-mapping tmp;
-int i;
+  mapping tmp;
+  int i;
   if (!memolevel) memolevel=([]);
   if (!arg1) return 0;
   if (intp(arg1)) tmp=(["all":arg1]);
@@ -126,15 +126,16 @@ int i;
   SetValue(i*10+50);  /* Never overwrite QueryValue ! */
   memolevel=ResolveMapping(tmp,memolevel);
   return 1;
- }
+}
+
 varargs int QueryMemoLevel(string guild)
 {
-int res;
-object s_obj;
+  int res;
+  object s_obj;
   if (!memolevel) memolevel=([]);
   if (s_obj=ScrollObject("QueryMemoLevel")) 
-      return s_obj->QueryMemoLevel(guild);
-  if (!guild && TP) guild=TP->QueryGuild();
+      return ({int})s_obj->QueryMemoLevel(guild);
+  if (!guild && TP) guild=({string})TP->QueryGuild();
   if (!guild) return 100;
   res=memolevel[guild];
   if (!res) return 100;
@@ -144,8 +145,8 @@ object s_obj;
 /* not memorize the scroll                                           */
 int ForbidMemo(mixed strs)
 {
-string *tmp;
-int i;
+  string *tmp;
+  int i;
   if (!memolevel) memolevel=([]);
   if (!strs) return 0;
   if (stringp(strs)) strs=({strs});
@@ -164,16 +165,16 @@ int i;
 /* for Level and Guild are performed                                 */
 varargs int CanMemo(object who)
 {
-int lev,minlevel;
-string guild;
-object s_obj;
+  int lev,minlevel;
+  string guild;
+  object s_obj;
   if (!memolevel) memolevel=([]);
   if (s_obj=ScrollObject("CanMemo")) 
-        return s_obj->CanMemo(who);
+        return ({int})s_obj->CanMemo(who);
   if (!who) who=TP;
   if (!who) return 0;
-  guild=who->QueryGuild();
-  lev=who->QueryLevel();
+  guild=({string})who->QueryGuild();
+  lev=({int})who->QueryLevel();
   if (!guild) return 0;
   minlevel=memolevel[guild];
   if (minlevel<1) return 0;
@@ -188,7 +189,7 @@ object s_obj;
 /* (["guild1":level1,"guild2":level2)]                                */
 varargs int SetCastLevel(mixed arg1,int arg2)
 {
-mapping tmp;
+  mapping tmp;
   if (!castlevel) castlevel=([]);
   if (!arg1) return 0;
   if (intp(arg1)) tmp=(["all":arg1]);
@@ -202,11 +203,11 @@ mapping tmp;
 /* 0: means no cast at all                                            */
 varargs int QueryCastLevel(string guild)
 {
-object s_obj;
+  object s_obj;
   if (!castlevel) castlevel=([]);
   if (s_obj=ScrollObject("QueryCastLevel")) 
-        return s_obj->QueryCastLevel(guild);
-  if (!guild && TP) guild=TP->QueryGuild();
+        return ({int})s_obj->QueryCastLevel(guild);
+  if (!guild && TP) guild=({string})TP->QueryGuild();
   if (!guild) return 0;
   return castlevel[guild];
 }
@@ -214,8 +215,8 @@ object s_obj;
 /* not use the scroll                                                */
 int ForbidCast(mixed strs)
 {
-string *tmp;
-int i;
+  string *tmp;
+  int i;
   if (!castlevel) castlevel=([]);
   if (!strs) return 0;
   if (stringp(strs)) strs=({strs});
@@ -234,16 +235,16 @@ int i;
 /* Level and Guild are performed                                     */
 varargs int CanCast(object who)
 {
-int lev,minlevel;
-string guild;
-object s_obj;
+  int lev,minlevel;
+  string guild;
+  object s_obj;
   if (!castlevel) castlevel=([]);
   if (s_obj=ScrollObject("QueryCastLevel")) 
-        return s_obj->QueryCastLevel(guild);
+        return ({int})s_obj->QueryCastLevel(guild);
   if (!who) who=TP;
   if (!who) return 0;
-  guild=who->QueryGuild();
-  lev=who->QueryLevel();
+  guild=({string})who->QueryGuild();
+  lev=({int})who->QueryLevel();
   if (!guild) return 0;
   minlevel=castlevel[guild];
   if (minlevel<1) return 0;
@@ -276,11 +277,11 @@ string QueryCastName() { return this_spell(); }
 /* -------------- Failcheck Functions -------------------------------- */
 mixed CheckCastLevel(string spname)
 {
-int lev;
+  int lev;
   if (!CanCast(TP))
   {
      RestoreSP();
-     if ( (lev=QueryCastLevel(TP->QueryGuild()) ) )
+     if ( (lev=QueryCastLevel(({string})TP->QueryGuild()) ) )
         return "You need to be level "+lev+" to use this scroll.\n";
      else return "Your guild can not use this particular scroll.\n";
   }
@@ -288,7 +289,7 @@ int lev;
 }
 mixed ScrollFailCheck(string spname)
 {
-  if (TP->Query(P_BLIND))
+  if (({int})TP->Query(P_BLIND))
   {
      RestoreSP();
      return "You are blind.\n";
@@ -320,8 +321,7 @@ void CastOver(int flag,string spname)
 /* Chance that a spell will backfire */
 int Backfire(string spname)
 {
-int res;
-  switch(TP->QueryAttribute("Wis"))
+  switch(({int})TP->QueryAttribute("Wis"))
   {
     case 0..5: return 66;
     case 6..10: return 45;
@@ -360,8 +360,8 @@ public closure SetFailFn(mixed fun)
     }
   return ffail = fun;
 }
-public closure QueryFailFn() {return ffail;}
 
+public closure QueryFailFn() {return ffail;}
 
 public varargs string QueryShort()
 {
@@ -373,9 +373,8 @@ public varargs string QueryShort()
 
 public string QueryReadMsg()
 {
-string res;
-string *us;
-int i,lev;
+  string res;
+  int lev;
   res=QuerySpellMsg(spellname);
   if (!res||res=="") return "The scroll is completely empty.\n";
   lev=QueryCastLevel();
@@ -393,7 +392,7 @@ int i,lev;
 
 varargs mixed NotifySpellFail(object enemy,object caster,string spname)
 {
-mixed res;
+  mixed res;
   if ( (enemy!=0) || !QueryFailFn() )
        return ::NotifySpellFail(enemy,caster,spname);
   res=funcall(QueryFailFn()); /* >0: success */

@@ -122,7 +122,7 @@ void notify_enter (object oldenv, mixed method, mixed extra) {
 int QueryTPort() {
   if (!buildup || !ENV())
     return TPORT_NO;
-  return ENV()->Query(P_TPORT);
+  return ({int})ENV()->Query(P_TPORT);
 }
 
 // Be autoloading.
@@ -184,7 +184,7 @@ int flook (string arg) {
       notify_fail("You can't look inside a packed tent.\n");
       return 0;
     }
-    i = TP->CantSee(THIS);
+    i = ({int})TP->CantSee(THIS);
     if (i < 0)
       write("You see nothing, it's too dark inside.\n");
     else if (i > 0)
@@ -207,12 +207,12 @@ int flook (string arg) {
       && ENV(TP) == THIS
      )
   {
-    i = TP->CantSee(ENV(THIS));
-    if (!ENV(THIS)->Query("Indoors"))
-      write(ENV(THIS)->Query("DayDescr"));
-    write(ENV(THIS)->QueryIntLong()||"Nothing special to see.\n");
-    write(ENV(THIS)->GetExits()||"");
-    write(ENV(THIS)->GetDoors()||"");
+    i = ({int})TP->CantSee(ENV(THIS));
+    if (!({int})ENV(THIS)->Query("Indoors"))
+      write(({string})ENV(THIS)->Query("DayDescr"));
+    write(({string})ENV(THIS)->QueryIntLong()||"Nothing special to see.\n");
+    write(({string})ENV(THIS)->GetExits()||"");
+    write(({string})ENV(THIS)->GetDoors()||"");
     inv = all_inventory(ENV(THIS));
     if (sizeof(inv) > 1) {
       inv -= ({ THIS });
@@ -304,7 +304,7 @@ int fbuild (string arg) {
     }
     buildup = 0;
     write("You put down the tent and pack it.\n");
-    show(TP->QueryName()+" puts down a tent and makes a nice pack of it.\n");
+    show(({string})TP->QueryName()+" puts down a tent and makes a nice pack of it.\n");
     return 1;
   }
 
@@ -322,7 +322,7 @@ int fbuild (string arg) {
   buildup = 1;
 
   write("After a few minutes of work, you put up a nice tent.\n");
-  show(TP->QueryName()+" fiddles with planes, sticks and ropes and finally "
+  show(({string})TP->QueryName()+" fiddles with planes, sticks and ropes and finally "
        +"puts up a nice tent.\n");
   return 1;
 }
@@ -340,12 +340,12 @@ int fenter (string arg) {
     return 0;
   }
 
-  if (TP->move(THIS, M_SPECIAL, ({"leaves into a tent", "enters from outside", "enter the tent"})) != ME_OK)
+  if (({int})TP->move(THIS, M_SPECIAL, ({"leaves into a tent", "enters from outside", "enter the tent"})) != ME_OK)
   {
     notify_fail("You fail to enter the tent.\n");
     return 0;
   }
-  show_room(THIS, TP->QueryName()+" enters from outside.\n", ({ TP }));
+  show_room(THIS, ({string})TP->QueryName()+" enters from outside.\n", ({ TP }));
   return 1;
 }
 
@@ -357,12 +357,12 @@ int fleave (string arg) {
   if (arg && !id(arg))
     return 0;
 
-  if (TP->move(ENV(THIS), M_SPECIAL, ({"leaves the tent", "emerges from a tent", "leave the tent"})) != ME_OK)
+  if (({int})TP->move(ENV(THIS), M_SPECIAL, ({"leaves the tent", "emerges from a tent", "leave the tent"})) != ME_OK)
   {
     notify_fail("You fail to leave the tent.\n");
     return 0;
   }
-  show_room(THIS, TP->QueryName()+" leaves the tent.\n");
+  show_room(THIS, ({string})TP->QueryName()+" leaves the tent.\n");
   return 1;
 }
 
@@ -371,7 +371,7 @@ int fleave (string arg) {
 */
 
 int fsleep (string arg) {
-  object key, body, *inv;
+  object key, body;
 
   if (arg || ENV(TP) != THIS)
     return 0;
@@ -383,22 +383,21 @@ int fsleep (string arg) {
   key = clone_object(TENTKEY);
   key->move(TP);
   key->Setup(THIS, TP);
-  inv = all_inventory(THIS)-({TP});
   body = clone_object("/std/thing");
-  body->Set("Name", TP->QueryName());
-  body->Set("Weight", TP->QueryWeight()-TP->QueryWeightContents());
-  body->Set("Short", TP->QueryName()+", deep asleep");
+  body->Set("Name", ({string})TP->QueryName());
+  body->Set("Weight", ({int})TP->QueryWeight()-({int})TP->QueryWeightContents());
+  body->Set("Short", ({string})TP->QueryName()+", deep asleep");
   body->Set("Long",
- "This is "+TP->QueryName()+" "+TP->QueryName()+" "+TP->QueryTitle()
+ "This is "+({string})TP->QueryName()+" "+({string})TP->QueryName()+" "+({string})TP->QueryTitle()
 +", obviously asleep.\n"
                );
-  body->AddId(TP->QueryName());
+  body->AddId(({string})TP->QueryName());
   body->AddId("body");
-  Set("TentIsUsed", TP->QueryName());
+  Set("TentIsUsed", ({string})TP->QueryName());
   write(
 "As you lie down and close your eyes, your conscience quickly fades away...\n"
        );
-  say(TP->QueryName()+" lies down and closes "+TP->QueryObjective()+" eyes.\n"
+  say(({string})TP->QueryName()+" lies down and closes "+({string})TP->QueryObjective()+" eyes.\n"
       "Soon you hear the regular breath of a person deeply asleep.\n");
   TP->SetHome(TENT);
   TP->quit();

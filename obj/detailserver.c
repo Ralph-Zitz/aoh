@@ -28,7 +28,7 @@ mapping QueryToplist() {return toplist;}
 
 int Debug(string str)
 {
-object ob;
+  object ob;
   ob=find_player("softbyte");
   if (!ob) return 0;
   tell_object(ob,blueprint(this_object())+"::"+str);
@@ -52,14 +52,14 @@ int sort_it(string a,string b)
 // Gives the toplist as string back
 string WriteToplist()
 {
-string s,name;
-string *idx;
-int i,flag;
-  if (this_player()->QueryRealName()=="softbyte"
-      && this_player()->Query("Debug") ) flag=1;
+  string s,name;
+  string *idx;
+  int i,flag;
+  if (({string})this_player()->QueryRealName()=="softbyte"
+      && ({int})this_player()->Query("Debug") ) flag=1;
   else flag=0;
   idx=m_indices(toplist);
-  idx=sort_array(idx,#'sort_it/*'*/);
+  idx=sort_array(idx,#'sort_it /*'*/);
   s="Toplist of the detail fixes:\n";
   s+=sprintf("%-2.2s: %-11.11s %-7.7s %-7.7s (%s)\n",
      "##","Name","Details","Quest.","Sum");
@@ -82,10 +82,10 @@ int i,flag;
 // his entries in the toplist
 varargs int AddToplist(mixed tp,int d_cnt,int q_cnt,int nologging)
 {
-string name;
+  string name;
   if (!toplist) toplist=m_allocate(100,3);
   if (!tp) return 0;
-  if (objectp(tp)) name=tp->QueryRealName();
+  if (objectp(tp)) name=({string})tp->QueryRealName();
   else if (stringp(tp)) name=tp;
   else return -1;
   if (member(toplist,name))
@@ -106,7 +106,7 @@ string name;
 // Puts the detail of room into the mapping of missing details
 varargs int RecordDetail(string detail,mixed room)
 {
-mapping troom;
+  mapping troom;
   if (!room)
   {
      room=previous_object();
@@ -139,7 +139,7 @@ mapping troom;
 // If force==1 then all details from the room are removed
 varargs int RemoveDetail(string detail,mixed room,int force)
 {
-mapping troom;
+  mapping troom;
   if (!room)
   {
      room=previous_object();
@@ -188,7 +188,7 @@ int sort_number(string a,string b)
 
 varargs string *QueryIndex(int sorted)
 {
-string *roomindex;
+  string *roomindex;
   if (!misdetails) misdetails=m_allocate(100,3);
   roomindex=m_indices(misdetails); 
   if (!roomindex || !sizeof(roomindex) ) return ({});
@@ -201,7 +201,7 @@ string *roomindex;
 // Room can be either the object room or its filename/blueprint
 varargs mapping QueryDetails(mixed room)
 {
-mapping troom;
+  mapping troom;
   if (!room) room=environment(this_player())||previous_object();
   if (!room)
   {
@@ -219,7 +219,7 @@ mapping troom;
 // Room can be either the object room or its filename/blueprint
 varargs int QueryNumberOfDetails(mixed room)
 {
-int nr;
+  int nr;
   if (!room) room=environment(this_player())||previous_object();
   if (!room)
   {

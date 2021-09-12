@@ -25,6 +25,7 @@ public varargs string SetTeleportTo(string file)
 {
   file = resolve_file(file);
   Pteleport_to=file||CHURCH;
+  return Pteleport_to;
 }
 
 public string QueryTeleportTo()
@@ -39,7 +40,7 @@ private string QueryHole()
   return "bright";
 }
 
-public string QueryShort()
+public varargs string QueryShort()
 {
   return "a big column with a "+QueryHole()+" hole inside";
 }
@@ -84,18 +85,18 @@ public int cmd_touch(string str)
                        "of the world. You can't leave.\n",
 		       NOTIFY_NOT_VALID),0;
   if ((efile = object_name(env))==QueryTeleportTo())
-    {
-      if (!efile = TP->Query(P_CAME_FROM))
-        return notify_fail("Nothing happens.\n",NOTIFY_NOT_VALID),0;
-      TP->Set(P_CAME_FROM,0);
-      dest = efile;
-    }
+  {
+    if (!efile = ({string})TP->Query(P_CAME_FROM))
+      return notify_fail("Nothing happens.\n",NOTIFY_NOT_VALID),0;
+    TP->Set(P_CAME_FROM,0);
+    dest = efile;
+  }
   else
-    {
-      TP->Set(P_CAME_FROM,efile);
-      dest = QueryTeleportTo();
-    }
-  if (TP->move(dest,M_SILENT)!=ME_OK)
+  {
+    TP->Set(P_CAME_FROM,efile);
+    dest = QueryTeleportTo();
+  }
+  if (({int})TP->move(dest,M_SILENT)!=ME_OK)
     return notify_fail("You're puzzled. Nothing happens.\n",
 		       NOTIFY_NOT_VALID),0;
   write("You touch the column and suddenly the dark hole becomes very wide -\n"
@@ -109,18 +110,18 @@ public int cmd_touch(string str)
   // The player won't see where he is without looking around.
   // It's a small gag. Please don't change that.
   // Thragor
-  if (!TP->QueryInvis())
-    {
-      show_room(env,
-        capitalize(TP->QueryName())+" touches the column. Suddenly "+
-        TP->QueryPronoun()+" shrinks, loses contact to the ground and is\n"
-        "sucked away into the dark hole in the column.\n");
-      show_room(environment(),
-        "Suddenly something very small appears out of the hole in the\n"
-        "column. Looks like something living. It becomes bigger and bigger\n"
-        "and after some seconds, "+TP->QueryName()+" is standing in front\n"
-        "of you.\n",({TP}));
-    }
+  if (!({int})TP->QueryInvis())
+  {
+    show_room(env,
+      capitalize(({string})TP->QueryName())+" touches the column. Suddenly "+
+      ({string})TP->QueryPronoun()+" shrinks, loses contact to the ground and is\n"
+      "sucked away into the dark hole in the column.\n");
+    show_room(environment(),
+      "Suddenly something very small appears out of the hole in the\n"
+      "column. Looks like something living. It becomes bigger and bigger\n"
+      "and after some seconds, "+({string})TP->QueryName()+" is standing in front\n"
+      "of you.\n",({TP}));
+  }
   return 1;
 }
 

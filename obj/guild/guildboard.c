@@ -17,8 +17,8 @@
 
 inherit "/std/board";
 
-private static string *guildgroups;
-private static mapping levelgroups;
+private nosave string *guildgroups;
+private nosave mapping levelgroups;
 // 'group':fromlevel
 
 public string *QueryGroups()
@@ -47,7 +47,7 @@ public mapping QueryLevelGroups()
   return (levelgroups||([]))+([]);
 }
 
-public mapping SetLevelGroups(mapping names)
+public mapping SetLevelGroups(mixed names)
 {
   string *g;
   if (!names) return QueryLevelGroups();
@@ -85,7 +85,7 @@ private status query_allowed(string group,object pl,object env)
 			 "Matching groups: "+implode(regsearch,", ")+".\n",
 			 NOTIFY_NOT_VALID),0;
   if (sizeof(regsearch = regexp(g,group)))
-    if (!env->is_member(pl))
+    if (!({int})env->is_member(pl))
       return notify_fail("You must be a member of this guild to read "
 			 "this group.\n",NOTIFY_NOT_VALID),0;
   g = m_indices(l);
@@ -95,7 +95,7 @@ private status query_allowed(string group,object pl,object env)
     return notify_fail("Your selection fits to more than one group.\n"
 		       "Please be a bit more specific.\n",
 		       NOTIFY_NOT_VALID),0;
-  if (l[regsearch[0]]>pl->QueryLevel())
+  if (l[regsearch[0]]>({int})pl->QueryLevel())
     return notify_fail("Your level is not high enough.\n",
 		       NOTIFY_NOT_VALID),0;
   return 1;
@@ -103,9 +103,7 @@ private status query_allowed(string group,object pl,object env)
 
 public varargs int _chg_act(string newgroup)
 {
-  int res;
   object env,news;
-  mixed data;
 
   if (   !TP
       || !(env = environment())
@@ -119,7 +117,7 @@ public varargs int _chg_act(string newgroup)
   if (member(_match_groups(),newgroup)==-1)
     return notify_fail("No group '"+newgroup+"' on this board.\n",
 		       NOTIFY_NOT_VALID),0;
-  if ((data = (mixed)news->GetStatus(newgroup)) == NEWS_ILLPARM)
+  if ((({mixed})news->GetStatus(newgroup)) == NEWS_ILLPARM)
     return notify_fail("No such group '"+newgroup+"'.\n",NOTIFY_NOT_VALID),0;
   if (!query_allowed(newgroup,TP,env))
     return 0;

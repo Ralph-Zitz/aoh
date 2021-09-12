@@ -43,7 +43,7 @@ void create () {
   SetWimpy (QueryMaxHP());
   SetGoChance(0);
   SetWeight (75000);
-  book = random(({int})GUIDEOBJ->CountBooks())+1;
+//  book = random(({int})GUIDEOBJ->CountBooks())+1;
   if (start_new_book())
   {
     chapter = random(20)-1;
@@ -101,7 +101,6 @@ void read_on () {
   remove_call_out ("read_on");
   if (!text || actline >= sizeof(text)) { /* Load next chapter */
     string ftext;
-    int what;
     while (!ftext) {
       if (++chapter < 1) ftext = start_new_book();
       else if (ftext = ({string})GUIDEOBJ->ReadChapter (book, chapter))

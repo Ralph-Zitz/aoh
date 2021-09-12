@@ -84,7 +84,7 @@ public mixed QueryNoGive() {
 
 public string QueryExtralook() {
   return (QueryAreFriends() && QueryWorn())
-         ? (capitalize(TP->QueryPronoun())+" is a close friend of "
+         ? (capitalize(({string})TP->QueryPronoun())+" is a close friend of "
             +(QueryNames()[1])+".\n")
 	   : 0;
 }
@@ -194,14 +194,14 @@ public int fpropose (string arg)
     return 0; 
   }
 
-  SetNames(({0, capitalize(TP->QueryRealName())}));
+  SetNames(({0, capitalize(({string})TP->QueryRealName())}));
   sigother = TP;
   if (ME_OK != move(player))
     raise_error("Move of ring failed\n");
 
   write("You offer a friendship ring to "+capitalize(arg)+".\n");
   tell_object(player,
-capitalize(TP->QueryRealName())+" offers a close friendship to you!\n"
+capitalize(({string})TP->QueryRealName())+" offers a close friendship to you!\n"
 +"You receive a nice ring and may now accept the friendship.\n");
 
   return 1;
@@ -225,14 +225,14 @@ public int faccept (string arg)
     return 0;
   }
   n = QueryNames();
-  n[0] = capitalize(TP->QueryRealName());
+  n[0] = capitalize(({string})TP->QueryRealName());
   SetNames(n);
   SetFriendTime(ctime(time()));
   ring2 = clone_object(blueprint(THIS));
   ring2->SetNames(({ n[1], n[0] }));
   ring2->SetFriendTime(QueryFriendTime());
   ring2->SetAreFriends(1);
-  if (ME_OK != ring2->move(sigother))
+  if (ME_OK != ({int})ring2->move(sigother))
     raise_error("Move of ring2 failed\n");
   SetAreFriends(1);
   TP->SetTitle("is a close friend of "+n[1]);

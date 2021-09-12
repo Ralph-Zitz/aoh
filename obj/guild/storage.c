@@ -64,15 +64,15 @@ public void AddObject(object ob,object pl)
     map(inv,SF(AddObject),pl);
   if (   !ob
       || !pl
-      || ob->QueryValue()<MIN_VALUE
+      || ({int})ob->QueryValue()<MIN_VALUE
       || (   member(inherit_list(ob),"std/armour.c")==-1
           && member(inherit_list(ob),"std/weapon.c")==-1
          )
-      || !ob->QueryShort()
+      || !({string})ob->QueryShort()
      )
     return;
   uid = getuid(pl);
-  short = (string)ob->QueryShort();
+  short = ({string})ob->QueryShort();
   obs = QueryObjects();
   if (!member(obs,uid))
     obs[uid] = ([short:1]);
@@ -99,15 +99,15 @@ public void RemoveObject(object ob,object pl)
     map(inv,SF(RemoveObject),pl);
   if (   !ob
       || !pl
-      || ob->QueryValue()<MIN_VALUE
+      || ({int})ob->QueryValue()<MIN_VALUE
       || (   member(inherit_list(ob),"std/armour.c")==-1
           && member(inherit_list(ob),"std/weapon.c")==-1
          )
-      || !ob->QueryShort()
+      || !({string})ob->QueryShort()
      )
     return;
   uid = getuid(pl);
-  short = ob->QueryShort();
+  short = ({string})ob->QueryShort();
   obs = QueryObjects();
   if (!member(obs,uid))
     obs[uid] = ([short:-1]);
@@ -158,10 +158,10 @@ public int allow_enter(int method,mixed extra)
   object po;
   po = previous_object();
   if (query_once_interactive(po)&&!IS_IMMORTAL(po))
-    if (po->QueryGuild()!=QueryGuild())
+    if (({string})po->QueryGuild()!=QueryGuild())
       return write("Only members of "+QueryGuild()+" are allowed to enter.\n"),
                          ME_NO_ENTER;
-    else if (po->QueryLevel()<QueryLevel())
+    else if (({int})po->QueryLevel()<QueryLevel())
       return write("You're not high enough in level to enter.\n"),
                         ME_NO_ENTER;
   return (::allow_enter(method,extra));
@@ -184,7 +184,7 @@ public void notify_enter(mixed from,int method,mixed extra)
 public int cmd_list(string str)
 {
   if (str) return 0;
-  smore(GetList(),TP?TP->QueryPageSize():25);
+  smore(GetList(),TP?({int})TP->QueryPageSize():25);
   return 1;
 }
 

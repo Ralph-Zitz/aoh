@@ -33,14 +33,14 @@ public varargs int CheckTeleport(object player, int cost, int t_level) {
 // Make a wizcheck; return 1 if user is a wizard, else continue
 //                  return TP_IS_WIZ if recipient is a wizard
 
-  if (!IS_IMMORTAL(TP) || TP->Query(P_NOWIZ)) {
-    if(IS_IMMORTAL(player) && !player->Query(P_NOWIZ)) {
+  if (!IS_IMMORTAL(TP) || ({int})TP->Query(P_NOWIZ)) {
+    if(IS_IMMORTAL(player) && !({int})player->Query(P_NOWIZ)) {
       return TP_IS_WIZ;
     }
 
 // Check the level of teleporter Level to low: TP_NO_LEVEL
 
-    if(TP->QueryLevel()<t_level) {
+    if(({int})TP->QueryLevel()<t_level) {
       return TP_NO_LEVEL;
     }
 
@@ -50,15 +50,15 @@ public varargs int CheckTeleport(object player, int cost, int t_level) {
     if(!amulet=present("tportamulet",player)) {
       return TP_NO_AMULET;
     }
-    if(!amulet->QueryTeleport()) {
+    if(!({int})amulet->QueryTeleport()) {
       return TP_AMULET_OFF;
     }
   }
 
 // Combat checks
 
-    if(player->QueryLevel()<18) {
-      if (sizeof(player->Query(P_ENEMIES))) {
+    if(({int})player->QueryLevel()<18) {
+      if (sizeof(({object *})player->Query(P_ENEMIES))) {
 	if(TP==player) {
 	  return TP_IS_FIGHTING;
 	}
@@ -67,14 +67,14 @@ public varargs int CheckTeleport(object player, int cost, int t_level) {
 	}
       }
     }
-    if (cost && !TP->ReduceSP(cost)) {
+    if (cost && !({int})TP->ReduceSP(cost)) {
       return TP_NO_SP;
     }
   }
   return TP_OK;
 }  
     
-void RestoreSP(int amount) { TP->SetSP(TP->QuerySP()+amount); }
+void RestoreSP(int amount) { TP->SetSP(({int})TP->QuerySP()+amount); }
      
      
 varargs string QueryTeleportMessage(object player, int cost, int t_level) {
@@ -93,16 +93,16 @@ It would cost "+cost+" SP.\n");
 Try again later if you are more experienced.\n");
     break;
   case TP_IS_WIZ:
-    tell_object(player,TP->QueryName()+" tried to teleport you.\n");
+    tell_object(player,({string})TP->QueryName()+" tried to teleport you.\n");
     return("Never target a wizard with a teleport!.\n");
     break;
   case TP_NO_AMULET:
-    return(capitalize(player->QueryName())+" doesn't want to be teleported. "+capitalize(player->QueryPronoun())+" has\n\
+    return(capitalize(({string})player->QueryName())+" doesn't want to be teleported. "+capitalize(({string})player->QueryPronoun())+" has\n\
 no teleport amulet. Never try to teleport others who don't want\n\
 to be teleported.\n");
     break;
   case TP_AMULET_OFF:
-    return(capitalize(player->QueryName())+" doesn't want to be teleported. "+capitalize(player->QueryPossessive())+" amulet is switched off.\n");
+    return(capitalize(({string})player->QueryName())+" doesn't want to be teleported. "+capitalize(({string})player->QueryPossessive())+" amulet is switched off.\n");
     break;
   case TP_IS_FIGHTING:
     if(TP==player) {
@@ -110,8 +110,8 @@ to be teleported.\n");
 You are not allowed to teleport away in midst of a battle.\n");
     }
     else {
-      return(player->QueryName()+" is fighting at the moment.\n\
-So "+player->QueryPronoun()+" is not allowed to teleport away in midst of a battle.\n");
+      return(({string})player->QueryName()+" is fighting at the moment.\n\
+So "+({string})player->QueryPronoun()+" is not allowed to teleport away in midst of a battle.\n");
     }
     break;
   case TP_OK:
@@ -126,7 +126,7 @@ So "+player->QueryPronoun()+" is not allowed to teleport away in midst of a batt
      
 varargs int QueryAllowedTeleport(object player, int cost, int t_level) 
 {
-string s;
+  string s;
   if (!t_level || !intp(t_level)) t_level=10;
   if (!intp(cost)) cost=30;
   if (!player) player=TP;

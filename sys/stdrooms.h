@@ -32,4 +32,7 @@
 // TODO: Keep Milliways?
 #define RESTROOM  "/room/restroom"
 
+// Church
+#define CHURCH    "/d/silvere/rooms/west/xal_temple"
+
 #endif

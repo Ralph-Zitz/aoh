@@ -24,7 +24,7 @@
 #define STR "/obj/lib/string"
 #define TP this_player()
 
-public varargs status learn_skill(int value,int maxlearn)
+public varargs int learn_skill(int value,int maxlearn)
 {
   if (!maxlearn) maxlearn = 100;
   if (value>=maxlearn) return 0;
@@ -76,15 +76,15 @@ public void AdvanceSkill(object pl,string name)
 {
   int val;
   if (!pl) return;
-  val = pl->QueryAttr(name,1);
+  val = ({int})pl->QueryAttr(name,1);
   if (val<100)
-    {
-      pl->SetAttr(name,1+val,1);
-      if (sizeof((pl->QueryEnemies()||({}))-({0})))
-	call_out(SF(learn_message),1,pl,name);
-      else
-	learn_message(pl,name);
-    }
+  {
+    pl->SetAttr(name,1+val,1);
+    if (sizeof((({object *})pl->QueryEnemies()||({}))-({0})))
+      call_out(SF(learn_message),1,pl,name);
+    else
+      learn_message(pl,name);
+  }
 }
 
 public varargs status CheckSkill(object pl,
@@ -93,10 +93,10 @@ public varargs status CheckSkill(object pl,
                                  int percentage)
 {
   if (!pl) return 0;
-  if (name==SK_CLIMB&&pointerp(pl->QueryAttr(name,1)))
+  if (name==SK_CLIMB&&pointerp(({mixed})pl->QueryAttr(name,1)))
     pl->RemoveAttr(name);
-  if (pl->QueryAttr(name,1)>100) pl->SetAttr(name,100,1);
-  return check_success(pl->QueryAttr(name,1),&percentage,chance);
+  if (({int})pl->QueryAttr(name,1)>100) pl->SetAttr(name,100,1);
+  return check_success(({int})pl->QueryAttr(name,1),&percentage,chance);
 }
 
 public varargs status UseSkill(object pl,
@@ -111,11 +111,11 @@ public varargs status UseSkill(object pl,
   if (!p = CheckSkill(pl,name,chance,&percentage))
     {
       if (percentage<FAIL_LEARN_CHANCE
-          && learn_skill(pl->QueryAttr(name,1),maxlearn))
+          && learn_skill(({int})pl->QueryAttr(name,1),maxlearn))
         AdvanceSkill(pl,name);
     }
   else
-    if (learn_skill(pl->QueryAttr(name,1),maxlearn))
+    if (learn_skill(({int})pl->QueryAttr(name,1),maxlearn))
       AdvanceSkill(pl,name);
   return p;
 }
@@ -124,7 +124,7 @@ public string get_skill(string str)
 {
   mixed val;
   string amnt;
-  val = TP->QueryAttr(str,1);
+  val = ({mixed})TP->QueryAttr(str,1);
   /* Bugfix by Softbyte...some players are having array for some skills...*/
   if (!intp(val)) return "unknown"; 
   if (IS_IMMORTAL(TP))
@@ -175,18 +175,18 @@ public int cmd_skills(string str)
   int i;
   
   if (str)
-    return notify_fail("Just type '"+query_verb()+"'\n",NOTIFY_ILL_ARG),0;
+    return notify_fail("Just type '"+query_verb()+"'\n",NOTIFY_ILL_ARG);
 #ifndef GENERAL_LIST
-  return notify_fail("There are no skills available.\n",NOTIFY_NOT_VALID),0;
+  return notify_fail("There are no skills available.\n",NOTIFY_NOT_VALID);
 #endif
   if (!sizeof(skill_list = GENERAL_LIST))
-    return notify_fail("There are no skills available.\n",NOTIFY_NOT_VALID),0;
+    return notify_fail("There are no skills available.\n",NOTIFY_NOT_VALID);
   skill_list = sort_array(skill_list,SF(>));
   skills = mkmapping(skill_list,
     map(skill_list,SF(get_skill)));
   res = ({});
   for(i=0;i<sizeof(skill_list);i++)
-    res+=({STR->ladjust(skill_list[i]+": ",15,".")+" "+skills[skill_list[i]]});
-  STR->smore(res,TP->QueryPageSize());
+    res+=({ ({string})STR->ladjust(skill_list[i]+": ",15,".")+" "+skills[skill_list[i]]});
+  STR->smore(res,({int})TP->QueryPageSize());
   return 1;
 }

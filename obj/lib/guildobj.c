@@ -146,7 +146,7 @@ public varargs int check_owner(object pl,int silent_force)
   if (!pl) return call_out(SF(check_owner),2,pl,silent_force),0;
   if (!query_once_interactive(pl))
     {
-      if (!owner) SetOwner(pl->QueryName()||pl->QueryShort());
+      if (!owner) SetOwner(({string})pl->QueryName()||({string})pl->QueryShort());
       return 1;
     }
   if (!owner) SetOwner(getuid(pl));
@@ -154,7 +154,7 @@ public varargs int check_owner(object pl,int silent_force)
    debug_message(sprintf("pl %O guildobj %O\n", pl, guildob));
   if ((owner!=getuid(pl))
       ||(   (!IS_IMMORTAL(pl)||silent_force)
-          &&pl->QueryGuild()!=guildob->QueryGuildclass()
+          &&({string})pl->QueryGuild()!=({string})guildob->QueryGuildclass()
         ) )
     {
       if (!silent_force)
@@ -170,15 +170,15 @@ protected string who_line(object pl)
 {
   if (!pl) return "";
   if (!LoadGuild()) return "";
-  if (pl->QueryInvis()) return "";
+  if (({int})pl->QueryInvis()) return "";
   return capitalize(getuid(pl))+" "+
-         guildob->GuildLeveltoTitle(pl->QueryLevel(),pl->QueryGender())+" "+
-         "["+pl->QueryRace()+", "+
-             to_string(pl->QueryLevel())+", "+
-             pl->QueryAlignString(pl->QueryAlign())+
+         ({string})guildob->GuildLeveltoTitle(({int})pl->QueryLevel(),({int})pl->QueryGender())+" "+
+         "["+({string})pl->QueryRace()+", "+
+             to_string(({int})pl->QueryLevel())+", "+
+             ({string})pl->QueryAlignString(({int})pl->QueryAlign())+
          "]"+
-         (guildob->is_leader(pl)
-          ?guildob->is_creator(pl)
+         (({int})guildob->is_leader(pl)
+          ?({int})guildob->is_creator(pl)
            ?" -CREATOR-"
 	   :" -LEADER-"
           :""
@@ -188,12 +188,12 @@ protected string who_line(object pl)
 protected status who_sort(object pl1,object pl2)
 {
   int lvl1,lvl2;
-  status c1,c2;
+  int c1,c2;
   
   if (LoadGuild())
     {
-      c1=guildob->is_creator(pl1);
-      c2=guildob->is_creator(pl2);
+      c1=({int})guildob->is_creator(pl1);
+      c2=({int})guildob->is_creator(pl2);
     }
   if (c1!=c2)
     return c1==1;
@@ -203,7 +203,7 @@ protected status who_sort(object pl1,object pl2)
 	return getuid(pl1)>getuid(pl2);
       else
 	return lvl1>lvl2;
-  if ((lvl1=pl1->QueryLevel())==(lvl2=pl2->QueryLevel()))
+  if ((lvl1=({int})pl1->QueryLevel())==(lvl2=({int})pl2->QueryLevel()))
     return getuid(pl1)>getuid(pl2);
   else
     return lvl1>lvl2;
@@ -222,20 +222,20 @@ protected int guild_shout(object receiver,object sender,string text)
   string spec_text;
   
   if ((receiver!=sender)&&
-      receiver->QueryEarmuffs()>sender->QueryLevel())
+      ({int})receiver->QueryEarmuffs()>({int})sender->QueryLevel())
     return 0;
-  if (member(receiver->QueryIgnored(),getuid(sender))) return 0;
-  spec_text = ME->InformGShout(receiver,sender,text);
+  if (member(({string *})receiver->QueryIgnored(),getuid(sender))) return 0;
+  spec_text = ({string})ME->InformGShout(receiver,sender,text);
   if (receiver==sender)
-    if (sender->QueryEchoMode())
+    if (({int})sender->QueryEchoMode())
       tell_object(sender,
-        STR->wrap(spec_text||("You shout to all guildmembers: "+text+"\n"),
+        ({string})STR->wrap(spec_text||("You shout to all guildmembers: "+text+"\n"),
                   75,3));
     else
       tell_object(sender,"Ok.\n");
   else
     tell_object(receiver,
-      STR->wrap(spec_text||(sender->QueryName()+
+      ({string})STR->wrap(spec_text||(({string})sender->QueryName()+
                 " shouts to all guildmembers: "+text+"\n"),75,3));
   return 1;
 }
@@ -245,7 +245,7 @@ public int cmd_gshout(string txt)
 {
   if (!TP) return 0;
   if (!txt)
-    return notify_fail("What do you want to shout?\n",NOTIFY_ILL_ARG),0;
+    return notify_fail("What do you want to shout?\n",NOTIFY_ILL_ARG);
   filter(guild_users(),SF(guild_shout),TP,txt);
   return 1;
 }
@@ -256,22 +256,22 @@ protected int guild_emote(object receiver,object sender,string text)
   string spec_text,guildstr;
   
   if (!LoadGuild()) return 0;
-  guildstr = guildob->QueryGuildclass();
+  guildstr = ({string})guildob->QueryGuildclass();
   if ((receiver!=sender)&&
-      receiver->QueryEarmuffs()>sender->QueryLevel())
+      ({int})receiver->QueryEarmuffs()>({int})sender->QueryLevel())
     return 0;
-  if (member(receiver->QueryIgnored(),getuid(sender))) return 0;
-  spec_text = ME->InformGEmote(receiver,sender,text);
-  text = guildstr+"*"+capitalize(sender->QueryName())+" "+text+"\n";
+  if (member(({string *})receiver->QueryIgnored(),getuid(sender))) return 0;
+  spec_text = ({string})ME->InformGEmote(receiver,sender,text);
+  text = guildstr+"*"+capitalize(({string})sender->QueryName())+" "+text+"\n";
   if (receiver==sender)
-    if (sender->QueryEchoMode())
+    if (({int})sender->QueryEchoMode())
       tell_object(sender,
-        STR->wrap(spec_text||text,75,3));
+        ({string})STR->wrap(spec_text||text,75,3));
     else
       tell_object(sender,"Ok.\n");
   else
     tell_object(receiver,
-      STR->wrap(spec_text||text,75,3));
+      ({string})STR->wrap(spec_text||text,75,3));
   return 1;
 }
 
@@ -306,32 +306,32 @@ public int cmd_gtp()
   
   if (!TP) return 0;
   if (!LoadGuild())
-    return notify_fail("Unable to load guild.\n",NOTIFY_NOT_OBJ),0;
-  if (!guildob->is_leader(TP))
-    return notify_fail("You can't use this ability.\n",NOTIFY_NOT_VALID),0;
-  if (sizeof((TP->QueryEnemies()||({}))-({0})))
+    return notify_fail("Unable to load guild.\n",NOTIFY_NOT_OBJ);
+  if (!({int})guildob->is_leader(TP))
+    return notify_fail("You can't use this ability.\n",NOTIFY_NOT_VALID);
+  if (sizeof((({object *})TP->QueryEnemies()||({}))-({0})))
     return notify_fail("You can't do that while fighting.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if (   !(env = environment(TP))
-      || env->QueryTPort()&TPORT_OUT==0
+      || ({int})env->QueryTPort()&TPORT_OUT==0
     )
   // we need the object_name/blueprint check, because we have to ensure,
   // that the room still exists if we move the player back.
     return notify_fail("You can't do that at this place.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if (QueryTPLocation()) 
   {
     if (err = catch(target = load_object(QueryTPLocation())))
     {
       MASTER->runtime_error("Guild TP Location not loadable: "+err,QueryTPLocation(),
                             object_name(ME));
-      return notify_fail("There had been an error during teleport.\n"),0;
+      return notify_fail("There had been an error during teleport.\n");
     }
   }
   else target=guildob;
   if (env==target)
-    return notify_fail("You are already in the guild.\n",NOTIFY_NOT_VALID),0;
-  tport = target->QueryTPort();
+    return notify_fail("You are already in the guild.\n",NOTIFY_NOT_VALID);
+  tport = ({int})target->QueryTPort();
   target->SetTPort(TPORT_IN);
   TP->move(target,M_TELEPORT);
   target->SetTPort(tport);
@@ -377,7 +377,7 @@ public int cmd_skills(string str)
   if (!LoadGuild())
     return notify_fail("The guild can't be loaded.\n"
        "Inform the creator of the guild.\n",NOTIFY_NOT_VALID);
-  if (!sizeof(skill_list = m_indices(guildob->QuerySkills(TP)||([]))))
+  if (!sizeof(skill_list = m_indices(({mapping})guildob->QuerySkills(TP)||([]))))
     return notify_fail("You have no skills.\n",
       NOTIFY_NOT_VALID);
   skill_list = sort_array(skill_list,SF(>));
@@ -385,8 +385,8 @@ public int cmd_skills(string str)
     map(skill_list,SF(get_skill)));
   res = ({});
   for(i=0;i<sizeof(skill_list);i++)
-    res+=({STR->ladjust(skill_list[i]+": ",17,".")+" "+skills[skill_list[i]]});
-  STR->smore(res,TP->QueryPageSize());
+    res+=({ ({string})STR->ladjust(skill_list[i]+": ",17,".")+" "+skills[skill_list[i]]});
+  STR->smore(res,({int})TP->QueryPageSize());
   return 1;
 }
 

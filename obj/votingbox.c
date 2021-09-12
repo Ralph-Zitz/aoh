@@ -29,15 +29,15 @@ inherit "/lib/string";
 mapping Pvotes;
 // ([topic:<name>;<description>;([alternative:({names voted})])])
 
-private static string Psavefile; // Where to save the results
-private static int Pstarttime,
+private nosave string Psavefile; // Where to save the results
+private nosave int Pstarttime,
                    Pendtime,
                    Ptopiclvl, // which level you have to have to add a topic
                    Paltlvl,   // which level you have to have to add an
                               // alternative
                    Pvotelvl;  // from which level on you might vote
 
-private static closure Pinformfunc;
+private nosave closure Pinformfunc;
 
 public string SetSavefile(string f)
 {
@@ -99,24 +99,24 @@ public int AddTopic(string topic,string title,string desc)
   if (TI) // if (!TI) AddTopic is e. g. called during reset
     {
       if (TI!=TP)
-        return notify_fail("No valid call.\n",NOTIFY_NOT_VALID),0;
+        return notify_fail("No valid call.\n",NOTIFY_NOT_VALID);
       switch(QueryTopicLevel())
         {
          case ARCH_LEVEL:
           if (!IS_WIZARD(TI))
             return notify_fail("You're not allowed to add a topic.\n",
-			       NOTIFY_NOT_VALID),0;
+			       NOTIFY_NOT_VALID);
          case WIZ_LEVEL:
           if (!IS_WIZARD(TI))
             return notify_fail("You're not allowed to add a topic.\n",
-			       NOTIFY_NOT_VALID),0;
+			       NOTIFY_NOT_VALID);
 	 case NO_LEVEL:
 	   return notify_fail("No topics might be added.\n",
-                              NOTIFY_NOT_VALID),0;
+                              NOTIFY_NOT_VALID);
          default:
-          if (TI->QueryLevel()<QueryTopicLevel())
+          if (({int})TI->QueryLevel()<QueryTopicLevel())
             return notify_fail("You're not allowed to add a topic.\n",
-			       NOTIFY_NOT_VALID),0;
+			       NOTIFY_NOT_VALID);
 	}
     }
   LoadBox();
@@ -124,7 +124,7 @@ public int AddTopic(string topic,string title,string desc)
   if (   Pvotes
       && member(Pvotes,topic))
     return notify_fail("There's already another topic '"+topic+"'.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if (!Pvotes)
     Pvotes = m_allocate(0,3);
   Pvotes[topic,V_NAME] = title;
@@ -137,24 +137,24 @@ public int AddTopic(string topic,string title,string desc)
 public int RemoveTopic(string topic)
 {
   if (!TI||TI!=TP)
-    return notify_fail("No valid call.\n",NOTIFY_NOT_VALID),0;
+    return notify_fail("No valid call.\n",NOTIFY_NOT_VALID);
   switch(QueryTopicLevel())
     {
      case ARCH_LEVEL:
       if (!IS_WIZARD(TI))
         return notify_fail("You're not allowed to delete a topic.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
      case WIZ_LEVEL:
       if (!IS_WIZARD(TI))
         return notify_fail("You're not allowed to delete a topic.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
      case NO_LEVEL:
        return notify_fail("It's not allowed to remove topics.\n",
-			  NOTIFY_NOT_VALID),0;
+			  NOTIFY_NOT_VALID);
      default:
-      if (TI->QueryLevel()<QueryTopicLevel())
+      if (({int})TI->QueryLevel()<QueryTopicLevel())
         return notify_fail("You're not allowed to delete a topic.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
     }
   topic = lower_case(topic||"");
   LoadBox();
@@ -162,7 +162,7 @@ public int RemoveTopic(string topic)
       || !member(Pvotes,topic)
      )
     return notify_fail("There's no topic '"+topic+"'.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   m_delete(Pvotes,topic);
   SaveBox();
   return 1;
@@ -177,35 +177,35 @@ public string *QueryTopics()
 public int AddAlternative(string topic,string alt)
 {
   if (!TI||TI!=TP)
-    return notify_fail("No valid call.\n",NOTIFY_NOT_VALID),0;
+    return notify_fail("No valid call.\n",NOTIFY_NOT_VALID);
   switch(QueryAlternativeLevel())
     {
      case ARCH_LEVEL:
       if (!IS_WIZARD(TI))
         return notify_fail("You're not allowed to add an alternative.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
      case WIZ_LEVEL:
       if (!IS_WIZARD(TI))
         return notify_fail("You're not allowed to add an alternative.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
      case NO_LEVEL:
        return notify_fail("It's not possible to add alternatives.",
-			  NOTIFY_NOT_VALID),0;
+			  NOTIFY_NOT_VALID);
      default:
-      if (TI->QueryLevel()<QueryAlternativeLevel())
+      if (({int})TI->QueryLevel()<QueryAlternativeLevel())
         return notify_fail("You're not allowed to add an alternative.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
     }
   topic = lower_case(topic||"");
   LoadBox();
   if (   !Pvotes
       || !member(Pvotes,topic))
     return notify_fail("There's no topic '"+topic+"'.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if (member(Pvotes[topic,V_ALTS],alt))
     return notify_fail("There's already an alternative '"+alt+"' "
                        "for the topic '"+topic+"'.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   Pvotes[topic,V_ALTS][alt] = ({});
   SaveBox();
   return 1;
@@ -214,24 +214,24 @@ public int AddAlternative(string topic,string alt)
 public int RemoveAlternative(string topic,string alt)
 {
   if (!TI||TI!=TP)
-    return notify_fail("No valid call.\n",NOTIFY_NOT_VALID),0;
+    return notify_fail("No valid call.\n",NOTIFY_NOT_VALID);
   switch(QueryAlternativeLevel())
     {
      case ARCH_LEVEL:
       if (!IS_WIZARD(TI))
         return notify_fail("You're not allowed to delete an alternative.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
      case WIZ_LEVEL:
       if (!IS_WIZARD(TI))
         return notify_fail("You're not allowed to delete an alternative.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
      case NO_LEVEL:
        return notify_fail("It's not possible to delete an alternative.\n",
-			  NOTIFY_NOT_VALID),0;
+			  NOTIFY_NOT_VALID);
      default:
-      if (TI->QueryLevel()<QueryAlternativeLevel())
+      if (({int})TI->QueryLevel()<QueryAlternativeLevel())
         return notify_fail("You're not allowed to delete an alternative.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
     }
   topic = lower_case(topic||"");
   LoadBox();
@@ -239,11 +239,11 @@ public int RemoveAlternative(string topic,string alt)
       || !member(Pvotes,topic)
      )
     return notify_fail("There's no topic '"+topic+"'.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if (!member(Pvotes[topic,V_ALTS],alt))
     return notify_fail("There's no alternative '"+alt+"' "
                        "for the topic '"+topic+"'.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   m_delete(Pvotes[topic,V_ALTS],alt);
   SaveBox();
   return 1;
@@ -264,38 +264,38 @@ public nomask int AddVote(string topic,string alt)
   int Ai,Vi;
   
   if (!TI||TI!=TP)
-    return notify_fail("No valid call.\n",NOTIFY_NOT_VALID),0;
+    return notify_fail("No valid call.\n",NOTIFY_NOT_VALID);
   switch(QueryVoteLevel())
     {
      case ARCH_LEVEL:
       if (!IS_WIZARD(TI))
         return notify_fail("You're not allowed to vote.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
      case WIZ_LEVEL:
       if (!IS_WIZARD(TI))
         return notify_fail("You're not allowed to vote.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
      case NO_LEVEL:
        return notify_fail("It can't be voted here.\n",
-			  NOTIFY_NOT_VALID),0;
+			  NOTIFY_NOT_VALID);
      default:
-      if (TI->QueryLevel()<QueryVoteLevel())
+      if (({int})TI->QueryLevel()<QueryVoteLevel())
         return notify_fail("You're not allowed to vote.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
       if (sscanf(getuid(TI),"guest%d",Ai))
         return notify_fail("You're not allowed to vote.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
     }
   topic = lower_case(topic||"");
   LoadBox();
   if (   !Pvotes
       || !member(Pvotes,topic))
     return notify_fail("There's no topic '"+topic+"'.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if (!member(Pvotes[topic,V_ALTS],alt))
     return notify_fail("There's no alternative '"+alt+"' "
                        "for the topic '"+topic+"'.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   Ai = sizeof(alts = m_indices(Pvotes[topic,V_ALTS]));
   while(Ai-- && !altvote)
     {
@@ -319,7 +319,7 @@ public nomask int AddVote(string topic,string alt)
 public string QueryVoted(string topic)
 {
   int Ai,Vi;
-  string altvote,*alts,*voted,voter;
+  string altvote,*alts,*voted;
 
   topic = lower_case(topic||"");
   LoadBox();
@@ -332,7 +332,7 @@ public string QueryVoted(string topic)
     {
       Vi = sizeof(voted = Pvotes[topic,V_ALTS][alts[Ai]]);
       while(Vi-- && !altvote)
-	if ((voter = crypt(getuid(TI),voted[Vi][0..1]))==voted[Vi])
+	if ((crypt(getuid(TI),voted[Vi][0..1]))==voted[Vi])
 	  altvote = alts[Ai];
     }
   return altvote;
@@ -373,17 +373,17 @@ public int cmd_list(string str)
   mapping alts;
   
   if (!str)
-    return notify_fail("List what?\n",NOTIFY_NOT_OBJ),0;
+    return notify_fail("List what?\n",NOTIFY_NOT_OBJ);
   str = lower_case(str);
   if (str=="topics")
     {
       if (!CheckActive())
         return notify_fail("There's no voting right now.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
       idx = QueryTopics();
       if (!sizeof(idx))
         return notify_fail("No topics to vote for.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
       txt = "";
       for(i=0;i<sizeof(idx);i++)
 	txt+=sprintf("%1s %2d. %s\n",(QueryVoted(idx[i])?"":"*"),i+1,
@@ -394,32 +394,32 @@ public int cmd_list(string str)
     {
       if (!CheckActive())
         return notify_fail("There's no voting right now.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
       idx = QueryTopics();
       if (!sizeof(idx))
         return notify_fail("No topics to list.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
       nr--;
       if (   nr<0
           || nr>=sizeof(idx))
         return notify_fail("No such topic available.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
       txt = Pvotes[idx[nr],V_DESC];
     }
   else if (sscanf(str,"votes %d",nr))
     {
       if (!CheckActive())
         return notify_fail("There's no voting right now.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
       idx = QueryTopics();
       if (!sizeof(idx))
         return notify_fail("No topics to vote for.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
       nr--;
       if (   nr<0
           || nr>=sizeof(idx))
         return notify_fail("No such topic available.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
       alts = QueryVotes()[idx[nr]];
       Aidx = QueryAlternatives(idx[nr]);
       txt = "Votes on topic '"+Pvotes[idx[nr],V_NAME]+"'\n";
@@ -431,7 +431,7 @@ public int cmd_list(string str)
     }
   else
     return notify_fail("List what?\n",NOTIFY_NOT_OBJ),0;
-  smore(txt,TP->QueryPageSize());
+  smore(txt,({int})TP->QueryPageSize());
   return 1;
 }
 
@@ -455,25 +455,25 @@ public int cmd_vote(string str)
 
   if (!CheckActive())
     return notify_fail("There's no voting right now.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   Tidx = QueryTopics();
   if (!sizeof(Tidx))
     return notify_fail("No topics to vote for.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   Ntopic--;
   if (   Ntopic<0
       || Ntopic>=sizeof(Tidx))
     return notify_fail("No such topic available.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   Aidx = QueryAlternatives(Tidx[Ntopic]);
   if (!sizeof(Aidx))
     return notify_fail("No alternatives to choose between.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   Nalt--;
   if (   Nalt<0
       || Nalt>=sizeof(Aidx))
     return notify_fail("No such alternative available.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
 
   if (!AddVote(Tidx[Ntopic],Aidx[Nalt]))
     return 0;
@@ -508,12 +508,12 @@ public int cmd_add(string str)
       topics = QueryTopics();
       if (!sizeof(topics))
         return notify_fail("No topics add an alternative to.\n",
-		           NOTIFY_NOT_VALID),0;
+		           NOTIFY_NOT_VALID);
       if (   topicnr<0
           || topicnr>=sizeof(topics)
          )
         return notify_fail("No such topic available.\n",
-		           NOTIFY_NOT_VALID),0;
+		           NOTIFY_NOT_VALID);
       if (!AddAlternative(topics[topicnr],alternative))
 	return 0;
       write("Alternative added.\n");
@@ -521,28 +521,28 @@ public int cmd_add(string str)
     }
 
   if (!TI||TI!=TP)
-    return notify_fail("No valid call.\n",NOTIFY_NOT_VALID),0;
+    return notify_fail("No valid call.\n",NOTIFY_NOT_VALID);
   switch(QueryTopicLevel())
     {
      case -2:
       if (!IS_WIZARD(TI))
         return notify_fail("You're not allowed to add a topic.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
      case -1:
       if (!IS_WIZARD(TI))
         return notify_fail("You're not allowed to add a topic.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
      default:
-      if (TI->QueryLevel()<QueryTopicLevel())
+      if (({int})TI->QueryLevel()<QueryTopicLevel())
         return notify_fail("You're not allowed to add a topic.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
     }
 
   LoadBox();
   if (   Pvotes
       && member(Pvotes,lower_case(topic)))
     return notify_fail("There's already another topic '"+topic+"'.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
 
   write("Please give a description to the topic '"+topic+"':\n");
   input_text(SF(topic_description),({topic}));
@@ -559,7 +559,7 @@ public int cmd_remove(string str)
   if (!str)
     return notify_fail(
       "Remove what? (remove [topic] <nr>, remove [alternative] <topicnr> "
-      "<nr>)\n",NOTIFY_NOT_OBJ),0;
+      "<nr>)\n",NOTIFY_NOT_OBJ);
   if (   !sscanf(str,"topic %d",topicnr)
       && sscanf(str,"%d %d",topicnr,altnr)!=2
       && sscanf(str,"alternative %d %d",topicnr,altnr)!=2)
@@ -568,12 +568,12 @@ public int cmd_remove(string str)
     {
       topics = QueryTopics();
       if (!sizeof(topics))
-        return notify_fail("No topics to remove.\n",NOTIFY_NOT_VALID),0;
+        return notify_fail("No topics to remove.\n",NOTIFY_NOT_VALID);
       topicnr--;
       if (   topicnr<0
           || topicnr>=sizeof(topics))
         return notify_fail("No such topic available.\n",
-			   NOTIFY_NOT_VALID),0;
+			   NOTIFY_NOT_VALID);
       if (!RemoveTopic(topics[topicnr]))
 	return 0;
       write("Topic removed.\n");
@@ -583,22 +583,22 @@ public int cmd_remove(string str)
   topics = QueryTopics();
   if (!sizeof(topics))
     return notify_fail("No topics to remove alternatives from.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   topicnr--;
   if (   topicnr<0
       || topicnr>=sizeof(topics))
     return notify_fail("No such topic available.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
 
   alts = QueryAlternatives(topics[topicnr]);
   if (!sizeof(alts))
     return notify_fail("No alternatives to remove.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   altnr--;
   if (   altnr<0
       || altnr>=sizeof(alts))
     return notify_fail("No such alternative available.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
 
   if (!RemoveAlternative(topics[topicnr],alts[altnr]))
     return 0;
@@ -634,7 +634,7 @@ public int cmd_help(string str)
     "    remove an alternative\n"
     "\n"
     "  help voting\n"
-    "    this page\n",TP->QueryPageSize());
+    "    this page\n",({int})TP->QueryPageSize());
   return 1;
 }
 
@@ -642,7 +642,7 @@ public void reset()
 {
   mapping votes;
   
-  if (!is_clone()) return;
+  if (!clonep()) return;
   if (   !CheckActive()
       && sizeof(votes = QueryVotes())
       && QueryInformFunc())

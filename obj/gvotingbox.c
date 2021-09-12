@@ -72,13 +72,13 @@ private int valid_candidate(mixed pl)
   object env;
   return    !IS_IMMORTAL(pl)
          && (env = environment())
-         && env->is_member(pl);
+         && ({int})env->is_member(pl);
 }
 
 public int cmd_list(string str)
 // list votes list votes to topic
 {
-  int nr,i;
+  int i;
   string *Aidx,txt;
   mapping alts;
   
@@ -102,7 +102,7 @@ public int cmd_list(string str)
   for(i=0;i<sizeof(Aidx);i++)
     txt+=sprintf("%2d. %-20s %3d votes\n",
 	         i+1,capitalize(Aidx[i]),alts[Aidx[i]]);
-  smore(txt,TP->QueryPageSize());
+  smore(txt,({int})TP->QueryPageSize());
   return 1;
 }
 
@@ -112,27 +112,27 @@ public int cmd_vote(string str)
   string *Aidx,who;
   int Nalt;
   
-  if (!TP||!str||!is_clone())
+  if (!TP||!str||!clonep())
     return notify_fail("For whom do you want to vote for?\n",
-		       NOTIFY_NOT_OBJ),0;
+		       NOTIFY_NOT_OBJ);
   str = lower_case(str);
 
   if (!CheckActive())
     return notify_fail("There's no voting right now.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   Aidx = QueryAlternatives(V_TOPIC);
   if (!sizeof(Aidx))
     return notify_fail("No candidates to choose between.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if ((Nalt = member(Aidx,str))==-1)
     if (to_string(Nalt = to_int(str))!=str)
       return notify_fail(capitalize(str)+" is no candidate.\n",
-			 NOTIFY_NOT_VALID),0;
+			 NOTIFY_NOT_VALID);
     else
       {
         Nalt--;
 	if (Nalt<0 || Nalt>=sizeof(Aidx))
-          return notify_fail("No candidate "+str+".\n",NOTIFY_NOT_VALID),0;
+          return notify_fail("No candidate "+str+".\n",NOTIFY_NOT_VALID);
         who = Aidx[Nalt];
       }
   else
@@ -140,7 +140,7 @@ public int cmd_vote(string str)
   if (!valid_candidate(TP))
     return notify_fail(
       "You're not allowed to vote for the guildleader of this guild.\n",
-      NOTIFY_NOT_VALID),0;
+      NOTIFY_NOT_VALID);
   if (!AddVote(V_TOPIC,who))
     return 0;
   write("Voted.\n");
@@ -152,17 +152,17 @@ public int cmd_candidate(string str)
   string *topics;
   
   if (!TP||str)
-    return notify_fail("Just type 'candidate'.\n",NOTIFY_NOT_OBJ),0;
+    return notify_fail("Just type 'candidate'.\n",NOTIFY_NOT_OBJ);
   if (!CheckActive() || !sizeof(topics = QueryTopics()) )
     return notify_fail("There's no voting taking place right now.\n",
-		       NOTIFY_NOT_VALID),0;
-  if (TP->QueryLevel()<QueryAlternativeLevel())
+		       NOTIFY_NOT_VALID);
+  if (({int})TP->QueryLevel()<QueryAlternativeLevel())
     return notify_fail("Your level is too low to candidate.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if (!valid_candidate(TP))
     return notify_fail(
       "You're not allowed to candidate for the guildleader of this guild.\n",
-      NOTIFY_NOT_VALID),0;
+      NOTIFY_NOT_VALID);
   if (!AddAlternative(topics[0],getuid(TP)))
     return 0;
   write("Apply for Guildleader added.\n");
@@ -172,7 +172,6 @@ public int cmd_candidate(string str)
 public int evaluate_leader(mapping votes,string leader,string vice)
 {
   int *v;
-  string idx;
   
   v = sort_array(m_values(votes),SF(<));
   votes = mkmapping(m_values(votes),map(m_indices(votes),
@@ -193,7 +192,7 @@ public void reset()
   mapping votes;
   string leader,vice,*applies;
   object env;
-  int t,i;
+  int t;
   if (!is_clone()||!env = environment()) return;
   t = time();
   applies = m_indices((votes = QueryVotes()[V_TOPIC]||([])));
@@ -228,7 +227,7 @@ public void reset()
 	env->ChangeStat(lower_case(leader),G_LEADER);
 	if (vice) env->ChangeStat(lower_case(vice),G_VICELEADER);
       }
-    else if (!env->QueryGuildleader())
+    else if (!({int})env->QueryGuildleader())
       SetStartTime(t);
 }
 
@@ -277,7 +276,7 @@ public void init()
   if (   TI
       && CheckActive()
       && valid_candidate(TI)
-      && TI->QueryLevel()>4
+      && ({int})TI->QueryLevel()>4
       && !QueryVoted(V_TOPIC)
      )
     tell_object(TI,"You haven't voted for the guildleader up to now.\n");

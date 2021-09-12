@@ -55,8 +55,9 @@ varargs int InitHighResistance(mixed arg)
  AddResistance(ST_KNOW,90);
  AddResistance(ST_INFLUENCE,100);
  AddResistance(ST_CHANGE,100);
-
+ return 1;
 }
+
 varargs int InitLowResistance(mixed arg) {return InitHighResistance(arg);}
 varargs int InitMediumResistance(mixed arg) {return InitHighResistance(arg);}
 
@@ -142,23 +143,25 @@ varargs int InitMediumSpells(mixed arg)
 	   ])
 	  );
 
-return 1;
+  return 1;
 }
+
 varargs int InitLowSpells(mixed arg) {return InitMediumSpells(arg);}
 varargs int InitHighSpells(mixed arg) {return InitMediumSpells(arg);}
 
 /* Log not answer questions for later processing */
 string MyShrugMsg(string what)
 {
-string tmp,file;
+  string tmp,file;
   if (file=QueryQuestionLog() && this_player() && what)
   {
-    tmp=(this_player()->QueryRealName()||"Someone")+" asks "+QueryName()+": '"+
+    tmp=(({string})this_player()->QueryRealName()||"Someone")+" asks "+QueryName()+": '"+
         what+"' on "+ctime()+".\n";
     write_file(file,tmp);
   }
-  return ::QueryShrugMsg(what);
+  return ::QueryShrugMsg();
 }
+
 mixed QueryShrugMsg() {return #'MyShrugMsg;}
 
 void returnitem(object whom,object what)
@@ -170,7 +173,7 @@ void returnitem(object whom,object what)
 
 varargs void notify_enter (mixed oldenv, int method, mixed extra) 
 {
-object what;
+  object what;
   what = previous_object();
   if (QueryReturnItem()) call_out(#'returnitem,1,this_player()||this_interactive(),what);
   ::notify_enter (oldenv, method, extra);

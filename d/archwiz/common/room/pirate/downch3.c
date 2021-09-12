@@ -2,7 +2,7 @@
 
 inherit "/std/room";
 
-create() {
+varargs void create() {
   ::create();
   SetIntShort("a stairway");
   SetIntLong(
@@ -15,7 +15,7 @@ create() {
   "long stair","long stairway","end","end of stairs",
   "end of stairway","end of stair"}),QueryIntLong());
   AddDetail("down",
-(CITY("wiz_hall"))->QueryIntLong()+(CITY("wiz_hall"))->Content());
+({string})(CITY("wiz_hall"))->QueryIntLong()+({string})(CITY("wiz_hall"))->Content());
   AddDetail("leo","Jump down, perhaps you'll meet him.\n");
   AddDetail(({"floor","ground"}),"It is about 10 feet below you.\n");
   AddDetail(({"walls","wall","ceiling"}),

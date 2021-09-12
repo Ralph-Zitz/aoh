@@ -13,7 +13,11 @@ inherit "/std/room";
 int lamp_is_lit;
 object northroom;
 
-QueryIntLong() {return ::QueryIntLong()+_lamp();}
+string _lamp();
+string _lamp2();
+string _door2();
+
+varargs string QueryIntLong() {return ::QueryIntLong()+_lamp();}
 
 string _door() {
  return process_string(
@@ -25,26 +29,26 @@ string _lamp() {return lamp_is_lit?"There is a lit lamp besides the door.\n":"";
 
 string _lamp2() { return lamp_is_lit ? "lit " : ""; }
 
-string _door2() { return (ELEVATOR)->query_door() ? "closed":"open"; }
+string _door2() { return ({int})ELEVATOR->query_door() ? "closed":"open"; }
 
-open(string str) {
+int open(string str) {
   if (str != "door") return 0;
-  if ((ELEVATOR)->query_level() != 1) {
+  if (({int})ELEVATOR->query_level() != 1) {
     write("You can't when the elevator isn't here.\n");
     return 1;
   }
-  (ELEVATOR)->open_door("door");
+  ELEVATOR->open_door("door");
   return 1;
 }
 
-close(string str) {
+int close(string str) {
   if (str != "door") return 0;
   (ELEVATOR)->close_door("door");
   return 1;
 }
 
-west() {
-  if ((ELEVATOR)->query_door() || (ELEVATOR)->query_level() != 1) {
+int west() {
+  if (({int})ELEVATOR->query_door() || ({int})ELEVATOR->query_level() != 1) {
     write("The door is closed.\n");
     return 1;
   }
@@ -53,18 +57,18 @@ west() {
   return 1;
 }
 
-push(string str) {
+int push(string str) {
   if (str && str != "button") return 0;
-  if ((ELEVATOR)->call_elevator(1)) lamp_is_lit = 1;
+  if (({int})ELEVATOR->call_elevator(1)) lamp_is_lit = 1;
   return 1;
 }
 
-elevator_arrives() {
+void elevator_arrives() {
   say("The lamp on the button beside the elevator goes out.\n");
   lamp_is_lit = 0;
 }
 
-notify_enter(o, m, e) {
+void notify_enter(mixed o, int m, mixed e) {
   ::notify_enter(o, m, e);
   if (living(previous_object()) && !interactive(previous_object())) {
     log_file("LEO", (objectp(previous_object()) ? object_name(previous_object())
@@ -76,13 +80,13 @@ notify_enter(o, m, e) {
 int do_north() {
   if (!this_player()) return 0;
   if (!query_once_interactive(this_player())) return 0;
-  if (this_player()->QueryRealLevel() < 20) return notify_fail(
+  if (({int})this_player()->QueryRealLevel() < 20) return notify_fail(
     "Only high level players are allowed to enter the northern "
-    "room.\n"),0;
-  return this_player()->move(CITY("wiz_north"),M_GO,"north");
+    "room.\n");
+  return ({int})this_player()->move(CITY("wiz_north"),M_GO,"north");
 }
   
-void create() {
+varargs void create() {
   ::create();
   SetIntShort("Wizards Hall");
   SetIntLong(
@@ -110,7 +114,7 @@ QueryIntLong());
   AddDetail(({"floor","ground"}),
 "You stand on it.\n");
   AddDetail(({"hole","dark hole"}),
-(PIRATE("downch3"))->QueryIntLong()+(PIRATE("downch3"))->Content());
+({string})(PIRATE("downch3"))->QueryIntLong()+({string})(PIRATE("downch3"))->Content());
   AddExit("north",#'do_north);
   AddExit("west", #'west);
   AddRoomCmd("open", #'open);

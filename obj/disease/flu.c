@@ -32,7 +32,7 @@ void Action()
     return ;  
   }
   // Slower call_outs for netdead player
-  if (pl->QueryNetdead())
+  if (({int})pl->QueryNetdead())
   {
       call_out("Action",300);  
       return ;
@@ -44,12 +44,12 @@ void Action()
     switch(random(2))
     { 
     case 0: 
-      tell_room(env,capitalize(pl->QueryName())+" sneezes.\n",({pl}));
+      tell_room(env,capitalize(({string})pl->QueryName())+" sneezes.\n",({pl}));
       tell_object(pl,"You sneeze.\n");
       Infect(50,env);  // infect with 5 % probablity
     break;
     case 1:
-      tell_room(env,capitalize(pl->QueryName())+" coughes.\n",({pl}));
+      tell_room(env,capitalize(({string})pl->QueryName())+" coughes.\n",({pl}));
       tell_object(pl,"You cough.\n");
       Infect(250,env);  // infect with 25 % probablity
     break;

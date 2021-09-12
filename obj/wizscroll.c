@@ -32,7 +32,7 @@ void init() {
 int _owner (object this) {
   int wlvl;
   if (!this) this = environment();
-  if (!living(this) || !this->QueryIsPlayer()) return O_NONE;
+  if (!living(this) || !({int})this->QueryIsPlayer()) return O_NONE;
   wlvl = query_user_level(this);
   if (wlvl < LVL_ANCIENT) return O_PLAYER;
   if (wlvl == LVL_ANCIENT) return O_ANCIENT;
@@ -93,5 +93,5 @@ mixed fread (string arg) {
     }
   if (!fname) 
     return notify_fail ("Read what?\n");
-  return TP->more("/doc/intro/"+fname);
+  return ({int})TP->more("/doc/intro/"+fname);
 }

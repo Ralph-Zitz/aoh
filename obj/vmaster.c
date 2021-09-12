@@ -68,7 +68,6 @@ public object compile_object(string file)
   mixed properties,obfile;
   object ob;
   int i;
-  string err;
 
   seteuid(getuid());  
   
@@ -132,7 +131,7 @@ public varargs int clean_up(int arg)
   for(i=sizeof(files);i--;)
     if (   (ob = find_object(files[i]))
         && !is_clone(ob))
-      res = res || ob->clean_up(arg);
+      res = res || ({int})ob->clean_up(arg);
   if (res)
     return 1;
   (::remove());

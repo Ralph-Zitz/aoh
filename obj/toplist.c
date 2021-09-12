@@ -7,16 +7,16 @@ inherit "std/thing";
 
 string GetAgeData()
 {
-string file;
-  file=TOPLIST_D->QueryAgeFile();
+  string file;
+  file=({string})TOPLIST_D->QueryAgeFile();
   if (!file) return 0;
   return read_file(file);
 }
 string GetQPData()
 {
-string file;
+  string file;
 
- file=TOPLIST_D->QueryQPFile();
+  file=({string})TOPLIST_D->QueryQPFile();
   if (!file) return 0;
   return read_file(file);
 }
@@ -38,7 +38,10 @@ varargs void create() {
   SetValue(5);
 }
 
-void init() { ::init(); add_action("read", "read"); }
+void init() {
+  ::init();
+  add_action("read", "read");
+}
 
 int read(string str) {
   switch (str) {
@@ -48,13 +51,13 @@ int read(string str) {
     case "toplist" : {
      write(GetQPData()
             ||"The list is empty at the moment.\n");
-      say(this_player()->QueryName() + " reads the top list.\n");
+      say(({string})this_player()->QueryName() + " reads the top list.\n");
       return 1;
     }
     case "veterans" : {
      write(GetAgeData()
             ||"The list is empty at the moment.\n");
-      say(this_player()->QueryName() + " reads the list of veterans.\n");
+      say(({string})this_player()->QueryName() + " reads the list of veterans.\n");
       return 1;
     }
   }

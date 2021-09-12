@@ -22,20 +22,19 @@ inherit "std/npc";
 nosave int f;
 
 void create() {
-  object l;
   /* Don't do anything with the blueprint. */
   if(::create()) return;
 
   SetName("Leo");
   SetShort("Leo the retired Archwizard");
   SetLong(
-"He is a very old, skinny man with long silver hair and a long silver\n\
-beard. He wears a silk blue robe with strange patterns woven into it.\n\
-On his head he wears a high, pointed, dark blue hat, which has magical\n\
-stars painted on it. In his left hand, Leo holds a map of some\n\
-hyperdimensional area. In his right he holds a flower with two red\n\
-blooms. It seems very strange to you that each of the blooms has an\n\
-eye on it. The flower is tensely looking at Leo.\n");
+"He is a very old, skinny man with long silver hair and a long silver "
+"beard. He wears a silk blue robe with strange patterns woven into it. "
+"On his head he wears a high, pointed, dark blue hat, which has magical "
+"stars painted on it. In his left hand, Leo holds a map of some "
+"hyperdimensional area. In his right he holds a flower with two red "
+"blooms. It seems very strange to you that each of the blooms has an "
+"eye on it. The flower is tensely looking at Leo.\n");
   SetIds(({"leo","man","human","archwizard","wizard"}));
   SetAds(({"tired","retired","old","very old","skinny"}));
   SetRace("human");
@@ -76,33 +75,36 @@ eye on it. The flower is tensely looking at Leo.\n");
     "The flower winks at Leo.\n",
     "Leo says: Nobody comes to me anymore to get a castle.\n"
     }));
-  /* greetings from pepel */
+  /* greetings from pepel
   catch(l = clone_object("/d/daydream/pepel/gdl"));
   if (l) {
     catch("/d/daydream/pepel/gd"->signit(l, this_object()));
     l->move(this_object(), 1);
   }
+  */
   if (object_name(previous_object()) == "/d/archwiz/common/room/city/wiz_hall")
     call_out("go_pub", 1000+random(1600), 0);
   else f = 1;
 }
 
-void init() { add_action("give","give"); }
+void init() {
+  add_action("give","give");
+}
 
 void catch_tell(string str) {
   object from;
-  string a, b, c, d, next_out;
+  string next_out;
   if (!(from = this_player())
       || !interactive(this_player())) return;	/* Not from a real player. */
-  if (sscanf(str, "%sello%s", a, b) == 2 ||
-      sscanf(str, "%s hi%s", a, b) == 2 ||
-      sscanf(str, "%s Hi%s", a, b) == 2){
-    next_out = "Leo says: Welcome, " + from->QueryName() + ".\n";
+  if (sscanf(str, "%~sello%~s") == 2 ||
+      sscanf(str, "%~s hi%~s") == 2 ||
+      sscanf(str, "%~s Hi%~s") == 2){
+    next_out = "Leo says: Welcome, " + ({string})from->QueryName() + ".\n";
     call_out("sayit", 2, next_out);
     return;
   }
-  if (sscanf(str, "%sgive%scastle%s", a, b, c) == 3 ||
-      sscanf(str, "%swant%scastle%s", a, b, c) == 3) {
+  if (sscanf(str, "%~sgive%~scastle%~s") == 3 ||
+      sscanf(str, "%~swant%~scastle%~s") == 3) {
     if (IS_WIZARD(from)) {
       next_out =
 	"Leo searches in his pockets for a castle, but does not find any.\n";
@@ -115,8 +117,8 @@ void catch_tell(string str) {
   }
   /* greetings from pepel */
   if (this_player() != this_object() &&
-      (sscanf(str, "%ssay%sgive%slicense%s", a, b, c, d) == 4 ||
-      sscanf(str, "%ssay%swant%slicense%s", a, b, c, d) == 4)) {
+      (sscanf(str, "%~ssay%~sgive%~slicense%~s") == 4 ||
+      sscanf(str, "%~ssay%~swant%~slicense%~s") == 4)) {
     call_out("givit", 2, this_player());
     return;
   }
@@ -126,15 +128,15 @@ void catch_tell(string str) {
  /* added by Joern */
 int give(string str) {
   object ob,from;
-  string a,b;
+  string a;
   if (!str) return 0;
-  if (!sscanf(str,"%s to le%s",a,b)==2) return 0;
-  if (!sscanf(str,"%s to Le%s",a,b)==2) return 0;
+  if (!sscanf(str,"%s to le%~s",a)==2) return 0;
+  if (!sscanf(str,"%s to Le%~s",a)==2) return 0;
   if (a!="orc slayer" && a!="slayer" && a!="blade" && a!="orcslayer" && a!="sword") return 0;
   from=this_player();
   ob=present("orc slayer",from);
   if (!ob) return 0;
-  if (member(QUESTMASTER->QueryPlayerQuests(from), "orc_slayer") == -1) {
+  if (member(({string *})QUESTMASTER->QueryPlayerQuests(from), "orc_slayer") == -1) {
     /* I want them to seek the _real_ Leo - Pepel */
     if (f) {
       say("Leo blushes deeply.\n");
@@ -143,19 +145,19 @@ int give(string str) {
 "am only a double of Leo the Archwizard. Leo himself managed to\n"
 "escape. I am sorry, you need to search him, in the now almost\n"
 "forgotten capital of this world, below the Ruin City.\n");
-      say("Leo whispers something to "+from->QueryName()+"\n", from);
-      say("Leo returns a sword to "+from->QueryName()+".\n");
-      log_file("LEO", ctime(time())+" "+from->QueryRealName()
+      say("Leo whispers something to "+({string})from->QueryName()+"\n", from);
+      say("Leo returns a sword to "+({string})from->QueryName()+".\n");
+      log_file("LEO", ctime(time())+" "+({string})from->QueryRealName()
 	       +" was denied by the double in "
 	       +object_name(environment())+"\n");
       return 1;
     } else {
       write("Leo says: Well done. You have fullfilled this quest.\n");
-      filter(users()-({ from }), #'tell_object /*'*/, from->QueryName()+" has solved the orc slayer quest.\n");
+      filter(users()-({ from }), #'tell_object /*'*/, ({string})from->QueryName()+" has solved the orc slayer quest.\n");
       write("You give the sword to Leo.\n");
       QUESTMASTER->SetPlayerQuest("orc_slayer", from);
       destruct(ob);
-      log_file("LEO", ctime(time())+" "+from->QueryRealName()
+      log_file("LEO", ctime(time())+" "+({string})from->QueryRealName()
 	       +" solved the orc slayer quest.\n");
       write("\n");
       return 1;
@@ -175,11 +177,11 @@ void givit(string who) {
   catch(l = clone_object("/d/daydream/pepel/gdl"));
   if (l) {
     say("Leo fetches something from another dimension.\n");
-    if (ME_OK == l->move(who, M_GIVE)) {
-      say("Leo gives "+l->QueryShort()+" to " +who->QueryName()+".\n");
+    if (ME_OK == ({int})l->move(who, M_GIVE)) {
+      say("Leo gives "+({string})l->QueryShort()+" to " +({string})who->QueryName()+".\n");
       if (f) l->Set("fake", object_name(environment()));
     } else {
-      say("Leo fails to give "+l->QueryShort()+" to " +who->QueryName()+".\n");
+      say("Leo fails to give "+({string})l->QueryShort()+" to " +({string})who->QueryName()+".\n");
       destruct(l);
     }
   } else /* not l */
@@ -200,5 +202,4 @@ varargs void Die() {
 
 /* when things get too boring, Leo goes for a beer */
 void go_pub() {
-  int state;
 }

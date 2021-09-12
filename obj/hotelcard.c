@@ -14,25 +14,24 @@ string hotelname, hotel_path, home;
 int old_home;
 
 varargs void create() {
-	::create();
-	SetShort("A Hotel-Card");
-	AddId("hcard");
-	AddId("card");
-	AddId("hotelcard");
-	AddId("hotel-card");
-	SetLong(
-"A hotel-Card. You can sleep at a hotel with it.\n");
-        if (this_player()) {
-        	hotelname = environment(this_player())->QueryHotelName();
-        } else {
-        	hotelname = environment(this_object())->QueryHotelName();
-        }
-        if(!hotelname) {
-        	hotelname = "a hotel";
-        }
-        hotel_path = STARTROOM;
-        /* This default setting will be overwritten */
-        home = this_player()->QueryHome();
+  ::create();
+  SetShort("A Hotel-Card");
+  AddId("hcard");
+  AddId("card");
+  AddId("hotelcard");
+  AddId("hotel-card");
+  SetLong("A hotel-Card. You can sleep at a hotel with it.\n");
+  if (this_player()) {
+    hotelname = ({string})(environment(this_player())->QueryHotelName());
+  } else {
+    hotelname = ({string})(environment(this_object())->QueryHotelName());
+  }
+  if(!hotelname) {
+    hotelname = "a hotel";
+  }
+  hotel_path = STARTROOM;
+  /* This default setting will be overwritten */
+  home = ({string})this_player()->QueryHome();
 }
 
 void simple_obj() { replace_program("/obj/hotelcard"); }

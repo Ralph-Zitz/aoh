@@ -76,7 +76,7 @@ void create () {
 */
 
 public int prevent_leave (mixed dest, int method, mixed extra) {
-  if (!TP || TP != PO || LSTATE_GHOST != TP->Query(P_LSTATE)) {
+  if (!TP || TP != PO || LSTATE_GHOST != ({int})TP->Query(P_LSTATE)) {
     if (QueryLockState() != LOCK_OPEN) {
       if (TP || TI)
         write ("The "+strip_a(QueryShort())+" is closed.\n");
@@ -94,7 +94,7 @@ public int prevent_leave (mixed dest, int method, mixed extra) {
 */
 
 public int allow_enter (int method, mixed extra) {
-  if (!TP || TP != PO || LSTATE_GHOST != TP->Query(P_LSTATE)) {
+  if (!TP || TP != PO || LSTATE_GHOST != ({int})TP->Query(P_LSTATE)) {
     if (QueryLockState() != LOCK_OPEN) {
       if (TP || TI)
         write ("The "+strip_a(QueryShort())+" is closed.\n");
@@ -112,7 +112,7 @@ public int allow_enter (int method, mixed extra) {
 public varargs object *Locate (mixed item, int mode) {
   if (QueryLockState() != LOCK_OPEN 
   &&  member(deep_inventory(THIS), TP) == -1
-  &&  LSTATE_GHOST != TP->Query(P_LSTATE)
+  &&  LSTATE_GHOST != ({int})TP->Query(P_LSTATE)
   &&  QueryTransparency() < 500
      ) 
     return (mode & SEARCH_OBJECT) ? 0 : ({});
@@ -126,7 +126,7 @@ public varargs object *Locate (mixed item, int mode) {
 
 public varargs string Content (string what, mixed exclude) {
   if (member(deep_inventory(THIS), TP) == -1
-   && LSTATE_GHOST != TP->Query(P_LSTATE)
+   && LSTATE_GHOST != ({int})TP->Query(P_LSTATE)
    && QueryLockState() != LOCK_OPEN
    && QueryTransparency() < 500
      )

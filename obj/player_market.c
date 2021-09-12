@@ -91,7 +91,7 @@ void ClearObjList() // former Del_objlist
  save_object(object_name());
 }
 
-void create()
+varargs void create()
 {
  if(object_name(this_object()) == MYFILE) return;
  ::create();
@@ -124,8 +124,8 @@ public status CheckTrade(object ob)
  if (member(inherit_list(ob),"std/food.c")!=-1) return 0;
  if (member(inherit_list(ob),"std/drink.c")!=-1) return 0;
  // we can't handle items here, which override QueryValue
- if (ob->Query(P_NOBUY)) return 0;
- if (ob->Query(P_NOSELL)) return 0;
+ if (({int})ob->Query(P_NOBUY)) return 0;
+ if (({int})ob->Query(P_NOSELL)) return 0;
  // we don't take items which may not be sold again
  return 1;
 }
@@ -135,14 +135,14 @@ int modify_on_amount(object ob,int price)
  return price;
 }
 
-int buy_routine(object ob)
+varargs int buy_routine(object ob)
 {
  if (shop::buy_routine(ob))
  {
-  m_delete(sold_objects[ob->Query(P_SELLER)],object_name(ob));
-  BANK_D->AddAccount(ob->Query(P_SELLER),
-                         ob->QueryValue()*3*PROFIT_SELL);
-  ob->SetValue(ob->Query(P_ORIG_VALUE));
+  m_delete(sold_objects[({string})ob->Query(P_SELLER)],object_name(ob));
+  BANK_D->AddAccount(({string})ob->Query(P_SELLER),
+          ({int})ob->QueryValue()*3*PROFIT_SELL);
+  ob->SetValue(({int})ob->Query(P_ORIG_VALUE));
   save_object(object_name());
   return 1;
  }
@@ -167,7 +167,7 @@ protected void pm_sell_items(object *items,object env,int price)
   return;
  }
 
- if (BANK_D->QueryAccount(getuid(PL))==-1)
+ if (({int})BANK_D->QueryAccount(getuid(PL))==-1)
  {
   SkWrite("Sorry "+CustomerName()+", you have no bank account.\n");
   return;
@@ -181,23 +181,23 @@ protected void pm_sell_items(object *items,object env,int price)
  {
   ob = present(items[i], env);
   if (!ob) continue;
-  str = (string)ob->QueryShort();
+  str = ({string})ob->QueryShort();
   // Items with no value are not accepted from the shop.
-  if (!(int)ob->QueryValue())
+  if (!({int})ob->QueryValue())
   {
    SkWrite("Sorry "+CustomerName()+", this item ("+str+") has no value.\n");
    SkWrite("Toss it in a dust-bin...\n");
    further_items-=({ob});
    continue;
   }
-  if (ob->Query(P_NOBUY))
+  if (({int})ob->Query(P_NOBUY))
   {
    SkWrite ("Sorry "+CustomerName()+", I don't buy such items!\n");
    if (env!=PL)
    {
     SkWrite("Hm. I think you might want to have this back.\n");
-    write(SkShort(1)+" gives "+(ob->QueryShort()||"something")+" to you.\n");
-    if (ob->move(PL,M_SILENT)!=ME_OK)
+    write(SkShort(1)+" gives "+(({string})ob->QueryShort()||"something")+" to you.\n");
+    if (({int})ob->move(PL,M_SILENT)!=ME_OK)
     {
       SkWrite("You can't take it. I'll put in on the floor.\n");
       ob->move(ME,M_SILENT);
@@ -213,13 +213,13 @@ protected void pm_sell_items(object *items,object env,int price)
    continue;
   }
   // Check if item is droppable.
-  if (ob->QueryNoDrop()||ob->QueryNoGive())
+  if (({int})ob->QueryNoDrop()||({int})ob->QueryNoGive())
   {
    SkWrite("Oh " + CustomerName() + ", I can't take '" +str+ "' from you!\n");
    further_items-=({ob});
    continue;
   }
-  if (!st->MayAddWeight(ob->QueryWeight()))
+  if (!({int})st->MayAddWeight(({int})ob->QueryWeight()))
   {
    SkWrite("Oh, " + CustomerName() + ", "+str+" doesn't fit into my store!\n");
    further_items-=({ob});
@@ -236,8 +236,8 @@ protected void pm_sell_items(object *items,object env,int price)
         }) );
   show_room(ME, SkShort(1) + " puts the item into the store.\n");
   PutInStore(ob);
-  SaveObjList(ob,ob->QueryValue());
-  ob->Set(P_ORIG_VALUE,ob->QueryValue());
+  SaveObjList(ob,({int})ob->QueryValue());
+  ob->Set(P_ORIG_VALUE,({int})ob->QueryValue());
   ob->Set(P_SELLER,getuid(PL));
   ob->SetValue(price);
  }
@@ -266,44 +266,44 @@ public int do_sell(string str)
   Say(CustomerName(1)+" wants to sell "+(str||"something")+
       ".\n",({TP}),1);
   if (QueryNoSell())	// you can't sell anything in here
-    return (int)notify_fail(
+    return notify_fail(
       lambda(0,
         ({LSF("SkSay"),
           "I don't buy any items.\n"
         })),
-      NOTIFY_NOT_OBJ)&&0;
+      NOTIFY_NOT_OBJ);
   if (!sk_in_shop())
     return 0;	// Check if the shopkeeper is in the shop and
 		// if not, give a message to the player.
   if (!str)
-    return (int)notify_fail(
+    return notify_fail(
       lambda(0,
         ({LSF("SkSay"),
           "What would you sell?\n"
-        })),NOTIFY_NOT_VALID)&&0;
+        })),NOTIFY_NOT_VALID);
 
   if (sscanf(str,"%s for %s",hstr,valstr)==2)
     {
       str = hstr;
       if (sscanf(valstr,"%d %s",price,hstr)==2)
-        return (int)notify_fail(SkShort(1)+
-         " says: Just give the amount of copper coins as amount.\n")&&0;
+        return notify_fail(SkShort(1)+
+         " says: Just give the amount of copper coins as amount.\n");
       sscanf(valstr,"%d",price);
       if (!price = price / 3) price = 1;
     }
   else
-    return (int)notify_fail(
+    return notify_fail(
       SkShort(1)+" says: Please tell me the price you want to sell your "
-      "items for.\n")&&0;
+      "items for.\n");
 
-  found = TP->SearchM(str, SEARCH_INV|SM_CMULTI|SM_REALLY|WizSearch());
+  found = ({mixed})TP->SearchM(str, SEARCH_INV|SM_CMULTI|SM_REALLY|WizSearch());
   found = sort_findings(found, sort_f_prop(P_NODROP));
   msg = found[-FOUND_SINGLE]
         ? "You didn't find as much things as you wanted to sell.\n"
         : "";
   emsg = found[-FOUND_SINGLE]
          ? CustomerName(1)+
-           " didn't find as much things as "+TP->QueryPronoun()+
+           " didn't find as much things as "+({string})TP->QueryPronoun()+
            " wanted to sell.\n"
          : "";
 
@@ -327,7 +327,7 @@ public int do_sell(string str)
       msg += "You can't drop "+msg2+".\n";
     }
   if (!(sizeof(found[FOUND_SINGLE])))
-    return (int)notify_fail(
+    return notify_fail(
       msg
       ?lambda(0,
         ({ESF(","),
@@ -341,7 +341,7 @@ public int do_sell(string str)
           })
         }))
       :"You don't have any "+str+" to sell.\n",
-      NOTIFY_NOT_VALID)&&0;
+      NOTIFY_NOT_VALID);
 
   pm_sell_items(found[FOUND_SINGLE],env,price);
   // sell all items in the array, give messages and
@@ -354,19 +354,19 @@ public int do_sell(string str)
   return 1;
 }
 
-is_own(object ob, string uid)
+int is_own(object ob, string uid)
 {
- if(ob->Query(P_SELLER) == uid)
+ if(({string})ob->Query(P_SELLER) == uid)
  {
-  write(STR->radjust(to_string(get_price(ob)),6)+"    "+ob->QueryShort()+"\n");
+  write(({string})STR->radjust(to_string(GetPrice(ob)),6)+"    "+({string})ob->QueryShort()+"\n");
   return 1;
  }
  return 0;
 }
 
-list_own(string str)
+int list_own(string str)
 {
- if (PL->CanSee())
+ if (({int})PL->CanSee())
  {
   write(SkShort(1) + " shows a list to you (all prices in copper coins):\n\n\
 <cost> of <item>\n");
@@ -379,7 +379,7 @@ list_own(string str)
  return 1;
 }
 
-do_list(string str)
+int do_list(string str)
 {
  if (lower_case(str||"")!="own")
   return ::do_list(str);
@@ -399,17 +399,17 @@ public string detail_sign()
                                   (!QueryNoSell()?"sell":"")+
                        " things here.\n")
 )+
-((QueryNoList()&&QueryNoIdentify()&&QueryNoAppraise()
+((({int})ME->QueryNoList()&&({int})ME->QueryNoIdentify()&&({int})ME->QueryNoAppraise()
   &&QueryNoSell()&&QueryNoBuy())
  ?"The shop-assistant is stupid and understands no command at all.\n"
  :"The shop-assistant understands the following commands:\n"+
-(!QueryNoList()?
+(!({int})ME->QueryNoList()?
  "'list [<pattern>]'   e.g. list, list weapon, list armour, list bag, ...\n"
  "                     pattern might be a regular expression\n":"")+
-(!QueryNoIdentify()?
+(!({int})ME->QueryNoIdentify()?
  "'identify <id>'      Give a special info and the creator of the item.\n"
  "                     That will cost you 10% of the item value.\n":"")+
-(!QueryNoAppraise()?
+(!({int})ME->QueryNoAppraise()?
  "'appraise <id>'      Let the assistant appraise the value of one of your items.\n":"")+
 (!QueryNoSell()?
  "'sell <id> for <pr>' Sell the item with the name <id> for price <pr>.\n"

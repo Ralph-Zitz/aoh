@@ -11,7 +11,7 @@ void create()
 mixed display(object ob)
 {
   string str;
-  str = sprintf("%-20s %3d %O",ob->QueryName(),ob->QueryGoChance(),ob->HeartDebug());
+  str = sprintf("%-20s %3d %O",({string})ob->QueryName(),({int})ob->QueryGoChance(),({mixed})ob->HeartDebug());
   return str;
 }
 

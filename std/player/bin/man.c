@@ -95,7 +95,7 @@
 
 #include <daemons.h>
 #include <msgclass.h>
-
+#include <driver/regexp.h>
 
 /* Select a given man topic out of a menu */
 void man_select(string str,mixed *n_data)
@@ -176,7 +176,7 @@ int main(string str)
     return 1;
   }
 
-  str=lower_case(str);
+  //str=lower_case(str);
 
   // index a doc file manually
   if (1==sscanf(str,"%s new",fname))
@@ -193,7 +193,7 @@ int main(string str)
   else if (2==sscanf(str,"%s %s list",section,key))
   {
     sections=({string *})MAN_D->GetKeywords(section);
-    sections=regexp(sections,key)||({});
+    sections=regexp(sections,key,RE_PCRE)||({});
     sections=sort_array(sections,#'> /*'*/);
     show_keys(section,sections);
     return 1;

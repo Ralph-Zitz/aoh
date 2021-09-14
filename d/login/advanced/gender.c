@@ -32,20 +32,21 @@ int do_gender_select(string str)
   if(!str)
   {
     msg_write(CMSG_GENERIC,
-      "Try either 'select gender female' or 'select gender male'.\n");
+      "Try either 'select gender female' or 'select gender male' or 'select gender other'.\n");
     return 1;
   }
 
   args = norm_id(str, 1);
   if(sizeof(args) < 2 || args[0] != "gender" ||
-     member(({"male","female"}),args[1]) == -1)
+     member(({"male","female","other"}),args[1]) == -1)
   {
      msg_write(CMSG_GENERIC,
-       "Try either 'select gender female' or 'select gender male'.\n");
+       "Try either 'select gender female' or 'select gender male' or 'select gender other'.\n");
      return 1;
   }
 
   if(args[1] == "female") gender = GENDER_FEMALE;
+  else if(args[1] == "other") gender = GENDER_OTHER;
   else gender = GENDER_MALE;
 
   this_player()->Set(P_GENDER, gender);
@@ -76,10 +77,11 @@ public varargs void create()
   "You finally find yourself in an office. You sense a totally sterile\n"
   "smell. You know you are in a doctor's office. As you examine the\n"
   "diplomas on the wall, you realize this is a plastic surgeon's office.\n"
-  "It's time you picked your gender. You have a 50/50 shot, let's hope you can get it right the first time.\n"
+  "It's time you picked your gender. You have a 1/3 shot, let's hope you can get it right the first time.\n"
   "\n"
   "You can '%^BOLD%^%^GREEN%^select gender male%^RESET%^' or "
-  "'%^BOLD%^%^GREEN%^select gender female%^RESET%^'.\n"
+  "'%^BOLD%^%^GREEN%^select gender female%^RESET%^' or "
+  "'%^BOLD%^%^GREEN%^select gender other%^RESET%^'.\n"
   "\n"
   "Then proceed to the north to continue with the character setup.\n");
   SetIndoors(1);
@@ -99,6 +101,5 @@ public varargs void create()
   Set(P_INT_SMELL, "You smell gloves, latex gloves. Sterile and dry.\n");
   AddDetail(({"diploma","wall","diplomas","walls"}),
   "You see diplomas on the wall from top Medical Colleges around the world.\n");
-
 }
 

@@ -261,13 +261,16 @@ public string QueryGenderString() {
   return ({ "unsure", "male", "female", "other" })[QueryGender()];
 }
 public string QueryPronoun() {
-  return ({ "it", "he", "she", "it" })[QueryGender()];
+  return ({ "it", "he", "she", "they" })[QueryGender()];
+//  return ({ "it", "he", "she", "it" })[QueryGender()];
 }
 public string QueryPossessive() {
-  return ({ "its", "his", "her", "its" })[QueryGender()];
+  return ({ "its", "his", "her", "them" })[QueryGender()];
+//  return ({ "its", "his", "her", "its" })[QueryGender()];
 }
 public string QueryObjective() {
-  return ({ "it", "him", "her", "it" })[QueryGender()];
+  return ({ "it", "him", "her", "their" })[QueryGender()];
+//  return ({ "it", "him", "her", "it" })[QueryGender()];
 }
 
 //--------------------------------------------------------------------------

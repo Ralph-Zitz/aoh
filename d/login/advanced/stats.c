@@ -306,9 +306,9 @@ public varargs void create()
   ::create();
   SetIntShort("Stats choosing");
   SetIntLong(
-  "As you walk into the ship's gym, you notice many machines\n"
-  "designed to build your different muscles (including your brain).\n"
-  "You see other people using the machines and decided to join in.\n"
+  "As you walk into the ship's gym, you notice many machines "
+  "designed to build your different muscles (including your brain). "
+  "You see other people using the machines and decided to join in. "
   "This is where you will choose your stats, choose carefully.\n"
   "\n"
   "You can:\n"

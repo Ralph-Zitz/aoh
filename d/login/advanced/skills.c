@@ -181,8 +181,8 @@ public varargs void create()
   seteuid(getuid());
   SetIntShort("Skill Selection");
   SetIntLong(
-  "After you have strengthened your muscles in the ship's gym\n"
-  "you move along into the ship's arena. This is where you find\n"
+  "After you have strengthened your muscles in the ship's gym "
+  "you move along into the ship's arena. This is where you find "
   "people working on their skills. You decide to join them.\n"
   "\n"
   "You can:\n"

@@ -73,12 +73,12 @@ public varargs void create()
   ::create();
   SetIntShort("Gender Selection");
   SetIntLong(
-  "As you wander around, you realize you are on a ship of some kind.\n"
-  "You finally find yourself in an office. You sense a totally sterile\n"
-  "smell. You know you are in a doctor's office. As you examine the\n"
-  "diplomas on the wall, you realize this is a plastic surgeon's office.\n"
-  "It's time you picked your gender. You have a 1/3 shot, let's hope you can get it right the first time.\n"
-  "\n"
+  "As you wander around, you realize you are on a ship of some kind. "
+  "You finally find yourself in an office. You sense a totally sterile "
+  "smell. You know you are in a doctor's office. As you examine the "
+  "diplomas on the wall, you realize this is a plastic surgeon's office. "
+  "It's time you picked your gender. You have a 1/3 shot, let's hope you "
+  "can get it right the first time.\n"
   "You can '%^BOLD%^%^GREEN%^select gender male%^RESET%^' or "
   "'%^BOLD%^%^GREEN%^select gender female%^RESET%^' or "
   "'%^BOLD%^%^GREEN%^select gender other%^RESET%^'.\n"

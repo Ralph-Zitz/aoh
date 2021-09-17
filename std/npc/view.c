@@ -357,7 +357,7 @@ public varargs mixed Sense (mixed what, string type, int flags)
   if (sizeof(what) && pointerp(what[0]))
     what = what[0];
   if (found[-FOUND_SINGLE])
-    msg += "You did not find as much things as you though you could.\n";
+    msg += "You did not find as many things as you thought you could.\n";
 
   // Construct the message for the items not being located.
   // But first check if they are details from the room.

@@ -323,8 +323,7 @@ private mapping get_verbs( void )
       "orgasmin": ({DEUX,0," have a sloppy orgasm in \nWHO \nHOW",
         " has a sloppy orgasm in \nWHO \nHOW"}),
       "fingerfuck":({DEUX,0," finger \nWHO \nHOW"," fingers \nWHO \nHOW"}),                     
-      "jump":     ({DEUX,0," jump into \nPOSS arms",
-        " jumps into \nPOSS arms"}),
+//      "jump":     ({DEUX,0," jump into \nPOSS arms", " jumps into \nPOSS arms"}),
       "curl":     ({SIMP,0," curl$ comfortably into \nPOSS arms"}),
       "oh":       ({DEUX,({"entirely"})," look \nHOW blank and go 'Oh'", " looks \nHOW "
         "blank and goes 'Oh'"}),

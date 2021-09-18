@@ -3774,7 +3774,7 @@ void FtpAccess(string host, string message, int port)
 #ifdef MASTER_ERQ_HANDLER
 
 //---------------------------------------------------------------------------
-void erq_callback( int * data, int len, closure orig_cb )
+void erq_callback( int|int * data, int len, closure orig_cb )
 
 // Call the original callback if it is still valid.
 

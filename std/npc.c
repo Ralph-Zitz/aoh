@@ -123,7 +123,7 @@ void create() {
   add_npc_cmds();
   add_soul_cmds();
   /* For statistics */
-  // catch("/obj/npcstat"->Add(this_object()));
+  catch("/obj/npcstat"->Add(this_object()));
 }
 
 varargs void reset() {

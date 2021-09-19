@@ -65,9 +65,3 @@
 #define NIGHT_COST(c) (c*4)
 #endif
 
-
-
-
-
-
-

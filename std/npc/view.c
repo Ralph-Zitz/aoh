@@ -41,7 +41,7 @@ public string *_weapons (string poss);
 public string *_armours ();
 public string *_equipment ();
 public mapping sortObjsByEnv (object * what, object me, object * envs);
-                                       // std/living/putget
+                                       // std/npc/putget
 private string _make_inv (object cont, int mode, int depth, int width);
 //--------------------------------------------------------------------------
 

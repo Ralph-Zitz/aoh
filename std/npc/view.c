@@ -22,7 +22,6 @@
 #define THIS  this_object()
 #define TP    this_player()
 #define ENV   environment
-#define DBG(x) if(find_player("nostradamus")) tell_object(find_player("nostradamus"),x)
 
 // Define this for extra code for 'read'
 /* #define READCODE */

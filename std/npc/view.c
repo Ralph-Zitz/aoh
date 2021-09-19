@@ -22,6 +22,7 @@
 #define THIS  this_object()
 #define TP    this_player()
 #define ENV   environment
+#define DBG(x) if(find_player("nostradamus")) tell_object(find_player("nostradamus"),x)
 
 // Define this for extra code for 'read'
 /* #define READCODE */
@@ -194,6 +195,7 @@ public varargs mixed LookFor (mixed what, int impl)
   rc = ({ msg });
 
   // Sort objects by environments, compute the messages for the environments.
+  tmp = filter(tmp, #'objectp /*'*/)
   bags = sortObjsByEnv(what, THIS, &tmp);
   envs = describeEnvs(tmp);
 
@@ -448,6 +450,7 @@ public varargs mixed Sense (mixed what, string type, int flags)
   rc = ({ msg });
 
   // Sort objects by environments, compute the messages for the environments.
+  tmp = filter(tmp, #'objectp /*'*/);
   sortObjsByEnv(what, THIS, &tmp);
   envs = describeEnvs(tmp, 1);
 

@@ -5,40 +5,39 @@
 
 // Path defines for /obj/weapons
 #define WEAPONS_BASE    "/obj/weapons/"
-#define W_ARCHERY(x)    WEAPONS_BASE+"archery/"+x
-#define W_AXES(x)       WEAPONS_BASE+"axes/"+x
-#define W_BULLETS(x)    WEAPONS_BASE+"bullets/"+x
-#define W_CHAINS(x)     WEAPONS_BASE+"chains/"+x
-#define W_CLUBS(x)      WEAPONS_BASE+"clubs/"+x
-#define W_DISTANTS(x)   WEAPONS_BASE+"distants/"+x
-#define W_HAMMERS(x)    WEAPONS_BASE+"hammers/"+x
-#define W_HANDS(x)      WEAPONS_BASE+"hands/"+x
-#define W_INFANTRIES(x) WEAPONS_BASE+"infantries/"+x
-#define W_KNIFES(x)     WEAPONS_BASE+"knifes/"+x
-#define W_RAPIERS(x)    WEAPONS_BASE+"rapiers/"+x
-#define W_SPEARS(x)     WEAPONS_BASE+"spears/"+x
-#define W_SWORDS(x)     WEAPONS_BASE+"swords/"+x
-#define W_STAFFS(x)     WEAPONS_BASE+"staffs/"+x
-#define W_WHIPS(x)      WEAPONS_BASE+"whips/"+x
-#define W_SPECIAL(x)    WEAPONS_BASE+"special/"+x
-#define W_UNIQUE(x)     WEAPONS_BASE+"unique/"+x
+#define W_ARCHERY(x)    WEAPONS_BASE "archery/" x
+#define W_AXES(x)       WEAPONS_BASE "axes/" x
+#define W_BULLETS(x)    WEAPONS_BASE "bullets/" x
+#define W_CHAINS(x)     WEAPONS_BASE "chains/" x
+#define W_CLUBS(x)      WEAPONS_BASE "clubs/" x
+#define W_DISTANTS(x)   WEAPONS_BASE "distants/" x
+#define W_HAMMERS(x)    WEAPONS_BASE "hammers/" x
+#define W_HANDS(x)      WEAPONS_BASE "hands/" x
+#define W_INFANTRIES(x) WEAPONS_BASE "infantries/" x
+#define W_KNIFES(x)     WEAPONS_BASE "knifes/" x
+#define W_RAPIERS(x)    WEAPONS_BASE "rapiers/" x
+#define W_SPEARS(x)     WEAPONS_BASE "spears/" x
+#define W_SWORDS(x)     WEAPONS_BASE "swords/" x
+#define W_STAFFS(x)     WEAPONS_BASE "staffs/" x
+#define W_WHIPS(x)      WEAPONS_BASE "whips/" x
+#define W_SPECIAL(x)    WEAPONS_BASE "special/" x
+#define W_UNIQUE(x)     WEAPONS_BASE "unique/" x
 
 // Path defines for /obj/armours
 #define ARMOURS_BASE    "/obj/armours/"
-#define A_AMULETS(x)    ARMOURS_BASE+"amulets/"+x
-#define A_BELTS(x)      ARMOURS_BASE+"belts/"+x
-#define A_BOOTS(x)      ARMOURS_BASE+"boots/"+x
-#define A_CLOAKS(x)     ARMOURS_BASE+"cloaks/"+x
-#define A_GLOVES(x)     ARMOURS_BASE+"gloves/"+x
-#define A_HELMETS(x)    ARMOURS_BASE+"helmets/"+x
-#define A_MAILS(x)      ARMOURS_BASE+"mails/"+x
-#define A_RINGS(x)      ARMOURS_BASE+"rings/"+x
-#define A_SHIELDS(x)    ARMOURS_BASE+"shields/"+x
-#define A_SKINS(x)      ARMOURS_BASE+"skins/"+x
-#define A_TROUSERS(x)   ARMOURS_BASE+"trousers/"+x
-#define A_SPECIAL(x)    ARMOURS_BASE+"special/"+x
-#define A_UNIQUE(x)     ARMOURS_BASE+"unique/"+x
-
+#define A_AMULETS(x)    ARMOURS_BASE "amulets/" x
+#define A_BELTS(x)      ARMOURS_BASE "belts/" x
+#define A_BOOTS(x)      ARMOURS_BASE "boots/" x
+#define A_CLOAKS(x)     ARMOURS_BASE "cloaks/" x
+#define A_GLOVES(x)     ARMOURS_BASE "gloves/" x
+#define A_HELMETS(x)    ARMOURS_BASE "helmets/" x
+#define A_MAILS(x)      ARMOURS_BASE "mails/" x
+#define A_RINGS(x)      ARMOURS_BASE "rings/" x
+#define A_SHIELDS(x)    ARMOURS_BASE "shields/" x
+#define A_SKINS(x)      ARMOURS_BASE "skins/" x
+#define A_TROUSERS(x)   ARMOURS_BASE "trousers/" x
+#define A_SPECIAL(x)    ARMOURS_BASE "special/" x
+#define A_UNIQUE(x)     ARMOURS_BASE "unique/" x
 
 // Generic ID for arrows
 #define GENERIC_ARROW_ID " generic arrow"
@@ -180,7 +179,6 @@
 #define MAX_HP_THRESHOLD 900 // 0..1024
 #define DEX_THRESHOLD    900 // 0..1024
 #define MAG_THRESHOLD    900 // 0..1024
-
 #endif
 
-#endif
+#endif // _COMBAT_

@@ -195,7 +195,7 @@ public varargs mixed LookFor (mixed what, int impl)
   rc = ({ msg });
 
   // Sort objects by environments, compute the messages for the environments.
-  tmp = filter(tmp, #'objectp /*'*/)
+  tmp = filter(tmp, #'objectp /*'*/);
   bags = sortObjsByEnv(what, THIS, &tmp);
   envs = describeEnvs(tmp);
 

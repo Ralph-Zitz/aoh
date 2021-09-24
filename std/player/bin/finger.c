@@ -133,7 +133,7 @@ public varargs string MakeFingerString( string str, mixed pli ) {
     /* check if user is a retired wizard, i.e. secure-savefile exists */
     /* query_user_level does that for us */
     if ( tx = query_user_level( str ) )
-      return capitalize( str )+ "is a retired wizard of " MUDNAME ".\n";
+      return capitalize( str )+ " is a retired wizard of " MUDNAME ".\n";
     else
       return "This player does not exist at " MUDNAME ".\n";
   }

@@ -82,14 +82,14 @@
 //
 //      ({ meta-verb ,
 //           ({ verb ,
-//              ({ persons }), 
+//              ({ persons }),
 //              ({ adverbs }),
-//              message, 
+//              message,
 //              ({ where })
 //           }),
 //           ......
 //      })
-//                  
+//
 //=============================================================================
 // NAME
 //      mixed *query_feeling_for(object *who)
@@ -232,7 +232,7 @@ public varargs void more_flush( string str )
 
     if ( rows < 2 )
         rows = 24;
-    rows -= 2;   
+    rows -= 2;
 
     if ( str == "q" )
     {
@@ -322,7 +322,7 @@ private mapping get_verbs( void )
         " does the worm \nHOW next to \nWHO"}),
       "orgasmin": ({DEUX,0," have a sloppy orgasm in \nWHO \nHOW",
         " has a sloppy orgasm in \nWHO \nHOW"}),
-      "fingerfuck":({DEUX,0," finger \nWHO \nHOW"," fingers \nWHO \nHOW"}),                     
+      "fingerfuck":({DEUX,0," finger \nWHO \nHOW"," fingers \nWHO \nHOW"}),
 //      "jump":     ({DEUX,0," jump into \nPOSS arms", " jumps into \nPOSS arms"}),
       "curl":     ({SIMP,0," curl$ comfortably into \nPOSS arms"}),
       "oh":       ({DEUX,({"entirely"})," look \nHOW blank and go 'Oh'", " looks \nHOW "
@@ -400,7 +400,7 @@ private mapping get_verbs( void )
       "curtsey":  ({DEFA,0,""," before"}),
       "puzzle":   ({SIMP,0," look$ \nHOW puzzled \nAT"," at"}),
       "grovel":   ({DEFA,0,""," before"}),
-      "listen":   ({DEFA,0,""," to"}),
+/*      "listen":   ({DEFA,0,""," to"}), */
       "tongue":   ({SIMP,0," stick$ \nYOUR tongue out \nHOW \nAT"," at"}),
       "apologize":({DEFA,0,""," to"}),
       "complain": ({DEFA,0,""," about"}),
@@ -752,7 +752,7 @@ private string get_adverb_string( void )
 {
     if ( adverb_string )
         return adverb_string;
-    return adverb_string = 
+    return adverb_string =
     sprintf( "%-*#s\n", MORE_WIDTH(),
       implode( SORT( m_indices( adverbs ) ), "\n" )
     );
@@ -1239,7 +1239,7 @@ private mixed * reduce_verb( string verb,
         a = verbdata[ 2 ];
         b = verbdata[ 3 ];
         if ( !sizeof( who ) && ( sscanf( a, "%~s\nWHO" )
-            || 
+            ||
             sscanf( a, "%~s\nPOSS" )
             ||
             sscanf( a, "%~s\nTHEIR" )
@@ -1784,7 +1784,7 @@ public int do_feel( string p )
         else
             my_tell_room( environment( TP ), "\n", ({ }) );
     }
-    flush(); 
+    flush();
     return 1;
 }
 

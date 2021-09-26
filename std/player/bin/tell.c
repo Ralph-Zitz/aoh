@@ -151,60 +151,58 @@ int main ( string str ) {
 
       /* if we did not already initialise usr-array for abbrev checking */
       if ( ! usr ) {
-  tmp = users();
-  if ( ! IS_IMMORTAL( this_player() ) )
-    tmp -= filter_objects( tmp, "Query", P_INVIS );
-  usr = map_objects( tmp, "Query", P_REALNAME );
-  usr -= ({ 0 });
-      }
-
-      tmp = ({});
-      for (j = sizeof( usr ); j--; ) {
-  if ( ! strstr( usr[j], whos[i] ) ) {
-    if ( whos[i] != usr[j] )
-      tmp += ({ usr[j] });
-  }
-      }
-
-      switch( sizeof( tmp ) ) {
-      case 1:
-  if ( ob = find_living( tmp[0] ) )
-    break;
-  /* fallthough */
-      case 0:
-  write( "No living named '"+capitalize(whos[i])+"' found.\n");
-  break;
-      default:
-  tmp = map( tmp, #'capitalize /*'*/ );
-  write("Who is '"+whos[i]+"': ");
-  if (sizeof(tmp) > 1)
-    write(implode(tmp[0..<2], ", ")+" or ");
-  write(tmp[<1]+"?\n");
-  break;
+        tmp = users();
+      if ( ! IS_IMMORTAL( this_player() ) )
+        tmp -= filter_objects( tmp, "Query", P_INVIS );
+      usr = map_objects( tmp, "Query", P_REALNAME );
+      usr -= ({ 0 });
+    }
+    tmp = ({});
+    for (j = sizeof( usr ); j--; ) {
+      if ( ! strstr( usr[j], whos[i] ) ) {
+        if ( whos[i] != usr[j] )
+          tmp += ({ usr[j] });
       }
     }
+    switch( sizeof( tmp ) ) {
+      case 1:
+        if ( ob = find_living( tmp[0] ) )
+        break;
+  /* fallthough */
+      case 0:
+        msg_write( CMSG_GENERIC, "No living named '"+capitalize(whos[i])+"' found.\n");
+        break;
+      default:
+        tmp = map( tmp, #'capitalize /*'*/ );
+        msg_write(CMSG_GENERIC, "Who is '"+whos[i]+"': ");
+        if (sizeof(tmp) > 1)
+          msg_write(CMSG_GENERIC, implode(tmp[0..<2], ", ")+" or ");
+        msg_write(CMSG_GENERIC, tmp[<1]+"?\n");
+        break;
+    }
+  }
 
     /* we found a player, a living or an abbreviated player */
-    if ( ob ) {
-      /* check for netdead and ignore */
-      if (!interactive(ob) && query_once_interactive(ob))
-  write( capitalize(({string})ob->Query(P_REALNAME))+" is currently netdead.\n" );
-      else if ( ( ! interactive( ob ) ) ||
-  ( ({int})ob->check_ignore( "tell", this_player() ) > 0 ) ) {
-  lt += ({ ob }); /* add to local recipients */
-        rn += ({ ({string})ob->Query( P_REALNAME ) });
-      }
-      else {
-  /* write proper message for ignore */
-  if ( ! IS_IMMORTAL( this_player() ) && ({int})ob->Query( P_INVIS ) )
-    write( "No living named '"+capitalize(whos[i])+"' found.\n");
-  else
-    write( capitalize(({string})ob->Query(P_REALNAME))+" ignores you.\n" );
-      }
+  if ( ob ) {
+    /* check for netdead and ignore */
+    if (!interactive(ob) && query_once_interactive(ob))
+      msg_write( CMSG_GENERIC, capitalize(({string})ob->Query(P_REALNAME))+" is currently netdead.\n" );
+    else if ( ( ! interactive( ob ) ) ||
+      ( ({int})ob->check_ignore( "tell", this_player() ) > 0 ) ) {
+      lt += ({ ob }); /* add to local recipients */
+      rn += ({ ({string})ob->Query( P_REALNAME ) });
+    }
+    else {
+      /* write proper message for ignore */
+      if ( ! IS_IMMORTAL( this_player() ) && ({int})ob->Query( P_INVIS ) )
+        msg_write( CMSG_GENERIC, "No living named '"+capitalize(whos[i])+"' found.\n");
+      else
+        msg_write( CMSG_GENERIC, capitalize(({string})ob->Query(P_REALNAME))+" ignores you.\n" );
+    }
 
-      /* for invisible targets and player tells fake not found */
-      if ( ! IS_IMMORTAL( this_player() ) && ({int})ob->Query(P_INVIS ) )
-  write( "No living named '"+capitalize(whos[i])+"' found.\n");
+    /* for invisible targets and player tells fake not found */
+    if ( ! IS_IMMORTAL( this_player() ) && ({int})ob->Query(P_INVIS ) )
+      msg_write( CMSG_GENERIC, "No living named '"+capitalize(whos[i])+"' found.\n");
     }
   }
 
@@ -223,7 +221,7 @@ int main ( string str ) {
                                      SENDER: ({string})this_player()->Query( P_REALNAME ),
                                      DATA: msg
                                     ]), 1) ) {
-      write( "Intermud tell to "+atconcat(mt[i])+" failed with error: "+tmp2 );
+      msg_write( CMSG_GENERIC, "Intermud tell to "+atconcat(mt[i])+" failed with error: "+tmp2 );
       mt[i] = 0;
       }
 #ifdef FEATURES_INTERMUD3
@@ -237,17 +235,17 @@ int main ( string str ) {
 
   /* write apropriate message */
   if ( i = sizeof( mt ) ) {
-    write( "Intermud tell"+(i>1?"s":"")+" to " );
+    msg_write( CMSG_GENERIC, "Intermud tell"+(i>1?"s":"")+" to " );
     switch( i ) {
     case 1:
-      write( atconcat( mt[0] ) );
+      msg_write( CMSG_GENERIC, atconcat( mt[0] ) );
       break;
     default:
       tmp = map( mt, #'atconcat /*'*/ );
-      write( implode( tmp[0..<2], ", " ) + " and "+tmp[<1] );
+      msg_write( CMSG_GENERIC, implode( tmp[0..<2], ", " ) + " and "+tmp[<1] );
       break;
     }
-    write( " sent.\n" );
+    msg_write( CMSG_GENERIC, " sent.\n" );
   }
 
   /* handle local recipients */
@@ -292,7 +290,7 @@ int main ( string str ) {
 
   /* write the nobody message or echo the tell */
   if ( ! sizeof( lt ) && ! sizeof( mt ) )
-    write("Nobody listened.\n");
+    msg_write(CMSG_GENERIC, "Nobody listened.\n");
   else if ( sizeof( lt ) ) { /* only echo messages that go to local recp */
     txt = "You told ";
 

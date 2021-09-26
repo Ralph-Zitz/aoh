@@ -111,7 +111,7 @@ object Armageddon() {
     return armageddon;
   armageddon = find_living("armageddon");
   if (!armageddon)
-    armageddon = load_object("/obj/armageddon");
+    armageddon = clone_object("/obj/armageddon");
   armageddon->move_to_loc();
   return armageddon;
 }

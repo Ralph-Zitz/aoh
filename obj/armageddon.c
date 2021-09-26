@@ -10,6 +10,7 @@
 #include <combat.h>       /* For weapons and armours */
 #include <moving.h>
 #include <stdrooms.h>
+#include <msgclass.h>
 
 inherit "/std/npc";
 
@@ -73,10 +74,11 @@ void move_to_loc() {
     return;
   if (object_name(environment()) == WHERE_TO_GO)
     return;
-  tell_room(environment(), 
-"Armageddon looks up and says: Folks, it was nice to be here with you, but\n"
-"  now duty calls - I have a world to destruct.\n"
-	   );
+  msg_room(environment(), CMSG_ROOM,
+    "Armageddon looks up and says: Folks, it was nice to be here with you, but "
+    "now duty calls - I have a world to destroy.\n",
+    ({ this_object() })
+  );
   catch(move(WHERE_TO_GO, M_TELEPORT));
 }
 
@@ -104,9 +106,9 @@ void catch_tell(string str) {
   if (-1 != strstr(what, "time") || -1 != strstr(what, "shutdown"))
   {
     if (!shut || !({int})shut->query_progress())
-      tell_object(this_player()
-                 , "Armageddon tells you: There is no shutdown in progress.\n"
-                 );
+      msg_object(this_player(), CMSG_TELL,
+        "Armageddon tells you: There is no shutdown in progress.\n"
+      );
     else
     {
       seconds = ({int})shut->query_time_left();
@@ -118,22 +120,22 @@ void catch_tell(string str) {
       }
       if (seconds != 0)
         msg += seconds + " seconds";
-      tell_object( this_player()
-                 , "Armageddon tells you: "+msg+" till shutdown.\n"
-                 );
+      msg_object(this_player(), CMSG_TELL,
+        "Armageddon tells you: " + msg + " until shutdown.\n"
+      );
     }
     return;
   }
   if (!rescue) {
-    tell_object(this_player(), 
-"Armageddon tells you: What do you want? Please tell me later, i'am busy now!\n"
-               );
+    msg_object(this_player(), CMSG_TELL,
+      "Armageddon tells you: What do you want? Please tell me later, I am busy now!\n"
+    );
     return;
   }
-  tell_object(this_player(),
-"Armageddon teleports you to a special shop...\n"
-             );
-    this_player()->move(SHUTSHOP, M_TELEPORT);
+  msg_object(this_player(), CMSG_TELL,
+    "Armageddon teleports you to a special shop...\n"
+  );
+  this_player()->move(SHUTSHOP, M_TELEPORT);
 }
 
 /*************************************************************************/

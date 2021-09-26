@@ -26,11 +26,11 @@ void create () {
   object ob;
 
   while (ob = find_living("armageddon")) {
-    ob->remove(); 
+    ob->remove();
     if (ob) destruct(ob);
   }
-
-  if (::create())  return;
+  if (!clonep()) return;
+  ::create();
 
   SetName ("Armageddon");
   SetShort("Armageddon the god of world destruction");
@@ -39,7 +39,7 @@ void create () {
   SetRace ("god");
   SetGender (1);
   Set(P_WEIGHT, 100000);
-  Set(P_MAX_HP, 1000);    
+  Set(P_MAX_HP, 1000);
   Set(P_HP, 1000);
   Set(P_MAX_SP, 1000);
   Set(P_SP, 1000);
@@ -82,7 +82,7 @@ void move_to_loc() {
   catch(move(WHERE_TO_GO, M_TELEPORT));
 }
 
-void Shut() 
+void Shut()
 {
   SetLong("He is firmly concentrated on counting and prepares the\n" +
           "destruction of the world!\n");

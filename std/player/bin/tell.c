@@ -145,8 +145,7 @@ int main ( string str ) {
     }
 
     /* try to find the target */
-    if ( ! ob = ( find_player(whos[i]) ||
-    find_living(whos[i]) ) ) {
+    if ( ! ob = ( find_player(whos[i]) || find_living(whos[i]) ) ) {
       /* not found, try if it is an abbreviated name */
 
       /* if we did not already initialise usr-array for abbrev checking */
@@ -156,56 +155,55 @@ int main ( string str ) {
         tmp -= filter_objects( tmp, "Query", P_INVIS );
       usr = map_objects( tmp, "Query", P_REALNAME );
       usr -= ({ 0 });
-    }
-    tmp = ({});
-    for (j = sizeof( usr ); j--; ) {
-      if ( ! strstr( usr[j], whos[i] ) ) {
-        if ( whos[i] != usr[j] )
-          tmp += ({ usr[j] });
+      }
+      tmp = ({});
+      for (j = sizeof( usr ); j--; ) {
+        if ( ! strstr( usr[j], whos[i] ) ) {
+          if ( whos[i] != usr[j] )
+            tmp += ({ usr[j] });
+        }
+      }
+      switch( sizeof( tmp ) ) {
+        case 1:
+          if ( ob = find_living( tmp[0] ) )
+          break;
+        /* fallthough */
+        case 0:
+          msg_write( CMSG_GENERIC, "No living named '"+capitalize(whos[i])+"' found.\n");
+          break;
+        default:
+          tmp = map( tmp, #'capitalize /*'*/ );
+          msg_write(CMSG_GENERIC, "Who is '"+whos[i]+"': ");
+          if (sizeof(tmp) > 1)
+            msg_write(CMSG_GENERIC, implode(tmp[0..<2], ", ")+" or ");
+          msg_write(CMSG_GENERIC, tmp[<1]+"?\n");
+          break;
       }
     }
-    switch( sizeof( tmp ) ) {
-      case 1:
-        if ( ob = find_living( tmp[0] ) )
-        break;
-  /* fallthough */
-      case 0:
-        msg_write( CMSG_GENERIC, "No living named '"+capitalize(whos[i])+"' found.\n");
-        break;
-      default:
-        tmp = map( tmp, #'capitalize /*'*/ );
-        msg_write(CMSG_GENERIC, "Who is '"+whos[i]+"': ");
-        if (sizeof(tmp) > 1)
-          msg_write(CMSG_GENERIC, implode(tmp[0..<2], ", ")+" or ");
-        msg_write(CMSG_GENERIC, tmp[<1]+"?\n");
-        break;
-    }
-  }
 
     /* we found a player, a living or an abbreviated player */
-  if ( ob ) {
-    /* check for netdead and ignore */
-    if (!interactive(ob) && query_once_interactive(ob))
-      msg_write( CMSG_GENERIC, capitalize(({string})ob->Query(P_REALNAME))+" is currently netdead.\n" );
-    else if ( ( ! interactive( ob ) ) ||
-      ( ({int})ob->check_ignore( "tell", this_player() ) > 0 ) ) {
-      lt += ({ ob }); /* add to local recipients */
-      rn += ({ ({string})ob->Query( P_REALNAME ) });
-    }
-    else {
-      /* write proper message for ignore */
-      if ( ! IS_IMMORTAL( this_player() ) && ({int})ob->Query( P_INVIS ) )
-        msg_write( CMSG_GENERIC, "No living named '"+capitalize(whos[i])+"' found.\n");
-      else
-        msg_write( CMSG_GENERIC, capitalize(({string})ob->Query(P_REALNAME))+" ignores you.\n" );
-    }
+    if ( ob ) {
+      /* check for netdead and ignore */
+      if (!interactive(ob) && query_once_interactive(ob))
+        msg_write( CMSG_GENERIC, capitalize(({string})ob->Query(P_REALNAME))+" is currently netdead.\n" );
+      else if ( ( ! interactive( ob ) ) ||
+        ( ({int})ob->check_ignore( "tell", this_player() ) > 0 ) ) {
+        lt += ({ ob }); /* add to local recipients */
+        rn += ({ ({string})ob->Query( P_REALNAME ) });
+      }
+      else {
+        /* write proper message for ignore */
+        if ( ! IS_IMMORTAL( this_player() ) && ({int})ob->Query( P_INVIS ) )
+          msg_write( CMSG_GENERIC, "No living named '"+capitalize(whos[i])+"' found.\n");
+        else
+          msg_write( CMSG_GENERIC, capitalize(({string})ob->Query(P_REALNAME))+" ignores you.\n" );
+      }
 
-    /* for invisible targets and player tells fake not found */
-    if ( ! IS_IMMORTAL( this_player() ) && ({int})ob->Query(P_INVIS ) )
-      msg_write( CMSG_GENERIC, "No living named '"+capitalize(whos[i])+"' found.\n");
+      /* for invisible targets and player tells fake not found */
+      if ( ! IS_IMMORTAL( this_player() ) && ({int})ob->Query(P_INVIS ) )
+        msg_write( CMSG_GENERIC, "No living named '"+capitalize(whos[i])+"' found.\n");
     }
   }
-
   /* handle intermud tells first */
   for( i = 0; i < sizeof( mt ); i ++ ) {
 #ifdef FEATURES_INTERMUD3
@@ -221,8 +219,8 @@ int main ( string str ) {
                                      SENDER: ({string})this_player()->Query( P_REALNAME ),
                                      DATA: msg
                                     ]), 1) ) {
-      msg_write( CMSG_GENERIC, "Intermud tell to "+atconcat(mt[i])+" failed with error: "+tmp2 );
-      mt[i] = 0;
+        msg_write( CMSG_GENERIC, "Intermud tell to "+atconcat(mt[i])+" failed with error: "+tmp2 );
+        mt[i] = 0;
       }
 #ifdef FEATURES_INTERMUD3
     }
@@ -237,13 +235,13 @@ int main ( string str ) {
   if ( i = sizeof( mt ) ) {
     msg_write( CMSG_GENERIC, "Intermud tell"+(i>1?"s":"")+" to " );
     switch( i ) {
-    case 1:
-      msg_write( CMSG_GENERIC, atconcat( mt[0] ) );
-      break;
-    default:
-      tmp = map( mt, #'atconcat /*'*/ );
-      msg_write( CMSG_GENERIC, implode( tmp[0..<2], ", " ) + " and "+tmp[<1] );
-      break;
+      case 1:
+        msg_write( CMSG_GENERIC, atconcat( mt[0] ) );
+        break;
+      default:
+        tmp = map( mt, #'atconcat /*'*/ );
+        msg_write( CMSG_GENERIC, implode( tmp[0..<2], ", " ) + " and "+tmp[<1] );
+        break;
     }
     msg_write( CMSG_GENERIC, " sent.\n" );
   }
@@ -268,16 +266,14 @@ int main ( string str ) {
       tmp -= ({ 0 });
 
       if ( sizeof ( tmp ) )
-  txt = btext+implode( tmp, "," )+" and ";
+        txt = btext+implode( tmp, "," )+" and ";
       else
-  txt = btext;
+        txt = btext;
     }
-
     ob->receive_msg( CMSG_TELL, this_player(), txt+"you: "+msg+"\n" );
     ob->Set( P_TELL_REPLYTO, ( rn -
                                ({ ({string})ob->Query(P_REALNAME) }) +
                                ({ ({string})this_player()->Query(P_REALNAME) }) ) );
-
     if ( ! IS_IMMORTAL( this_player() ) && ({int})ob->Query( P_INVIS ) )
       lt[i] = 0;
   }
@@ -312,7 +308,6 @@ int main ( string str ) {
     else
       msg_write( CMSG_TELL|MMSG_NOREPLY, "Ok.\n" );
   }
-
   /* finally done */
   return 1;
 }

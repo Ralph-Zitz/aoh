@@ -799,7 +799,7 @@ public varargs int fgive (string arg) {
     return 0;
   }
   arg = tmp;
-  notify_fail("Give what to "+to+"?", NOTIFY_NOT_OBJ);
+  notify_fail("Give what to "+to+"?\n", NOTIFY_NOT_OBJ);
   if (!arg)
     return 0;
   rc = Give(arg, to, PUTGET_FULL);
@@ -824,7 +824,7 @@ public varargs int fput (string arg) {
   }
   where = arg[sizeof(tmp)+1..sizeof(tmp)+4];
   arg = tmp;
-  notify_fail("Put what "+where+" "+to+"?", NOTIFY_NOT_OBJ);
+  notify_fail("Put what "+where+" "+to+"?\n", NOTIFY_NOT_OBJ);
   if (!arg)
     return 0;
   Set(TMP_WHERE,where);

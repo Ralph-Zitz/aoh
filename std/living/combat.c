@@ -39,7 +39,6 @@
 #define TI this_interactive()
 #define ENV environment
 #define SF(x) #'x //' Emacs-Hack
-#define DBG(x) if(find_player("nostradamus")) tell_object(find_player("nostradamus"), x)
 
 /*#include "log.h"*/
 
@@ -69,7 +68,10 @@ public int combat_heartbeat();
 
 nosave mixed delaymsg;
 nosave int   delaybeats;
-nosave mixed *enemies, *hunters;
+nosave int   aggressive;
+nosave int   a_ness;
+nosave mixed *enemies;
+nosave mixed *hunters;
 nosave mixed *defences;
 nosave mixed *weapons;
 nosave mixed *hands;
@@ -79,10 +81,8 @@ nosave object friendobj;
 nosave mixed  equipobj;
 nosave object last_wield_ob;
 nosave object last_wear_ob;
-
 nosave object magicobj;  /* Denotes the object for doing magic */
 
-nosave int aggressive, a_ness;
 
 // -----------------------------------------------------------------------------
 // Add-, Get-, Remove-, Set- and Query-Functions
@@ -172,9 +172,10 @@ public status AddEnemy(object e)
       || e == ME
      )
     return 0;
-  enemies += ({e});
-  f = QueryFollowers()||({});
-  if (member(f,0)!=-1) f-=({0});
+  enemies += ({ e });
+  f = QueryFollowers() || ({});
+  if (member(f,0) != -1)
+      f -= ({ 0 });
   map_objects(f,"NotifyAddEnemy",e);
   AddHeart(HEART_COMBAT);
   return 1;
@@ -184,15 +185,16 @@ public status RemoveEnemy(object e)
 {
   object *f;
   if (enemies && member(enemies,e)!=-1)
-    {
-      enemies-=({e});
-      f = QueryFollowers()||({});
-      if (member(f,0)!=-1) f-=({0});
-      map_objects(f,"NotifyRemoveEnemy",e);
-      if (!sizeof(enemies) && !delaybeats)
-        RemoveHeart(HEART_COMBAT);
-      return 1;
-    }
+  {
+    enemies -= ({ e });
+    f = QueryFollowers() || ({});
+    if (member(f,0)!=-1)
+      f -= ({ 0 });
+    map_objects(f,"NotifyRemoveEnemy",e);
+    if (!sizeof(enemies) && !delaybeats)
+      RemoveHeart(HEART_COMBAT);
+    return 1;
+  }
   return 0;
 }
 
@@ -207,9 +209,10 @@ private status AddHunter(object e)
    || (hunters && member(hunters,e)!=-1)
      )
     return 0;
-  hunters += ({e});
-  f = QueryFollowers()||({});
-  if (member(f,0)!=-1) f-=({0});
+  hunters += ({ e });
+  f = QueryFollowers() || ({});
+  if (member(f,0) != -1)
+    f -= ({ 0 });
   map_objects(f,"NotifyAddHunter",e);
   return 1;
 }
@@ -218,13 +221,14 @@ public status RemoveHunter(object e)
 {
   object *f;
   if (hunters && member(hunters,e)!=-1)
-    {
-      hunters-=({e});
-      f = QueryFollowers()||({});
-      if (member(f,0)!=-1) f-=({0});
-      map_objects(f,"NotifyRemoveHunter",e);
-      return 1;
-    }
+  {
+    hunters -= ({ e });
+    f = QueryFollowers() || ({});
+    if (member(f,0) != -1)
+      f -= ({ 0 });
+    map_objects(f,"NotifyRemoveHunter",e);
+    return 1;
+  }
   return 0;
 }
 
@@ -252,10 +256,10 @@ public object QueryFriendObj() { return friendobj; }
 public void StartHunting(object e)
 {
   if (RemoveEnemy(e) && e)
-    {
-      AddHunter(e);
-      msg_object( e, CMSG_COMBAT_SELF, "You are hunted by "+(QueryName()||"someone")+".\n");
-    }
+  {
+    AddHunter(e);
+    msg_object(e, CMSG_COMBAT_SELF, "You are hunted by "+(QueryName()||"someone")+".\n");
+  }
 }
 
 public void StopHunting(object e)
@@ -269,7 +273,7 @@ public void StopAllHunting()
   int i;
   object e;
   if (enemies)
-    for (i=sizeof(enemies); i--; )
+    for (i=sizeof(enemies); i--;)
       if (e=enemies[i])
       {
         StopHunting(e);
@@ -327,12 +331,12 @@ public void Kill(object ob)
   if (   objectp(ob)
       && AddEnemy(ob)
      )
-    {
-      msg_object( ob, CMSG_COMBAT_SELF|MMSG_DIRECT,
-    capitalize((Query(P_NAME)||Query(P_SHORT)||"Someone"))+
-    " attacks you!\n" );
-      AddHeart(HEART_COMBAT);
-    }
+  {
+    msg_object( ob, CMSG_COMBAT_SELF|MMSG_DIRECT,
+      capitalize((Query(P_NAME)||Query(P_SHORT)||"Someone"))+
+      " attacks you!\n" );
+    AddHeart(HEART_COMBAT);
+  }
 }
 
 public status CalcIsHit(object attacker)
@@ -365,59 +369,59 @@ public object do_hit(mixed x)
   if (!enemies || !sizeof(enemies)) return 0;
   enemy = enemies[random(sizeof(enemies))];
   if (!enemy || ({int})enemy->QueryHP() < 0 )
-    {
-      StopHunting(enemy);
-      return 0;
-    }
+  {
+    StopHunting(enemy);
+    return 0;
+  }
   if (!present(enemy) && enemy != environment())
-    {
-      StartHunting(enemy);
-      return 0;
-    }
+  {
+    StartHunting(enemy);
+    return 0;
+  }
 
   if (objectp(x))
-    {
-      xshort = ({string})x->QueryShort(); /* counter self-destructing weapons */
-      damage = ({int})x->QueryDamage(enemy);
-      damage_type = ({int})x->QueryDamageType();
-      if (({int})x->QueryOldCombat())
   {
-    switch (damage_type)
-      {
-      case DT_BLUDGEON: how = " charge on "; hows = " charges on "; break;
-      case DT_PIERCE: how = " stab at "; hows = " stabs at "; break;
-      case DT_SLASH: how = " slash at "; hows = " slashes at "; break;
-      default: how = " attack "; hows = " attacks ";
-      }
-    msg_object( ME, CMSG_COMBAT_SELF,
-        "You"+how+({string})enemy->QueryName() +" with "+xshort);
-    msg_object( enemy, CMSG_COMBAT,
-        "  "+capitalize(QueryName())+hows+"you with "+xshort);
-    msg_say( CMSG_COMBAT_OTHERS,
-     "  "+capitalize(QueryName())+hows+({string})enemy->QueryName()+" with "
-     +xshort,({ME, enemy}));
-  }
-    }
-  else
+    xshort = ({string})x->QueryShort(); /* counter self-destructing weapons */
+    damage = ({int})x->QueryDamage(enemy);
+    damage_type = ({int})x->QueryDamageType();
+    if (({int})x->QueryOldCombat())
     {
-      /* Magic formula for hand attacks */
-      damage = random(3*hands[x][HAND_WC]/5+QueryDex()/5 + QueryStr()/5);
-      damage_type = DT_BLUDGEON;
-      msg_object( ME, CMSG_COMBAT_SELF, "You attack "+({string})enemy->QueryName()
-    +" with "+hands[x][HAND_SHORT]);
-      msg_object(enemy, CMSG_COMBAT,
-   "  "+capitalize(QueryName())+" attacks you with "
-   +hands[x][HAND_SHORT]);
+      switch (damage_type)
+      {
+        case DT_BLUDGEON: how = " charge on "; hows = " charges on "; break;
+        case DT_PIERCE: how = " stab at "; hows = " stabs at "; break;
+        case DT_SLASH: how = " slash at "; hows = " slashes at "; break;
+        default: how = " attack "; hows = " attacks ";
+      }
+      msg_object( ME, CMSG_COMBAT_SELF,
+        "You"+how+({string})enemy->QueryName() +" with "+xshort);
+      msg_object( enemy, CMSG_COMBAT,
+        "  "+capitalize(QueryName())+hows+"you with "+xshort);
       msg_say( CMSG_COMBAT_OTHERS,
-         "  "+capitalize(QueryName())+" attacks "+({string})enemy->QueryName()+" with "
-         +hands[x][HAND_SHORT],({ME, enemy}));
+        "  "+capitalize(QueryName())+hows+({string})enemy->QueryName()+" with "
+        +xshort,({ME, enemy}));
     }
+  }
+  else
+  {
+    /* Magic formula for hand attacks */
+    damage = random(3*hands[x][HAND_WC]/5+QueryDex()/5 + QueryStr()/5);
+    damage_type = DT_BLUDGEON;
+    msg_object( ME, CMSG_COMBAT_SELF, "You attack "+({string})enemy->QueryName()
+      +" with "+hands[x][HAND_SHORT]);
+      msg_object(enemy, CMSG_COMBAT,
+      "  "+capitalize(QueryName())+" attacks you with "
+      +hands[x][HAND_SHORT]);
+    msg_say( CMSG_COMBAT_OTHERS,
+      "  "+capitalize(QueryName())+" attacks "+({string})enemy->QueryName()+" with "
+      +hands[x][HAND_SHORT],({ME, enemy}));
+  }
 
   if (enemy)
-    {
-      damage = ({int})enemy->Defend(damage, damage_type, objectp(x)?x:0);
-      AddXP(damage);
-    }
+  {
+    damage = ({int})enemy->Defend(damage, damage_type, objectp(x)?x:0);
+    AddXP(damage);
+  }
   return enemy;
 }
 
@@ -427,13 +431,17 @@ public void Attack()
   int i,h;
 
   /* Perhaps do attack chatting */
-  if (Query(P_ACHAT_CHANCE)) ME->DoAttackChat();
+  if (Query(P_ACHAT_CHANCE))
+    ME->DoAttackChat();
 
   /* Scan all weapons and free 'hands' */
   for (i = sizeof(weapons) + 1; --i;)
-    if (w = weapons[<i]) do_hit(w);
+    if (w = weapons[<i])
+      do_hit(w);
   h=sizeof(hands);
-  for (i = h + 1; --i;) if (!objectp(hands[<i][HAND_WEAPON])) do_hit(h - i);
+  for (i = h + 1; --i;)
+    if (!objectp(hands[<i][HAND_WEAPON]))
+      do_hit(h - i);
 }
 
 public varargs int Defend(int dam, int dam_type, mixed weapon)
@@ -639,7 +647,8 @@ public void unwieldme(object ob)
 {
   int i;
   for (i = sizeof(hands); i--;)
-    if (hands[i][HAND_WEAPON] == ob) hands[i][HAND_WEAPON] = 0;
+    if (hands[i][HAND_WEAPON] == ob)
+      hands[i][HAND_WEAPON] = 0;
   weapons -= ({ob});
 }
 
@@ -653,34 +662,40 @@ public int wearme(object ob)
   last_wear_ob = ob;
   i = ({int})ob->wear(ME);
   last_wear_ob = 0;
-  if (!i) return 0;
+  if (!i)
+    return 0;
   at = ({mixed})ob->QueryArmourType();
   if (!VALID_ARMOUR_TYPE(at))
-    {
-      msg_write( CMSG_GENERIC,
-        ({string})ob->QueryShort()+" does not have a valid armour type.\n");
-      log_file("INVALID_ARMOUR",
-         ctime(time())+" "+({string})ME->QueryRealName()+" "+object_name(ob)
-         +" UID "+getuid(ob)+" EUID "+geteuid(ob)+"\n");
-      return 0;
-    }
+  {
+    msg_write( CMSG_GENERIC,
+      ({string})ob->QueryShort()+" does not have a valid armour type.\n");
+    log_file("INVALID_ARMOUR",
+       ctime(time())+" "+({string})ME->QueryRealName()+" "+object_name(ob)
+       +" UID "+getuid(ob)+" EUID "+geteuid(ob)+"\n");
+    return 0;
+  }
 
   for (i = sizeof(armours); i--;)
     if (armours[i] && ({mixed})armours[i]->QueryArmourType() == at)
-      {
-  if (armours[i] == ob)
-    return 1;
-  msg_write( CMSG_GENERIC, "You are already wearing "+add_a(at)+".\n");
-  return 0;
-      }
-  if (AT_SHIELD == at)
     {
-      int h;
-      if ((h = ({int})ob->QueryWeaponHands()) < 1) h = 1;
-      for (i = sizeof(hands); i-- && h;) if (!hands[i][HAND_WEAPON]) h--;
-      if (h) { msg_write( CMSG_GENERIC,
-    "You don't have enough free hands!\n"); return 0; }
+      if (armours[i] == ob)
+        return 1;
+      msg_write( CMSG_GENERIC, "You are already wearing "+add_a(at)+".\n");
+      return 0;
     }
+  if (AT_SHIELD == at)
+  {
+    int h;
+    if ((h = ({int})ob->QueryWeaponHands()) < 1)
+      h = 1;
+    for (i = sizeof(hands); i-- && h;)
+      if (!hands[i][HAND_WEAPON])
+        h--;
+    if (h) {
+      msg_write( CMSG_GENERIC, "You don't have enough free hands!\n");
+      return 0;
+    }
+  }
   return 1;
 }
 
@@ -688,7 +703,8 @@ public void removeme(object ob)
 {
   int i;
   for (i = sizeof(hands); i--;) /* search for shields */
-    if (hands[i][HAND_WEAPON] == ob) hands[i][HAND_WEAPON] = 0;
+    if (hands[i][HAND_WEAPON] == ob)
+      hands[i][HAND_WEAPON] = 0;
   armours -= ({ob});
 }
 
@@ -725,11 +741,11 @@ public mixed RemoveEquipObj(mixed o)
   if (!equipobj)
     return 0;
   if (objectp(equipobj))
-    {
-      if (equipobj == o)
-  equipobj = 0;
-      return equipobj;
-    }
+  {
+    if (equipobj == o)
+      equipobj = 0;
+    return equipobj;
+  }
   return equipobj -= ({ o, 0 });
 }
 
@@ -749,12 +765,12 @@ public status AddWeapon(object ob)
 public void RemoveWeapon(object ob, int flags)
 {
   if (-1 != member(weapons, ob))
-    {
-      weapons -= ({ ob });
-      if (PREV != ob)
-  ob->Unwield(flags);
-      ob->SetWielded(0);
-    }
+  {
+    weapons -= ({ ob });
+    if (PREV != ob)
+      ob->Unwield(flags);
+    ob->SetWielded(0);
+  }
 }
 
 public status AddArmour(object ob)
@@ -820,10 +836,10 @@ public int Grip(object ob)
 
   for (i = sizeof(hands) + 1; --i && h;)
     if (!hands[<i][HAND_WEAPON])
-      {
-  hands[<i][HAND_WEAPON] = ob;
-  h--;
-      }
+    {
+      hands[<i][HAND_WEAPON] = ob;
+      h--;
+    }
   return 1;
 }
 

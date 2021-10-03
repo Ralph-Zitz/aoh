@@ -771,6 +771,7 @@ void add_ancient_commands() {
 void add_wiz_commands() {
   if (ME != PL) return;
   add_action("cmd_home", "home");
+  add_action("cmd_wizlist", "wizlist");
 }
 
 /* -------------------------------------------------------------------------
@@ -1411,6 +1412,11 @@ static int cmd_home(string str) {
       || rc != 1)
     rc = move( STARTROOM, M_TELEPORT);
   return rc;
+}
+
+static int cmd_wizlist(string str) {
+  wizlist(str);
+  return 1;
 }
 
 /* *************************************************************************

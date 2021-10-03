@@ -51,8 +51,8 @@ public int main( string arg )
   if (({int})this_player()->QueryGhost())
   {
     msg_write(CMSG_GENERIC,
-    "You can't use the command score right now.  Perhaps you're\n"+
-      "dead or something.  Please try again later.  Thank you.\n");
+    "You can't use the command score right now.  Perhaps you're "+
+      "dead or something. Please try again later. Thank you.\n");
     return 1;
   }
 
@@ -88,6 +88,15 @@ public int main( string arg )
   if (reminvis) short = (short || "")+" (invisible)";
 /* nice confusing invis sequence eh? */
 
+  string *enem = map(({object *})TP->QueryEnemies(), (: return ({string})$1->Short(); :));
+  string enemy = "Nobody";
+  if (!sizeof(enem)) {
+    enem = map(({object *})TP->QueryHunters(), (: return ({string})$1->Short(); :));
+    if (sizeof(enem))
+      enemy = "%^BOLD%^%^RED%^" + enem[0] + "%^RESET%^";
+  } else {
+    enemy = "%^BOLD%^%^RED%^" + enem[0] + "%^RESET%^";
+  }
   msg="";
   msg+=({string})L_STRING->cadjust(" "+({string})TP->QueryShort()+"'s score ",75,"-=")+"\n";
   msg += sprintf(
@@ -96,13 +105,13 @@ public int main( string arg )
   "Str:  %3.3d      Money: %-10.10d  Race:   %-15.15s \n"
   "Con:  %3.3d      Bank:  %-10.10d  Guild:  %-15.15s \n"
   "Int:  %3.3d      Known: %-3.3d%%        Gender: %-4.6s\n"
-  "Wis:  %3.3d      XP:    %-10.10d  \n"
+  "Wis:  %3.3d      XP:    %-10.10d  Enemy:  %-15.50s\n"
   "Agi:  %3.3d                       \n"
   "Qui:  %3.3d      Wimpy: %-3.3d         Load:   %-1.8d stones \n"
   "Cha:  %3.3d      Mails: %-3.3d         Age:    %-20.20s\n"
   "\n"
-  "HP:  %s%-3.3d/%3.3d%s   Spec:              Food:    %-16.16s\n"
-  "SP:  %s%-3.3d/%3.3d%s   Aim:               Water:   %-16.16s\n"
+  "HP:  %s%-3.3d/%3.3d%s   Spec: %-10.11s  Food:    %-16.16s\n"
+  "SP:  %s%-3.3d/%3.3d%s   Aim:  %-11.11s  Water:   %-16.16s\n"
   "PEP: %s%-3.3d/%3.3d%s                      Alcohol: %-16.16s\n"
   "MEP: %s%-3.3d/%3.3d%s                      \n"
   ,
@@ -113,11 +122,16 @@ public int main( string arg )
   ({int})TP->QueryCon(), l, ({string})TP->QueryGuild(),
   ({int})TP->QueryInt(), k, CAP(({string})TP->QueryGenderString()),
   ({int})TP->QueryWis(), ({int})TP->QueryXP(),
+  enemy,
   ({int})TP->QueryAgi(),
   ({int})TP->QueryQui(), ({int})TP->QueryWimpy(),   ({int})TP->QueryWeightContent()/10,
   ({int})TP->QueryCha(), ({int})MAILDEMON->FingerMail(getuid(TP)),({string})TP->AgeString(),
-  hpcol,({int})TP->QueryHP(), ({int})TP->QueryMaxHP(),rescol, ({string})TP->QueryFoodMsg(),
-  spcol,({int})TP->QuerySP(), ({int})TP->QueryMaxSP(),rescol, ({string})TP->QueryDrinkMsg(),
+  hpcol,({int})TP->QueryHP(), ({int})TP->QueryMaxHP(),rescol,
+  "Placeholder",
+  ({string})TP->QueryFoodMsg(),
+  spcol,({int})TP->QuerySP(), ({int})TP->QueryMaxSP(),rescol,
+  "Body",
+  ({string})TP->QueryDrinkMsg(),
   pepcol,({int})TP->QueryPEP(),({int})TP->QueryMaxPEP(),rescol,({string})TP->QueryAlcoholMsg(),
   mepcol,({int})TP->QueryMEP(),({int})TP->QueryMaxMEP(),rescol
   );

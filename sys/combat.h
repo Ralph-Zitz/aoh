@@ -49,7 +49,7 @@
 
 #define MAX_CLASS   20  // Nominal maximum value
 #define CLASS_SCALE  5  // Scalefactor to cvert class values <-> 0..100 range.
- 
+
 // Combat skills, partially used as weapontypes as well
 
 #define CS_HAND      "CsHand"     // Martial arts, also defensive
@@ -99,9 +99,11 @@
 #define AIM_ARMS      "arms"
 #define AIM_LEGS      "legs"
 
-#define VALID_AIM(a) (member( ({ \
-  AIM_FEET, AIM_OTHER, AIM_BODY, AIM_HANDS, AIM_HEAD, AIM_ARMS,\
-  AIM_LEGS }), a) != -1)
+#define AIM_LOCATIONS ({ \
+	AIM_FEET, AIM_OTHER, AIM_BODY, AIM_HANDS, AIM_HEAD, AIM_ARMS,\
+	AIM_LEGS })
+
+#define VALID_AIM(a) (member(AIM_LOCATIONS, a) != -1)
 
 // Damage types
 // Negative types affect the whole victim
@@ -114,7 +116,7 @@
 #define DT_WATER     6   // water??
 #define DT_GAS       7   // poison gas
 #define DT_ZAP	     8   // finger of death
-#define DT_ELECTRO   9   // 
+#define DT_ELECTRO   9   //
 #define DT_ACID     10   //
 #if 0
 #define DT_POISON   -1   // all sorts of poison

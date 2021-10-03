@@ -72,6 +72,7 @@ private int load_scope(int i) {
     scopes["debug"] = ({ "/aoh.debug.log", 1, 0 });
     scopes["generic"] = ({ "/log/ERR/generic", 1, 0 });
     scopes["daemons"] = ({ "/log/ERR/daemons", 1, 0 });
+    scopes["skills"] = ({ "/log/ERR/skills", 1, 0 });
     scopes["money"] = ({ "/log/ERR/money", 1, 0 });
     scopes["silvere"] = ({ "/d/silvere/.err", 1, 0 });
     scopes["std"] = ({ "/log/ERR/std", 1, 0 });
@@ -124,6 +125,7 @@ varargs void create() {
   scopes["debug"] = ({ "/aoh.debug.log", 1, 0 });
   scopes["generic"] = ({ "/log/ERR/generic", 1, 0 });
   scopes["daemons"] = ({ "/log/ERR/daemons", 1, 0 });
+  scopes["skills"] = ({ "/log/ERR/skills", 1, 0 });
   scopes["money"] = ({ "/log/ERR/money", 1, 0 });
   scopes["silvere"] = ({ "/d/silvere/.err", 1, 0 });
   scopes["std"] = ({ "/log/ERR/std", 1, 0 });

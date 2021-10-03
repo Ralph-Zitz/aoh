@@ -55,6 +55,7 @@
 #include "/secure/kernel/compat.ic"
 #include "/secure/kernel/terminal_colour.ic"
 #include "/secure/kernel/query_snoop.ic"
+#include "/secure/kernel/process_mxp.ic"
 #include "/secure/kernel/override.ic"
 #include "/secure/kernel/string.ic"
 #include "/secure/kernel/debug_info.ic"
@@ -79,11 +80,11 @@
 #include "/secure/kernel/query_editing.ic"
 #include "/secure/kernel/query_input_pending.ic"
 #include "/secure/kernel/query_idle.ic"
-#include "/secure/kernel/process_mxp.ic"
 #else
 #include "/secure/sparekernel/compat.ic"
 #include "/secure/sparekernel/terminal_colour.ic"
 #include "/secure/sparekernel/query_snoop.ic"
+#include "/secure/sparekernel/process_mxp.ic"
 #include "/secure/sparekernel/override.ic"
 #include "/secure/sparekernel/string.ic"
 #include "/secure/sparekernel/debug_info.ic"
@@ -108,7 +109,6 @@
 #include "/secure/sparekernel/query_editing.ic"
 #include "/secure/sparekernel/query_input_pending.ic"
 #include "/secure/sparekernel/query_idle.ic"
-#include "/secure/sparekernel/process_mxp.ic"
 #endif
 
 /*-------------------------------------------------------------------------*/

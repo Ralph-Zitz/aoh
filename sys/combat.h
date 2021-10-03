@@ -91,6 +91,18 @@
 
 #define AT_HITZONES   7  // Number of target zones
 
+#define AIM_FEET      "feet"
+#define AIM_OTHER     "other"
+#define AIM_BODY      "body"
+#define AIM_HANDS     "hands"
+#define AIM_HEAD      "head"
+#define AIM_ARMS      "arms"
+#define AIM_LEGS      "legs"
+
+#define VALID_AIM(a) (member( ({ \
+  AIM_FEET, AIM_OTHER, AIM_BODY, AIM_HANDS, AIM_HEAD, AIM_ARMS,\
+  AIM_LEGS }), a) != -1)
+
 // Damage types
 // Negative types affect the whole victim
 

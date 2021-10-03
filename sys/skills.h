@@ -14,33 +14,38 @@
 // Throwing this in from the old file for the Adv Guild
 #define FAIL_LEARN_CHANCE 15 // the chance to learn from failures
 #define GENERAL_LIST ({SK_THROW,SK_CLIMB,SK_SWIM,SK_JUMP,SK_DETECT,SK_SHOOT})
-
+#define ROOM_VERBS    "room_verbs"
+#define LIVING_VERBS  "living_verbs"
+#define THING_VERBS   "thing_verbs"
+#define ROOM_SKILLS   "room_skills"
+#define LIVING_SKILLS "living_skills"
+#define THING_SKILLS  "thing_skills"
 
 // ****************** MAGIC SKILLS *******************************************
-#define SK_FIRE      "fire"     // the ability to cast fire spells 
+#define SK_FIRE      "fire"            // the ability to cast fire spells 
 
 // ****************** BODY SKILLS ********************************************
 // Defined in std/room
 #define SK_SEARCH      "searching"     // the ability to throw something
-#define SK_CLIMB       "climbing"     // climbing on hills, trees
-#define SK_SWIM        "swimming"     // swim through oceans, ...
-#define SK_JUMP        "jumping"      // jumping 5 metres and more ;-)
+#define SK_CLIMB       "climbing"      // climbing on hills, trees
+#define SK_SWIM        "swimming"      // swim through oceans, ...
+#define SK_JUMP        "jumping"       // jumping 5 metres and more ;-)
 
-#define SK_DETECT      "perception"       // detect traps, secrets, etc.
+#define SK_DETECT      "perception"    // detect traps, secrets, etc.
 
 // Defined in std/thing
-#define SK_THROW       "throwing"     // the ability to throw something
+#define SK_THROW       "throwing"      // the ability to throw something
 
 // Not yet implemented
-#define SK_REPAIR      "repair"       // repair skill for weapons
+#define SK_REPAIR      "repair"        // repair skill for weapons
 #define SK_SHOOT       "shooting"
 
 // ************* PATH and FILENAMES ******************************************
 
-#define SK_MAIN     "/p/skills/"         // The root directory
-#define SK_STD(x)   SK_MAIN "std/"+(x)   // The std code
-#define SK_MOD(x)   SK_MAIN "modules/"+(x)  // The skill modules
-#define SK_DATA(x)  SK_MAIN "data/"+(x)  // The definition for the skills
+#define SK_MAIN     "/p/skills/"                 // The root directory
+#define SK_STD(x)   SK_MAIN "std/" x             // The std code
+#define SK_MOD(x)   SK_MAIN "modules/" x         // The skill modules
+#define SK_DATA(x)  SK_MAIN "data/" x            // The definition for the skills
 
 #define SKILLSERVER "/p/skills/std/skillserver"  // The main skill handler
 

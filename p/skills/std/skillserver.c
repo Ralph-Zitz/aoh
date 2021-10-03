@@ -176,8 +176,7 @@ int QuerySkillMax(string skill)
 int IsSkill(string skill)
 {
   if (!skill) return 0;
-  if (!member(m_skills,skill)) return 0;
-  return 1;
+  return member(m_skills, skill);
 }
 
 
@@ -235,14 +234,14 @@ string QueryFailString(string skill,object who)
 string *QueryThingVerbs()
 {
   if (!m_internal) return ({});
-  return m_internal["thing_verbs"]||({});
+  return m_internal[THING_VERBS]||({});
 }
 
 // Returns the verbs added via add_action to std/living
 string *QueryLivingVerbs()
 {
   if (!m_internal) return ({});
-  return m_internal["living_verbs"]||({});
+  return m_internal[LIVING_VERBS]||({});
 }
 
 // Returns the verbs added via add_action to std/room
@@ -250,7 +249,7 @@ string *QueryLivingVerbs()
 string *QueryRoomVerbs()
 {
   if (!m_internal) return ({});
-  return m_internal["room_verbs"]||({});
+  return m_internal[ROOM_VERBS]||({});
 }
 // Returns the SK_XXXX for a given verb
 // TODO: Do this automatically when loading the skill
@@ -267,7 +266,7 @@ string VerbToSkill(string skill_verb)
 
   if (idx>=0)
   {
-    ids=m_internal["room_skills"];
+    ids=m_internal[ROOM_SKILLS];
 	  if (!ids || sizeof(ids)-1 < idx)
 	  {
 	    raise_error("Skillserver: Verb-skill matching error for rooms.\n");
@@ -282,7 +281,7 @@ string VerbToSkill(string skill_verb)
 
   if (idx>=0)
   {
-    ids=m_internal["thing_skills"];
+    ids=m_internal[THING_SKILLS];
 	if (!ids || sizeof(ids)-1 < idx)
 	{
 	  raise_error("Skillserver: Verb-skill matching error for things.\n");
@@ -297,7 +296,7 @@ string VerbToSkill(string skill_verb)
 
   if (idx>=0)
   {
-    ids=m_internal["living_skills"];
+    ids=m_internal[LIVING_SKILLS];
 	if (!ids || sizeof(ids)-1 < idx)
 	{
 	  raise_error("Skillserver: Verb-skill matching error for livings.\n");
@@ -315,7 +314,7 @@ string VerbToSkill(string skill_verb)
 // ========================= Auxiliary functions ============================
 varargs string ValueToString(int skill,int flag)
 {
-  string s_end;
+  string s_end = "";
 
   if (flag & 1)     // Add the dezimal number as well
   {

@@ -109,7 +109,7 @@ string *QuerySkills(string class)
 
 varargs int CanLearnSkill(string skill,object who)
 {
-  string *races. *guilds;
+  string *races, *guilds;
 
   if (!who) who=TP;
   if (!who || !skill) return 0;

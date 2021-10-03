@@ -23,7 +23,7 @@ public string process_mxp(string message, int does_mxp) {
     string *processed_lines = allocate(sizeof(original_lines));
 
     for (line = 0; line < sizeof(original_lines); line++) {
-	processed_lines[line] = does_mxp ? MXPMODE(1) : "";
+        processed_lines[line] = does_mxp ? MXPMODE(1) : "";
 
         length = sizeof(original_lines[line]);
 

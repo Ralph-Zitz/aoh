@@ -13,10 +13,9 @@
 #include <daemons.h>
 #include <msgclass.h>
 #include <money.h>
+#include <string.h>
+#include <macros.h>
 
-#define TP this_player()
-#define CAP(x)  capitalize( (x)||"" )
-#define SLIB "/lib/string"
 inherit MONEY_LIB;
 
 string GetColour(int amount,int max)
@@ -90,7 +89,7 @@ public int main( string arg )
 /* nice confusing invis sequence eh? */
 
   msg="";
-  msg+=({string})SLIB->cadjust(" "+({string})TP->QueryShort()+"'s score ",75,"-=")+"\n";
+  msg+=({string})L_STRING->cadjust(" "+({string})TP->QueryShort()+"'s score ",75,"-=")+"\n";
   msg += sprintf(
   "Title: %s %s\n"
   "Level: %d\n\n"
@@ -123,7 +122,7 @@ public int main( string arg )
   mepcol,({int})TP->QueryMEP(),({int})TP->QueryMaxMEP(),rescol
   );
 
-  msg+=({string})SLIB->mkstr(75,"-=")+"\n";
+  msg+=({string})L_STRING->mkstr(75,"-=")+"\n";
   msg_write( CMSG_GENERIC,msg);
   seteuid(0);
   return 1;

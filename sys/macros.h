@@ -31,11 +31,11 @@
 #endif
 
 #ifndef CAP
-#define CAP(x)    capitalize(x)
+#define CAP(x)    capitalize(x||"")
 #endif
 
 #ifndef LOW
-#define LOW(x)   lower_case(x)
+#define LOW(x)   lower_case(x||"")
 #endif
 
 #ifndef SF

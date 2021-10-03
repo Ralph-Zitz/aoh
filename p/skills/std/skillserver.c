@@ -2,7 +2,7 @@
 // /p/skills/skillserver.c
 //
 // The basic skill handling of OSB
-// (c) Softbyte@OSB 3oct97 
+// (c) Softbyte@OSB 3oct97
 // V1.0:  Basic skill handling and functions
 //---------------------------------------------------------------------------
 
@@ -19,7 +19,7 @@ inherit "/p/skills/std/database";       // file handling
 #define TO this_object()
 #define TP this_player()
 
-// mapping index for classes 
+// mapping index for classes
 #define M_C_SKILLS        0   // skills
 #define M_C_INFO          1   // class info
 #define M_C_HELP          2   // class help
@@ -31,7 +31,6 @@ inherit "/p/skills/std/database";       // file handling
 #define M_S_RACESTART     3   // mapping on the startvalues (races)
 #define M_S_RACEBONUS     4   // mapping on the startboni (races)
 
-
 // ========================= Protoypes ======================================
 string *QueryClasses();
 string *QuerySkills(string class);
@@ -39,22 +38,21 @@ string *QuerySkills(string class);
 // ========================= Variables ======================================
 mapping skill_to_class;   // fast access on classes
 
-
 // ========================= General functions ==============================
 // ************************      classes     ********************************
 //
 // Load the classes from the config file if necessary or forced
 varargs int LoadClassData(int force)
 {
-int i,j;
-string *classes;
-string *skills;
+  int i, j;
+  string *classes, *skills;
+
   if (!m_classes || force)
   {
     seteuid(getuid());
     if (!ReadClasses())  // did not read from inifile
     {
-       return -1;  
+       return -1;
     }
     skill_to_class=([]);
     classes=QueryClasses();
@@ -81,14 +79,14 @@ string FindClass(string skill)
 string QueryClassInfo(string class)
 {
   if (!m_classes || !member(m_classes,class)) return 0;
-  return m_classes[class,M_C_INFO]; 
+  return m_classes[class,M_C_INFO];
 }
 
 // Returns the ihelp text for a class
 string QueryClassHelp(string class)
 {
   if (!m_classes || !member(m_classes,class)) return 0;
-  return m_classes[class,M_C_HELP]; 
+  return m_classes[class,M_C_HELP];
 }
 
 // Returns an array of all class names
@@ -111,28 +109,29 @@ string *QuerySkills(string class)
 
 varargs int CanLearnSkill(string skill,object who)
 {
-string *races;
-string *guilds;
+  string *races. *guilds;
+
   if (!who) who=TP;
   if (!who || !skill) return 0;
 
   races=m_skills[skill,M_S_RACES]||({});
   if (member(races,"general")!=-1) return 1; // general skill
-  if (member(races,({string})who->QueryRace())!=-1) return 1; // correct race 
+  if (member(races,({string})who->QueryRace())!=-1) return 1; // correct race
 
   guilds=m_skills[skill,M_S_GUILDS]||({});
   if (member(guilds,"general")!=-1) return 1; // general skill
-  if (member(guilds,({string})who->QueryGuild())!=-1) return 1; // correct guild 
+  if (member(guilds,({string})who->QueryGuild())!=-1) return 1; // correct guild
 
   return 0;
 }
 
-// Returns the start value of a skill for a given race 
+// Returns the start value of a skill for a given race
 // if the race has no specifiic start the general start value is taken
 varargs int QuerySkillStart(string skill, object who)
 {
-mapping map;
-int value_general,value_race;
+  mapping map;
+  int value_general, value_race;
+
   if (!who) who=TP;
   if (!who || !skill) return 0;
 
@@ -143,11 +142,12 @@ int value_general,value_race;
   return value_general;
 }
 
-// Returns the bonus value of a skill for a given race 
+// Returns the bonus value of a skill for a given race
 varargs int QuerySkillBonus(string skill, object who)
 {
-mapping map;
-int value_race;
+  mapping map;
+  int value_race;
+
   if (!who) who=TP;
   if (!who || !skill) return 0;
 
@@ -186,22 +186,20 @@ int IsSkill(string skill)
 //
 int UseSkill(object who,string skill,int difficulty)
 {
-int dice1,dice2;
-int pl_skill;
-int result;
+  int dice1, dice2;
+  int pl_skill;
+  int result;
 
   pl_skill=({int})who->QuerySkill(skill);
-
 
   dice1=random(pl_skill)+1;
   dice2=random(difficulty)+1;
 
-
-  if (dice2<dice1)             // Success
+  if (dice2 < dice1)             // Success
   {
     result=(1000*dice2)/dice1;
   }
-  else                         // Failure
+  else                           // Failure
   {
     result=(-1000*dice1)/dice2;
   }
@@ -212,8 +210,7 @@ int result;
 // be used ... Might vanish...do not use !!!!!!!!!!
 varargs int ApplySkill(object who,string skill,int difficulty,mixed props)
 {
-int value;
-  value=UseSkill(who,skill,difficulty);
+  int value = UseSkill(who, skill, difficulty);
   return value;
 }
 
@@ -225,6 +222,7 @@ string CannotUseSkill(string skill,object who,int difficulty, string id_str,
 {
   return 0;
 }
+
 string QueryFailString(string skill,object who)
 {
   // TODO aus ini file
@@ -258,28 +256,30 @@ string *QueryRoomVerbs()
 // TODO: Do this automatically when loading the skill
 string VerbToSkill(string skill_verb)
 {
-string *ids;
-int idx;
+  string *ids;
+  int idx;
 
   if (!m_internal) return 0;
 
   // Is it a room action?
   ids=QueryRoomVerbs();
   idx=member(ids, skill_verb);
+
   if (idx>=0)
   {
     ids=m_internal["room_skills"];
-	if (!ids || sizeof(ids)-1 < idx)
-	{
-	  raise_error("Skillserver: Verb-skill matching error for rooms.\n");
-	  return 0;
-	}
-	return ids[idx];
+	  if (!ids || sizeof(ids)-1 < idx)
+	  {
+	    raise_error("Skillserver: Verb-skill matching error for rooms.\n");
+	    return 0;
+	  }
+	  return ids[idx];
   }
 
   // Is it a thing action?
   ids=QueryThingVerbs();
   idx=member(ids, skill_verb);
+
   if (idx>=0)
   {
     ids=m_internal["thing_skills"];
@@ -294,6 +294,7 @@ int idx;
   // Is it a living action?
   ids=QueryLivingVerbs();
   idx=member(ids, skill_verb);
+
   if (idx>=0)
   {
     ids=m_internal["living_skills"];
@@ -314,8 +315,9 @@ int idx;
 // ========================= Auxiliary functions ============================
 varargs string ValueToString(int skill,int flag)
 {
-string s_end;
-  if (flag & 1)     // Add the dezimal number as well 
+  string s_end;
+
+  if (flag & 1)     // Add the dezimal number as well
   {
     s_end="("+to_string(skill/10)+"%)";
   }
@@ -356,13 +358,13 @@ string s_end;
   return "unknown"+s_end;
 }
 
-  
+
 
 // ========================= Create function ================================
 void create()
 {
   ::create();
-  if (is_clone())
+  if (clonep())
   {
     destruct(TO);
     return;
@@ -383,7 +385,7 @@ varargs mixed RelayCall(string module, string fun, mixed p1, mixed p2,
   string class;
   object ob;
 
-  ob=find_player("softbyte");
+  ob=find_player("nostradamus");
   if (ob && ({int})ob->Query("Debug")) tell_object(ob,
     sprintf("RelayCall: %s %s %O %O %O %O\n",module,fun,p1,p2,p3,p4));
 

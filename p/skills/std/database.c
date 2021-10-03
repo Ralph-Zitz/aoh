@@ -28,24 +28,27 @@ mapping QueryM_Skills() {return m_skills;}
 // Guarantees that the internal data arrays are really arrays
 private string *CheckArray(mixed s)
 {
-  if (!s) return ({});
+  if (!s)
+    return ({});
   if (stringp(s))
   {
-    if (s=="") return ({});
-	return ({s});
+    if (s=="")
+      return ({});
+	  return ({s});
   }
-  else if (pointerp(s)) return s;
+  else if (pointerp(s))
+    return s;
   return ({});
 }
 
 // Read in the class information file (classes.ini)
 varargs int ReadClasses(string file)
 {
-string *classes;
-string *skills;
-string name,info;
-mixed v1,s1;
-int i;
+  string *classes, *skills;
+  string name,info;
+  mixed v1,s1;
+  int i;
+
   m_classes=([]);
   m_internal=([]);
   if (!file) file="classes";
@@ -60,21 +63,21 @@ int i;
   s1=CheckArray(s1);
   m_internal+=(["room_verbs":v1]);
   m_internal+=(["room_skills":s1]);
-  
+
   v1=GetKeyValue(SK_DATA(file+".ini"),"internal","thing_verbs");
   s1=GetKeyValue(SK_DATA(file+".ini"),"internal","thing_skills");
   v1=CheckArray(v1);
   s1=CheckArray(s1);
   m_internal+=(["thing_verbs":v1]);
   m_internal+=(["thing_skills":s1]);
-  
+
   v1=GetKeyValue(SK_DATA(file+".ini"),"internal","living_verbs");
   s1=GetKeyValue(SK_DATA(file+".ini"),"internal","living_skills");
   v1=CheckArray(v1);
   s1=CheckArray(s1);
   m_internal+=(["living_verbs":v1]);
   m_internal+=(["living_skills":s1]);
-  
+
   // classes are all sections but the internal one
   classes=GetSections(SK_DATA(file+".ini"))-({"internal"});
   if (!classes) return 0;
@@ -93,16 +96,16 @@ int i;
 // read the skills for a given class
 void ReadSkills(string class)
 {
-string *skills;
-mixed races,guilds;
-mixed racestart,racebonus;
-string info;
-int i;
-   if (!class) return 0;
-   if (!m_skills) m_skills=([]);
+  string *skills;
+  mixed races, guilds, racestart, racebonus;
+  string info;
+  int i;
 
-   // Does the inifile exist?
-   if (file_size(SK_DATA(class+".ini"))<=0) return 0;
+  if (!class) return 0;
+  if (!m_skills) m_skills=([]);
+
+  // Does the inifile exist?
+  if (file_size(SK_DATA(class+".ini"))<=0) return 0;
 
   skills=({string *})TO->QuerySkills(class);  // what are the skills?
   if (!skills) return 0;
@@ -127,7 +130,6 @@ int i;
 //   printf("Read skill %s races=%O guilds=%O start=%O bonus=%O\n",
 //      skills[i],races,guilds,racestart,racebonus);
   }
- 
 }
 
 

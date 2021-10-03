@@ -114,8 +114,6 @@ public varargs nomask void notify_fail(mixed msg, int pri)
 {
   if (TP)
   {
-    if (stringp(msg))
-      msg = process_mxp(msg, ({int})TP->QueryMXP());
     FAKE_OBJECT;
     TP->NotifyFail(msg, pri);
   }

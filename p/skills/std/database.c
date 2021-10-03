@@ -57,26 +57,26 @@ varargs int ReadClasses(string file)
   if (file_size(SK_DATA(file+".ini"))<=0) return 0;
 
   // Read internal data
-  v1=GetKeyValue(SK_DATA(file+".ini"),"internal","room_verbs");
-  s1=GetKeyValue(SK_DATA(file+".ini"),"internal","room_skills");
+  v1=GetKeyValue(SK_DATA(file+".ini"),"internal",ROOM_VERBS);
+  s1=GetKeyValue(SK_DATA(file+".ini"),"internal",ROOM_SKILLS);
   v1=CheckArray(v1);
   s1=CheckArray(s1);
-  m_internal+=(["room_verbs":v1]);
-  m_internal+=(["room_skills":s1]);
+  m_internal+=([ROOM_VERBS:v1]);
+  m_internal+=([ROOM_SKILLS:s1]);
 
-  v1=GetKeyValue(SK_DATA(file+".ini"),"internal","thing_verbs");
-  s1=GetKeyValue(SK_DATA(file+".ini"),"internal","thing_skills");
+  v1=GetKeyValue(SK_DATA(file+".ini"),"internal",THING_VERBS);
+  s1=GetKeyValue(SK_DATA(file+".ini"),"internal",THING_SKILLS);
   v1=CheckArray(v1);
   s1=CheckArray(s1);
-  m_internal+=(["thing_verbs":v1]);
-  m_internal+=(["thing_skills":s1]);
+  m_internal+=([THING_VERBS:v1]);
+  m_internal+=([THING_SKILLS:s1]);
 
-  v1=GetKeyValue(SK_DATA(file+".ini"),"internal","living_verbs");
-  s1=GetKeyValue(SK_DATA(file+".ini"),"internal","living_skills");
+  v1=GetKeyValue(SK_DATA(file+".ini"),"internal",LIVING_VERBS);
+  s1=GetKeyValue(SK_DATA(file+".ini"),"internal",LIVING_SKILLS);
   v1=CheckArray(v1);
   s1=CheckArray(s1);
-  m_internal+=(["living_verbs":v1]);
-  m_internal+=(["living_skills":s1]);
+  m_internal+=([LIVING_VERBS:v1]);
+  m_internal+=([LIVING_SKILLS:s1]);
 
   // classes are all sections but the internal one
   classes=GetSections(SK_DATA(file+".ini"))-({"internal"});

@@ -34,6 +34,7 @@ void add_bin_commands() {
   add_action( "cmd_equipment",    "equipment"         );
   add_action( "cmd_skills",       "skills"            );
   add_action( "cmd_skills",       "skill"             );
+  add_action( "cmd_aim",          "aim"               );
 
   add_action( "cmd_who",          "who"               );
   add_action( "cmd_whoiswho",     "whoiswho"          );
@@ -128,6 +129,10 @@ public int cmd_equipment( string arg ) {
 
 public int cmd_skills( string arg ) {
   return ({int})"/std/player/bin/skills"->main( arg );
+}
+
+public int cmd_aim( string arg ) {
+  return ({int})"/std/player/bin/aim"->main( arg );
 }
 
 /* -------------------------------------------------------------------------

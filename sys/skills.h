@@ -43,9 +43,9 @@
 // ************* PATH and FILENAMES ******************************************
 
 #define SK_MAIN     "/p/skills/"                 // The root directory
-#define SK_STD(x)   SK_MAIN "std/" x             // The std code
-#define SK_MOD(x)   SK_MAIN "modules/" x         // The skill modules
-#define SK_DATA(x)  SK_MAIN "data/" x            // The definition for the skills
+#define SK_STD(x)   SK_MAIN "std/" + x           // The std code
+#define SK_MOD(x)   SK_MAIN "modules/" + x       // The skill modules
+#define SK_DATA(x)  SK_MAIN "data/" + x          // The definition for the skills
 
 #define SKILLSERVER "/p/skills/std/skillserver"  // The main skill handler
 

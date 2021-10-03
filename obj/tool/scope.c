@@ -362,24 +362,24 @@ int fscope (string arg) {
   mixed *data;
 
   if (!check_owner()) return 0;
-  USAGE (arg == "?",
+  USAGE (arg == "?", 
  "scope\n"
 +"  Lists all important data about the scopes.\n"
-+"scope <name> <filename>\n"
-+"  Set a scope on <filename> under <name> and start it.\n"
-+"scope <name> [on | off]\n"
-+"  Start/stop scoping on <name> ('on' is default).\n"
-+"scope <name> remove\n"
-+"  Remove the scope <name>.\n"
++"scope 'name' 'filename'\n"
++"  Set a scope on 'filename' under 'name' and start it.\n"
++"scope 'name' [on | off]\n"
++"  Start/stop scoping on 'name' ('on' is default).\n"
++"scope 'name' remove\n"
++"  Remove the scope 'name'.\n"
 +"scope on | off\n"
 +"  Start/stop all scoping.\n"
-+"scope <int>\n"
-+"  Set the scope interval to <int> seconds.\n"
++"scope 'int'\n"
++"  Set the scope interval to 'int' seconds.\n"
 +"scope save\n"
 +"  Save the scope settings into ~/.scope.o\n"
 +"scope load\n"
 +"  Load the scope settings from ~/.scope.o\n"
-        );
+)
 
   update_scopes(1);
 

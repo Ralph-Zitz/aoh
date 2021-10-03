@@ -66,6 +66,7 @@ public int QueryHP(); // std/living/body
 public int QueryGhost(); // std/living/description
 public int combat_heartbeat();
 
+string aim;
 nosave mixed delaymsg;
 nosave int   delaybeats;
 nosave int   aggressive;
@@ -104,6 +105,18 @@ public mixed SetCombatDelay(int time, string s)
     AddHeart(HEART_COMBAT);
   }
   return delaybeats = time;
+}
+
+public string SetAim(string a) {
+  if (!VALID_AIM(a))
+    aim = AIM_BODY;
+  else
+    aim = a;
+  return aim;
+}
+
+public string QueryAim() {
+  return aim || AIM_BODY;
 }
 
 public string QueryCombatDelayMsg() { return delaymsg; }

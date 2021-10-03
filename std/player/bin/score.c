@@ -15,6 +15,7 @@
 #include <money.h>
 #include <string.h>
 #include <macros.h>
+#include <combat.h>
 
 inherit MONEY_LIB;
 
@@ -130,7 +131,7 @@ public int main( string arg )
   "Placeholder",
   ({string})TP->QueryFoodMsg(),
   spcol,({int})TP->QuerySP(), ({int})TP->QueryMaxSP(),rescol,
-  "Body",
+  ({string})TP->QueryAim(),
   ({string})TP->QueryDrinkMsg(),
   pepcol,({int})TP->QueryPEP(),({int})TP->QueryMaxPEP(),rescol,({string})TP->QueryAlcoholMsg(),
   mepcol,({int})TP->QueryMEP(),({int})TP->QueryMaxMEP(),rescol

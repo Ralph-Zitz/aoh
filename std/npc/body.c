@@ -215,11 +215,6 @@ public void DoDigest()
   if (!Query(P_NOWIZ) || LSTATE_GHOST == QueryLState())
     return;
 
-#if 0
-  if (IS_IMMORTAL(this_object()) || LSTATE_GHOST == QueryLState())
-    return;
-#endif
-
   // Reduce Drink.
   val = QueryDrink() - 1;
   accDrink += QueryDegDrink();

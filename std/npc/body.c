@@ -261,6 +261,9 @@ public int body_heartbeat()
   int val, alc, rc;
 
   rc = ::body_heartbeat();
+  if (!Query(P_NOWIZ))
+    return 1;
+
   if (LSTATE_GHOST == QueryLState())
     rc = 1;
   else

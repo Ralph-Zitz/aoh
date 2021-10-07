@@ -279,22 +279,21 @@ public int body_heartbeat()
     // Degenerate alcohol.
     if (alc > 0)
     {
-      val -= 1;
       accAlc += QueryDegAlcohol();
       if (accAlc > 100)
       {
+        alc -= 1;
         accAlc -= 100;
-        if (val < 1)
+        if (alc < 1)
         {
-          val = 0;
+          alc = 0;
           write("You are sober.\n");
         }
-        SetAlcohol(val);
+        SetAlcohol(alc);
       }
-      if (val)
+      if (alc)
         rc = 1;
     }
-
     if (THIS && interactive(THIS))
       DoDigest();
   }

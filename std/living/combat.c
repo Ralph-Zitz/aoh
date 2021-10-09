@@ -345,7 +345,7 @@ public void Kill(object ob)
       && AddEnemy(ob)
      )
   {
-    msg_object( ob, CMSG_COMBAT_SELF|MMSG_DIRECT,
+    msg_object(ob, CMSG_COMBAT_SELF|MMSG_DIRECT,
       capitalize((Query(P_NAME)||Query(P_SHORT)||"Someone"))+
       " attacks you!\n" );
     AddHeart(HEART_COMBAT);
@@ -401,16 +401,23 @@ public object do_hit(mixed x)
     {
       switch (damage_type)
       {
-        case DT_BLUDGEON: how = " charge on "; hows = " charges on "; break;
-        case DT_PIERCE: how = " stab at "; hows = " stabs at "; break;
-        case DT_SLASH: how = " slash at "; hows = " slashes at "; break;
-        default: how = " attack "; hows = " attacks ";
+        case DT_BLUDGEON:
+          how = " charge on "; hows = " charges on ";
+          break;
+        case DT_PIERCE:
+          how = " stab at "; hows = " stabs at ";
+          break;
+        case DT_SLASH:
+          how = " slash at "; hows = " slashes at ";
+          break;
+        default:
+          how = " attack "; hows = " attacks ";
       }
-      msg_object( ME, CMSG_COMBAT_SELF,
+      msg_object(ME, CMSG_COMBAT_SELF,
         "You"+how+({string})enemy->QueryName() +" with "+xshort);
-      msg_object( enemy, CMSG_COMBAT,
+      msg_object(enemy, CMSG_COMBAT,
         "  "+capitalize(QueryName())+hows+"you with "+xshort);
-      msg_say( CMSG_COMBAT_OTHERS,
+      msg_say(CMSG_COMBAT_OTHERS,
         "  "+capitalize(QueryName())+hows+({string})enemy->QueryName()+" with "
         +xshort,({ME, enemy}));
     }
@@ -420,12 +427,12 @@ public object do_hit(mixed x)
     /* Magic formula for hand attacks */
     damage = random(3*hands[x][HAND_WC]/5+QueryDex()/5 + QueryStr()/5);
     damage_type = DT_BLUDGEON;
-    msg_object( ME, CMSG_COMBAT_SELF, "You attack "+({string})enemy->QueryName()
+    msg_object(ME, CMSG_COMBAT_SELF, "You attack "+({string})enemy->QueryName()
       +" with "+hands[x][HAND_SHORT]);
       msg_object(enemy, CMSG_COMBAT,
       "  "+capitalize(QueryName())+" attacks you with "
       +hands[x][HAND_SHORT]);
-    msg_say( CMSG_COMBAT_OTHERS,
+    msg_say(CMSG_COMBAT_OTHERS,
       "  "+capitalize(QueryName())+" attacks "+({string})enemy->QueryName()+" with "
       +hands[x][HAND_SHORT],({ME, enemy}));
   }
@@ -572,9 +579,9 @@ public varargs int Defend(int dam, int dam_type, mixed weapon)
          , 100, (dam*100)/(QueryHP()||1));
     if (pointerp(what))
     {
-      tell_object(TP, what[0]);
-      if (ME != TP) tell_object(ME, what[1]);
-      show_room(ENV(TP), what[2], ({ TP, ME }) );
+      msg_object(TP, CMSG_COMBAT_SELF, what[0]);
+      if (ME != TP) msg_object(ME, CMSG_COMBAT, what[1]);
+      msg_room(ENV(TP), CMSG_COMBAT_OTHERS, what[2], ({ TP, ME }) );
     }
   }
   else if (   (!weapon || !intp(weapon) || !(weapon&DEFEND_F_NOMSG))
@@ -582,28 +589,38 @@ public varargs int Defend(int dam, int dam_type, mixed weapon)
   {
     switch (dam)
     {
-      case 0: what = " miss "; whats = " misses "; how = "";
+      case 0:
+        what = " miss "; whats = " misses "; how = "";
         break;
-      case 1: what=" tickle ";whats=" tickles ";how=" in the stomach";
+      case 1:
+        what=" tickle "; whats=" tickles "; how=" in the stomach";
         break;
-      case 2..3: what = " graze "; whats = " grazes "; how = "";
+      case 2..3:
+        what = " graze "; whats = " grazes "; how = "";
         break;
-      case 4..5: what = " hit "; whats = " hits "; how = "";
+      case 4..5:
+        what = " hit "; whats = " hits "; how = "";
         break;
-      case 6..10: what = " hit "; whats = " hits "; how = " hard";
+      case 6..10:
+        what = " hit "; whats = " hits "; how = " hard";
         break;
-      case 11..20: what = " hit "; whats = " hits "; how = " very hard";
+      case 11..20:
+        what = " hit "; whats = " hits "; how = " very hard";
         break;
-      case 21..30: what = " smash "; whats = " smashes ";
-        how = " with a bone crushing sound";
+      case 21..30:
+        what = " smash "; whats = " smashes "; how = " with a bone crushing sound";
         break;
-      default: what=" massacre ";whats=" massacres ";how=" to small fragments";
+      default:
+        what=" massacre "; whats=" massacres "; how=" to small fragments";
     }
-    if (dam) { what = " and"+what; whats = " and"+whats; }
-    else { what = ", but"+what; whats = ", but"+whats; }
-    msg_object( attacker, CMSG_COMBAT_SELF, what+QueryName()+how+".\n");
-    msg_object( ME, CMSG_COMBAT, whats+"you"+how+".\n");
-    msg_say( CMSG_COMBAT_OTHERS, whats+QueryName()+how+".\n", ({ME, attacker}));
+    if (dam) {
+      what = " and" + what; whats = " and" + whats;
+    } else {
+      what = ", but" + what; whats = ", but" + whats;
+    }
+    msg_object(attacker, CMSG_COMBAT_SELF, what + QueryName() + how + ".\n");
+    msg_object(ME, CMSG_COMBAT, whats + "you" + how + ".\n");
+    msg_say(CMSG_COMBAT_OTHERS, whats + QueryName() + how + ".\n", ({ME, attacker}));
   }
   else if (objectp(weapon)) /* conventional weapon with magical damage type */
     weapon->DidDamage(attacker, dam, dam_type);
@@ -611,7 +628,7 @@ public varargs int Defend(int dam, int dam_type, mixed weapon)
   /* oh, why do I need all these tests ?? - because it's buggy ! */
   if (xtras && pointerp(xtras))
     for (i = sizeof(xtras) + 1; --i;)
-      if (stringp(xtras[<i])) tell_room(HERE, xtras[<i]);
+      if (stringp(xtras[<i])) msg_room(HERE, CMSG_COMBAT_OTHERS, xtras[<i]);
 
   ac = environment();
   i = DoDamage(dam);

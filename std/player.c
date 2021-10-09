@@ -1347,7 +1347,7 @@ public int cmd_review(string arg) {
 
 public int cmd_prompt(string arg) {
   if (!arg)
-    write("Your prompt is: \""+QueryPrompt()+"\".\n");
+    msg_write(CMSG_GENERIC, "Your prompt is: \""+QueryPrompt()+"\".\n");
   else
     SetPrompt(arg);
   return 1;
@@ -1360,7 +1360,7 @@ public int cmd_prompt(string arg) {
 
 public int cmd_title(string t) {
   if (!t)
-    return write("Your title is " + title + ".\n"),1;
+    return msg_write(CMSG_GENERIC, "Your title is " + title + ".\n"),1;
   SetTitle(t);
   return 1;
 }
@@ -1372,7 +1372,7 @@ public int cmd_title(string t) {
 
 public int cmd_presay( string t ) {
   if ( ! t )
-    return write( "Your presay is \""+QueryPresay()+"\".\n" ), 1;
+    return msg_write(CMSG_GENERIC, "Your presay is \""+QueryPresay()+"\".\n" ), 1;
 
   if ( t == "0" )
     SetPresay( "" );
@@ -1397,10 +1397,10 @@ static int cmd_heal(string name) {
   it = lower_case(name);
   ob = find_living(it);
   if (!ob)
-    return write("No such person is playing now.\n"),1;
+    return notify_fail("No such person is playing now.\n", NOTIFY_ILL_ARG);
   ob->Heal(100000);
-  tell_object(ob, "You are healed by " + QueryName() + ".\n");
-  write("Ok.\n");
+  msg_object(ob, CMSG_COMBAT, "You are healed by " + QueryName() + ".\n");
+  msg_write(CMSG_GENERIC, "Ok.\n");
   return 1;
 }
 
@@ -1413,13 +1413,13 @@ static int cmd_wimpy(string arg) {
   int w;
   if (arg && (!sscanf(arg, "%d", w) || w < 0))
     return notify_fail("Usage: wimpy <positive number>\n",
-         NOTIFY_ILL_ARG),0;
+         NOTIFY_ILL_ARG);
   if (arg)
     SetWimpy(w);
   if (w = QueryWimpy())
-    write("Wimpy mode ("+w+").\n");
+    msg_write(CMSG_GENERIC, "Wimpy mode ("+w+").\n");
   else
-    write("Brave mode.\n");
+    msg_write(CMSG_GENERIC, "Brave mode.\n");
   return 1;
 }
 
@@ -1452,9 +1452,9 @@ static int cmd_wizlist(string str) {
 
 public int command_me(string cmd) {
   if (ME != TI) {
-    if (TI) tell_object(ME, ({string})TI->QueryName()+" forces you to "+cmd+".\n");
+    if (TI) msg_object(ME, CMSG_GENERIC, ({string})TI->QueryName()+" forces you to "+cmd+".\n");
     else if (!TI && getuid(previous_object()) != getuid(ME))
-      tell_object(ME, getuid(previous_object())+" forces you to "+cmd+".\n");
+      msg_object(ME, CMSG_GENERIC, getuid(previous_object())+" forces you to "+cmd+".\n");
   }
   return ::command_me(cmd);
 }

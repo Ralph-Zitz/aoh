@@ -201,6 +201,7 @@ protected void update_encoding();
 static void ping_no_answer(object ob);
 static int has_telnet_option(int option, int remote);
 public void init_mxp();
+public mixed query_terminal();
 
 // TODO: it's not quite complete
 private string telnet_to_text(int command, int option, int* args) {
@@ -1329,7 +1330,10 @@ private void sb_naws(int command, int option, int* optargs) {
     this_object()->receive(sprintf("window_size height:%d x width:%d\n", lines, cols),
                            CMSG_GENERIC|MMSG_DIRECT);
     this_object()->Set(P_PAGEWIDTH, cols);
-    this_object()->Set(P_PAGESIZE, lines-2);
+    if(strstr(query_terminal()[1][0], "mudlet") != -1)
+      this_object()->Set(P_PAGESIZE, lines-2);
+    else
+      this_object()->Set(P_PAGESIZE, lines-2);
   }
 //     this_object()->notify("window_size", this_object(), cols, lines);
 }
@@ -2064,7 +2068,7 @@ nomask int mxp_hook(string m)
       string * exp_s = ({});
       mapping mp = ([]);
       string patt = "\\b(MXP|VERSION|CLIENT)\\b";
-      
+
       if (m[<1..] == ">")
         m = m[..<2];
       all_exp = explode(m, " ");

@@ -28,11 +28,13 @@
 #include <driver/object_info.h>
 #include UDP_HEADER
 
-#define ME this_object()
-#define PL this_player()
+#define TO this_object()
+#define TP this_player()
 #define TI this_interactive()
+#define ME TO
+#define PL TP
 #define SF(x) #'x /*'*/
-#define SYM(x) 'x /*'*/
+#define ENV(x) environment(x)
 
 /* Define this to log the load of the players at every change in /log/WSTAT
  */
@@ -973,41 +975,62 @@ public int cmd_petrify(string arg) {
  */
 
 public int cmd_kill(string str) {
-  object eob;
-  if (!str || str == "") { write("Kill WHOM?\n"); return 1; }
+  object eob, *eobs = ({});
+  if (!str || str == "") { return notify_fail("Kill WHOM?\n", NOTIFY_ILL_ARG); }
   if (QueryGhost())
-    return write("You can't do that in your present state.\n"),1;
-  eob = SearchEnv(lower_case(str));
+    return notify_fail("You can't do that in your present state.\n", NOTIFY_NOT_VALID);
+  if ("all" == lower_case(str)) {
+    string *names = ({});
+    eobs = (search(ME, lower_case(str), SEARCH_ENV) || ({})) - ({ ME });
+    eobs -= filter(eobs, #'query_once_interactive /*'*/);
+    eobs = filter(eobs, #'living /*'*/);
+    if (!sizeof(eobs))
+      return notify_fail("You can't see any creatures here to attack!\n", NOTIFY_ILL_ARG);
+    names = map(eobs, (: return ({string})$1->Short(); :));
+    msg_write(CMSG_COMBAT_SELF, "You attack " + implode(names[..<2], ", ") + ", and " + names[<1] + "!\n");
+    msg_room(ENV(ME), CMSG_COMBAT_OTHERS|MMSG_SEE,
+      ({ Query(P_NAME) + " attacks " + implode(names[..<2], ", ") + ", and " + names[<1] + "!\n",
+         "You hear the sounds of a fight breaking out around you from multiple sources!\n"
+      }),
+      (({ ME }) + eobs)
+    );
+    map(eobs, #'Kill /*'*/);
+    return 1;
+  }
+  else
+    eob = SearchEnv(lower_case(str));
   if (!CanSee() || !eob || !objectp(eob) || !living(eob))
-  {
-    write("I can't see that creature here!\n");
-    return 1;
-  }
+    return notify_fail("You can't see that creature here!\n", NOTIFY_ILL_ARG);
   if (!living(eob) || !({int})eob->Query(P_IS_LIVING))
-  {
-    write("That is dead already. In fact, it never was alive.\n");
-    return 1;
-  }
+    return notify_fail("That is dead already. In fact, it never was alive.\n", NOTIFY_NOT_VALID);
   if (eob == this_object())
   {
     switch(random(3))
     {
       case 0:
-        write("Ouch, that would hurt!\n"); break;
+        return notify_fail("Ouch, that would hurt!\n", NOTIFY_NOT_VALID);
+        break;
       case 1:
-        write("You think suicide's an alternative? You might be sorry.\n");
-        // Suicidal Tendencies rules, ok!
+        return notify_fail("You think suicide's an alternative? You might be sorry.\n", NOTIFY_NOT_VALID);
         break;
       case 2:
-        write("Interesting concept.\n");
+        return notify_fail("Interesting concept.\n", NOTIFY_NOT_VALID);
         break;
       default:
-        write("That's not logical.\n");
+        return notify_fail("That's not logical.\n", NOTIFY_NOT_VALID);
     }
-    return 1;
+    return notify_fail("That's not logical.\n", NOTIFY_NOT_VALID);
   }
-  if (!query_once_interactive(eob))
+  if (!query_once_interactive(eob)) {
+    msg_write(CMSG_COMBAT_SELF, "You attack " + ({string})eob->Short() + "!\n");
+    msg_room(ENV(ME), CMSG_COMBAT_OTHERS|MMSG_SEE,
+      ({ Query(P_NAME) + " attacks " + ({string})eob->Short() + "!\n",
+         "You hear sounds of a fight breaking out around you!\n"
+      }),
+      ({ ME, eob })
+    );
     Kill(eob);
+  }
   return 1;
 }
 

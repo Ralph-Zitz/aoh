@@ -93,11 +93,11 @@
 #define MORE_MAX_PAGES_READ 30
 
 // mode flags
-#define MORE_QUIET     1 // do not write 'looks at a complete different reality'
-#define MORE_STRING    2 // filename is a string
-#define MORE_NOHTML      4 // HTML comments are suppressed
-#define MORE_NOHEADER    8 // No Fileheader is shown
-#define MORE_PROMPTLAST 16 // Prompt at the last page is shown
+#define MORE_QUIET         1 // do not write 'looks at a complete different reality'
+#define MORE_STRING        2 // filename is a string
+#define MORE_NOHTML        4 // HTML comments are suppressed
+#define MORE_NOHEADER      8 // No Fileheader is shown
+#define MORE_PROMPTLAST   16 // Prompt at the last page is shown
 
 // mostly internal use
 #define MORE_NOPARTIAL  1024 // ignore given partial segement and show full
@@ -123,7 +123,7 @@ private mixed GetData( mixed type )
 
 private void SetData( mixed type, mixed v )
 {
-mapping m;
+  mapping m;
   if ( ! data ) data=([]);
 
   m=data[this_player()->Query(P_REALNAME)];
@@ -150,7 +150,7 @@ private void remove_data()
 private void remote_call(string fun, object ob)
 {
   if (fun && ob && objectp(ob) && stringp(fun))
-      call_other(ob,fun);
+    call_other(ob,fun);
 }
 
 // reads in the 'file' or the string array stored in MORESTRINGS
@@ -203,8 +203,8 @@ int flag_filter(string s,int mode)
 }
 
 /*--------------------------------------------------------------------------
- * Reads ina a given page which must be the NEXT not yet read page and
- * adjusts the inernal data arrays
+ * Reads in a a given page which must be the NEXT not yet read page and
+ * adjusts the internal data arrays
  *--------------------------------------------------------------------------
  */
 private int ScanPage(int page)
@@ -366,10 +366,10 @@ private string get_header()
 
 public void more_prompt (int nlines)
 {
-int percent,page,eline,sline,mode;
-int *rlines;
-int *mbytes;
-int *partial;
+  int percent,page,eline,sline,mode;
+  int *rlines;
+  int *mbytes;
+  int *partial;
 
 
   rlines=GetData(MORE_RLINES)||({});

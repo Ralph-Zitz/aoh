@@ -12,17 +12,11 @@ int GetAmount(int value)
   int i;
 
   if (value<333)    // low talent
-  {
     i=20;
-  }
   else if (value<667) // medium talent
-  {
     i=40;
-  }
   else             // high talent
-  {
     i=80;
-  }
   return i;
 }
 

@@ -201,7 +201,7 @@ protected void update_encoding();
 static void ping_no_answer(object ob);
 static int has_telnet_option(int option, int remote);
 public void init_mxp();
-public mixed query_terminal();
+public mixed *query_terminal();
 
 // TODO: it's not quite complete
 private string telnet_to_text(int command, int option, int* args) {
@@ -508,7 +508,7 @@ static int query_telnet(int option, mixed sb) {
   return ts[option, TS_STATE];
 }
 
-public mixed query_terminal() {
+public mixed *query_terminal() {
   mixed sb;
   return query_telnet(TELOPT_TTYPE, &sb) ? sb : 0;
 }
@@ -1300,7 +1300,6 @@ private void sb_status(int command, int option, int* optargs) {
   }
 
   // We dont send SB ENVIRON or SB NEWENV
-
   // quote IAC and SE
   // we use -SE for unquotable SEs
   for (s = sizeof(ret); s--;) {
@@ -1330,12 +1329,17 @@ private void sb_naws(int command, int option, int* optargs) {
     this_object()->receive(sprintf("window_size height:%d x width:%d\n", lines, cols),
                            CMSG_GENERIC|MMSG_DIRECT);
     this_object()->Set(P_PAGEWIDTH, cols);
-    if(strstr(query_terminal()[1][0], "mudlet") != -1)
+    mixed *term = query_terminal();
+    string s = "";
+    if (term && sizeof(term) == 2)
+      term = term[1];
+    if (term && sizeof(term) == 1)
+      s = term[0];
+    if(strstr(s, "mudlet") != -1)
       this_object()->Set(P_PAGESIZE, lines-2);
     else
       this_object()->Set(P_PAGESIZE, lines-2);
   }
-//     this_object()->notify("window_size", this_object(), cols, lines);
 }
 
 private void sb_xdisp(int command, int option, int* optargs) {

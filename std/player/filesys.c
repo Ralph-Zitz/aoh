@@ -71,6 +71,7 @@
 #include <secure/wizlevels.h>
 #include <search.h>
 #include <properties.h>
+#include <daemons.h>
 
 /*-------------------------------------------------------------------------*/
 
@@ -359,7 +360,7 @@ int fmore (string str) {
       return 0;
     }
   }
-  "/lib/more"->more(fname, flag, pagesize);
+  MORE->more(fname, flag, pagesize);
   return 1;
 }
 

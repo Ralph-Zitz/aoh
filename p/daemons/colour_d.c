@@ -118,44 +118,43 @@ mapping QueryClassTrans( mapping pClassColors, string tty ) {
 
   for( i = 0; i < sizeof( cn ); i ++ ) {
     switch ( tty ) {
-    case "ansi":
-      if ( mappingp( pClassColors ) && pClassColors[i] ) {
-	res["cmsg_"+cn[i]] =
-	  RESET[0..<2] + ";" +
-	  ANSI_TRANS[COLOR_NAMES[pClassColors[i][0]]][2..<2] + ";" +
-	  ANSI_TRANS["B_"+COLOR_NAMES[pClassColors[i][1]]][2..<2] +
-	  (pClassColors[i][2]?(";"+BOLD[2..]):"m");
-      }
-      else if ( mappingp( pClassColors ) && pClassColors[-1] ) {
-	res["cmsg_"+cn[i]] =
-	  RESET[0..<2] + ";" +
-	  ANSI_TRANS[COLOR_NAMES[pClassColors[-1][0]]][2..<2] + ";" +
-	  ANSI_TRANS["B_"+COLOR_NAMES[pClassColors[-1][1]]][2..<2] +
-	  (pClassColors[-1][2]?(";"+BOLD[2..]):"m");
-      }
-      else
-	res["cmsg_"+cn[i]] = "";
-      break;
-    case "vt100":
-      if ( mappingp( pClassColors ) && pClassColors[i] ) {
-	res["cmsg_"+cn[i]] =
-	  RESET[0..<2] +
-	  (pClassColors[i][2]?(";"+BOLD[2..]):"m");
-      }
-      else if ( mappingp( pClassColors ) && pClassColors[-1] ) {
-	res["cmsg_"+cn[i]] =
-	  RESET[0..<2] +
-	  (pClassColors[-1][2]?(";"+BOLD[2..]):"m");
-      }
-      else
-	res["cmsg_"+cn[i]] = "";
-      break;
-    default:
-      res["cmsg_"+cn[i]] = "";
-      break;
+      case "ansi":
+        if ( mappingp( pClassColors ) && pClassColors[i] ) {
+	      res["cmsg_"+cn[i]] =
+	        RESET[0..<2] + ";" +
+	        ANSI_TRANS[COLOR_NAMES[pClassColors[i][0]]][2..<2] + ";" +
+	        ANSI_TRANS["B_"+COLOR_NAMES[pClassColors[i][1]]][2..<2] +
+	        (pClassColors[i][2]?(";"+BOLD[2..]):"m");
+        }
+        else if ( mappingp( pClassColors ) && pClassColors[-1] ) {
+          res["cmsg_"+cn[i]] =
+	        RESET[0..<2] + ";" +
+            ANSI_TRANS[COLOR_NAMES[pClassColors[-1][0]]][2..<2] + ";" +
+	        ANSI_TRANS["B_"+COLOR_NAMES[pClassColors[-1][1]]][2..<2] +
+	        (pClassColors[-1][2]?(";"+BOLD[2..]):"m");
+        }
+        else
+	      res["cmsg_"+cn[i]] = "";
+        break;
+      case "vt100":
+        if ( mappingp( pClassColors ) && pClassColors[i] ) {
+	      res["cmsg_"+cn[i]] =
+	        RESET[0..<2] +
+	        (pClassColors[i][2]?(";"+BOLD[2..]):"m");
+        }
+        else if ( mappingp( pClassColors ) && pClassColors[-1] ) {
+	      res["cmsg_"+cn[i]] =
+	        RESET[0..<2] +
+	        (pClassColors[-1][2]?(";"+BOLD[2..]):"m");
+        }
+        else
+	      res["cmsg_"+cn[i]] = "";
+        break;
+      default:
+        res["cmsg_"+cn[i]] = "";
+        break;
     }
   }
-
   return res;
 }
 

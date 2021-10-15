@@ -330,7 +330,7 @@ private varargs string translate( mixed msg, int class, int indent ) {
 			 trans,
 			 ( class & MMSG_NOWRAP ) ?
 			 0 :
-			 ( Query(P_PAGEWIDTH) - 2 ),
+			 ( Query(P_PAGEWIDTH) ),
 			 ( class & MMSG_NOWRAP ) ?
 			 0 :
 			 indent );

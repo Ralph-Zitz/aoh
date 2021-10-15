@@ -31,7 +31,7 @@ private void set_color( int class, string str, string tty )
   mapping c;
   int fg, bg, hgl;
 
-  if ( ! c = ({mapping})this_player()->QueryClassColors() )
+  if ( !(c = ({mapping})this_player()->QueryClassColors()) || sizeof(c) == 0)
   {
     c = ([ -1 : ({ 7, 0, 0 }) ]);
     this_player()->AddClassColor( -1, 7, 0, 0 );

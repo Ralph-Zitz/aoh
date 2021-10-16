@@ -82,6 +82,7 @@ nosave object friendobj;
 nosave mixed  equipobj;
 nosave object last_wield_ob;
 nosave object last_wear_ob;
+nosave object target;
 nosave object magicobj;  /* Denotes the object for doing magic */
 
 
@@ -117,6 +118,21 @@ public string SetAim(string a) {
 
 public string QueryAim() {
   return aim || AIM_BODY;
+}
+
+public object SetTarget(object t) {
+  if (t == ME)
+    return target = 0;
+  else
+    return target = t;
+}
+
+public object QueryTarget() {
+  return target;
+}
+
+public string QueryTargetShort() {
+  return objectp(target) ? ({string})target->Short() : 0;
 }
 
 public string QueryCombatDelayMsg() { return delaymsg; }
@@ -375,12 +391,20 @@ public object do_hit(mixed x)
   // Hit the opponent. Return the one we attacked.
 {
   int damage, damage_type;
+  int myc, ec;
   string how, hows;
   object enemy;
   string xshort;
 
   if (!enemies || !sizeof(enemies)) return 0;
   enemy = enemies[random(sizeof(enemies))];
+  /* Hit our preferred target if we can */
+  myc = QueryInt() + QueryDex();
+  ec = ({int})enemy->QueryInt() + ({int})enemy->QueryDex();
+  if (myc > ec) {
+    if (enemy != QueryTarget() && objectp(QueryTarget()) && present(enemy))
+      enemy = QueryTarget();
+  }
   if (!enemy || ({int})enemy->QueryHP() < 0 )
   {
     StopHunting(enemy);

@@ -1,5 +1,6 @@
 #ifndef MXP_H
 #include <mxp.h>
+#include <driver/regexp.h>
 #endif
 
 /*
@@ -18,6 +19,9 @@ public string process_mxp(string message, int does_mxp) {
     int i = 0;
     int inTag = 0;
     int inEntity = 0;
+
+    //return message;
+    //return regreplace(message, "<[^<>]+>", "", RE_PCRE|RE_GLOBAL|RE_MULTILINE);
 
     string *original_lines = explode(message, "\n");
     string *processed_lines = allocate(sizeof(original_lines));

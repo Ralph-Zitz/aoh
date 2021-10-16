@@ -35,6 +35,7 @@ void add_bin_commands() {
   add_action( "cmd_skills",       "skills"            );
   add_action( "cmd_skills",       "skill"             );
   add_action( "cmd_aim",          "aim"               );
+  add_action( "cmd_priority",     "priority"          );
 
   add_action( "cmd_who",          "who"               );
   add_action( "cmd_whoiswho",     "whoiswho"          );
@@ -89,6 +90,14 @@ public int cmd_party( string arg ) {
   return ({int})"/std/player/bin/party"->cmd_party(arg);
 }
 
+public int cmd_aim( string arg ) {
+  return ({int})"/std/player/bin/aim"->main( arg );
+}
+
+public int cmd_priority( string arg ) {
+  return ({int})"/std/player/bin/priority"->main( arg );
+}
+
 /* -------------------------------------------------------------------------
  * who commands
  * -------------------------------------------------------------------------
@@ -129,10 +138,6 @@ public int cmd_equipment( string arg ) {
 
 public int cmd_skills( string arg ) {
   return ({int})"/std/player/bin/skills"->main( arg );
-}
-
-public int cmd_aim( string arg ) {
-  return ({int})"/std/player/bin/aim"->main( arg );
 }
 
 /* -------------------------------------------------------------------------

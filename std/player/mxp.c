@@ -6,8 +6,11 @@ private nosave mapping mxp_support_info;
 private int wants_mxp;
 
 public mixed QueryMXP();
+public int QueryWantsMXP() {
 
 public void init_mxp() {
+  if (!QueryWantsMXP())
+    return;
   mxp_version_info = ([]);
   mxp_support_info = ([ MXP_SUPPORT_ENABLED: ({}), MXP_SUPPORT_DISABLED: ({}) ]);
   // Tell the client that from now on we are sending MXP sequences

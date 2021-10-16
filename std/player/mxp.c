@@ -6,13 +6,30 @@ private nosave mapping mxp_support_info;
 private int wants_mxp;
 
 public mixed QueryMXP();
-public int QueryWantsMXP() {
+public void EndMXP();
+public void StartMXP();
+public int QueryWantsMXP();
+public int SetWantsMXP(int i);
+public void init_mxp();
+
+public void end_mxp() {
+  efun::write(process_mxp(MXPMODE(3), QueryMXP()));
+  SetWantsMXP(0);
+  EndMXP();
+}
+
+public void start_mxp() {
+  StartMXP();
+  init_mxp();
+}
 
 public void init_mxp() {
-  if (!QueryWantsMXP())
-    return;
   mxp_version_info = ([]);
   mxp_support_info = ([ MXP_SUPPORT_ENABLED: ({}), MXP_SUPPORT_DISABLED: ({}) ]);
+
+  if (QueryMXP())
+    SetWantsMXP(1);
+
   // Tell the client that from now on we are sending MXP sequences
   //binary_message(({IAC, SB, TELOPT_MXP, IAC, SE}));
 

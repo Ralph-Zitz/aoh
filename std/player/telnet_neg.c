@@ -514,8 +514,16 @@ public mixed *query_terminal() {
   return query_telnet(TELOPT_TTYPE, &sb) ? sb : 0;
 }
 
+public void EndMXP() {
+  set_telnet(DONT, TELOPT_MXP);
+}
+
+public void StartMXP() {
+  set_telnet(DO, TELOPT_MXP);
+}
+
 public mixed QueryMXP() {
-  return has_telnet_option(TELOPT_MXP, 1) && QueryWantsMXP();
+  return has_telnet_option(TELOPT_MXP, 1);
 }
 
 public mixed QueryGMCP() {
@@ -1785,7 +1793,6 @@ private void start_mxp(int command, int option)
 {
     if (command != WILL)
         return;
-
     ts[TS_EXTRA, TSE_LOG] += "* Sending MXP initialization\n";
     send(({ IAC, SB, TELOPT_MXP, IAC, SE }));
 //    efun::binary_message(to_array("\e[7z")); // Lock to locked mode for now.

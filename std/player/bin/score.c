@@ -103,17 +103,17 @@ public int main( string arg )
   msg += sprintf(
   "Title: %s %s\n"
   "Level: %d\n\n"
-  "Str:  %3.3d      Money: %-10.10d  Race:   %-15.15s \n"
-  "Con:  %3.3d      Bank:  %-10.10d  Guild:  %-15.15s \n"
-  "Int:  %3.3d      Known: %-3.3d%%        Gender: %-4.6s\n"
-  "Wis:  %3.3d      XP:    %-10.10d  Enemy:  %-15.50s\n"
+  "Str:  %3.3d      Money:  %-12.10d  Race:    %-15.15s \n"
+  "Con:  %3.3d      Bank:   %-12.10d  Guild:   %-15.15s \n"
+  "Int:  %3.3d      Known:  %-5.3d%%        Gender:  %-4.6s\n"
+  "Wis:  %3.3d      XP:     %-12.10d  Enemy:   %-15.50s\n"
   "Agi:  %3.3d                       \n"
-  "Qui:  %3.3d      Wimpy: %-3.3d         Load:   %-1.8d stones \n"
-  "Cha:  %3.3d      Mails: %-3.3d         Age:    %-20.20s\n"
+  "Qui:  %3.3d      Wimpy:  %-5.3d         Load:    %-1.8d stones \n"
+  "Cha:  %3.3d      Mails:  %-5.3d         Age:     %-20.20s\n"
   "\n"
-  "HP:  %s%-3.3d/%3.3d%s   Spec: %-10.11s  Food:    %-16.16s\n"
-  "SP:  %s%-3.3d/%3.3d%s   Aim:  %-11.11s  Water:   %-16.16s\n"
-  "PEP: %s%-3.3d/%3.3d%s                      Alcohol: %-16.16s\n"
+  "HP:  %s%-3.3d/%3.3d%s   Spec:   %-12.12s  Food:    %-16.16s\n"
+  "SP:  %s%-3.3d/%3.3d%s   Aim:    %-12.12s  Water:   %-16.16s\n"
+  "PEP: %s%-3.3d/%3.3d%s   Target: %-13.11s Alcohol: %-16.16s\n"
   "MEP: %s%-3.3d/%3.3d%s                      \n"
   ,
 
@@ -133,7 +133,9 @@ public int main( string arg )
   spcol,({int})TP->QuerySP(), ({int})TP->QueryMaxSP(),rescol,
   CAP(({string})TP->QueryAim()),
   ({string})TP->QueryDrinkMsg(),
-  pepcol,({int})TP->QueryPEP(),({int})TP->QueryMaxPEP(),rescol,({string})TP->QueryAlcoholMsg(),
+  pepcol,({int})TP->QueryPEP(),({int})TP->QueryMaxPEP(),rescol,
+  ({string})TP->QueryTargetShort() ? ({string})TP->QueryTargetShort() : "Nobody",
+  ({string})TP->QueryAlcoholMsg(),
   mepcol,({int})TP->QueryMEP(),({int})TP->QueryMaxMEP(),rescol
   );
 

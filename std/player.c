@@ -987,13 +987,24 @@ public int cmd_kill(string str) {
     if (!sizeof(eobs))
       return notify_fail("You can't see any creatures here to attack!\n", NOTIFY_ILL_ARG);
     names = map(eobs, (: return ({string})$1->Short(); :));
-    msg_write(CMSG_COMBAT_SELF, "You attack " + implode(names[..<2], ", ") + ", and " + names[<1] + "!\n");
-    msg_room(ENV(ME), CMSG_COMBAT_OTHERS|MMSG_SEE,
+    if (sizeof(names) == 1) {
+      msg_write(CMSG_COMBAT_SELF, "You attack " + names[0] + "!\n");
+      msg_room(ENV(ME), CMSG_COMBAT_OTHERS|MMSG_SEE,
+      ({ Query(P_NAME) + " attacks " + names[0] + "!\n",
+         "You hear the sounds of a fight breaking out around you from multiple sources!\n"
+      }),
+      (({ ME }) + eobs)
+    );
+    }
+    else {
+      msg_write(CMSG_COMBAT_SELF, "You attack " + implode(names[..<2], ", ") + ", and " + names[<1] + "!\n");
+      msg_room(ENV(ME), CMSG_COMBAT_OTHERS|MMSG_SEE,
       ({ Query(P_NAME) + " attacks " + implode(names[..<2], ", ") + ", and " + names[<1] + "!\n",
          "You hear the sounds of a fight breaking out around you from multiple sources!\n"
       }),
       (({ ME }) + eobs)
     );
+    }
     map(eobs, #'Kill /*'*/);
     return 1;
   }

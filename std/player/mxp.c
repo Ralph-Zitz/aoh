@@ -3,6 +3,7 @@
 
 private nosave mapping mxp_version_info;
 private nosave mapping mxp_support_info;
+private int wants_mxp;
 
 public mixed QueryMXP();
 
@@ -25,6 +26,14 @@ public void init_mxp() {
   efun::write(process_mxp(MXPTAG("!ELEMENT RExits FLAG=\"RoomExit\""), QueryMXP()));
   efun::write(process_mxp(MXPTAG("!ELEMENT Prompt FLAG=\"Prompt\""), QueryMXP()));
   efun::write(process_mxp(MXPTAG("!ELEMENT Ex \"<send>\""), QueryMXP()));
+}
+
+public int QueryWantsMXP() {
+  return wants_mxp;
+}
+
+public int SetWantsMXP(int i) {
+  return i ? wants_mxp = 1 : wants_mxp = 0;
 }
 
 public void SetMXPVersion(mapping m = ([])) {

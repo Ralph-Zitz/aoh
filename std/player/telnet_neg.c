@@ -202,6 +202,7 @@ static void ping_no_answer(object ob);
 static int has_telnet_option(int option, int remote);
 public void init_mxp();
 public mixed *query_terminal();
+public int QueryWantsMXP();
 
 // TODO: it's not quite complete
 private string telnet_to_text(int command, int option, int* args) {
@@ -514,7 +515,7 @@ public mixed *query_terminal() {
 }
 
 public mixed QueryMXP() {
-  return has_telnet_option(TELOPT_MXP, 1);
+  return has_telnet_option(TELOPT_MXP, 1) && QueryWantsMXP();
 }
 
 public mixed QueryGMCP() {
@@ -1326,8 +1327,8 @@ private void sb_naws(int command, int option, int* optargs) {
     "     Window size: " + cols + " cols, " + lines + " lines\n";
 
   if(!pointerp(old) || old[0] != cols || old[1] != lines) {
-    this_object()->receive(sprintf("window_size height:%d x width:%d\n", lines, cols),
-                           CMSG_GENERIC|MMSG_DIRECT);
+//    this_object()->receive(sprintf("window_size height:%d x width:%d\n", lines, cols),
+//                           CMSG_GENERIC|MMSG_DIRECT);
     this_object()->Set(P_PAGEWIDTH, cols);
     mixed *term = query_terminal();
     string s = "";

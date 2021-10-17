@@ -8,6 +8,7 @@
 
 #include "xtool/xtool.h"
 #include <driver/object_info.h>
+#include <mxp.h>
 
 nosave object  cloner;
 nosave object  lastroom;
@@ -112,8 +113,8 @@ int security() {
  */
 
 void Write(string str) {
-  if(!cloner) efun::write(str);
-  else efun::tell_object(cloner, str);
+  if(!cloner) efun::write(process_mxp(str, TPMXP));
+  else efun::tell_object(cloner, process_mxp(str, TPMXP));
 }
 
 /*----------------------------------------------------------------------

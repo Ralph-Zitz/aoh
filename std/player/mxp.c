@@ -37,7 +37,8 @@ public void init_mxp() {
   // Tell the client that from now on we are sending MXP sequences
   //binary_message(({IAC, SB, TELOPT_MXP, IAC, SE}));
 
-    // Switch to "permanent secure" mode, MXP tags now enabled
+  // Switch to "permanent secure" mode, MXP tags now enabled
+#if 0  
   efun::write(MXPMODE(6) +
     MXPTAG2("VERSION") +
     MXPTAG2("SUPPORT") +
@@ -49,19 +50,19 @@ public void init_mxp() {
     MXPTAG2("!ELEMENT Prompt FLAG=\"Prompt\"") +
     MXPTAG2("!ELEMENT red '<COLOR red><B>'") +
     MXPTAG2("!ELEMENT Ex \"<send>\""));
-
-  // Switch to "permanent secure" mode, MXP tags now enabled
-  // efun::write(process_mxp(MXPMODE(6), QueryMXP()));
-  // efun::write(process_mxp(MXPTAG("VERSION"), QueryMXP()));
-  // efun::write(process_mxp(MXPTAG("SUPPORT"), QueryMXP()));
-  // efun::write(process_mxp(MXPTAG("!-- Set up MXP elements --"), QueryMXP()));
-  // efun::write(process_mxp(MXPTAG("!ELEMENT RNum FLAG=\"RoomNum\" ATT=\"id\" EMPTY"), QueryMXP()));
-  // efun::write(process_mxp(MXPTAG("!ELEMENT RName FLAG=\"RoomName\""), QueryMXP()));
-  // efun::write(process_mxp(MXPTAG("!ELEMENT RDesc FLAG=\"RoomDesc\""), QueryMXP()));
-  // efun::write(process_mxp(MXPTAG("!ELEMENT RExits FLAG=\"RoomExit\""), QueryMXP()));
-  // efun::write(process_mxp(MXPTAG("!ELEMENT Prompt FLAG=\"Prompt\""), QueryMXP()));
-  // efun::write(process_mxp(MXPTAG("!ELEMENT red '<COLOR red><B>'"), QueryMXP()));
-  // efun::write(process_mxp(MXPTAG("!ELEMENT Ex \"<send>\""), QueryMXP()));
+#endif
+   // Switch to "permanent secure" mode, MXP tags now enabled
+  efun::write(process_mxp(MXPMODE(6), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("VERSION"), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("SUPPORT"), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("!-- Set up MXP elements --"), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("!ELEMENT RNum FLAG=\"RoomNum\" ATT=\"id\" EMPTY"), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("!ELEMENT RName FLAG=\"RoomName\""), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("!ELEMENT RDesc FLAG=\"RoomDesc\""), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("!ELEMENT RExits FLAG=\"RoomExit\""), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("!ELEMENT Prompt FLAG=\"Prompt\""), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("!ELEMENT red '<COLOR red><B>'"), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("!ELEMENT Ex \"<send>\""), QueryMXP()));
 }
 
 public int QueryWantsMXP() {

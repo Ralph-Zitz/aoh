@@ -68,19 +68,38 @@ public string SetRoomLong(string str) {
 
 public varargs string IntLong(string what)  {
   mixed rc;
+
+  return
+    MXPTAG("RDesc") +
+      process_string((pointerp(rc = QueryIntLong()) ? rc[0]: rc) +
+      implode(filterExtra(P_INT_LONG), "")) +
+    MXPTAG("/RDesc");
+
+#if 0
   return   (TPMXP ? MXPTAG2("RDesc") : "") +
            process_string((pointerp(rc = QueryIntLong()) ? rc[0]: rc) +
            implode(filterExtra(P_INT_LONG), "")) +
            (TPMXP ? MXPTAG2("/RDesc") : "");
+#endif
 }
 
 public varargs string ExaIntLong(string what)  {
   mixed rc;
+
+  return
+    MXPTAG("RDesc") +
+      process_string((pointerp(rc = QueryIntLong()) ? rc[1]
+                                  : "You see nothing special.\n"+rc) +
+      implode(filterExtra(P_INT_LONG), "")) +
+      MXPTAG("/RDesc");
+
+#if 0
   return   (TPMXP ? MXPTAG2("RDesc") : "") +
            process_string((pointerp(rc = QueryIntLong()) ? rc[1]
                                        : "You see nothing special.\n"+rc) +
            implode(filterExtra(P_INT_LONG), "")) +
            (TPMXP ? MXPTAG2("/RDesc") : "");
+#endif
 }
 
 public varargs string IntShort(string what) {

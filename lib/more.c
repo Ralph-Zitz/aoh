@@ -542,7 +542,7 @@ varargs int more ( mixed fname, int mode, int chunk, int itrans,
   tmp=get_header()+tmp;
 
   if ( tmp && tmp[<1] != '\n' ) tmp += "\n";
-  msg_write( CMSG_GENERIC|MMSG_NOWRAP|MMSG_DIRECT|itrans, process_mxp(tmp, TPMXP) );
+  msg_write( CMSG_GENERIC|MMSG_NOWRAP|MMSG_DIRECT|itrans, tmp);
 
   // if we got the flag to show the last eof do not exit right now
   if ( (!(mode & MORE_PROMPTLAST)) &&  (lines<=0) )

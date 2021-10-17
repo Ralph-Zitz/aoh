@@ -13,7 +13,7 @@ public int SetWantsMXP(int i);
 public void init_mxp();
 
 public void end_mxp() {
-  efun::write(process_mxp(MXPMODE(3), QueryMXP()));
+  efun::write(MXPMODE(3));
   SetWantsMXP(0);
   EndMXP();
 }
@@ -29,23 +29,39 @@ public void init_mxp() {
 
   if (QueryMXP())
     SetWantsMXP(1);
+  else {
+    SetWantsMXP(0);
+    return;
+  }
 
   // Tell the client that from now on we are sending MXP sequences
   //binary_message(({IAC, SB, TELOPT_MXP, IAC, SE}));
 
+    // Switch to "permanent secure" mode, MXP tags now enabled
+  efun::write(MXPMODE(6) +
+    MXPTAG2("VERSION") +
+    MXPTAG2("SUPPORT") +
+    MXPTAG2("!-- Set up MXP elements --") +
+    MXPTAG2("!ELEMENT RNum FLAG=\"RoomNum\" ATT=\"id\" EMPTY") +
+    MXPTAG2("!ELEMENT RName FLAG=\"RoomName\"") +
+    MXPTAG2("!ELEMENT RDesc FLAG=\"RoomDesc\"") +
+    MXPTAG2("!ELEMENT RExits FLAG=\"RoomExit\"") +
+    MXPTAG2("!ELEMENT Prompt FLAG=\"Prompt\"") +
+    MXPTAG2("!ELEMENT red '<COLOR red><B>'") +
+    MXPTAG2("!ELEMENT Ex \"<send>\""));
+
   // Switch to "permanent secure" mode, MXP tags now enabled
-  efun::write(process_mxp(MXPMODE(6), QueryMXP()));
-  efun::write(process_mxp(MXPTAG("VERSION"), QueryMXP()));
-  efun::write(process_mxp(MXPTAG("SUPPORT"), QueryMXP()));
-//  efun::write(process_mxp(MXPMODE(6) + MXPTAG("VERSION") + "\n", QueryMXP()));
-//  efun::write(process_mxp(MXPMODE(6) + MXPTAG("SUPPORT") + "\n", QueryMXP()));
-  efun::write(process_mxp(MXPTAG("!-- Set up MXP elements --"), QueryMXP()));
-  efun::write(process_mxp(MXPTAG("!ELEMENT RNum FLAG=\"RoomNum\" ATT=\"id\" EMPTY"), QueryMXP()));
-  efun::write(process_mxp(MXPTAG("!ELEMENT RName FLAG=\"RoomName\""), QueryMXP()));
-  efun::write(process_mxp(MXPTAG("!ELEMENT RDesc FLAG=\"RoomDesc\""), QueryMXP()));
-  efun::write(process_mxp(MXPTAG("!ELEMENT RExits FLAG=\"RoomExit\""), QueryMXP()));
-  efun::write(process_mxp(MXPTAG("!ELEMENT Prompt FLAG=\"Prompt\""), QueryMXP()));
-  efun::write(process_mxp(MXPTAG("!ELEMENT Ex \"<send>\""), QueryMXP()));
+  // efun::write(process_mxp(MXPMODE(6), QueryMXP()));
+  // efun::write(process_mxp(MXPTAG("VERSION"), QueryMXP()));
+  // efun::write(process_mxp(MXPTAG("SUPPORT"), QueryMXP()));
+  // efun::write(process_mxp(MXPTAG("!-- Set up MXP elements --"), QueryMXP()));
+  // efun::write(process_mxp(MXPTAG("!ELEMENT RNum FLAG=\"RoomNum\" ATT=\"id\" EMPTY"), QueryMXP()));
+  // efun::write(process_mxp(MXPTAG("!ELEMENT RName FLAG=\"RoomName\""), QueryMXP()));
+  // efun::write(process_mxp(MXPTAG("!ELEMENT RDesc FLAG=\"RoomDesc\""), QueryMXP()));
+  // efun::write(process_mxp(MXPTAG("!ELEMENT RExits FLAG=\"RoomExit\""), QueryMXP()));
+  // efun::write(process_mxp(MXPTAG("!ELEMENT Prompt FLAG=\"Prompt\""), QueryMXP()));
+  // efun::write(process_mxp(MXPTAG("!ELEMENT red '<COLOR red><B>'"), QueryMXP()));
+  // efun::write(process_mxp(MXPTAG("!ELEMENT Ex \"<send>\""), QueryMXP()));
 }
 
 public int QueryWantsMXP() {

@@ -73,6 +73,7 @@
 #include <secure/wizlevels.h>
 #include <properties.h>
 #include <msgclass.h>
+#include <mxp.h>
 
 #define MORE_MODE       0
 #define MORE_REGEXP     1
@@ -541,7 +542,7 @@ varargs int more ( mixed fname, int mode, int chunk, int itrans,
   tmp=get_header()+tmp;
 
   if ( tmp && tmp[<1] != '\n' ) tmp += "\n";
-  msg_write( CMSG_GENERIC|MMSG_NOWRAP|MMSG_DIRECT|itrans, tmp );
+  msg_write( CMSG_GENERIC|MMSG_NOWRAP|MMSG_DIRECT|itrans, process_mxp(tmp, TPMXP) );
 
   // if we got the flag to show the last eof do not exit right now
   if ( (!(mode & MORE_PROMPTLAST)) &&  (lines<=0) )

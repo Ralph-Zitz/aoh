@@ -3,6 +3,12 @@
 
 #define MXP_SUPPORT_ENABLED  "mxp_enabled_features"
 #define MXP_SUPPORT_DISABLED "mxp_disabled_features"
+#ifndef TPMXP
+#define TPMXP ({int})this_player()->QueryMXP()
+#endif
+#ifndef TOMXP
+#define TOMXP ({int})this_object()->QueryMXP()
+#endif
 
 /* strings */
 
@@ -19,6 +25,7 @@
 /* constructs an MXP tag with < and > around it */
 
 #define MXPTAG(arg) sprintf("%s%s%s", MXP_BEG, arg, MXP_END)
+#define MXPTAG2(arg) sprintf("<%s>", arg)
 
 #define ESC "\x1B"  /* esc character */
 

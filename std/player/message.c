@@ -30,9 +30,6 @@
 /* the max. size of the user-definable class-dep. history */
 #define MAX_MSG_HISTORY 20
 
-/* Do we support MXP?  */
-#define TOMXP ({int})TO->QueryMXP()
-
 /* -------------------------------------------------------------------------
  * Prototypes
  * -------------------------------------------------------------------------
@@ -401,7 +398,7 @@ public varargs void receive( string msg, int class, int indent, int time ) {
     }
 
     msg = translate( msg, class, indent );
-    efun::tell_object( this_object(), process_mxp(msg, TOMXP) );
+    efun::tell_object( this_object(), msg /* process_mxp(msg, TOMXP) */ );
   }
 }
 
@@ -545,7 +542,8 @@ public mixed print_prompt() {
       value = incmsg + "\n" + value;
       incmsg = 0;
     }
-    value = process_mxp(sprintf("%s%s%s", MXPTAG("Prompt"), value, MXPTAG("/Prompt")), TOMXP);
+    value = sprintf("%s%s%s", (TOMXP ? MXPTAG2("Prompt") : ""), value, (TOMXP ? MXPTAG2("/Prompt") : ""));
+    // value = process_mxp(sprintf("%s%s%s", MXPTAG("Prompt"), value, MXPTAG("/Prompt")), TOMXP);
     /* translate the color macros and do the output */
     efun::tell_object( this_object(), translate( value, CMSG_GENERIC, 0 ) );
   }

@@ -13,7 +13,6 @@
 
 #define TO this_object()
 #define TP this_player()
-#define TPMXP ({int})this_player()->QueryMXP()
 #define THIS this_object()
 
 public string * filterExtra (string prop); // std/thing/description
@@ -69,10 +68,11 @@ public string SetRoomLong(string str) {
 
 public varargs string IntLong(string what)  {
   mixed rc;
-  return   MXPTAG("RDesc") +
-           process_string((pointerp(rc = QueryIntLong()) ? rc[0] : rc) +
+  return   (TPMXP ? MXPTAG2("RDesc") : "") +
+           process_string((pointerp(rc = QueryIntLong()) ? rc[0]: rc) +
            implode(filterExtra(P_INT_LONG), "")) +
-           MXPTAG("/RDesc");
+           (TPMXP ? MXPTAG2("/RDesc") : "");
+
 /*
   return process_mxp(MXPTAG("RDesc") +
            process_string((pointerp(rc = QueryIntLong()) ? rc[0] : rc) +
@@ -83,15 +83,16 @@ public varargs string IntLong(string what)  {
 
 public varargs string ExaIntLong(string what)  {
   mixed rc;
-  return   MXPTAG("RDesc") +
+  return   (TPMXP ? MXPTAG2("RDesc") : "") +
            process_string((pointerp(rc = QueryIntLong()) ? rc[1]
-                                       : "You see nothing special.\n"+rc) + 
+                                       : "You see nothing special.\n"+rc) +
            implode(filterExtra(P_INT_LONG), "")) +
-           MXPTAG("/RDesc");
+           (TPMXP ? MXPTAG2("/RDesc") : "");
+
 /*
   return process_mxp(MXPTAG("RDesc") +
            process_string((pointerp(rc = QueryIntLong()) ? rc[1]
-                                       : "You see nothing special.\n"+rc) + 
+                                       : "You see nothing special.\n"+rc) +
            implode(filterExtra(P_INT_LONG), "")) +
            MXPTAG("/RDesc"), TPMXP);
 */

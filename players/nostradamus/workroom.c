@@ -8,6 +8,7 @@
 #include <stdrooms.h>
 #include <properties.h>
 #include <msgclass.h>
+#include <mxp.h>
 
 inherit "/std/room";
 
@@ -19,7 +20,7 @@ public varargs void create () {
   Set(P_INT_SHORT, "The workroom of " NAME);
   Set(P_INT_LONG,
      "This is the workroom of " NAME " 😃.\n"
-     "Since " NAME " is just a new wizard, it is completely empty, but "
+     "Since " NAME " is just a " + MXPTAG("red") + "new" + MXPTAG("/red")+ " wizard, it is completely empty, but "
      "nevertheless quite comfortable.\n"
   );
   AddRoomCmd("hosts", #'my_cmd /*'*/);

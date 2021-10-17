@@ -72,13 +72,6 @@ public varargs string IntLong(string what)  {
            process_string((pointerp(rc = QueryIntLong()) ? rc[0]: rc) +
            implode(filterExtra(P_INT_LONG), "")) +
            (TPMXP ? MXPTAG2("/RDesc") : "");
-
-/*
-  return process_mxp(MXPTAG("RDesc") +
-           process_string((pointerp(rc = QueryIntLong()) ? rc[0] : rc) +
-           implode(filterExtra(P_INT_LONG), "")) +
-           MXPTAG("/RDesc"), TPMXP);
-*/
 }
 
 public varargs string ExaIntLong(string what)  {
@@ -88,14 +81,6 @@ public varargs string ExaIntLong(string what)  {
                                        : "You see nothing special.\n"+rc) +
            implode(filterExtra(P_INT_LONG), "")) +
            (TPMXP ? MXPTAG2("/RDesc") : "");
-
-/*
-  return process_mxp(MXPTAG("RDesc") +
-           process_string((pointerp(rc = QueryIntLong()) ? rc[1]
-                                       : "You see nothing special.\n"+rc) +
-           implode(filterExtra(P_INT_LONG), "")) +
-           MXPTAG("/RDesc"), TPMXP);
-*/
 }
 
 public varargs string IntShort(string what) {

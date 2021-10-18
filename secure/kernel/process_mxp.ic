@@ -19,15 +19,7 @@ public string process_mxp(string message, int does_mxp) {
     int i = 0;
     int inTag = 0;
     int inEntity = 0;
-#if 0
-    if (!does_mxp)
-        return regreplace(message, "<[^<>]+>", "", RE_PCRE|RE_GLOBAL|RE_MULTILINE);
-    else {
-        string *original_lines = explode(message, "\n");
-        return implode(map(original_lines, (: return MXPMODE(2) + $1; :)), "\n");
-    }
-#endif
-#if 1
+
     string *original_lines = explode(message, "\n");
     string *processed_lines = allocate(sizeof(original_lines));
 
@@ -89,5 +81,4 @@ public string process_mxp(string message, int does_mxp) {
         }
     }
     return implode(processed_lines, "\n");
-#endif
 }

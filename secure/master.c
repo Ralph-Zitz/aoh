@@ -1358,7 +1358,7 @@ void inaugurate_master (int arg)
 }
 
 //---------------------------------------------------------------------------
-mixed get_master_uid ()
+string get_master_uid ()
 
 // Return the string to be used as uid (and -euid) of a (re)loaded master.
 // Under !native, the function may also return a non-zero number.

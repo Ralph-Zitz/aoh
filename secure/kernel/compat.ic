@@ -13,6 +13,7 @@
  */
 
 #include <driver/wizlist.h>
+#include <msgclass.h>
 
 /*-------------------------------------------------------------------------*/
 public string version() 
@@ -67,7 +68,7 @@ varargs void wizlist(string name)
         name = ({string})this_player()->QueryRealName();
         if (!name)
         {
-            write("Need to provide a name or 'ALL' to the wizlist function.\n");
+            msg_write(CMSG_GENERIC, "Need to provide a name or 'ALL' to the wizlist function.\n");
             return;
         }
     }
@@ -83,7 +84,7 @@ varargs void wizlist(string name)
 
     if ((pos = member(a[WL_NAME], name)) < 0 && name != "ALL")
     {
-        write("No wizlist info for '"+name+"' found.\n");
+        msg_write(CMSG_GENERIC, "No wizlist info for '"+name+"' found.\n");
         return;
     }
     b = allocate(sizeof(cmds));
@@ -101,7 +102,7 @@ varargs void wizlist(string name)
             a = a[<15..];
         }
     }
-    write("\nWizard top score list\n\n");
+    msg_write(CMSG_GENERIC, "\nWizard top score list\n\n");
     if (total_cmd == 0)
         total_cmd = 1;
     for (i = sizeof(a); i; ) {

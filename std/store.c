@@ -163,7 +163,7 @@ public mixed SearchObjects(string pattern)
 public int CheckList(object ob)
 {
   return sizeof(({string})ob->QueryShort()||"")
-         && !({int})ob->Query(P_NOSELL)
+         && !({mixed})ob->Query(P_NOSELL)
          &&!({int})ob->QueryIsPlayer();
 }
 

@@ -134,9 +134,9 @@ varargs void create()
  " |         ....light wounds                [" +
      calc_cost(HEAL_COST(LIGHT_WOUNDS))+" copper]                |\n"
  " |         ....serious wounds              [" +
-     calc_cost(HEAL_COST(SERIOUS_WOUNDS))+" copper]                |\n"
+     calc_cost(HEAL_COST(SERIOUS_WOUNDS))+" copper]               |\n"
  " |         ....critical wounds             [" +
-     calc_cost(HEAL_COST(CRITICAL_WOUNDS))+" copper]                |\n"
+     calc_cost(HEAL_COST(CRITICAL_WOUNDS))+" copper]               |\n"
  " |                                                                     |\n"
  " |         I can also cure poisoning and treat diseases.               |\n"
  " |                                                                     |\n"

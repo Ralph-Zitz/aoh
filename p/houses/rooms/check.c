@@ -12,7 +12,7 @@ mapping house_doors;
 mapping house_vitems;
 int house_vitemcounter;
 
-create() {
+varargs void create() {
   ::create();
   SetIntShort("Test");
   SetIntLong("Test room:\n"

@@ -60,9 +60,6 @@ varargs void create()
 {
   string *dummy;
   string file;
-  string *exits;
-  string *items;
-  int i;
 
   if(member((file = object_name()), '#') != -1) return;
   if(file == "/p/houses/common/room/room") return;
@@ -194,15 +191,13 @@ string opposite(string dir)
 
 // removes all (!) items matching to str
 int destruct (string str) {
-  mixed dummy,ids,item;
-  int i,num;
-  item=({0,0,0});
+  mixed dummy;
+  int i;
   if(!security()) return 0;
   if(!str) {
     notify_fail("You can only smash an item.\nExample: smash chair\n");
     return 0;
   }
-  item=0;
   if(dummy = QueryItems())
     for(i = sizeof(dummy); i--; )
       if (({int})dummy[i][0]->id(str)) {
@@ -402,10 +397,6 @@ up, down, northwest, northeast, southwest, southeast!\n");
 
 int unhide_exit(string str)
 {
-  string filename;
-  object other_room, *inv;
-  int    i;
-
   if(!security()) return 0;
   if(!str) {
     notify_fail("You can unhide a special direction.\n\Example: unhide north\n");
@@ -422,7 +413,7 @@ int unhide_exit(string str)
     notify_fail("This room has no exit to " + str + ".\n");
     return 0;
   }
-  if(!(filename = get_new_filename(str))) {
+  if(!get_new_filename(str)) {
     notify_fail("There is no room in the " + str + ".\n");
     return 0;
   }
@@ -536,23 +527,18 @@ Please edit the name of the room (help with \"~h\")!\n]");
 
 void store_long(string *text)
 {
-  string new_long;
-  string file;
-
   if(!sizeof(text)) {
     write("No changes are done.\n");
     return;
   }
   write("You changed the description of the room.\n");
   say(capitalize(QueryOwner()) + " changed the description of the room.\n");
-  SetIntLong(new_long = implode(text,"\n") + "\n");
+  SetIntLong(implode(text,"\n") + "\n");
   update_file();
 }
 
 void getstring(string str)
 {
-  string file;
-
   switch (str) {
   case "": case ".": case "**":
     write("You didn't change the name of the room.\n");
@@ -578,8 +564,6 @@ void getstring(string str)
 
 void gettext(string str)
 {
-  string file;
-
   switch (str) {
   case "~r":
     if (!sizeof(edittext))
@@ -621,8 +605,6 @@ void gettext(string str)
 
 void getdetailtext(string str)
 {
-  string new_detail;
-  string file;
   switch (str) {
   case "~r":
     if (!sizeof(edittext))
@@ -648,7 +630,7 @@ void getdetailtext(string str)
       return;
     }
     write("You changed a detail of this room.\n");
-    AddDetail(detail,new_detail=implode(edittext,"\n") + "\n");
+    AddDetail(detail,implode(edittext,"\n") + "\n");
     update_file();
     return;
   case "~h":

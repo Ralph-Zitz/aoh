@@ -20,7 +20,7 @@ public varargs void create () {
   Set(P_INT_SHORT, "The workroom of " NAME);
   Set(P_INT_LONG,
      "This is the workroom of " NAME " 😃.\n"
-     "Nothing to see here, move along.\n"
+     "Nothing " + MXPTAG("b") + "to" + MXPTAG("/b") + " see here, move along.\n"
   );
   AddRoomCmd("hosts", #'my_cmd /*'*/);
   AddRoomCmd("efun", #'my_efun /*'*/);

@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------
- * /std/player/bin/time.c  --  The OSB time command
+ * /std/player/bin/time.c  --  The AoH time command
  *
  * Copyright (C) 1997 by One Step Beyond.
  * All Rights Reserved.
@@ -26,7 +26,7 @@
 // prototypes
 private string get_rl_time();
 private string get_aol_time();
-private string get_osb_time();
+private string get_aoh_time();
 
 
 public int main( string arg ) 
@@ -45,13 +45,13 @@ public int main( string arg )
   switch( arg )
   {
      case TIME_AOH:
-       s += get_osb_time();
+       s += get_aoh_time();
        break;
      case TIME_RL:
        s += get_rl_time();
        break;
      case TIME_ALL:
-       s += get_osb_time();
+       s += get_aoh_time();
        s += get_rl_time();
        s += get_aol_time();
    }
@@ -107,7 +107,7 @@ private string get_aol_time()
          +cdate[11..18]+" CT\n"; 
 }
 
-private string get_osb_time()
+private string get_aoh_time()
 {
    mixed *date;
    

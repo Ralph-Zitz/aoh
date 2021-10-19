@@ -145,7 +145,7 @@ public int main( string arg ) {
     case TIME_AOH:
       this_player()->Set(P_TIME_OPTIONS, TIME_AOH);
       msg_write( CMSG_GENERIC,
-                 "Time command set to display OSB time.\n" );
+                 "Time command set to display AoH time.\n" );
       break;
     case TIME_RL:
       this_player()->Set(P_TIME_OPTIONS, TIME_RL);
@@ -155,11 +155,11 @@ public int main( string arg ) {
     case TIME_ALL:
       this_player()->Set(P_TIME_OPTIONS, TIME_ALL);
       msg_write( CMSG_GENERIC,
-                 "Time command set to display OSB and real world time.\n" );
+                 "Time command set to display AoH and real world time.\n" );
       break;
     default:
       msg_write( CMSG_GENERIC,
-                 "Usage: config time <osb | rl | all>.\n" );
+                 "Usage: config time <aoh | rl | all>.\n" );
     }
     break;
 

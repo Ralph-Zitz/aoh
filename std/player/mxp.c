@@ -61,7 +61,8 @@ public void init_mxp() {
   efun::write(process_mxp(MXPTAG("!ELEMENT RDesc FLAG=\"RoomDesc\""), QueryMXP()));
   efun::write(process_mxp(MXPTAG("!ELEMENT RExits FLAG=\"RoomExit\""), QueryMXP()));
   efun::write(process_mxp(MXPTAG("!ELEMENT Prompt FLAG=\"Prompt\""), QueryMXP()));
-  efun::write(process_mxp(MXPTAG("!ELEMENT red '<COLOR red><B>'"), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("!ELEMENT bred \"<COLOR red><B>\""), QueryMXP()));
+  efun::write(process_mxp(MXPTAG("!ELEMENT byellow \"<COLOR yellow><B>\""), QueryMXP()));
   efun::write(process_mxp(MXPTAG("!ELEMENT Ex \"<send>\""), QueryMXP()));
 }
 

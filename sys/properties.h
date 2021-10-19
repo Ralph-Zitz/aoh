@@ -421,7 +421,7 @@
 #define P_CLASS_HISTORY    "ClassHistory"
 #define P_TIME_OPTIONS     "TimeOptions"
 
-#define TIME_OSB           "osb"
+#define TIME_AOH           "aoh"
 #define TIME_RL            "rl"
 #define TIME_ALL           "all"
 

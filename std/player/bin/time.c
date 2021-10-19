@@ -44,7 +44,7 @@ public int main( string arg )
   
   switch( arg )
   {
-     case TIME_OSB:
+     case TIME_AOH:
        s += get_osb_time();
        break;
      case TIME_RL:

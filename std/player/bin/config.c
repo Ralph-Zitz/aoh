@@ -142,8 +142,8 @@ public int main( string arg ) {
 
   case "time":
     switch( lower_case(how) )  {
-    case TIME_OSB:
-      this_player()->Set(P_TIME_OPTIONS, TIME_OSB);
+    case TIME_AOH:
+      this_player()->Set(P_TIME_OPTIONS, TIME_AOH);
       msg_write( CMSG_GENERIC,
                  "Time command set to display OSB time.\n" );
       break;

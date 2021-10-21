@@ -48,7 +48,9 @@
 #define COLOUR_D      DAEMONPATH "colour_d"
 
 // The room daemon
+#ifndef ROOM_D
 #define ROOM_D        DAEMONPATH "room_d"
+#endif
 
 // The bank daemon
 #define BANK_D        DAEMONPATH "bank_d"

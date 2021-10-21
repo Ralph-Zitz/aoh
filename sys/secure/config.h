@@ -61,6 +61,7 @@
 #define RACEMASTER    "/p/daemons/races/racemaster"
 #define QUESTMASTER   "/p/daemons/quest_control"
 #define CHANNEL_D     "/p/daemons/channel_d"
+#define ROOM_D        "/p/daemons/room_d"
 #define CHANNELMASTER "/p/daemons/channel_d"
 #define SKILLMASTER   "/p/daemons/skillmaster"
 #define EXPLOREMASTER "/p/daemons/explorer"

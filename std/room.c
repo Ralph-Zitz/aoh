@@ -6,6 +6,7 @@
 
 #include <classes.h>
 #include <properties.h>
+#include <secure/config.h>
 
 inherit "/std/room/restrictions";  // also has an create()
 inherit "/std/room/description";
@@ -180,6 +181,16 @@ public string SetIntMap(string mapfile)
    return pIntMap;
 }
 
+private int pNumID;
+
+public int QueryNumID() { return pNumID; }
+public int SetNumID(int i)
+{
+  if (i < 0)
+     raise_error(sprintf("Illegal argument 1 to SetNumID(): %O (value must be positive)\n", i));
+  return pNumID = i;
+}
+
 public varargs void create(int noreplace) {
   if (!noreplace &&
       object_name()[0..8] != "/std/room" && object_name()[0..8] != "/obj/room")
@@ -191,7 +202,7 @@ public varargs void create(int noreplace) {
   skills::create();  // must be AFTER AddClassId
   seteuid(getuid());
   Set(P_HELP_MSG, "There is nothing special about this room.\n");
-   pIntMap="/d/silvere/doc/maps/harbour.map";
+  pIntMap="/d/silvere/doc/maps/harbour.map";
   // support for new commands: - Magictcs - 21 apr 98
   AddRoomCmd("get",  "cmd_get_vitem");
   AddRoomCmd("take", "cmd_get_vitem");

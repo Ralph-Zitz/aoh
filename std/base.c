@@ -213,7 +213,7 @@ public /* nomask */ int QueryInherited( void )
 
 public /* nomask */ int QueryCloned( void )
 {
-  return Pcloned;
+  return clonep(); /* return Pcloned; */
 }
 
 public /* nomask */ int SetCloned( int i )

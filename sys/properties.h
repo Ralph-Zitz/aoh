@@ -506,6 +506,7 @@
 #define P_INT_LIGHT        "IntLight"
 #define P_ITEMS            "Items"
 #define P_ITEMS_REFRESH    "ItemsRefresh"
+#define P_NUM_ID           "NumID"
 #define P_MAGIC_PROTECTION "MagicProtection"
 #define P_MAX_INV          "MaxInv"
 #define P_MAX_WEIGHT       "MaxWeight"

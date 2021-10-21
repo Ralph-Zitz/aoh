@@ -186,17 +186,19 @@ public string SetIntMap(string mapfile)
 private int pNumID;
 
 public int QueryNumID() {
-  if (pNumID || pNumID = ({int})ROOM_D->QueryRoomID(TO))
-    return pNumID;
-  return 0;
+  if (!pNumID)
+    return pNumID = ({int})ROOM_D->QueryRoomID(TO);
+  return pNumID;
 }
 
 public int SetNumID(int i)
 {
   if (!QueryNumID() || i < 1)
-     return pNumID = ({int})ROOM_D->InsertRoom(TO);
+    return pNumID = ({int})ROOM_D->InsertRoom(TO);
+  else if (pNumID = QueryNumID())
+    return pNumID;
   else
-     return pNumID = ({int})ROOM_D->InsertRoomID(i, TO);
+    return pNumID = ({int})ROOM_D->InsertRoomID(i, TO);
 }
 
 public varargs void create(int noreplace) {

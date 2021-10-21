@@ -6,7 +6,9 @@
 
 #include <classes.h>
 #include <properties.h>
-#include <secure/config.h>
+#include <macros.h>
+#include <config.h>
+#include <daemons.h>
 
 inherit "/std/room/restrictions";  // also has an create()
 inherit "/std/room/description";
@@ -183,12 +185,18 @@ public string SetIntMap(string mapfile)
 
 private int pNumID;
 
-public int QueryNumID() { return pNumID; }
+public int QueryNumID() {
+  if (pNumID || pNumID = ({int})ROOM_D->QueryRoomID(TO))
+    return pNumID;
+  return 0;
+}
+
 public int SetNumID(int i)
 {
-  if (i < 0)
-     raise_error(sprintf("Illegal argument 1 to SetNumID(): %O (value must be positive)\n", i));
-  return pNumID = i;
+  if (!QueryNumID() || i < 1)
+     return pNumID = ({int})ROOM_D->InsertRoom(TO);
+  else
+     return pNumID = ({int})ROOM_D->InsertRoomID(i, TO);
 }
 
 public varargs void create(int noreplace) {

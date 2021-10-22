@@ -975,10 +975,14 @@ int Xtool(string str) {
 	 "                varcheck=<on|off>|snoopchk=<on|off>|invischk="+
 	 "<on|off>|\n"+
 	 "                scanchk=<on|off>|short=<on|off>|echo=<on|off>|"+
-	 "more=<amount>|\n"+
+	 "more=<amount|auto>|\n"+
 	 "                kill|news|save|load|reset]");
   if(str) {
-    if(sscanf(str, "more=%d", m)) {
+    if(sscanf(str, "more=%s", tmp) && tmp="auto") {
+      morelines = ({int})this_player()->QueryPageSize();
+      WDLN("Setting number of displayed lines to " + morelines);
+    }
+    else if(sscanf(str, "more=%d", m)) {
       if(m<5) WDLN("Sorry, amount of lines should be more then 5");
       else {
 	WDLN("Setting amount of displayed lines to "+m);

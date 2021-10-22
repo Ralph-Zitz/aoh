@@ -76,7 +76,8 @@ inherit "/std/thing/properties";
 #define TOOL_LEVEL         (20)
 #endif
 
-#define MORE_LINES         (20)
+/* #define MORE_LINES         (20) */
+#define MORE_LINES         ({int})TP->QueryPageSize()
 #define MAX_HISTORY        (25)
 #define MAX_RECURSION      (6)
 #define TRACE_LEVEL        (1|2|4|8)

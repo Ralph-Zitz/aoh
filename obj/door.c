@@ -84,13 +84,13 @@ private string extend_long(string s) {
 }
 
 varargs string Long (string what) {
-  if (TP && ({mapping})TP->QueryCmdData(SUBID))
+  if (TP && ({mixed})TP->QueryCmdData(SUBID))
     return thing::Long(what);
   return extend_long(thing::Long(what));
 }
 
 varargs string ExaLong (string what) {
-  if (TP && ({mapping})TP->QueryCmdData(SUBID))
+  if (TP && ({mixed})TP->QueryCmdData(SUBID))
     return thing::ExaLong(what);
   return extend_long(thing::ExaLong(what));
 }

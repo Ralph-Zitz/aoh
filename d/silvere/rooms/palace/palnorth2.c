@@ -71,8 +71,8 @@ varargs void create()
    Set(P_COORDINATES, ({ ({ 10,-10,0 }), C_SILVERE }) );
 
    Set(P_NOWAY_MSG,
-"You walk into the wall like an idiot. Somehow you have the feeling, that\
- everyone laughs at you.\n");
+"You walk into the wall like an idiot. Somehow you have the feeling, that "
+"everyone laughs at you.\n");
 
    AddExit("west",  SIL_PALACE("palnorth3"));
    AddExit("east",  SIL_PALACE("palnorth1"));

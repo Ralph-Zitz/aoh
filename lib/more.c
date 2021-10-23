@@ -547,7 +547,7 @@ varargs int more ( mixed fname, int mode, int chunk, int itrans,
   // if we got the flag to show the last eof do not exit right now
   if ( (!(mode & MORE_PROMPTLAST)) &&  (lines<=0) )
   {
-      msg_write( CMSG_GENERIC|MMSG_DIRECT, "=== EOF.\n" );
+      /* msg_write( CMSG_GENERIC|MMSG_DIRECT, "=== EOF.\n" ); */
       remove_data();
       remote_call(fun,ob);
       return 1;

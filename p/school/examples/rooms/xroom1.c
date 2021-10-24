@@ -26,7 +26,7 @@ string _do_light (string key);
 // any kind of initialization usually do.
 
 
-void create() 
+varargs void create() 
 {
     /* Here we call create() in the parent object, which is /std/room.
     ** This initializes the default values for rooms.

@@ -45,6 +45,11 @@ void initialize_globals() {
   invisobjs=({});
   msgto=NULL;
   manpath=({TOOL_PATH+"/",
+    "/doc/3.3vs3.5/",
+    "/doc/LpcBooks/",
+    "/doc/man/",
+    "/doc/other/",
+    "/doc/papers/",
     "/doc/lib/",
     "/doc/other/",
     "/doc/daemons/",

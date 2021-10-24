@@ -130,7 +130,7 @@ object compile_object (string filename)
 "In detail, this room was created on the fly "
 "by /p/school/examples/lpc/xmaze0.c, the only real room in the maze.\n"
            );
-  room->Set(P_VMASTER, "/p/school/examples/lpc/xmaze0"); /* !!! */
+  room->Set(P_VMASTER, object_name(THIS)); /* !!! */
 
    /* That's it. */
   return room;

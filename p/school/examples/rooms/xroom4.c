@@ -10,20 +10,20 @@
 inherit "/std/room";
 
 int _special_plugh(string arg); // forward
-void _enter_dyna(string arg);   // forward
+int _enter_dyna(string arg);   // forward
 
 /*------------------------------------------------------------------------*/
 
-void create() 
+varargs void create() 
 {
   ::create();
 
   Set(P_INT_SHORT, "The fourth example room");
 
   Set(P_INT_LONG, 
-"You are in the fourth example room (/d/archwiz/common/lpc/exm/xroom4.c).\n"
-"Note that it doesn't have a door at the exit to the second room.\n"
-"We have some special commands in this room: 'plugh', 'xyzzy' and 'voy'.\n"
+"You are in the fourth example room (/d/archwiz/common/lpc/exm/xroom4.c). "
+"Note that it doesn't have a door at the exit to the second room. "
+"We have some special commands in this room: 'plugh', 'xyzzy' and 'voy'. "
 "There are exits to the east, west and to the north.\n"
       );
 
@@ -61,7 +61,7 @@ int _special_plugh(string arg) {
 ** This one doesn't do much either.
 */
 
-_special_voy(arg) {
+int _special_voy(string arg) {
   if (arg) write ("Voying "+arg+"...done.\n");
   else write ("You feel something watching you.\n");
   return 1;
@@ -74,7 +74,7 @@ _special_voy(arg) {
 
 int _enter_dyna(string arg) {
   if (arg) return 0;  /* Moving north with args? Naaah */
-  return "/d/archwiz/common/lpc/exm/xdynamaster"->_move_in_dyna(
+  return ({int})"/d/archwiz/common/lpc/exm/xdynamaster"->_move_in_dyna(
     this_player(), query_verb(), 0, -1, 0
   );
 }

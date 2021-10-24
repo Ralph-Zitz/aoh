@@ -9,7 +9,7 @@
 inherit "/obj/key";
 
   /* Initialize us */
-create() {
+varargs void create() {
 
   ::create();
 

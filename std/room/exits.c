@@ -611,13 +611,13 @@ public mixed * DoorInfo (mixed door) {
 
 public varargs mixed AddDoor ( string dir, mixed dest
                       , mixed doorid, mixed doorlong
-                      , mixed * keyid, int state
+                      , string|mixed * keyid, int state
                       )
 {
   string   doorobj;
   mixed    keycode;
   string   doorshort, *doorids, *doorads;
-  object  *door;
+  mixed    *door;
 
   AddExit(({ dir }), dest);
   dest = Pexits[dir];

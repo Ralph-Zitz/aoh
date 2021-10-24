@@ -48,7 +48,7 @@
 
 inherit "/std/room";
 
-void create() 
+varargs void create() 
 {
   ::create();
   
@@ -69,7 +69,7 @@ void create()
    // The key will be refreshed on every reset if it was taken away.
    //
    
-  AddItem ("/p/school/examples/rooms/boguskey", REFRESH_REMOVE);
+  AddItem ("/p/school/examples/lpc/boguskey", REFRESH_REMOVE);
   
      
 /* =========================================================================

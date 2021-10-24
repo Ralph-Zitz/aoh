@@ -14,26 +14,26 @@
 inherit "/std/room";
 
 /*------------------------------------------------------------------------*/
-void create() 
+varargs void create() 
 {
   ::create();
 
   Set(P_INT_SHORT, "The third example room");
 
   Set(P_INT_LONG,
-"You are in the third example room (/d/archwiz/common/lpc/exm/xroom3.c).\n"
+"You are in the third example room (/d/archwiz/common/lpc/exm/xroom3.c). "
 "It features a door west, leading to the second example room.\n"
      );
 
     /* Now add the door: closed, but unlocked.
     */
   AddDoor("west", EXROOMS("xroom2"), "wooden door",
-          "An old wooden door.\n", 0, DOOR_STATUS_CLOSED);
+          "An old wooden door.\n", 0, LOCK_CLOSED);
 
    /* Now place the right key for the locked door in xroom2 here.
    ** The key will be refreshed on every reset if it was taken away.
    */
-  AddItem ("/d/archwiz/common/lpc/exm/boguskey", REFRESH_REMOVE);
+  AddItem ("/p/school/examples/lpc/boguskey", REFRESH_REMOVE);
 }
 
 /*------------------------------------------------------------------------*/

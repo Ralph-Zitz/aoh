@@ -130,7 +130,7 @@ int cmd_drink(string str)
   //  the argument NOTIFY_NOT_VALID to notify_fail(), by the way.
   // -------------------------------------------------------------------
 
-  if ( (TP->QueryDrink() + DRINK) > TP->QueryMaxDrink() )
+  if ( (({int})TP->QueryDrink() + DRINK) > ({int})TP->QueryMaxDrink() )
   {
     notify_fail("You can't drink that much.\n", NOTIFY_NOT_VALID);
     return 0;

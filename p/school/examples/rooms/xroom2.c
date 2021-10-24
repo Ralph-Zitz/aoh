@@ -15,7 +15,7 @@
 inherit "/std/room";
 
 /*------------------------------------------------------------------------*/
-void create() 
+varargs void create() 
 {
   ::create();
 
@@ -54,7 +54,7 @@ void create()
     ** Note the appearance of P_OTHERROOM which prevents this entry from 
     ** being filled in by AddDoor().
     */
-  AddDoor("west", "/d/archwiz/common/lpc/exm/xroom4"
+  AddDoor("west", "/p/school/examples/rooms/xroom4"
          , ([ P_SHORT    :"a small door"
             , P_LONG     :"An old small door.\n"
             , P_ADS      : ({ "small" })
@@ -69,5 +69,5 @@ void create()
    /* To fool the player, we place a wrong key here.
    ** The key will be refreshed on every reset if it was taken away.
    */
-  AddItem("/d/archwiz/common/lpc/exm/weirdkey", REFRESH_REMOVE);
+  AddItem("/p/school/examples/lpc/weirdkey", REFRESH_REMOVE);
 }

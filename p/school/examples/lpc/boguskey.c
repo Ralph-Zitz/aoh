@@ -8,7 +8,7 @@
 inherit "/std/thing";
 
   /* Inititalize us */
-create() 
+varargs void create() 
 {
   ::create();
 

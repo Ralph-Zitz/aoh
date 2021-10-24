@@ -33,23 +33,18 @@ static void _chk_server()
 }
 
 /*-------------------------------------------------------------------------*/
-void create() 
+varargs void create() 
 {
-
   ::create();
-
   Set(P_INT_SHORT, "The other 'indoors' example room with windows");
-
   Set(P_INT_LONG,
-"You are in another 'indoors' exm. room (/d/archwiz/common/lpc/exm/xroom10.c).\n"
+"You are in another 'indoors' exm. room (/p/school/examples/rooms/xroom10.c). "
 "This one is fully lighted, but through the windows the changing of the "
-"daylight is percepted.\n"
-"You are in a small hut with some big windows.\n"
-"The hut extends to the south.\n"
+"daylight is percepted. "
+"You are in a small hut with some big windows. "
+"The hut extends to the south. "
       );
-
-  AddExit("south", "/d/archwiz/common/lpc/exm/xroom8");
-
+  AddExit("south", "/p/school/examples/rooms/xroom8");
   AddDetail(({"window", "windows"}), #'fwindows);
 
     /* This room is 'indoors', so tell the night_day-server manually
@@ -78,7 +73,7 @@ string fwindows()
 {
   _chk_server();
   return "Through the window you see the land outside.\n"
-         +(nightday ? (string) nightday->QueryStateDesc()
+         +(nightday ? ({string}) nightday->QueryStateDesc()
                     : ""
           );
 }

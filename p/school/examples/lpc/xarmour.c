@@ -13,7 +13,7 @@ inherit "/std/armour";
 ** Initialize us.
 */
 
-create () {
+varargs void create () {
 
   ::create();
 
@@ -27,7 +27,7 @@ create () {
 
     /* and also a long one */
   Set(P_LONG,
-"This is an example armour (/d/archwiz/common/lpc/exm/xarmour.c).\n" +
+"This is an example armour (/p/school/examples/lpc/xarmour.c). "
 "A pair of combat boots as they were worn by paratroopers.\n"
          );
 

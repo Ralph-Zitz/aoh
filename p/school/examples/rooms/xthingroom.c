@@ -14,19 +14,15 @@ object make_item(); // forward declaration
 ** Initialize us
 */
 
-void create() {
-  int ix;
-
+varargs void create() {
   ::create();
-
   SetIntShort("The Storage of Example Things");
-
   SetIntLong(
-"A 'multimedia' room. (/d/archwiz/common/lpc/exm/xthingroom.c)\n"
+"A 'multimedia' room. (/p/school/examples/rooms/xthingroom.c) "
 "This room is cluttered with various examples of things. "
 "Since some curious visitors took some away, the collection may "
-"be 'rebuild' manually.\n"
-"You see a doorway to the west, leading to the entrance.\n"
+"be 'rebuild' manually. "
+"You see a doorway to the west, leading to the entrance. "
 "There is a faint smell and a noticeable noise in the room.\n"
             );
 
@@ -74,8 +70,7 @@ void create() {
   AddItem("/d/archwiz/common/lpc/exm/xequipment", REFRESH_REMOVE);
   AddItem("/obj/torch", REFRESH_REMOVE);
   AddItem(#'make_item, REFRESH_REMOVE);
-
- AddItem("/d/archwiz/common/lpc/exm/xunit", REFRESH_REMOVE);
+  AddItem("/d/archwiz/common/lpc/exm/xunit", REFRESH_REMOVE);
   /* xunit is an example for a /std/unit. Due to the way /std/units work,
    * this way of adding the item might lead to unwanted reproduction.
    * An alternative is:
@@ -95,8 +90,8 @@ object make_item() {
   ob = clone_object("/std/thing");
   ob->SetShort("a fileless thing");
   ob->SetLong (
-"This is a fileless thing. It is cloned and configured on the fly\n"+
-"by the Room of Example Things (/d/archwiz/common/lpc/exm/xthingroom.c).\n"
+"This is a fileless thing. It is cloned and configured on the fly "+
+"by the Room of Example Things (/p/school/examples/rooms/xthingroom.c).\n"
               );
   ob->SetWeight (10);
   ob->SetValue(1);
@@ -110,7 +105,7 @@ object make_item() {
 ** Manually trigger a reset() to refresh the example items
 */
 
-_do_reset (str) {
+int _do_reset (string str) {
   if (str) return 0;
   ::reset();
   write ("Ok, take a look now.\n");

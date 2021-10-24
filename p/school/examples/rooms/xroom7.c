@@ -7,7 +7,7 @@
 
 inherit "/std/room";
 
-void create() 
+varargs void create() 
 {
 
   ::create();
@@ -15,14 +15,14 @@ void create()
   Set(P_INT_SHORT, "The 'outdoors' example room with illumination");
 
   Set(P_INT_LONG,
-"You are in another 'outdoors' exm. room.\n"
-"This one features a steady background illumination.\n"
-"You are standing on a small place under the clear sky.\n"
+"You are in another 'outdoors' exm. room. "
+"This one features a steady background illumination. "
+"You are standing on a small place under the clear sky. "
 "The place extends to the north, where some buildings can be seen. "
 "There is a lantern here, giving some light.\n"
      );
 
-  AddExit("north", "/d/archwiz/common/lpc/exm/xroom6");
+  AddExit("north", "/p/school/examples/rooms/xroom6");
 
   AddDetail("lantern",
 "The lantern shines dimly. It is securely mounted to the ground.\n"

@@ -8,20 +8,20 @@
 
 inherit "/std/room";
 
-void create() 
+varargs void create() 
 {
   ::create();
 
   Set(P_INT_SHORT, "The 'outdoors' example room with dimmed daylight");
 
   Set(P_INT_LONG,
-"You are in another 'outdoors' exm. room (/d/archwiz/common/lpc/exm/xroom9.c).\n"
-"This one features a dimmed daylight.\n"
-"You are in a thick forest. You can hardly see the sky.\n"
+"You are in another 'outdoors' exm. room (/p/school/examples/rooms/xroom9.c). "
+"This one features a dimmed daylight. "
+"You are in a thick forest. You can hardly see the sky. "
 "A path leads west from here.\n"
      );
 
-  AddExit("west", "/d/archwiz/common/lpc/exm/xroom6");
+  AddExit("west", "/p/school/examples/rooms/xroom6");
 
     /* Mark this room as being outdoors.
     ** This also takes care of setting the light.

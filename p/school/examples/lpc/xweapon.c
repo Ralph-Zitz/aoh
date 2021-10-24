@@ -28,7 +28,7 @@ varargs void create () {
 
     /* and also a long one */
   Set(P_LONG, 
-"This is an example weapon (/d/archwiz/common/lpc/exm/xweapon.c).\n"
+"This is an example weapon (/p/school/examples/lpc/xweapon.c). "
 "Yow, this towel is really wet and heavy. No chance to dry anything "
 "with it! But ... haven't you read something about wet towels in The Guide?\n"
          );
@@ -100,10 +100,10 @@ int QueryDamage(object enemy) {
   int align;
 
     /* What alignment is our enemy ? */
-  align = enemy->Query(P_ALIGN);
+  align = ({int})enemy->Query(P_ALIGN);
 
     /* Handle creatures differently */
-  if (!interactive(enemy) || !enemy->QueryIsPlayer()) {
+  if (!interactive(enemy) || !({int})enemy->QueryIsPlayer()) {
 
       /* Eat flaming death, nasty creature ! */
     if (align <= -400) {
@@ -118,12 +118,12 @@ int QueryDamage(object enemy) {
   }
 
     /* Stop any player attacking us */
-  write ("Your towel wettens "+enemy->QueryName()+" over and over.\n");
-  say (this_player()->QueryName()+" wettens "+enemy->QueryName()+
-       " with "+this_player()->QueryPossessive()+" towel over and over.\n"
+  write ("Your towel wettens "+({string})enemy->QueryName()+" over and over.\n");
+  say (({string})this_player()->QueryName()+" wettens "+({string})enemy->QueryName()+
+       " with "+({string})this_player()->QueryPossessive()+" towel over and over.\n"
        , enemy);
-  tell_object(enemy, this_player()->QueryName()+" wettens you with "+
-              this_player()->QueryPossessive()+" towel over and over.\n");
+  tell_object(enemy, ({string})this_player()->QueryName()+" wettens you with "+
+              ({string})this_player()->QueryPossessive()+" towel over and over.\n");
 
     /* If we call stop_attack() directly, the combat system will burp
     ** since upon return it assumes the combat round going on.
@@ -141,17 +141,17 @@ void stop_attack(object enemy) {
     return;
   }
 
-  write (enemy->QueryName()+" gets blinded by the water.\n");
-  say (enemy->QueryName()+" gets blinded by the water.\n", enemy);
+  write (({string})enemy->QueryName()+" gets blinded by the water.\n");
+  say (({string})enemy->QueryName()+" gets blinded by the water.\n", enemy);
   tell_object(enemy, "You get blinded by the water.\n");
 
   owner->StopHunting(enemy);
   enemy->StopHunting(owner);
 
-  write ("You stop attacking the blinded "+enemy->QueryName()+".\n");
-  say (owner->QueryName()+" stops attacking the blinded "+
-       enemy->QueryName()+".\n", enemy);
-  tell_object (enemy, owner->QueryName()+" stops attacking you.\n");
+  write ("You stop attacking the blinded "+({string})enemy->QueryName()+".\n");
+  say (({string})owner->QueryName()+" stops attacking the blinded "+
+       ({string})enemy->QueryName()+".\n", enemy);
+  tell_object (enemy, ({string})owner->QueryName()+" stops attacking you.\n");
 }
 
 /*************************************************************************/

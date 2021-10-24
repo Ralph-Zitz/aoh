@@ -15,7 +15,7 @@ inherit "/std/weapon";
 ** Initialize us.
 */
 
-create () {
+varargs void create () {
 
   ::create();
 
@@ -33,7 +33,7 @@ create () {
 
     /* and also a long one */
   Set(P_LONG, 
-"This is another example weapon (/d/archwiz/common/lpc/exm/xweapon2.c).\n" +
+"This is another example weapon (/p/school/examples/lpc/xweapon2.c). "
 "This is a long, heavy sword. You'll two hands to handle it.\n"
      );
 

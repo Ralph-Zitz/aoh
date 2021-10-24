@@ -17,23 +17,20 @@ inherit "/std/room";
 string fwindows(); // forward
 
 /*-------------------------------------------------------------------------*/
-void create() 
+varargs void create() 
 {
-
   ::create();
-
   Set(P_INT_SHORT, "The 'indoors' example room with windows");
-
   Set(P_INT_LONG,
-"You are in another 'indoors' exm. room (/d/archwiz/common/lpc/exm/xroom8.c).\n"
+"You are in another 'indoors' exm. room (/p/school/examples/rooms/xroom8.c). "
 "This one is fully lighted, but through the windows the changing of the "
-"daylight is percepted.\n"
-"You are in a small hut with some big windows.\n"
-"The exit is to the south, the hut extends to the north.\n"
+"daylight is percepted. "
+"You are in a small hut with some big windows. "
+"The exit is to the south, the hut extends to the north. "
      );
 
-  AddExit("south", "/d/archwiz/common/lpc/exm/xroom6");
-  AddExit("north", "/d/archwiz/common/lpc/exm/xroom10");
+  AddExit("south", "/p/school/examples/rooms/xroom6");
+  AddExit("north", "/p/school/examples/rooms/xroom10");
 
   AddDetail(({"window", "windows"}), #'fwindows);
 

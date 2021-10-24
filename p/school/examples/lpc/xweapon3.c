@@ -14,7 +14,7 @@ inherit "/std/weapon";
 ** Initialize us.
 */
 
-create () {
+varargs void create () {
 
   ::create();
 
@@ -23,9 +23,8 @@ create () {
 
     /* and also a long one */
   Set(P_LONG, 
-"This is an example non-conventional weapon\n"+
-"                                  (/d/archwiz/common/lpc/exm/xweapon3.c).\n"+
-"A normal boring staff .. well, except for the handle it is built from "+
+"This is an example non-conventional weapon (/p/school/examples/lpc/xweapon3.c). "
+"A normal boring staff .. well, except for the handle it is built from "
 "flames - maybe it's not that boring at all.. \n"
          );
 
@@ -63,13 +62,13 @@ create () {
 ** Give some messages when wielding/unwielding the staff.
 */
 
-void NotifyWield (object wielder, object weapon, int flags) 
+varargs void NotifyWield (object wielder, object weapon, int flags) 
 {
   if (!(flags & EWF_SILENT))
     write("A warm feeling runs through your veins.\n"); /* :-) */
 }
 
-void NotifyUnwield (object wielder, object weapon, int flags) 
+varargs void NotifyUnwield (object wielder, object weapon, int flags) 
 {
   if (!(flags & EWF_SILENT))
     write("You feel cold...\n");
@@ -83,7 +82,7 @@ void NotifyUnwield (object wielder, object weapon, int flags)
 ** That is the task of the DidDamage() function...
 */
 
-DidDamage (object attacker, int damage, int dam_type) {
+void DidDamage (object attacker, int damage, int dam_type) {
   object victim;
   string what, whats, how;
 
@@ -117,9 +116,9 @@ DidDamage (object attacker, int damage, int dam_type) {
     what = ", but"+what; 
     whats = ", but"+whats; 
   }
-  tell_object(attacker, what+(victim->QueryName())+how+".\n");
+  tell_object(attacker, what+(({string})victim->QueryName())+how+".\n");
   tell_object(victim, whats+"you"+how+".\n");
-  say(whats+(victim->QueryName())+how+".\n", ({victim, attacker}));
+  say(whats+(({string})victim->QueryName())+how+".\n", ({victim, attacker}));
 }
 
 /*************************************************************************/

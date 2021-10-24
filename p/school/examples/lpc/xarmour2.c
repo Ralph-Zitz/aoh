@@ -13,7 +13,7 @@ inherit "/std/armour";
 ** Initialize us.
 */
 
-create () {
+varargs void create () {
 
   ::create();
 
@@ -22,8 +22,8 @@ create () {
 
     /* and also a long one */
   Set(P_LONG,
-"This is an example armour (/d/archwiz/common/lpc/exm/xarmour2.c).\n"
-"A tall silver shield. Your sensitive mind feel a certain touch of ...\n"
+"This is an example armour (/p/school/examples/lpc/xarmour2.c). "
+"A tall silver shield. Your sensitive mind feel a certain touch of ... "
 " ... magic ...\n"
          );
 
@@ -71,7 +71,7 @@ create () {
 ** Analogous for Unwearing.
 */
 
-void NotifyWear (object wearer, object armour, int flags) {
+varargs void NotifyWear (object wearer, object armour, int flags) {
   if (!(flags & EWF_SILENT))
   {
     write("As you touch the shield, it emits a faint glow.\n");
@@ -79,7 +79,7 @@ void NotifyWear (object wearer, object armour, int flags) {
   }
 }
 
-void NotifyUnwear (object wearer, object armour, int flags) {
+varargs void NotifyUnwear (object wearer, object armour, int flags) {
   if (!(flags & EWF_SILENT))
   {
     write("You release the shield, and it goes dark.\n");
@@ -94,10 +94,9 @@ void NotifyUnwear (object wearer, object armour, int flags) {
 ** Here we just give a cute message.
 */
 
-DefendHit (object enemy, int damage, int dtype) {
-  return ({ ::CalcDefend (enemy, damage, dtype)
-          , "A low hum is audible.\n" 
-         });
+int DefendHit (object enemy, int damage, int dtype) {
+  write("A low hum is audible\n");
+  return ::CalcDefend (enemy, damage, dtype);
 }
 
 /*************************************************************************/

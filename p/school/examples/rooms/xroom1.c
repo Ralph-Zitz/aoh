@@ -13,8 +13,6 @@
 
 inherit "/std/room";           /* we derive from this one */
 
-
-
 int _do_west(string arg);      // prototypes
 string _do_light (string key); 
 
@@ -24,7 +22,6 @@ string _do_light (string key);
 // It is usually used to initialize values and properties in the object.
 // An object does not _need_ to have a create(), but all objects which have
 // any kind of initialization usually do.
-
 
 varargs void create() 
 {
@@ -58,15 +55,15 @@ varargs void create()
              );
 
     /* Add the 'normal' exit south */
-  AddExit("south", "/d/archwiz/common/lpc/entrance");
+  AddExit("south", "/d/silvere/rooms/harbour/entrance");
 
     /* Add another 'normal' exit north, leading to the other example rooms
     */
-  AddExit("north", "/d/archwiz/common/lpc/exm/xroom2");
+  AddExit("north", "/p/school/examples/rooms/xroom2");
 
     /* Add another 'normal' exit east, leading to the in/out example rooms
     */
-  AddExit("east", "/d/archwiz/common/lpc/exm/xroom5");
+  AddExit("east", "/p/school/examples/rooms/xroom5");
 
     /* Add the 'special' exit west. 'Special' means that we can specify
     ** a function which gets called when a player want to take this exit.
@@ -81,12 +78,12 @@ varargs void create()
     ** This is possible as the all we want to do is block the exit
     ** for non-VAWs.
     */
-  AddExit("southwest", "/d/archwiz/common/lpc/entrance");
+  AddExit("southwest", "/d/silvere/rooms/harbour/entrance");
   CheckExit("southwest", DACT_CHECK);
 
     /* To the southeast is a hidden exit into the xthingroom.
      */
-  AddExit("southeast", "/d/archwiz/common/lpc/exm/xthingroom");
+  AddExit("southeast", "/p/school/examples/rooms/xthingroom");
   HideExit("southeast", 1);
 
     /* Add the 'normal' detail, the picture. Note the '\n' at the end. */
@@ -110,11 +107,11 @@ varargs string IntLong (string arg)
 {
   string rc;
   rc = ::IntLong(arg);
-  if (arg || !TP->QueryObvious())
-    if (TP->QueryBrief())
-      rc += "["+(THIS->Exits(1) || "")+"]\n";
+  if (arg || !({int})TP->QueryObvious())
+    if (({int})TP->QueryBrief())
+      rc += "["+(({string})TO->Exits(1) || "")+"]\n";
     else
-      rc += (THIS->Exits(0)+THIS->Doors(0)) || "";
+      rc += (({string})TO->Exits(0)+({string})TO->Doors(0)) || "";
   return rc;
 }
 
@@ -131,11 +128,11 @@ int _do_west(string arg)
     /* Do our stuff... */
   if (!IS_WIZARD(this_player())) {
     write ("You bounce back into the room.\n");
-    show(this_player()->Query(P_NAME)
+    show(({string})TP->Query(P_NAME)
          +" tries to go west, but bounces back.\n");
   }
   else
-    this_player()->move("/d/archwiz/common/lpc/entrance", M_GO, "west");
+    TP->move("/d/silvere/rooms/harbour/entrance", M_GO, "west");
   return 1;
 }
 
@@ -152,7 +149,7 @@ varargs int CheckAction(string action, string verb, string arg, int method)
     /* Do our stuff... */
     if (!IS_WIZARD(this_player())) 
     {
-      show(this_player()->Query(P_NAME)
+      show(({string})TP->Query(P_NAME)
            +" tries to go west, but bounces back.\n");
       notify_fail("You bounce back into the room.\n"); // No write()!
       return 0; // Causes the move to fail.

@@ -28,7 +28,7 @@
 #include <driver/lpctypes.h>
 #include <driver/object_info.h>
 
-public varargs object load_object(string file, string creator); // forward
+// public varargs object load_object(string file, string creator); // forward
 
 /* --- call_out() --- */
 

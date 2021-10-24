@@ -11,11 +11,11 @@
 inherit "/std/room";
 
   /* The name of the maze master */
-#define MASTER "/d/archwiz/common/lpc/exm/xdynamaster"
+#define DYNA_MASTER "/p/school/examples/lpc/xdynamaster"
 
 int x, y, z;  /* Our coordinate */
 
-void create() {
+varargs void create() {
 
   ::create();
 
@@ -23,7 +23,7 @@ void create() {
 
   Set(P_INT_LONG,
 "You are in a little dynamic maze of twisty passages, all different.\n" +
-"In detail, this is /d/archwiz/common/exm/xdynabase.c .\n" +
+"In detail, this is /p/school/examples/lpc/xdynabase.c .\n" +
 "There is not much to see here.\n"
              );
 
@@ -39,7 +39,7 @@ int _move_in_dyna (string arg) {
   if (arg) return 0;  /* Moving with args is not quite useful */
 
     /* call the move fun in the master with direction and our coordinate */
-  return MASTER->_move_in_dyna (this_player(), query_verb(), x, y, z);
+  return ({int})DYNA_MASTER->_move_in_dyna (this_player(), query_verb(), x, y, z);
 }
 
 /*------------------------------------------------------------------------*/
@@ -48,7 +48,7 @@ int _move_in_dyna (string arg) {
 ** up the remaining properties.
 */
 
-init_mroom (string *ex, int cx, int cy, int cz) {
+void init_mroom (string *ex, int cx, int cy, int cz) {
   int i;
 
   x = cx; y = cy; z = cz;   /* Initialize our coordinate */

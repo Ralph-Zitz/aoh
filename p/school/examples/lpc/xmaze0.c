@@ -45,27 +45,27 @@ inherit "/std/room";  /* since we derive from this one */
 #define THIS this_object()
 
 /*------------------------------------------------------------------------*/
-void create() 
+varargs void create() 
 {
-
+  seteuid(getuid());
   ::create();  /* Initialize the /std/room */
 
   Set(P_INT_SHORT, "The Northeast Room");
   Set(P_INT_LONG,
-"You are in a square maze of dynamic rooms, all equal.\n"
-"In detail, this is /d/archwiz/common/lpc/exm/xmaze0.c, the only real\n"
-"room of the maze. This room will create the others on demand.\n"
+"You are in a square maze of dynamic rooms, all equal. "
+"In detail, this is /d/archwiz/common/lpc/exm/xmaze0.c, the only real "
+"room of the maze. This room will create the others on demand. "
 "To the east you can leave the maze.\n"
      );
 
     /* Add the 'normal' exit east */
-  AddExit("east", "/d/archwiz/common/lpc/xroom4");
+  AddExit("east", "/p/school/examples/rooms/xroom4");
 
     /* Add the exits to the dynamic rooms.
     ** Note that these aren't different from 'real' AddExit()s.
     */
-  AddExit("west", "/d/archwiz/common/lpc/exm/xmaze3");
-  AddExit("south", "/d/archwiz/common/lpc/exm/xmaze1");
+  AddExit("west", "/p/school/examples/lpc/xmaze3");
+  AddExit("south", "/p/school/examples/lpc/xmaze1");
 
     /* This is not really necessary, as the gamedriver will
     ** automatically call compile_object() in us.
@@ -98,7 +98,7 @@ object compile_object (string filename)
    /* Check if the filename is of the appropriate pattern. 
    ** We need the number for proper configuration of the room later.
    */
-  if (1 != sscanf(filename, "/d/archwiz/common/lpc/exm/xmaze%d.c", number)
+  if (1 != sscanf(filename, "/p/school/examples/lpc/xmaze%d.c", number)
    || number < 1 || number > 3
      )
     return 0;
@@ -111,26 +111,26 @@ object compile_object (string filename)
   switch(number) {
     case 1:
       room->Set(P_INT_SHORT, "The Southeast Room");
-      room->AddExit("north", "/d/archwiz/common/lpc/exm/xmaze0");
-      room->AddExit("west", "/d/archwiz/common/lpc/exm/xmaze2");
+      room->AddExit("north", "/p/school/examples/lpc/xmaze0");
+      room->AddExit("west", "/p/school/examples/lpc/xmaze2");
       break;
     case 2:
       room->Set(P_INT_SHORT, "The Southwest Room");
-      room->AddExit("north", "/d/archwiz/common/lpc/exm/xmaze3");
-      room->AddExit("east", "/d/archwiz/common/lpc/exm/xmaze1");
+      room->AddExit("north", "/p/school/examples/lpc/xmaze3");
+      room->AddExit("east", "/p/school/examples/lpc/xmaze1");
       break;
     case 3:
       room->Set(P_INT_SHORT, "The Northwest Room");
-      room->AddExit("south", "/d/archwiz/common/lpc/exm/xmaze2");
-      room->AddExit("east", "/d/archwiz/common/lpc/exm/xmaze0");
+      room->AddExit("south", "/p/school/examples/lpc/xmaze2");
+      room->AddExit("east", "/p/school/examples/lpc/xmaze0");
       break;
   }
   room->Set(P_INT_LONG,
-"You are in a square maze of dynamic rooms, all equal.\n"
-"In detail, this room was created on the fly\n"
-"by /d/archwiz/common/lpc/exm/xmaze0.c, the only real room in the maze.\n"
+"You are in a square maze of dynamic rooms, all equal. "
+"In detail, this room was created on the fly "
+"by /p/school/examples/lpc/xmaze0.c, the only real room in the maze.\n"
            );
-  room->Set(P_VMASTER, object_name(THIS)); /* !!! */
+  room->Set(P_VMASTER, "/p/school/examples/lpc/xmaze0"); /* !!! */
 
    /* That's it. */
   return room;

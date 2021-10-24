@@ -40,7 +40,7 @@
 object *mazeroom;
 
   /* Create all we need (it isn't much ;-) */
-create() {
+void create() {
   seteuid(getuid(this_object()));
   mazeroom = allocate(8);
 }

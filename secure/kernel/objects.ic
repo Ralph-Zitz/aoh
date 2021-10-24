@@ -177,6 +177,14 @@ object find_player(string name)
 }
 
 /*-------------------------------------------------------------------------*/
+public void dtell(string whom, string what)
+{
+  object ob;
+  if (ob = find_player(whom))
+    efun::tell_object(ob, what);
+}
+
+/*-------------------------------------------------------------------------*/
 public int query_user_level(mixed player)
 
 /* Return the user level of string/object <player> or the wizard who
@@ -264,6 +272,7 @@ public varargs string blueprint(mixed obj)
 #endif
 }
 
+#if 0
 /*-------------------------------------------------------------------------*/
 public varargs object load_object(string file, string creator)
 
@@ -292,6 +301,7 @@ public varargs object load_object(string file, string creator)
   }
   return obj;
 }
+#endif
 
 /*-------------------------------------------------------------------------*/
 #if __VERSION__ > "3.5.0"

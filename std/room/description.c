@@ -68,11 +68,19 @@ public string SetRoomLong(string str) {
 
 public varargs string IntLong(string what)  {
   mixed rc;
+  string res, d;
 
+  res = process_string((pointerp(rc = QueryIntLong()) ? rc[0]: rc) +
+        implode(filterExtra(P_INT_LONG), ""));
+  d = ({string})THIS->Doors(0, TP);
+  if (sizeof(d) && res[<1] == '\n')
+    res = res[..<2];
   return
-    MXPTAG("RDesc") +
+    MXPTAG("RDesc") + res + (sizeof(d) ? " " + d : "") +
+/*
       process_string((pointerp(rc = QueryIntLong()) ? rc[0]: rc) +
       implode(filterExtra(P_INT_LONG), "")) +
+*/
     MXPTAG("/RDesc");
 
 #if 0
@@ -85,12 +93,22 @@ public varargs string IntLong(string what)  {
 
 public varargs string ExaIntLong(string what)  {
   mixed rc;
+  string res, d;
+
+  res = process_string((pointerp(rc = QueryIntLong()) ? rc[1]
+                                    : "You see nothing special.\n"+rc) +
+        implode(filterExtra(P_INT_LONG), ""));
+  d = ({string})THIS->Doors(0, TP);
+  if (sizeof(d) && res[<1] == '\n')
+    res = res[..<2];
 
   return
-    MXPTAG("RDesc") +
+    MXPTAG("RDesc") + res + (sizeof(d) ? " " + d : "") +
+/*
       process_string((pointerp(rc = QueryIntLong()) ? rc[1]
                                   : "You see nothing special.\n"+rc) +
       implode(filterExtra(P_INT_LONG), "")) +
+*/
       MXPTAG("/RDesc");
 
 #if 0
@@ -195,7 +213,7 @@ public varargs string GetIntDesc(int nolong, mixed excl, object pl) {
     desc += (({int})pl->QueryBrief() ?
        "[" + s1 + (({string})THIS->Exits(1, pl) || "") + s2 + "]\n" :
        ( (s1+({string})THIS->Exits(0, pl)+s2) || "")
-            ) + ( (s1+({string})THIS->Doors(0, pl)+s2) || "");
+            ) /*+ ( (s1+({string})THIS->Doors(0, pl)+s2) || "") */;
   return desc + Content(0, excl, pl);
 }
 
@@ -211,7 +229,7 @@ public varargs string GetExaIntDesc(mixed excl, object pl) {
     desc += (({int})pl->QueryBrief() ?
        "[" + s1 + (({string})THIS->Exits(1, pl) || "") + s2 + "]\n" :
        ( (s1+({string})THIS->Exits(0, pl)+s2) || "")
-            ) + ( (s1+({string})THIS->Doors(0, pl)+s2) || "");
+            ) /*+ ( (s1+({string})THIS->Doors(0, pl)+s2) || "") */;
   return desc + Content(0, excl, pl);
 }
 

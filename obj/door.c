@@ -224,6 +224,7 @@ void init () {
     add_action ("fblock", dir);
   door::init();
   add_action ("fknock", "knock");
+  door::Aloha(0);
 }
 
 /*-------------------------------------------------------------------------

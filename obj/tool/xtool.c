@@ -33,6 +33,7 @@ nosave int     xlight;
 nosave mapping variable;
 int    morelines;
 int    modi;
+int    auto_psize;
 mapping aliases;
 
 void initialize_globals() {
@@ -73,6 +74,7 @@ void initialize_globals() {
   history=allocate(MAX_HISTORY);
   moreflag=FALSE;
   moreoffset=1;
+  auto_psize=0;
   hbeats=NULL;
   aliaslevel=NULL;
   term=NULL;
@@ -565,6 +567,9 @@ void XMoreFile(string file, int flag) {
 void MoreFile(string str) {
   int i;
   string l, r;
+
+  if ((i = ({int})TP->QueryPageSize()) && i != morelines && auto_psize)
+    morelines = i;
 
   SECURE1();
   if(str) {

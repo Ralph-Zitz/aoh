@@ -76,14 +76,6 @@ public mixed random_select (mixed list)
 }
 
 /*-------------------------------------------------------------------------*/
-public void dtell(string whom, string what)
-{
-  object ob;
-  if (ob = find_player(whom))
-    efun::tell_object(ob, what);
-}
-
-/*-------------------------------------------------------------------------*/
 public varargs int grandom(int nrdice)
 
 // Return a random number with approx. gaussian distribution.

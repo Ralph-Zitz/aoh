@@ -120,7 +120,8 @@ mixed debug_info(int what, varargs mixed* args)
         }
 
         case DINFO_MALLOC:
-            write(debug_info(DINFO_STATUS, "malloc"));
+            write(efun::driver_info(DI_STATUS_TEXT_MALLOC));
+            // write(debug_info(DINFO_STATUS, "malloc"));
             break;
 
         case DINFO_STATUS:

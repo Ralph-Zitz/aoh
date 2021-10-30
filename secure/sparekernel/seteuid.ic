@@ -11,7 +11,7 @@ int seteuid(string str)
         return 1;
     }
 
-    if (efun::call_direct(__MASTER_OBJECT__, "valid_seteuid", ob, str) != 1)
+    if (({int})efun::call_direct(__MASTER_OBJECT__, "valid_seteuid", ob, str) != 1)
         return 0;
 
     efun::configure_object(ob, OC_EUID, str);

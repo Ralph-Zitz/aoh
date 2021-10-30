@@ -1,4 +1,4 @@
-/* -*-C-*- 
+/* -*-C-*-
  *--------------------------------------------------------------------------
  * /secure/kernel/comm.ic -- Communication and message sefuns.
  *
@@ -39,11 +39,15 @@ public void msg_write( int class, mixed msg ) {
     raise_error( "Invalid call to msg_write: this_player() is 0.\n" );
 
   this_player()->receive_msg( class, this_player(), msg );
-}  
+}
 
 /* ---------------------------------------------------------------------- */
 
+#if __VERSION__ > "3.5.0"
 public varargs void msg_say( int class, mixed msg, object *|object excl ) {
+#else
+public varargs void msg_say( int class, mixed msg, object * excl ) {
+#endif
   /* sends the 'msg' to all objects in the environment of this_player()
    * with class 'class', excluding all objects in 'excl' and this_player().
    */
@@ -57,7 +61,7 @@ public varargs void msg_say( int class, mixed msg, object *|object excl ) {
 
   if ( ! origin )
     raise_error( "Invalid call to msg_say: originator is undefined.\n" );
- 
+
   if ( ! ( room = environment( origin ) ) )
     raise_error("Invalid call to msg_say: originator has no environment.\n" );
 
@@ -88,7 +92,11 @@ public void msg_object( object ob, int class, mixed msg ) {
 
 /* ---------------------------------------------------------------------- */
 
+#if __VERSION__ > "3.5.0"
 public varargs void msg_room(mixed room,int class,mixed msg,object *|object excl) {
+#else
+public varargs void msg_room(mixed room,int class,mixed msg,object * excl) {
+#endif
   /* sends the 'msg' to all objects in (room)object 'room' with class
    * 'class', excluding all objects in 'excl'.
    */
@@ -108,7 +116,7 @@ public varargs void msg_room(mixed room,int class,mixed msg,object *|object excl
 
   u = filter( all_inventory( room ), #'living /*'*/ );
   u -= excl;
-  
+
   tu = this_player()||previous_object();
 
   filter_objects( u, "receive_msg", class, tu, msg );
@@ -116,7 +124,11 @@ public varargs void msg_room(mixed room,int class,mixed msg,object *|object excl
 
 /* ---------------------------------------------------------------------- */
 
+#if __VERSION__ > "3.5.0"
 public varargs void msg_shout( int class, mixed msg, object *|object excl ) {
+#else
+public varargs void msg_shout( int class, mixed msg, object * excl ) {
+#endif
   /* sends the 'msg' with class 'class' to all users except this_player()
    * and the objects listed in 'excl'.
    */
@@ -131,7 +143,7 @@ public varargs void msg_shout( int class, mixed msg, object *|object excl ) {
 
   u = users() - ({ this_player() });
   u -= excl;
- 
+
   tu = this_player()||previous_object();
 
   filter_objects( u, "receive_msg", class, tu, msg );
@@ -139,7 +151,11 @@ public varargs void msg_shout( int class, mixed msg, object *|object excl ) {
 
 /* ---------------------------------------------------------------------- */
 
+#if __VERSION__ > "3.5.0"
 public varargs void msg_pshout( int class, mixed msg, object *|object excl ) {
+#else
+public varargs void msg_pshout( int class, mixed msg, object * excl ) {
+#endif
   /* sends the 'msg' with class 'class' to all players except this_player()
    * and the objects listed in 'excl'.
    */
@@ -154,16 +170,16 @@ public varargs void msg_pshout( int class, mixed msg, object *|object excl ) {
 
   u = users() - ({ this_player() });
   u -= excl;
-  u = filter( u, 
+  u = filter( u,
 		    lambda( ({ 'x /*'*/ }),
 			    ({ #'!, /*'*/
 				  ({ #'call_other, /*'*/
-				     MASTER, 
+				     MASTER,
 				     "query_user-level",
 				     'x /*'*/
 				  })
 			     }) ) );
- 
+
   tu = this_player()||previous_object();
 
   filter_objects( u, "receive_msg", class, tu, msg );
@@ -171,7 +187,11 @@ public varargs void msg_pshout( int class, mixed msg, object *|object excl ) {
 
 /* ---------------------------------------------------------------------- */
 
+#if __VERSION__ > "3.5.0"
 public varargs void msg_wshout( int class, mixed msg, object *|object excl ) {
+#else
+public varargs void msg_wshout( int class, mixed msg, object * excl ) {
+#endif
   /* sends the 'msg' with class 'class' to all wizards except this_player()
    * and the objects listed in 'excl'.
    */
@@ -186,15 +206,15 @@ public varargs void msg_wshout( int class, mixed msg, object *|object excl ) {
 
   u = users() - ({ this_player() });
   u -= excl;
-  u = filter( u, 
+  u = filter( u,
 		    lambda( ({ 'x /*'*/ }),
 			    ({ #'call_other /*'*/,
 			       MASTER,
 			       "query_user_level",
-			       'x /*'*/ 
+			       'x /*'*/
 			    }) ) );
 
- 
+
   tu = this_player()||previous_object();
 
   filter_objects( u, "receive_msg", class, tu, msg );
@@ -223,7 +243,7 @@ void pshout(string s) {
 /* ---------------------------------------------------------------------- */
 
 public varargs int see( mixed can, string cant) {
-  /* write a string to this_player() depending on the light 
+  /* write a string to this_player() depending on the light
    * TODO: compat function see uses CMSG_GENERIC.
    */
 
@@ -232,15 +252,15 @@ public varargs int see( mixed can, string cant) {
 
   if (pointerp(can))
     msg_write( CMSG_GENERIC|MMSG_SEE, can );
-  else 
+  else
     msg_write( CMSG_GENERIC|MMSG_SEE, ({ can, cant }) );
 
-  return (int)this_player()->CanSee();
+  return ({int})this_player()->CanSee();
 }
 
 /* ---------------------------------------------------------------------- */
 
-public varargs int show_object(object obj, string can, string cant) {
+public varargs int show_object(object obj, mixed can, string cant) {
   /*
    * TODO: compat function show_object uses CMSG_GENERIC.
    */
@@ -250,35 +270,35 @@ public varargs int show_object(object obj, string can, string cant) {
 
   if (pointerp(can))
     msg_object( obj, CMSG_GENERIC|MMSG_SEE, can );
-  else 
+  else
     msg_object( obj, CMSG_GENERIC|MMSG_SEE, ({ can, cant }) );
-  
-  return (int) obj->CanSee();
+
+  return ({int})obj->CanSee();
 }
 
 /* ---------------------------------------------------------------------- */
 
-public varargs object * show(string can, mixed ce, mixed excl) {
+public varargs object * show(mixed can, mixed ce, mixed excl) {
   /*
    * TODO: compat function show uses CMSG_GENERIC.
    */
 
-  object env, this;
+  object env;
   FAKE_OBJECT;
   if (!(env = environment(TP||TO)))
     return ({});
   if(objectp(ce) || pointerp(ce))
-    return (object *)env->display(can, objectp(ce) ? ({ TP, ce}) : ce+({ TP }));
+    return ({object *})env->display(can, objectp(ce) ? ({ TP, ce}) : ce+({ TP }));
   if(pointerp(excl))
-    return (object *)env->display(({can, ce}), excl+({ TP }));
+    return ({object *})env->display(({can, ce}), excl+({ TP }));
   if (pointerp(can))
-    return (object *)env->display(can, ({ TP }));
-  return (object *) env->display(({can, ce}), ({ TP }));
+    return ({object *})env->display(can, ({ TP }));
+  return ({object *})env->display(({can, ce}), ({ TP }));
 }
 
 /* ---------------------------------------------------------------------- */
 
-public varargs object * show_room(mixed room, string can, 
+public varargs object * show_room(mixed room, mixed can,
 				  mixed ce, mixed excl ) {
   /*
    * TODO: compat function show_room uses CMSG_GENERIC.
@@ -288,12 +308,12 @@ public varargs object * show_room(mixed room, string can,
     return ({});
   FAKE_OBJECT;
   if(pointerp(ce))
-    return (object *) room->display(can, ce);
+    return ({object *})room->display(can, ce);
   if(pointerp(excl))
-    return (object *) room->display(({can, ce}), excl);
+    return ({object *})room->display(({can, ce}), excl);
   if (pointerp(can))
-    return (object *) room->display(can);
-  return (object *) room->display(({can, ce}));
+    return ({object *})room->display(can);
+  return ({object *})room->display(({can, ce}));
 }
 
 /* *********************************************************************** */

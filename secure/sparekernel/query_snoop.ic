@@ -1,4 +1,4 @@
-#if ! __EFUN_DEFINED__(query_snoop)
+#if !__EFUN_DEFINED__(query_snoop)
 #ifndef __QUERY_SNOOP__
 #define __QUERY_SNOOP__
 

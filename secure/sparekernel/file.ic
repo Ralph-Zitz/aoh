@@ -14,6 +14,7 @@
  */
 
 /* Flags for get_dir(), see <dirent.h> */
+#pragma no_range_check
 #include <driver/files.h>
 
 #define FILE_NAME GETDIR_NAMES
@@ -22,32 +23,50 @@
 #define CAT_MAX_LINES 50
 #define TAIL_MAX_BYTES 1000
 
+#if __VERSION__ > "3.5.2"
 /*-------------------------------------------------------------------------*/
 varargs int tail(string file)
 {
-    if (extern_call())
-        set_this_object(previous_object());
+  string result = funcall(function string() : int ex_call = extern_call()
+  {
+    int fs;
+    string txt;
 
-    if (!stringp(file) || !this_player())
-        return 0;
-    string txt = read_bytes(file, -(TAIL_MAX_BYTES + 80), (TAIL_MAX_BYTES + 80));
-    if (!stringp(txt))
-        return 0;
+    if (ex_call)
+      set_this_object(previous_object(1));
 
-    // cut off first (incomplete) line
-    int index = strstr(txt, "\n");
-    if (index > -1)
+    if (!stringp(file) || (fs = file_size(file)) < 1 || !this_player())
+      return 0;
+
+    if (fs < TAIL_MAX_BYTES + 80)
+      txt = read_file(file);
+    else
     {
+      bytes b = read_bytes(file, -(TAIL_MAX_BYTES + 80), (TAIL_MAX_BYTES + 80));
+      if (!b)
+        return 0;
+
+      txt = to_text(b, "UTF-8");
+      // cut off first (incomplete) line
+      int index = strstr(txt, "\n");
+      if (index > -1)
+      {
         if (index + 1 < sizeof(txt))
-            txt = txt[index+1..];
+          txt = txt[index+1..];
         else
-            txt = "";
+          txt = "";
+      }
     }
+    return txt;
+  });
 
-    tell_object(this_player(), txt);
+  if (!result)
+    return 0;
 
-    return 1;
+  tell_object(this_player(), result);
+  return 1;
 }
+#endif
 
 /*-------------------------------------------------------------------------*/
 varargs int cat(string file, int start, int num)
@@ -81,7 +100,7 @@ varargs int cat(string file, int start, int num)
 }
 
 /*-------------------------------------------------------------------------*/
-public int file_date(string file) 
+public int file_date(string file)
 
 /* Return the time() of last write of <file>.
  */
@@ -94,7 +113,7 @@ public int file_date(string file)
 
 
 /*-------------------------------------------------------------------------*/
-string *get_dir_ext(string path) 
+string *get_dir_ext(string path)
 
 /* Return the content of a directory like the efun get_dir() does but also
  * extend the filenames with some special identification characters:
@@ -109,7 +128,7 @@ string *get_dir_ext(string path)
 
   finfo = get_dir(path, FILE_NAME | FILE_SIZE);
   if(finfo && (s = sizeof(finfo))) {
-    strs = (string*)MASTER->full_path_array(path, TP ? getuid(TP) : 0);
+    strs = ({string *})MASTER->full_path_array(path, TP ? getuid(TP) : 0);
     path = sizeof(strs) ? "/" + implode(strs[0..<2], "/") + "/" : "/";
     strs = ({});
     while(s--, s-- > 0) {
@@ -132,7 +151,7 @@ string *get_dir_ext(string path)
 }
 
 /*-------------------------------------------------------------------------*/
-public varargs string resolve_file(string file, mixed anchor) 
+public varargs string resolve_file(string file, mixed anchor)
 
 /* Resolve the (relative) pathname <file> in relation to object
  * <anchor> (default is the calling object).
@@ -157,17 +176,17 @@ public varargs string resolve_file(string file, mixed anchor)
     anchorpath = object_name(PRE)+"/../";
     anchor = PRE;
   }
-  
+
   switch (file[0]) {
   case '/':
   case '+':
   case '&':
   case '~':
-    tmp = (string *)"/secure/master"->full_path_array(file, getuid(anchor));
+    tmp = ({string *})"/secure/master"->full_path_array(file, getuid(anchor));
     break;
   case '.':
   default:
-    tmp = (string *)"/secure/master"->full_path_array(anchorpath+file, 0);
+    tmp = ({string *})"/secure/master"->full_path_array(anchorpath+file, 0);
   }
   return "/" + implode(tmp, "/");
 }

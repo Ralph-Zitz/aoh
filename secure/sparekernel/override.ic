@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------
- * /secure/kernel/override.ic -- Redefined true efuns.             
+ * /secure/kernel/override.ic -- Redefined true efuns.
  *
  * Copyright (C) 1997 by One Step Beyond.
  * All Rights Reserved.
@@ -26,8 +26,9 @@
  */
 
 #include <driver/lpctypes.h>
+#include <driver/object_info.h>
 
-public varargs object load_object(string file, string creator); // forward
+// public varargs object load_object(string file, string creator); // forward
 
 /* --- call_out() --- */
 
@@ -37,23 +38,21 @@ public varargs object load_object(string file, string creator); // forward
 /* --- misc --- */
 #define MAX_LOG_SIZE  50000  // 50kBytes plus one backup should be enough.
 
-#if defined(TIME_DELTA)
-#if TIME_DELTA != 0
+#ifdef TIME_DELTA
 
 /*-------------------------------------------------------------------------*/
 /* Host machine's clock doesn't run in time.
  */
 
-public nomask int time() 
-{ 
+public nomask int time()
+{
   return efun::time() + TIME_DELTA;
 }
-public varargs nomask string ctime(int t) 
-{ 
+public varargs nomask string ctime(int t)
+{
   return t ? efun::ctime(t) : efun::ctime(efun::time()+TIME_DELTA);
 }
 
-#endif
 #endif
 
 /* --------------------------------------------------------------------------
@@ -61,12 +60,12 @@ public varargs nomask string ctime(int t)
  * --------------------------------------------------------------------------
  */
 
-public int send_erq( int request, mixed * data, closure callback ) {
-  return (int)MASTER->erq_send( request, data, callback );
+public int send_erq( int request, bytes|mixed * data, closure callback ) {
+  return ({int})MASTER->erq_send( request, data, callback );
 }
 
 /*-------------------------------------------------------------------------*/
-public int log_file(string file, string txt) 
+public int log_file(string file, string txt)
 
 /* Append <txt> to the file /log/<file>. If the size of the logfile
  * exceeds MAX_LOG_SIZE before the write, /log/<file> is renamed to
@@ -76,15 +75,15 @@ public int log_file(string file, string txt)
 
 {
   FAKE_OBJECT;
-  file = (string)MASTER->full_path("/log/"+file);
+  file = ({string})MASTER->full_path("/log/"+file);
   if(file_size(file) > MAX_LOG_SIZE)
     catch(rename(file, file + ".old"));
-  return write_file(file, txt);
+  return efun::write_file(file, txt);
 }
 
 
 /*-------------------------------------------------------------------------*/
-public varargs nomask int command (string str, object ob) 
+public varargs nomask int command (string str, object ob)
 
 /* Wrap the command() into the handling of CmdData() in the player.
  * Amylaar hits you hard.
@@ -93,7 +92,7 @@ public varargs nomask int command (string str, object ob)
 {
   int rc;
   FAKE_OBJECT;
-  if (ob && ob != TO) return (int)ob->command_me(str);
+  if (ob && ob != TO) return ({int})ob->command_me(str);
   TO->SetCmdData("ThisPlayer", TP);
   // The 'TP->PushNotifyFail()' is done by the modify_command-hook.
   if ((rc = efun::command(str)) && TP)
@@ -105,7 +104,7 @@ public varargs nomask int command (string str, object ob)
 }
 
 /*-------------------------------------------------------------------------*/
-public varargs nomask void notify_fail(mixed msg, int pri) 
+public varargs nomask int notify_fail(mixed msg, int pri)
 
 /* Wrap the notify_fail() into the handling of CmdData() in the player.
  * Amylaar hits you hard.
@@ -117,6 +116,7 @@ public varargs nomask void notify_fail(mixed msg, int pri)
     FAKE_OBJECT;
     TP->NotifyFail(msg, pri);
   }
+  return 0;
 }
 
 /*-------------------------------------------------------------------------*/
@@ -138,7 +138,7 @@ public varargs nomask void input_to (mixed fun, int flag, varargs mixed *args)
 }
 
 /*-------------------------------------------------------------------------*/
-public nomask void set_this_player (object obj) 
+public nomask void set_this_player (object obj)
 
 /* Only root objects can change this_player().
  */
@@ -153,7 +153,7 @@ public nomask void set_this_player (object obj)
 }
 
 /*-------------------------------------------------------------------------*/
-public nomask void set_environment (object item, object dest) 
+public nomask void set_environment (object item, object dest)
 
 /* Only root objects can use set_environment().
  */
@@ -168,7 +168,7 @@ public nomask void set_environment (object item, object dest)
 }
 
 /*-------------------------------------------------------------------------*/
-public nomask mixed remove_interactive (object victim) 
+public nomask mixed remove_interactive (object victim)
 
 /* Too many wizards played with remove_interactive(), so only arches
  * and root objects can do this.
@@ -178,12 +178,12 @@ public nomask mixed remove_interactive (object victim)
   if (!victim || !interactive(victim))
     return 0;
   if (   (PRE && getuid(PRE) == ROOTID)
-      || (TI && LEVEL(TI) >= LVL_WIZARD)
+      || (TI && ({int})LEVEL(TI) >= LVL_WIZARD)
       || (TI && victim == TI && TP == TI)
      )
     return efun::remove_interactive(victim);
 
-  catch(log_file("DESTRUCT", ctime()+": "+capitalize((string)victim->QueryRealName())
+  catch(log_file("DESTRUCT", ctime()+": "+capitalize(({string})victim->QueryRealName())
 +"\n    remove_interactive() by "
 +(PRE ? (object_name(PRE)+" ["+getuid(PRE)+"]") : "???")
 +"\n"));
@@ -224,7 +224,7 @@ private object what_snoopee(object try, object snooper)
 }
 
 /*-------------------------------------------------------------------------*/
-public nomask varargs int snoop(object me, object you) 
+public nomask varargs int snoop(object me, object you)
 
 /* Start a snoop from <me> on <you>, including all notifications and logs.
  * The snoop is denied if <me> is not the interactive player.
@@ -245,13 +245,13 @@ public nomask varargs int snoop(object me, object you)
    * If <you> is valid, start a snoop from <me> on <you>, with
    * 'ret' receiving the returncode.
    */
-  if (me && TI) 
+  if (me && TI)
   {
     former = map(users(), #'what_snoopee, me) - ({ 0 });
-    if (you) 
+    if (you)
     {
       /* Start new snoop */
-      if (me != you && you != TI && !query_snoop(you)) 
+      if (me != you && you != TI && !query_snoop(you))
       {
         ret = efun::snoop(me, you);
         if (ret == 1)
@@ -277,7 +277,7 @@ public nomask varargs int snoop(object me, object you)
 
 /*-------------------------------------------------------------------------*/
 #if 0
-public nomask object query_snoop (object victim) 
+public nomask object query_snoop (object victim)
 
 /* Return the user which is currently snooping <victim>, or 0 if there
  * is none.
@@ -293,7 +293,7 @@ public nomask object query_snoop (object victim)
 }
 #endif
 /*-------------------------------------------------------------------------*/
-public nomask void shutdown() 
+public nomask void shutdown()
 
 /* Log shutdowns in /log/GAME_LOG to box ears...
  */
@@ -311,7 +311,7 @@ public nomask void shutdown()
 
 
 /*-------------------------------------------------------------------------*/
-private mixed process_value (string func) 
+private mixed process_value (string func)
 
 /* Auxiliary function for process_string(). */
 
@@ -338,7 +338,7 @@ private mixed process_value (string func)
     return 0;
   if (!arg)
     arg = "";
-    
+
   if (!symbol_function(func, obj))
     raise_error(sprintf("Can't find %O in %O to call.\n", func, obj));
 
@@ -346,7 +346,7 @@ private mixed process_value (string func)
   // return apply( symbol_function( func, obj ), explode(arg, "|") );
   tmp = explode(arg, "|");
   if (!sizeof(tmp))
-    return call_other(obj, func);
+    return ({mixed})call_other(obj, func);
   num = sizeof(tmp);
   if (num > 8)
   {
@@ -355,25 +355,25 @@ private mixed process_value (string func)
   }
   if (num != 8)
     tmp = tmp + allocate(8-num);
-  return call_other(obj, func, tmp[0], tmp[1], tmp[2], tmp[3]
+  return ({mixed})call_other(obj, func, tmp[0], tmp[1], tmp[2], tmp[3]
                              , tmp[4], tmp[5], tmp[6], tmp[7]
                    );
 }
 
 /*-------------------------------------------------------------------------*/
-public string process_string(string str) 
+public string process_string(string str)
 
 /* Bugfix for process_string() so that it can handle spaces in
  * arguments. Actually taken from Lima/MudOS.
  */
- 
+
 {
   int il;
   string * parts;
   string tmp;
 
   parts = explode(str, "@@");
-    
+
   for ( il = 1; il < sizeof(parts); il += 2) {
     tmp = process_value(parts[il]);
     if (stringp(tmp))
@@ -402,7 +402,7 @@ static int CountMessages = 0;
 static int CountMessagesTotal = 0;
 static string LastMessage;
 
-public varargs nomask void 
+public varargs nomask void
 call_out (mixed what, int delay, varargs mixed *args )
 
 {
@@ -437,7 +437,7 @@ call_out (mixed what, int delay, varargs mixed *args )
     set_this_object(tmp);
     return;
   }
-  
+
   if (CallOutStopped) {
     num = sizeof(call_out_info());
     if (num < CALL_OUT_MAX/4) {
@@ -513,7 +513,7 @@ call_out (mixed what, int delay, varargs mixed *args )
 public varargs mixed set_prompt (mixed prompt, object ob)
 {
   mixed oldvalue;
-  
+
   if (!ob)
     ob = this_player();
 #if !__EFUN_DEFINED__(query_once_interactive)
@@ -535,7 +535,7 @@ public varargs mixed set_prompt (mixed prompt, object ob)
 public void tell_object (object ob, string str)
 {
   mixed rc;
-  
+
   if (!objectp(ob))
     raise_error(sprintf("Bad argument 1 to tell_object: %O\n", ob));
 
@@ -550,7 +550,7 @@ public varargs void tell_room (mixed room, mixed msg, object * exclude)
   object * u;
   mixed rc;
   int i;
-  
+
   FAKE_OBJECT;
   if (stringp(room))
   {
@@ -561,7 +561,7 @@ public varargs void tell_room (mixed room, mixed msg, object * exclude)
     if (rc)
       room = rc;
   }
-  
+
   if (!objectp(room))
     raise_error(sprintf("Bad argument 1 to tell_room: %O\n", room));
 
@@ -570,7 +570,7 @@ public varargs void tell_room (mixed room, mixed msg, object * exclude)
     efun::tell_room(room, msg, exclude);
     return;
   }
-  
+
   /* Tell the message to all interactives with a Receive lfun
    * and add those to the exlude array.
    */
@@ -585,7 +585,7 @@ public varargs void tell_room (mixed room, mixed msg, object * exclude)
     exclude += u;
   else if (sizeof(u))
     exclude = u;
-  
+
   /* Now also tell the others */
   if (sizeof(exclude))
     efun::tell_room(room, msg, exclude);
@@ -597,7 +597,7 @@ public varargs void tell_room (mixed room, mixed msg, object * exclude)
 public void write (mixed msg)
 {
   mixed rc;
-  
+
   switch (typeof(msg))
   {
     case T_NUMBER:
@@ -614,6 +614,12 @@ public void write (mixed msg)
       break;
     case T_MAPPING:
       msg = "<MAPPING>";
+      break;
+    case T_STRUCT:
+      msg = "<STRUCT>";
+      break;
+    case T_CLOSURE:
+      msg = "<CLOSURE>";
       break;
     default:
       msg = "<UNKNOWN>";
@@ -641,7 +647,7 @@ public varargs void say (mixed msg, mixed exclude)
     origin = previous_object();
   else
     origin = this_player() || previous_object();
-  
+
   FAKE_OBJECT;
   if (!stringp(msg))
   {
@@ -658,7 +664,7 @@ public varargs void say (mixed msg, mixed exclude)
   else
     exclude = ({ origin });
   exclude -= ({ 0 });
-  
+
   /* Due to the FAKE_OBJECT we cant call tell_room() here.
    * Instead we call all interactives by hand, add them to exclude
    * and then call the efun.
@@ -670,7 +676,7 @@ public varargs void say (mixed msg, mixed exclude)
   recs += all_inventory(origin);
   recs -= exclude;
   for (i = sizeof(recs); i--; )
-    if (!interactive(recs[i]) 
+    if (!interactive(recs[i])
      || !call_resolved(&rc, recs[i], "Receive", msg)
        )
       recs[i] = 0;

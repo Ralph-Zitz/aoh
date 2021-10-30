@@ -17,14 +17,16 @@
  *--------------------------------------------------------------------------
  */
 
+#include <driver/regexp.h>
+
 public string chr( int i );  // forward
 
 nosave private string ascii = "";
-nosave private string whitespace = " \t\n\r";
+//nosave private string whitespace = " \t\n\r";
 nosave private string lowercase = "abcdefghijklmnopqrstuvwxyz";
 nosave private string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-nosave private string _lower, _upper, _swapcase;
+nosave private string _upper, _swapcase;
 
 /*-------------------------------------------------------------------------*/
 private void setup_string()
@@ -40,7 +42,7 @@ private void setup_string()
 	ascii += chr(i);
   }
 
-  _lower = ascii[0..('A'-1)] + lowercase + ascii[('Z'+1)..]; 
+//  _lower = ascii[0..('A'-1)] + lowercase + ascii[('Z'+1)..];
   _upper = ascii[0..('a'-1)] + uppercase + ascii[('z'+1)..];
   _swapcase = _upper[0..'A'-1] + lowercase + _upper['Z'+1..];
 }
@@ -99,7 +101,7 @@ public string upper_case ( string s )
 }
 
 /*-------------------------------------------------------------------------*/
-public string *old_explode(string str, string del) 
+public string *old_explode(string str, string del)
 
 /* Simulate the old behaviour of explode().
  */
@@ -118,7 +120,7 @@ public string *old_explode(string str, string del)
 }
 
 /*-------------------------------------------------------------------------*/
-public string strip_a (string str) 
+public string strip_a (string str)
 
 /* Strip the article 'a ' or 'an ' from <str> and return the remainder.
  * If there is no article, <str> is returned unchanged.
@@ -129,7 +131,7 @@ public string strip_a (string str)
     raise_error(sprintf("Illegal argument to strip_a(): %O\n", str));
   if (str[0] != 'a' && str[0] != 'A')
     return str;
-  if (str[1..2] == "n" || str[1..2] == "n ") 
+  if (str[1..2] == "n" || str[1..2] == "n ")
     str = str[3..];
   else if (!str[1] || str[1] == ' ')
     str = str[2..];
@@ -137,7 +139,7 @@ public string strip_a (string str)
 }
 
 /*-------------------------------------------------------------------------*/
-public string strip_article (string str) 
+public string strip_article (string str)
 
 /* Strip the article 'a ', 'an ' or 'the ' from <str> and return the
  * remainder. If there is no article, <str> is returned unchanged.
@@ -152,7 +154,7 @@ public string strip_article (string str)
 }
 
 /*-------------------------------------------------------------------------*/
-public string add_a (string str) 
+public string add_a (string str)
 
 /* Add the article 'a ' resp. 'an ' to <str> and return the result.
  */
@@ -178,7 +180,7 @@ public string add_gen (string str)
 {
   if (!stringp(str))
     raise_error(sprintf("Illegal argument to add_gen(): %O\n", str));
-  return str + ((member("sxy",str[<1]) != -1)?"'":"'s");
+  return str + ((member("sxz",str[<1]) != -1)?"'":"'s");
 }
 
 /*-------------------------------------------------------------------------*/
@@ -199,7 +201,7 @@ public string strip_gen (string str)
 }
 
 /*-------------------------------------------------------------------------*/
-public varargs mixed norm_id (string str, int noimplode) 
+public varargs mixed norm_id (string str, int noimplode)
 
 /* Normalize <str> my making it lowercase, remove leading and trailing
  * spaces, and collapse sequences of spaces into just one space.
@@ -216,7 +218,7 @@ public varargs mixed norm_id (string str, int noimplode)
 }
 
 /*-------------------------------------------------------------------------*/
-public string gen_id_pattern (string * ids, string * ads) 
+public string gen_id_pattern (string * ids, string * ads)
 
 /* Take the adjectives <ads> and ids <ids> and construct a suitable
  * regexp pattern for id-matching. The pattern will accept any number
@@ -326,9 +328,9 @@ public varargs string implode_list ( mixed * list
     if (stringp(list[i]))
       continue;
     if (living(list[i]))
-      list[i] = list[i]->QueryName() || list[i]->Short() || "Someone";
+      list[i] = ({string})list[i]->QueryName() || ({string})list[i]->Short() || "Someone";
     else
-      list[i] = list[i]->Short() || list[i]->QueryName() || "Something";
+      list[i] = ({string})list[i]->Short() || ({string})list[i]->QueryName() || "Something";
   }
   list -= ({ "", 0 });
   if (i = sizeof(list))

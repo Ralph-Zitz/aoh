@@ -1,5 +1,8 @@
 #if !__EFUN_DEFINED__(set_prompt)
 #include <driver/configuration.h>
+#ifndef P_PROMPT
+#define P_PROMPT "Prompt"
+#endif
 
 varargs string|closure aoh_set_prompt(string|closure|int prompt, object ob)
 {
@@ -8,8 +11,8 @@ varargs string|closure aoh_set_prompt(string|closure|int prompt, object ob)
     if (!efun::object_info(ob, OI_ONCE_INTERACTIVE) && !intp(prompt))
         efun::configure_interactive(ob, IC_PROMPT, prompt);
 
-    mixed oldprompt = ({mixed})ob->Query("Prompt");
-    ob->Set("Prompt", prompt);
+    mixed oldprompt = ({mixed})ob->Query(P_PROMPT);
+    ob->Set(P_PROMPT, prompt);
     return oldprompt;
 }
 

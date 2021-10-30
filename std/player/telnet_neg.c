@@ -957,7 +957,6 @@ void print_prompt(mixed str)
 	  efun::binary_message(({ IAC, EOR }), 1);
   else if(sizeof(str) && str[<1]!='\n')
     efun::tell_object( this_object(), "\n");
-
 }
 
 protected void set_eor_protokoll(int act)

@@ -99,7 +99,7 @@ varargs void wizlist(string name)
         } else if (pos < sizeof(cmds) - 13) {
             a = a[pos-2..];
         } else {
-            a = a[<15..];
+            // a = a[<15..];
         }
     }
     msg_write(CMSG_GENERIC, "\nWizard top score list\n\n");

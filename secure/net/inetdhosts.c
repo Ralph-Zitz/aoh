@@ -15,74 +15,46 @@
 
 #define LOGFILE "/log/inetdhosts"
 
-mapping hosts;
-string *donehosts = ({});
-int sent, received, timeouts;
+private mapping hosts;
+private nosave string *donehosts;
+private nosave int received;
+private nosave int sent;
+private nosave int timeouts;
+
+void query_next_host();
 
 #define TELL_CHEF(m) \
-  do { tell_room(find_object("/players/pepel/workroom"), \
+  do { tell_room(find_object("/players/nostradamus/workroom"), \
                  object_name()+": "+m+"\n"); } \
   while (0)
 
-#ifdef COMPAT_FLAG
-reset(i) { if (!i) create(); }
-#endif
-create() {
-#ifndef COMPAT_FLAG
+void create() {
   seteuid(getuid());
-#endif
   rm(LOGFILE);
-  hosts = INETD->query("hosts");
-  //TELL_CHEF(sprintf("created with hosts: %O", hosts));
-  call_out("query_next_host", 0);
+  sent = 0;
+  received = 0;
+  timeouts = 0;
+  donehosts = ({});
+  hosts = ({mapping})INETD->query("hosts") || ([]);
+  call_out(#'query_next_host /*'*/, 2);
 }
 
-restart() { donehosts = ({}); call_out("query_next_host", 0); }
-
-/* the encoding functions are copied from inetd.c - sigh */
-
-private string encode(mixed arg) {
-    if (objectp(arg))
-	return object_name(arg);
-    if (stringp(arg) &&
-    (arg[0] == '$' || (string)to_int(arg) == (string)arg))
-	return "$" + arg;
-    return to_string(arg);
+void restart() {
+  donehosts = ({});
+  sent = 0;
+  received = 0;
+  timeouts = 0;
+  while(find_call_out(#'query_next_host /*'*/) != -1);
+  call_out(#'query_next_host /*'*/, 2);
 }
 
-private string encode_packet(mapping data) {
-    int i;
-    mixed indices;
-    string header, body, t1, t2, ret;
-    int data_flag;
-
-    data_flag = 0;
-    for(i = sizeof(indices = m_indices(data)); i--; ) {
-	if (indices[i] == DATA) {
-	    data_flag = 1;
-	    continue;
-	}
-	header = encode(indices[i]);
-	body = encode(data[indices[i]]);
-	if (sscanf(header, "%s" + DELIMITER + "%s", t1, t2) ||
-		sscanf(body, "%s" + DELIMITER + "%s", t1, t2))
-	    return 0;
-	if (ret)
-	    ret += DELIMITER + header + ":" + body;
-	else
-	    ret = header + ":" + body;
-    }
-    if (ret) {
-	if (data_flag)
-	    ret += DELIMITER + DATA + ":" + encode(data[DATA]);
-	return ret;
-    }
+int togo() {
+  return sizeof(hosts) - sizeof(donehosts);
 }
 
 void query_next_host() {
   string *hostnames;
-  string h, err;
-  string packet;
+  string h;
 
   hostnames = m_indices(hosts) - donehosts;
   //TELL_CHEF(sprintf("hostnames: %O", hostnames));
@@ -90,29 +62,17 @@ void query_next_host() {
     h = hostnames[0];
     hostnames = 0;
     donehosts += ({ h });
-    if (find_call_out("query_next_host") < 0) call_out("query_next_host", 0);
+    while(find_call_out(#'query_next_host /*'*/) != -1);
+    call_out(#'query_next_host /*'*/, 1);
     /* now send out the query */
-    TELL_CHEF("sending query to "+h);
-    if (stringp(err = INETD->send_udp(h,
+    TELL_CHEF(sprintf("sending query to %s (%d to go)", h, togo()));
+    INETD->send_packet(h,
 				    ([ REQUEST:QUERY,
 				     SENDER:object_name(),
 				     DATA:"hosts" ]),
-				    1))) {
-      TELL_CHEF("send_udp() got "+err);
-      /* the packet will always be small enough */
-      packet = encode_packet(([ REQUEST:QUERY,
-			      SENDER:object_name(),
-			      DATA:"hosts",
-			      NAME:LOCAL_NAME,
-			      UDP_PORT:LOCAL_UDP_PORT,
-			      ID:42 ]));
-	if (!send_udp(hosts[h][HOST_IP], hosts[h][HOST_UDP_PORT], packet))
-	  TELL_CHEF("Error in sending packet.");
-    } else
-      sent++;
-  } else
-    TELL_CHEF("not sending request, sent "+sent+" received "+received
-              +" timeouts "+timeouts);
+				    1);
+    sent++;
+  }
 }
 
 void udp_reply(mapping data) {
@@ -127,7 +87,7 @@ void udp_reply(mapping data) {
   mudname = lower_case(data[NAME]);
   if (data[SYSTEM]) {
     TELL_CHEF(sprintf("got administrational reply %O", data));
-    if (TIME_OUT == data[SYSTEM]) {
+    if (member(data[SYSTEM], TIME_OUT) != -1) {
       timeouts++;
       if (mudname && hosts[mudname]) hosts[mudname][HOST_STATUS] = DOWN;
     }
@@ -151,7 +111,7 @@ void udp_reply(mapping data) {
    * eliminate duplicates
    */
   new = map(explode(data[DATA], "\n"),
-		  lambda(({'x}), ({ #'explode, 'x, ":" })));
+		  lambda(({'x}), ({ #'explode, 'x, ":" }))); /*'*/
   received++;
   //write_file(LOGFILE, sprintf("new %O\n", new));
   for (i = added = 0; i < sizeof(new); i++) {
@@ -206,7 +166,7 @@ void udp_reply(mapping data) {
       hosts[mudname] = mud;
       added++;
       /* send out a friendly piinnnnggg */
-      INETD->send_udp(mudname, ([ REQUEST:PING, SENDER:this_object() ]), 1);
+      INETD->send_packet(mudname, ([ REQUEST:PING, SENDER:this_object() ]), 1);
     }
   }
   //walk_mapping(hosts, lambda(({'x}), ({ #'write_file, LOGFILE,
@@ -215,7 +175,8 @@ void udp_reply(mapping data) {
   //write_file(LOGFILE, sprintf("hosts now: %O\n", hosts));
 
   if (added) {
-    if (find_call_out("query_next_host") < 0) call_out("query_next_host", 0);
+    while(find_call_out(#'query_next_host /*'*/) != -1);
+    call_out(#'query_next_host /*'*/, 0);
   } else
     TELL_CHEF("none added, sent "+sent+" received "+received
               +" timeouts "+timeouts);
@@ -226,7 +187,7 @@ mapping QueryHosts() { return hosts; }
 void dump() {
   string *muds, localcmds;
   int i, t, now;
-  
+
   rm(LOGFILE);
   now = time();
   write_file(LOGFILE, "#\n# Intermud Hosts on "+ctime(now)+".\n#\n");
@@ -234,7 +195,7 @@ void dump() {
   write_file(LOGFILE,
              "# queried "+sent+" sites, got "+received+" replies, "
              +timeouts+" timeouts, in all "+sizeof(hosts)+" entries\n#\n");
-  for (i = sizeof(muds = sort_array(m_indices(hosts), #'<)); i--;) {
+  for (i = sizeof(muds = sort_array(m_indices(hosts), #'<) ); i--;) {
      localcmds = implode(hosts[muds[i]][LOCAL_COMMANDS], ",");
      if ("channel,finger,locate,man,tell,who" == localcmds
          || "channel,finger,ftp,locate,man,tell,who" == localcmds)

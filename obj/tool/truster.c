@@ -21,31 +21,32 @@
 
 #include <config.h>
 #include <properties.h>
+#include <driver/configuration.h>
 
 #define VERSION "920831"
 #define VERSNR  1
 
 inherit "/std/thing";
 
-static int invis;      /* Flag if invisible */
+nosave int invis;      /* Flag if invisible */
 
 /*-------------------------------------------------------------------------
 ** Initialization.
 */
 
-create () {
+public void create () {
   thing::create();
   AddId ("truster");
   SetShort ("a truster");
   SetLong (
-"This object lets you 'trust' other objects by exporting its uid to them.\n"+
-"You can also 'trust all' objects you carry, with 'trust here' trust all\n"+
-"objects in the same room with you.\n"+
-"Same is possible with 'chkuids' which tells you the uids of other objects.\n"+
-"You can also create a 'stub' for an alien object with this truster.\n"+
-"Being 'suspicious' makes the truster leave in to the next plane of\n"+
-"existance. It can also be made (in)visible with '(in)vis truster'.\n"+
-"Give '<cmd> ?' for special info.\n"+
+"This object lets you 'trust' other objects by exporting its uid to them. "
+"You can also 'trust all' objects you carry, with 'trust here' trust all "
+"objects in the same room with you.\n"
+"Same is possible with 'chkuids' which tells you the uids of other objects. "
+"You can also create a 'stub' for an alien object with this truster. "
+"Being 'suspicious' makes the truster leave in to the next plane of "
+"existance. It can also be made (in)visible with '(in)vis truster'. "
+"Give '<cmd> ?' for special info.\n"
 "The truster is autoloading as long as carried.\n"
           );
   SetValue (0);
@@ -64,12 +65,12 @@ create () {
 ** Also handles invisibility.
 */
 
-QueryShort() {
+varargs string QueryShort() {
   if (!PL || invis || !query_user_level(PL)) return 0;
   return thing::QueryShort();
 }
 
-id(string str) {
+int id(string str) {
   if (!PL || !query_user_level(PL)) return 0;
   return thing::id(str);
 }
@@ -78,11 +79,11 @@ id(string str) {
 ** Handle the autoloading stuff.
 */
 
-QueryAutoObject() {
+mixed * QueryAutoObject() {
   return ({ VERSNR, invis });
 }
 
-SetAutoObject( mixed *args) {
+void SetAutoObject( mixed *args) {
 
     /* Can we understand the args ? */
   if (!pointerp(args) || sizeof(args) < 2) {
@@ -135,7 +136,7 @@ int check_euid() {
 ** Note the various abbreviations, and shared usages of command funs.
 */
 
-init() {
+void init() {
 
     /* May the living use us at all ? */
   if (!PL || !query_user_level(PL) || PL != environment(ME)) return;
@@ -194,13 +195,14 @@ int ftrust (string arg) {
     for (i = 0; i < sizeof(inv); i++) {
       ob = inv[i];
       if (ob == PL || ob == ME) continue;
-      short = (string) ob->QueryShort();
+      short = ({string}) ob->QueryShort();
       if (!short) short = object_name(ob);
 
       if (geteuid(ob))
         write ("Can't trust "+short+": euid is set.\n");
       else {
-        export_uid(ob);
+        configure_object(ob, OC_EUID, geteuid());
+        //export_uid(ob);
         if (getuid(ob) != getuid(ME))
           write ("Can't trust "+short+", but don't know why.\n");
         else write ("Trusting "+short+".\n");
@@ -241,7 +243,7 @@ int fstub (string arg) {
   ob = present(src, PL);
   if (!ob && env) ob = present(src, env);
   if (!ob) {
-    src = (string) MASTER->full_path(src,PL->QueryRealName());
+    src = ({string}) MASTER->full_path(src,PL->QueryRealName());
     if (file_size (src) == -1 && file_size(src+".c") == -1) {
       write ("Can't find '"+src+"'.\n");
       return 1;
@@ -254,7 +256,7 @@ int fstub (string arg) {
   sscanf (bar[sizeof(bar)-1], "%s#%s", base, foo);
   sscanf (src, "%s#%s", src, foo);
 
-  dest = (string) MASTER->full_path(dest,PL->QueryRealName());
+  dest = ({string}) MASTER->full_path(dest,PL->QueryRealName());
   if (file_size(dest) == -2) dest += "/"+base;
   if (!sscanf(dest, "%s.c", foo)) dest += ".c";
 
@@ -316,7 +318,7 @@ int fuid (string arg) {
   else
     for (i = 0; i < sizeof(inv); i++) {
       ob = inv[i];
-      short = (string) ob->QueryShort();
+      short = ({string}) ob->QueryShort();
       if (!short) short = object_name(ob);
 
       userid = getuid(ob);

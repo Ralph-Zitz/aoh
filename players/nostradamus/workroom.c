@@ -16,10 +16,9 @@
 
 inherit "/std/room";
 
-static int my_cmd(string s);
 static int my_efun(string s);
 static int my_reg(string s);
-static int my_update_hosts(string s, mapping hosts, string * indices, string * done);
+static void my_test(string s);
 
 public varargs void create () {
   ::create();
@@ -28,8 +27,6 @@ public varargs void create () {
      "This is the workroom of " NAME " 😃.\n"
      "Nothing " + MXPTAG("b") + "to" + MXPTAG("/b") + " see here, move along.\n"
   );
-  AddRoomCmd("hosts", #'my_cmd /*'*/);
-  AddRoomCmd("run", #'my_update_hosts /*'*/);
   AddRoomCmd("efun", #'my_efun /*'*/);
   AddRoomCmd("reg", #'my_reg /*'*/);
   AddExit("out", STARTROOM);
@@ -54,61 +51,6 @@ static void my_test(string s) {
 }
 
 static int my_efun(string s) {
-  python_exec(s, #'my_test);
+  python_exec(s, #'my_test /*'*/);
   return 1;
 }
-
-static int my_cmd(string s) {
-  string msg;
-  msg = ({string})INET_D->send_packet(s,
-                                  ([
-                                    "REQ": "query",
-                                    "DATA": "hosts",
-                                    "SND": ({string})this_player()->Query(P_REALNAME)
-                                   ]), 1);
-  if (stringp(msg))
-    msg_write(CMSG_GENERIC, msg);
-  else
-    msg_write(CMSG_GENERIC, "Message sent!");
-  return 1;
-}
-
-static int my_update_hosts(string s, mapping hosts = ([]), string * indices = ({}), string * done = ({})) {
-  this_player()->RegisterCmdFun(({this_player(), "print_prompt"}), s);
-  return 1;
-#if 0
-  int i;
-  string index, resp;
-  string * exp_resp;
-
-  if (!sizeof(hosts)) {
-    hosts = ({mapping})INET_D->query(I2RQ_HOSTS);
-    indices = sort_array(m_indices(hosts), #'> /*'*/);
-    if (sizeof(hosts) == sizeof(done))
-       return 0;
-  }
-  while (remove_call_out(#'my_update_hosts /*'*/) != -1);
-  i = sizeof(indices) - 1;
-  if (i < 0)
-    return 0;
-  index = indices[i];
-  if (sizeof(indices) > 1)
-    indices = indices[..<2];
-  else
-    indices = ({});
-  call_out(#'my_update_hosts, 2, 0, m_delete(hosts, index), indices, done += ({index}));
-
-  // Process each mud from here on out
-  resp = ({string})INET_D->send_packet(index,
-          ([
-            "REQ": "query",
-            "DATA": "hosts",
-            "SND": ({string})this_player()->Query(P_REALNAME)
-          ]), 1);
-  if (stringp(resp) && sizeof(resp)) {
-      exp_resp = explode(resp, "\n");
-  }
-  return 1;
-#endif
-}
-

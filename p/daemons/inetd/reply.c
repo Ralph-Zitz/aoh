@@ -39,7 +39,7 @@ void udp_reply(mapping data) {
         else
           receiver->udp_reply(data);
       }
-      else if (objectp(data[I2H_SENDER]) && (ob = find_object(data[I2H_SENDER])) )
+      else if (objectp(data[I2H_SENDER]))
 	      ob->udp_reply(data);
     }
     return;

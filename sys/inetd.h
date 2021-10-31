@@ -61,7 +61,7 @@
 #define I2H_HOST        "HST"
 #define I2H_ID          "ID"
 #define I2H_NAME        "NAME"
-#define I2H_PACKET	    "PKT"
+#define I2H_PACKET      "PKT"
 #define I2H_UDP_PORT    "UDP"
 #define I2H_SYSTEM      "SYS"
 #define I2H_RETRY       "_RETRY"

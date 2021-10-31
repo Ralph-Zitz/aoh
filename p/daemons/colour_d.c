@@ -33,6 +33,7 @@ inherit "/obj/lib/daemon_data";
 #define MAGENTA                  "\e[35m"
 #define CYAN                     "\e[36m"
 #define WHITE                    "\e[37m"
+#define DEFAULT                  "\e[39m"
 
 #define B_BLACK                  "\e[40m"
 #define B_RED                    "\e[41m"
@@ -43,7 +44,7 @@ inherit "/obj/lib/daemon_data";
 #define B_MAGENTA                "\e[45m"
 #define B_CYAN                   "\e[46m"
 #define B_WHITE                  "\e[47m"
-/* #define B_BLACK                  "\e[49m" */
+#define B_DEFAULT                "\e[49m"
 
 #if 0
 #define CLEARLINE                "\e[L\e[G"
@@ -54,9 +55,9 @@ inherit "/obj/lib/daemon_data";
 #define HOME                     "\e[H"
 #endif
 
-#define ANSI_TRANS ([ "BLACK" : BLACK, "RED" : RED, "GREEN" : GREEN, "ORANGE" : ORANGE, "YELLOW" : BOLD ORANGE, "BLUE" : BLUE, "CYAN" : CYAN, "MAGENTA" : MAGENTA, "WHITE" : WHITE, "B_BLACK" : B_BLACK, "B_RED" : B_RED, "B_GREEN" : B_GREEN, "B_ORANGE" : B_ORANGE, "B_YELLOW" : BOLD B_ORANGE, "B_BLUE" : B_BLUE, "B_CYAN" : B_CYAN, "B_MAGENTA" : B_MAGENTA, "B_WHITE" : B_WHITE, "BOLD" : BOLD, "FLASH" : FLASH, "UNDERL" : UNDERL, "INVERS" : INVERS, "RESET" : RESET, "_RESET_" : RESET ])
+#define ANSI_TRANS ([ "DEFAULT": DEFAULT, "B_DEFAULT": B_DEFAULT, "BLACK" : BLACK, "RED" : RED, "GREEN" : GREEN, "ORANGE" : ORANGE, "YELLOW" : BOLD ORANGE, "BLUE" : BLUE, "CYAN" : CYAN, "MAGENTA" : MAGENTA, "WHITE" : WHITE, "B_BLACK" : B_BLACK, "B_RED" : B_RED, "B_GREEN" : B_GREEN, "B_ORANGE" : B_ORANGE, "B_YELLOW" : BOLD B_ORANGE, "B_BLUE" : B_BLUE, "B_CYAN" : B_CYAN, "B_MAGENTA" : B_MAGENTA, "B_WHITE" : B_WHITE, "BOLD" : BOLD, "FLASH" : FLASH, "UNDERL" : UNDERL, "INVERS" : INVERS, "RESET" : RESET, "_RESET_" : RESET ])
 
-#define COLOR_NAMES ({ "BLACK", "RED", "GREEN", "ORANGE", "BLUE", "MAGENTA", "CYAN", "WHITE" })
+#define COLOR_NAMES ({ "BLACK", "RED", "GREEN", "ORANGE", "BLUE", "MAGENTA", "CYAN", "WHITE", "DEFAULT" })
 
 /* -------------------------------------------------------------------------
  * Global vars

@@ -17,7 +17,7 @@
 #include <daemons.h>
 
 #define VALID_CLASSES ({ "default", "tell", "channel", "fun", "emote", "say", "combat_self", "combat", "combat_others", "room_exit" })
-#define VALID_COLORS ({ "black", "red", "green", "orange", "blue", "magenta", "cyan", "white" })
+#define VALID_COLORS ({ "black", "red", "green", "orange", "blue", "magenta", "cyan", "white", "default" })
 #define VALID_MODES ({ "bold" })
 
 private int string_to_class( string what )
@@ -88,8 +88,9 @@ private void set_color( int class, string str, string tty )
         hgl = 0;
       }
 
-      if ( ( fg == bg ) && ( ! hgl ) )
+      if ( ( fg == bg ) && ( ! hgl ) && ( fg != 8 ) )
       {
+        msg_write( CMSG_GENERIC, sprintf("%d:%d\n", fg, bg));
         msg_write( CMSG_GENERIC,
                "Foreground and background color are identical.\n" );
         return;
@@ -217,7 +218,7 @@ public int main( string arg ) {
       msg_write( CMSG_GENERIC,
 		 "Invalid class given for coloring.\n"+
 		 "Valid classes are "+implode(VALID_CLASSES[0..<2],",")+
-		 " and "+VALID_CLASSES[<1]+".\n" );
+		 ", and "+VALID_CLASSES[<1]+".\n" );
     }
     return 1;
   }
@@ -227,9 +228,9 @@ public int main( string arg ) {
     {
 	    tmp= "Syntax: color <class> <clear>|<[bright] color [on <color]>\n\n"
 	        "Valid classes are:\n"+implode(VALID_CLASSES[0..<2],",")+""
-	       " and "+VALID_CLASSES[<1]+".\n\n"
+	       ", and "+VALID_CLASSES[<1]+".\n\n"
 	       "Valid colors are:\n"+implode(VALID_COLORS[0..<2],",")+""
-	       " and "+VALID_COLORS[<1]+".\n\n"
+	       ", and "+VALID_COLORS[<1]+".\n\n"
 	       "Foreground colors can be bright, i.e. bright red.\n";
     }
     else

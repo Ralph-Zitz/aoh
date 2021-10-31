@@ -1,7 +1,7 @@
 /*
  *	inetdhosts.c			Pepel <pepel@ibr.cs.tu-bs.de> Nov 94
  *
- * create the transitive hull of all known and reachable muds theat emply
+ * create the transitive hull of all known and reachable muds theat implement
  * the inetd protocol.
  */
 

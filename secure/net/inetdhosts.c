@@ -44,7 +44,7 @@ void restart() {
   sent = 0;
   received = 0;
   timeouts = 0;
-  while(find_call_out(#'query_next_host /*'*/) != -1);
+  while(remove_call_out(#'query_next_host /*'*/) != -1);
   call_out(#'query_next_host /*'*/, 2);
 }
 
@@ -62,7 +62,7 @@ void query_next_host() {
     h = hostnames[0];
     hostnames = 0;
     donehosts += ({ h });
-    while(find_call_out(#'query_next_host /*'*/) != -1);
+    while(remove_call_out(#'query_next_host /*'*/) != -1);
     call_out(#'query_next_host /*'*/, 1);
     /* now send out the query */
     TELL_CHEF(sprintf("sending query to %s (%d to go)", h, togo()));
@@ -175,7 +175,7 @@ void udp_reply(mapping data) {
   //write_file(LOGFILE, sprintf("hosts now: %O\n", hosts));
 
   if (added) {
-    while(find_call_out(#'query_next_host /*'*/) != -1);
+    while(remove_call_out(#'query_next_host /*'*/) != -1);
     call_out(#'query_next_host /*'*/, 0);
   } else
     TELL_CHEF("none added, sent "+sent+" received "+received

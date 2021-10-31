@@ -49,19 +49,19 @@
 
 /* --- Standard header macros. --- */
 
-#define RECIPIENT	"RCPNT"
-#define REQUEST		"REQ"
-#define SENDER		"SND"
+#define RECIPIENT   "RCPNT"
+#define REQUEST     "REQ"
+#define SENDER      "SND"
 /* The DATA field should be used to store the main body of any packet. */
-#define DATA		"DATA"
+#define DATA        "DATA"
 
 /* These headers are reserved for system use only. */
-#define HOST		"HST"
+#define HOST        "HST"
 #define ID          "ID"
-#define NAME		"NAME"
-#define PACKET		"PKT"
-#define UDP_PORT	"UDP"
-#define SYSTEM		"SYS"
+#define NAME        "NAME"
+#define PACKET      "PKT"
+#define UDP_PORT    "UDP"
+#define SYSTEM      "SYS"
 
 /* Reserved headers for diagnostics. */
 #define PACKET_LOSS     "PKT_LOSS"
@@ -69,16 +69,16 @@
 
 /* --- Standard REQUEST macros. --- */
 
-#define PING		"ping"
-#define QUERY		"query"
-#define REPLY		"reply"
+#define PING        "ping"
+#define QUERY       "query"
+#define REPLY       "reply"
 
 /* --- Standard SYSTEM macros. --- */
 
-#define FAILED		"F"
-#define REPEAT		"R"
-#define TIME_OUT	"TO"
-#define UNAVAILABLE	"U"
+#define FAILED      "F"
+#define REPEAT      "R"
+#define TIME_OUT    "TO"
+#define UNAVAILABLE "U"
 
 /* --- Index macros for host arrays. --- */
 

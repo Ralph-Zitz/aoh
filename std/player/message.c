@@ -25,7 +25,7 @@
 #include <driver/driver_info.h>
 
 /* the max. size of the editing-buffer */
-#define MAX_BUFFER 1000
+#define MAX_BUFFER 5000
 
 /* the max. size of the user-definable class-dep. history */
 #define MAX_MSG_HISTORY 20
@@ -602,7 +602,7 @@ static varargs void buffer_more_handler( string arg, int left ) {
     efun::tell_object( this_object(),
 		       "Accepted commands are:\n"
 		       "[CR]    : next page\n"
-  		     "p       : print all remaining text\n"
+  		       "p       : print all remaining text\n"
 		       "?       : this help\n"
 		       "q       : aborts bmore\n" );
     efun::tell_object( this_object(),

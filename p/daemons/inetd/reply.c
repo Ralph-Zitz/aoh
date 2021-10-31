@@ -20,11 +20,11 @@
 
 void udp_reply(mapping data) {
   object ob;
+  string receiver;
 
   if ( ({int})INET_D->check_system_field(data, I2S_TIME_OUT ) ) {
     if (data[I2H_SENDER]) {
-      if ( stringp(data[I2H_SENDER]) &&
-	   (ob = find_player( data[I2H_SENDER])) ) {
+      if ( stringp(data[I2H_SENDER]) && (ob = find_player( data[I2H_SENDER])) ) {
 	      msg_object( ob, CMSG_GENERIC,
 			  "\ninetd: " + capitalize(data[I2H_REQUEST]) +
 			  " request to " +
@@ -33,7 +33,13 @@ void udp_reply(mapping data) {
 			   data[I2H_NAME]) +
 			  " timed out.\n");
       }
-      else if ( objectp(ob = data[I2H_SENDER]) || (ob = find_object(data[I2H_SENDER])) )
+      else if (stringp(data[I2H_SENDER]) && receiver = data[I2H_SENDER]) {
+        if (ob = find_object(receiver))
+  	      ob->udp_reply(data);
+        else
+          receiver->udp_reply(data);
+      }
+      else if (objectp(data[I2H_SENDER]) && (ob = find_object(data[I2H_SENDER])) )
 	      ob->udp_reply(data);
     }
     return;

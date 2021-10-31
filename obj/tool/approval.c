@@ -36,8 +36,8 @@ inherit "/std/thing";
 #define SYM(x) 'x //'
 #define STR "/lib/string"
 
-private static string afile;
-private static int last_change;
+private nosave string afile;
+private nosave int last_change;
 
 public mapping approved;
 // ([<string file>:<int approve-date>;<string approve-name>])
@@ -96,7 +96,7 @@ private int LoadData()
 private int AddApproved(string file)
 {
   if (!TP) return U_INVALID;
-  file = TP->get_path(file);
+  file = ({string})TP->get_path(file);
   if (getuid(TP)!=getuid(TO))
     return U_INVALID;
   if (file_size(file)<0) return F_NOT_EXIST;
@@ -111,7 +111,7 @@ private int RemoveApproved(string file)
   if (!TP) return U_INVALID;
   if (getuid(TP)!=getuid(TO))
     return U_INVALID;
-  file = TP->get_path(file);
+  file = ({string})TP->get_path(file);
   LoadData();
   m_delete(approved,file);
   return SaveData();
@@ -122,7 +122,7 @@ private int CheckApproved(string file)
   if (!TP) return U_INVALID;
   if (getuid(TP)!=getuid(TO))
     return U_INVALID;
-  file = TP->get_path(file);
+  file = ({string})TP->get_path(file);
   if (file_size(file)<0) return CHECK_NO_FILE;
   LoadData();
   if (!member(approved,file))
@@ -135,7 +135,7 @@ private int CheckApproved(string file)
 public string Report(string dir)
 {
   string *files,*res,path;
-  int i,cres;
+  int i;
   if (!TP) return 0;
   if (getuid(TP)!=getuid(TO))
     return "Your uid is invalid.\n";
@@ -148,7 +148,7 @@ public string Report(string dir)
   else
     // Create a report about files in directory
     {
-      dir = TP->get_path(dir);
+      dir = ({string})TP->get_path(dir);
       path = implode(explode(dir,"/")[0..<2],"/")+"/";
       files = get_dir(dir,0x01);
       files = map(files,lambda(({SYM(f)}),({SF(+),path,SYM(f)})));
@@ -189,19 +189,19 @@ public int Approve(string str)
   res = AddApproved(&str);
   if (res == U_INVALID)
     return notify_fail("Your uid doesn't corrospond with the uid of the "
-		       "tool.\n",NOTIFY_NOT_VALID),0;
+		       "tool.\n",NOTIFY_NOT_VALID);
   if (res == F_NOT_EXIST)
     return notify_fail("The file you wanted to approve doesn't exist.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if (res == F_INVALID_NAME)
     return notify_fail("The approved-datafile-name is invalid.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if (res == F_NO_ACCESS)
     return notify_fail("You have no write-access to the data-file.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if (res == F_OK)
     return write(str+" got approved.\n"),1;
-  return notify_fail("Unknown error.\n",NOTIFY_NOT_VALID),0;
+  return notify_fail("Unknown error.\n",NOTIFY_NOT_VALID);
 }
 
 public int Remove(string str)
@@ -210,22 +210,22 @@ public int Remove(string str)
   res = RemoveApproved(str);
   if (res == U_INVALID)
     return notify_fail("Your uid doesn't corrospond with the uid of the "
-		       "tool.\n",NOTIFY_NOT_VALID),0;
+		       "tool.\n",NOTIFY_NOT_VALID);
   if (res == F_INVALID_NAME)
     return notify_fail("The approved-datafile-name is invalid.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if (res == F_NO_ACCESS)
     return notify_fail("You have no write-access to the data-file.\n",
-		       NOTIFY_NOT_VALID),0;
+		       NOTIFY_NOT_VALID);
   if (res == F_OK)
     return write(str+" got removed from approval-list.\n"),1;
-  return notify_fail("Unknown error.\n",NOTIFY_NOT_VALID),0;
+  return notify_fail("Unknown error.\n",NOTIFY_NOT_VALID);
 }
 
 public int AFile(string str)
 {
   if (!TP) return 0;
-  if (str) str = TP->get_path(str);
+  if (str) str = ({string})TP->get_path(str);
   if (!str)
     {
       if (afile)

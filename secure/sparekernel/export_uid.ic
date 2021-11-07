@@ -6,6 +6,5 @@ void export_uid(object ob)
     object p_ob = efun::previous_object();
 
     efun::configure_object(ob, OC_EUID, geteuid(p_ob));
-    return 1;
 }
 #endif

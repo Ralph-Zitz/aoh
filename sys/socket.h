@@ -120,7 +120,7 @@ static void   lookup(string host, closure cb);
 static mixed* note_err(string str, int* msg, int fd);
 int           remove();
 static void   sendbuf(int ufd, int* data, int off);
-static void   socket_cb(int* msg, int ufd);
+static void   socket_cb(int|int* msg, int ufd);
 int           socket_close(int fd);
 static string to_ascii(int* msg);
 static string to_mudmode(mixed data);

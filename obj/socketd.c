@@ -401,7 +401,7 @@ int socket_close(int ufd) {
   if (PO && PO != ME) {
     if (!m_contains(&fd, used_fd, ufd) || PO != sockets[fd, S_SOCKOBJ])
         if (!m_contains(&fd, used_fd, ufd)) return 0; //vanished
-    RAISE_ERROR("privilege violation: socket_close()\n");
+    RAISE_ERROR(sprintf("privilege violation: socket_close(), PO:%O\n", PO));
   } else {
     if (!m_contains(&fd, used_fd, ufd)) return 0; //vanished
   }
@@ -463,11 +463,13 @@ static void looked_up(int* msg, int ufd) {
 }
 
 // most of data gets here from the erq (see write_cb)
-static void socket_cb(int* msg, int ufd) {
+static void socket_cb(int|int* msg, int ufd) {
   int state, opts, port, type, fd;
   string host;
   object so;
 
+  if (intp(msg))
+    msg = ({ msg });
   debug("sockD::socket_cb(%O, %O)", msg, ufd);
   if (!m_contains(&fd, used_fd, ufd)) return; // should not happen
   msg   = map(msg, #'& /*'*/, 255);

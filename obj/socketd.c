@@ -399,9 +399,11 @@ int socket_close(int ufd) {
   debug("sockD::socket_close(%O)", ufd);
   if (!intp(ufd)) RAISE_ERROR("Bad argument 1 to socket_close()\n");
   if (PO && PO != ME) {
-    if (!m_contains(&fd, used_fd, ufd) || PO != sockets[fd, S_SOCKOBJ])
+    if (!m_contains(&fd, used_fd, ufd) || PO != sockets[fd, S_SOCKOBJ]) {
         if (!m_contains(&fd, used_fd, ufd)) return 0; //vanished
-    RAISE_ERROR(sprintf("privilege violation: socket_close(), PO:%O\n", PO));
+    }
+    if (object_name(PO) != __MASTER_OBJECT__)
+      RAISE_ERROR(sprintf("privilege violation: socket_close(), PO:%O\n", PO));
   } else {
     if (!m_contains(&fd, used_fd, ufd)) return 0; //vanished
   }

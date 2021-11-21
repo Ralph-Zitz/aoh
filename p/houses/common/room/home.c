@@ -294,8 +294,6 @@ int remove_owner(string player)
 
 int list(string str)
 {
-  string *cap_allowed;
-
   if(str && str != "allowed" && str != "owners") {
     notify_fail(
       "'list allowed' lists the people who are allowed to enter this house.\n\

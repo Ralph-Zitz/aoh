@@ -1079,13 +1079,13 @@ static mixed* note_err(string str, int* msg, int fd) {
           "ENOMEDIUM No medium found",
           "EMEDIUMTYPE Wrong medium type", })[msg[1]];
 
-    debug(str + " (%O) %O (%O) for %O", msg[0], e2, msg[1], who);
+    debug(str + " (%O) %O (%O) for %O\n", msg[0], e2, msg[1], who);
   }
-  else debug(str + " (%O) for %O", msg[0], who);
+  else debug(str + " (%O) for %O\n", msg[0], who);
 
 
   log_file(SOCKETLOG, ctime()[4..19] + str + " (" + msg[0] + ") " + extra||"" +
-    "for " + who + "\n");
+    "for " + who + "\n\n");
 
   return ({ str, msg, extra });
 }

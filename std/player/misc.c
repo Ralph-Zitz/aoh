@@ -62,7 +62,7 @@ string exp_fname (string fname); // std/player/filesys
 int more(string fname, int flag); // std/player/filesys
 public string QueryCurrentDir(); // std/player/filesys
 int QueryPageSize(); // std/player/filesys
-public string QuerySP();         // std/living/body
+public int QuerySP();         // std/living/body
 public varargs int ReduceSP(int diff, int min);
                                  // std/living/body
 public string QueryRealName();   // std/living/description

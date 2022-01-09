@@ -317,7 +317,7 @@ mixed elpromo;
 // void dangling_lfun_closure ()
 //   Handle a dangling lfun-closure.
 //
-// void log_error (string file, string err)
+// void log_error (string file, string err, int warn, int line)
 //   Announce a compiler-time error.
 //
 // mixed heart_beat_error (object culprit, string err,
@@ -2419,7 +2419,7 @@ void dangling_lfun_closure ()
 }
 
 //---------------------------------------------------------------------------
-void log_error (string file, string err)
+void log_error (string file, string err, int warn, int line)
 
 // Announce a compiler-time error.
 //
@@ -2444,7 +2444,8 @@ void log_error (string file, string err)
 
 #if __EFUN_DEFINED__(expand_define) /*!defined(__VERSION__) || __VERSION__ > "03.02.1@94"*/
   if (!catch(code = expand_define("__FILE__")) && code)
-    err += sprintf("Compiling %s, Line %s\n", code, expand_define("__LINE__"));
+    err += sprintf("Compiling %s, Line %d\n", code, line);
+    //err += sprintf("Compiling %s, Line %s\n", code, expand_define("__LINE__"));
     //err += "Compiling "+code+", Line "+expand_define("__LINE__")+"\n";
 #endif
   if (last_loader)
@@ -2458,7 +2459,8 @@ void log_error (string file, string err)
   {
     last_log_time = time();
     last_log_file = lfile;
-    err = " -- "+ctime()+" --\n"+err;
+    err = " -- "+ctime()+" --\n"+
+          " -- "+((warn == 1) ? "Warning --\n" : "Error --\n")+err;
   }
   if (catch(map(lfile, #'write_file /*'*/, err)))
     write ("Could not log error!\n");

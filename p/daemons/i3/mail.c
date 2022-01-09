@@ -297,4 +297,5 @@ static string check_mail_types(mixed* data) {
 
   if (sizeof(filter(data[MAIL_BCC], (: !stringp($1) :))))
     return "element in MAIL_BCC value not string";
+  return 0;
 }

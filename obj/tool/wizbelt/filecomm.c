@@ -444,20 +444,20 @@ int wrepl(string str) {
  return 1;
 }
 
-int wrepl2(string in, string file, int flag, int bup) {
+int wrepl2(string _in, string file, int flag, int bup) {
   write("Replace: ");
-  input_to("wrepl3", 0, in, file, flag, bup);
+  input_to("wrepl3", 0, _in, file, flag, bup);
   return 1;
 }
 
-int wrepl3(string in, string find, string file, int flag, int bup) {
+int wrepl3(string _in, string find, string file, int flag, int bup) {
  string ausgabe;
  if (sscanf(file, "%~s*%~s") > 0) {
-     ausgabe = WReplAll(file, find, in, bup);
+     ausgabe = WReplAll(file, find, _in, bup);
      if (flag) Out(ausgabe); else write("WRepl done.\n");
      return 1;
  }
- ausgabe = WRepl(file, find, in, bup);
+ ausgabe = WRepl(file, find, _in, bup);
  if (flag) Out(ausgabe); else write("WRepl done.\n");
  return 1;  
 }

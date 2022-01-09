@@ -118,8 +118,8 @@ int Xcindent(string str) {
     if(cindent(str)) WLN("Cindent: "+short_path(str));
     else WDLN("An cindent error occured");
   }
-  return TRUE;
   */
+  return TRUE;
 }
 
 int Xclean(string str) {

@@ -145,6 +145,7 @@ public varargs string IntNoise(string what)
       desc = ( noise || "" ) + extra;
       return desc != "" ? desc : 0;
    }
+   return 0;
 }
 
 public varargs string IntSmell(string what)
@@ -162,6 +163,7 @@ public varargs string IntSmell(string what)
       desc = ( smell||"") + extra;
       return desc != "" ? desc : 0;
    }
+   return 0;
 }
 
 public varargs object * MakeExcl(mixed excl, mixed add) {

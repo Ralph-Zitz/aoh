@@ -273,6 +273,7 @@ public varargs int AddXP(int amount,int delayed)
     }
     return ::AddXP(amount);
   }
+  return 0;
 }
 
 public int QueryRealLevel ()

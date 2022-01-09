@@ -234,19 +234,19 @@ public mapping SetReadMsgs(mapping map);
  */
 
 public mixed fsky(string str) {
-  mixed in;
+  mixed _in;
 
-  if (in = ({mixed})this_object()->QueryOutdoors())
-    return ({mixed})in->QueryStateDesc();
+  if (_in = ({mixed})this_object()->QueryOutdoors())
+    return ({mixed})_in->QueryStateDesc();
 
   return "What sky? There are just walls!\n";
 }
 
 public mixed fstar(string str) {
-  mixed in;
+  mixed _in;
 
-  if (in = ({mixed})this_object()->QueryOutdoors()) {
-    switch (({int})in->QueryState()) {
+  if (_in = ({mixed})this_object()->QueryOutdoors()) {
+    switch (({int})_in->QueryState()) {
     case ND_NIGHT:
       return "Little spots of light against the black of the universe.\n";
     case ND_PREDAWN:

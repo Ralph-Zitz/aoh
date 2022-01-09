@@ -58,6 +58,7 @@ varargs int AdjustMoney(object who, mixed i, string type) {
 object QueryMoneyObject(object who) {
   if(who)
     return present(MONEY_NAME,who);
+  return 0;
 }
 
 mixed QueryMoney(object who) {

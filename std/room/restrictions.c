@@ -124,9 +124,9 @@ public int QuerySunBright() { return Psunbright; }
 public int SetSunBright(int s) { return Psunbright = s; }
 
 public int QuerySunLight() {
-  mixed in;
-  return (in = QueryOutdoors())
-           ? (QuerySunBright() * ({int})in->QuerySunLight()) / MAX_SUNBRIGHT
+  mixed _in;
+  return (_in = QueryOutdoors())
+           ? (QuerySunBright() * ({int})_in->QuerySunLight()) / MAX_SUNBRIGHT
            : 0;
 }
 
@@ -407,15 +407,15 @@ public void IssueEnterMessages(object pl, mixed from, int method, mixed extra){
 }
 
 public void notify_enter(mixed from, int method, mixed extra) {
-  mixed in, oldin;
+  mixed _in, oldin;
 
   PRE->light_from_outside(QueryIntLight()-({int})PRE->QueryLight());
   emit_intlight(({int})PRE->QueryLight());
   AddIntWeight(({int})PRE->QueryWeight());
 
   oldin = from && ({mixed})from->QueryOutdoors();
-  if ((in = QueryOutdoors()) && in != oldin && ({int})in->IsMyPlayer(PRE))
-    tell_object(PRE, ({string})in->QueryStateDesc());
+  if ((_in = QueryOutdoors()) && _in != oldin && ({int})_in->IsMyPlayer(PRE))
+    tell_object(PRE, ({string})_in->QueryStateDesc());
   if (living(PRE)) {
     map(GetViewers(PRE), (: ({void})$1->RoomAddPlayer(PRE) :));
     PRE->RoomPlayers();

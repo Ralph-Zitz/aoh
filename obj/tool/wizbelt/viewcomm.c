@@ -64,6 +64,7 @@ string blanks(string str, int i) {
    if (bla>0) {for (x=0; x<bla; x++) {ret=ret+" "; }};
    x=sizeof(str);
    if (x>0) return ret[0..i-1];
+   return 0;
 }
 
 string cutlen(string str, int i) {

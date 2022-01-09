@@ -3542,7 +3542,8 @@ string dtime(int wann)
 // Return the time <wann> in a Unix-ls-like format.
 
 {
-  string monat, uhrzeit, wotag, tag, jahr;
+  string monat, uhrzeit, wotag;
+  int tag, jahr;
 
   sscanf(ctime(wann),"%s %s %d %s %d",wotag, monat, tag, uhrzeit, jahr);
   return wotag+(tag<=9 ? ",  " : ", ")+tag+". "+monat+" "+jahr+", "+uhrzeit;

@@ -1494,8 +1494,9 @@ void preload (string file)
   string name;
 
 #define TString(val) (""+(val/60)+"."+(""+(100+val%60))[1..10])
-
-  if(!file || !file[0] || file[0] == ';' || file_size(file+".c") < 0)
+  if (!file || (file && sizeof(file) < 1))
+    return;
+  if(!file[0] || file[0] == ';' || file_size(file+".c") < 0)
     return;
 
   write("Preloading: " + file + "...");

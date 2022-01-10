@@ -44,7 +44,8 @@
  */
 #if __VERSION__ > "3.5.0"
 /* #define AUTO_INCLUDE_STRING "#pragma pedantic\n#pragma save_types\n#pragma rtt_checks\n#pragma range_check\n#define NIGHTFALL 2\n#define ONESTEPBEYOND 0\n#include \"/sys/secure/config.h\"\n#include <config.h>\n" */
-#define AUTO_INCLUDE_STRING "#pragma strict_types\n#pragma pedantic\n#pragma save_types\n#pragma rtt_checks\n#pragma range_check\n#pragma warn_unused_variables\n#define NIGHTFALL 2\n#define ONESTEPBEYOND 0\n#include \"/sys/secure/config.h\"\n#include <config.h>\n"
+/* #define AUTO_INCLUDE_STRING "#pragma strict_types\n#pragma pedantic\n#pragma save_types\n#pragma rtt_checks\n#pragma range_check\n#pragma warn_unused_variables\n#define NIGHTFALL 2\n#define ONESTEPBEYOND 0\n#include \"/sys/secure/config.h\"\n#include <config.h>\n" */
+#define AUTO_INCLUDE_STRING "#pragma strict_types\n#pragma pedantic\n#pragma save_types\n#pragma rtt_checks\n#pragma range_check\n#pragma warn_unused_variables\n#pragma warn_unused_values\n#pragma warn_applied_functions\n#pragma warn_dead_code\n#pragma warn_function_inconsistent\n#define NIGHTFALL 2\n#define ONESTEPBEYOND 0\n#include \"/sys/secure/config.h\"\n#include <config.h>\n"
 #else
 #define AUTO_INCLUDE_STRING "#define NIGHTFALL 2\n#define ONESTEPBEYOND 0\n#include \"/sys/secure/config.h\"\n#include <config.h>\n"
 #endif

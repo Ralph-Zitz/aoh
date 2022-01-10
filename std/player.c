@@ -1027,7 +1027,6 @@ public int cmd_kill(string str) {
       default:
         return notify_fail("That's not logical.\n", NOTIFY_NOT_VALID);
     }
-    return notify_fail("That's not logical.\n", NOTIFY_NOT_VALID);
   }
   if (!query_once_interactive(eob)) {
     msg_write(CMSG_COMBAT_SELF, "You attack " + ({string})eob->Short() + "!\n");

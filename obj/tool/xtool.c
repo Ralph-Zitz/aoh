@@ -105,13 +105,14 @@ int query_prevent_shadow(object ob) { return 1; }
 int security() {
   object prev;
 
-  if(prev=PREV) {
+  if (prev=PREV) {
     if(!cloner) return TRUE;
 #if MUD_NF || MUD_MG
     if(getuid(prev)==ROOTID) return TRUE;
     return getuid(prev)==getuid()&&geteuid(prev)==geteuid()&&cloner==RTP;
-#endif
+#else
     return cloner==RTP;
+#endif
   } else return cloner==NULL;
 }
 
@@ -216,7 +217,6 @@ object VarToObj(string str) {
   default:
     return variable[RIGHT(str, 1)];
   }
-  return NULL;
 }
 
 string VarToFile(string str) {
@@ -587,7 +587,6 @@ void MoreFile(string str) {
       moreoffset=1;
       if(morefile==TMP_FILE) rm(morefile);
       return NULL;
-      break;
     case 'P':
     case 'U':
       moreflag=FALSE;
@@ -1504,7 +1503,6 @@ int CommandScan(string arg) {
     }
     return TRUE;
   }
-  return FALSE;
 }
 
 void history() { write(implode(history, "\n")+"\n"); }

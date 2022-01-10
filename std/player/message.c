@@ -511,7 +511,7 @@ private string parse_prompt(string what) {
  * -------------------------------------------------------------------------
  */
 
-public mixed print_prompt() {
+public varargs mixed print_prompt() {
   mixed value;
 
   if ( ( msgbuf ) &&

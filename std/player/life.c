@@ -48,7 +48,7 @@ public int QueryLight(); // std/thing/restrictions
 public varargs int move(mixed dest, int method, mixed extra); // std/living/moving
 public void StopAllHunting(); // std/living/combat
 public void save_me(status value_items, status destruct_autos); // std/player
-static void print_prompt(); // std/player/message
+public varargs mixed print_prompt(); // std/player/message
 static void replace_by_statue();
 
 nosave int age_to_save;

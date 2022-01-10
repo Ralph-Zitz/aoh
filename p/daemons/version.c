@@ -28,8 +28,8 @@ nomask void create ()
 {
   if (object_name(this_object()) != LIBVERSION_D)
   {
-    raise_error("Illegal attempt.\n");
     destruct (this_object());
+    raise_error("Illegal attempt.\n");
   }
 }
 

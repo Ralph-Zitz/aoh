@@ -721,7 +721,6 @@ public string map_brief_exit (string exit) {
   default:
     return exit;
   }
-  return exit;
 }
 
 public varargs string MakeExitString (int brief, string * dirs, string kind) {

@@ -2460,7 +2460,7 @@ void log_error (string file, string err, int warn, int line)
   {
     last_log_time = time();
     last_log_file = lfile;
-    err = " -- "+ctime()+" --\n"+
+    err = " -- "+ctime()+
           " -- "+((warn == 1) ? "Warning --\n" : "Error --\n")+err;
   }
   if (catch(map(lfile, #'write_file /*'*/, err)))

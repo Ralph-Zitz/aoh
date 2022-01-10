@@ -211,7 +211,6 @@ private varargs string implode_nicely( string * dum, string del )
     default:
         return implode( dum[0..s-2], ", ") + " " + del + " " + dum[s-1];
     }
-    return 0;
 }
 
 private void mymore( string str )

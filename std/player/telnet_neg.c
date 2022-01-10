@@ -943,7 +943,7 @@ void print_eor() {
 }
 
 // H_PRINT_PROMPT driver hook.
-void print_prompt(mixed str)
+public varargs mixed print_prompt(mixed str)
 {
   int state;
 
@@ -954,9 +954,10 @@ void print_prompt(mixed str)
 
   state = Q_LOCAL(ts[TELOPT_EOR, TS_STATE]);
   if (state == YES || state == WANT_NO)
-	  efun::binary_message(({ IAC, EOR }), 1);
+	return efun::binary_message(({ IAC, EOR }), 1);
   else if(sizeof(str) && str[<1]!='\n')
-    efun::tell_object( this_object(), "\n");
+    return efun::tell_object( this_object(), "\n");
+  return;
 }
 
 protected void set_eor_protokoll(int act)

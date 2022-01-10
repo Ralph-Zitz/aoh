@@ -334,7 +334,6 @@ public varargs string AgeString(int age_time,int format)
       if (m) res += m+" min ";
       return res;
   }
-  return res;
 }
 
 public varargs void Die(int silent)

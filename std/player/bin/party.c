@@ -586,7 +586,6 @@ int cmd_party(string arg)
     case "protect": return cmd_protect(arg);
     default: return notify_fail("Unknown party command.\n");
   }
-  return notify_fail("Unknown party command.\n");
 }
 
 // ------------ Calls from std/player ----------------------

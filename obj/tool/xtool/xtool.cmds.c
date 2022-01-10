@@ -952,7 +952,7 @@ int Xstop(string str) {
   object item;
 
   WDLN("Not ready implemented yet");
-  return TRUE;
+  //return TRUE;
 
   SECURE2(TRUE);
   USAGE1(str, "xst(op)");
@@ -998,7 +998,6 @@ int Xtool(string str) {
 	WLN("Updating "+TOOL_TITLE+" failed!");
       else obj->update_tool(AUTOLOAD_ARGS, cloner);
       return TRUE;
-      break;
     case "heart=on":
       MODE_ON(MODE_HEART);
       hbeats=0;

@@ -191,7 +191,6 @@ varargs string PayValueString(object who, int value, string *types,
                                                       #'object_name),"\n")));
     return 0;
   } /* end switch() */
-  return 0;
 }
 
 varargs mapping CreateMoneyFromValue(int value, string *types)

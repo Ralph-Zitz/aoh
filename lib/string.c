@@ -186,7 +186,7 @@ varargs string countup(string *foo, mixed separator) {
     else
       return implode(foo[..<2], ", ") + ", and " + foo[<1];
   }
-  return "";
+//  return "";
 }
 
 /*-------------------------------------------------------------------------
@@ -498,7 +498,7 @@ varargs string mixed_to_string(mixed mix, int lvl)
 	}
       return str+"])";
     }
-  return "...";
+  //return "...";
 }
 /*
 varargs string mixed_to_string (mixed value, int depth) {
@@ -742,7 +742,7 @@ void input_loop(string str,object pl,closure func,
   if (str[0]=='~')
     switch(str[1])
       {
-        case 'q': return break_input(pl,func,args); break;
+        case 'q': return break_input(pl,func,args);
         case 'h': show_help(pl); go_on = 0; break;
         case 'd': go_on = 0;
                   if (str!="~d"

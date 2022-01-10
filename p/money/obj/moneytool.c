@@ -286,7 +286,6 @@ public int cmd_mt(string str)
       case "help"  : return cbhelp();
       default: return 0;
     }
-    return 0;
 }
 
 /*-----------------------------------------------------------------------*/

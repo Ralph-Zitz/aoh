@@ -146,7 +146,6 @@ public nomask void set_this_player (object obj)
 {
   if (!PRE || (obj != PRE && to_string(PRE)[0..6] != "/secure")) {
     raise_error("Illegal attempt to change this_player().\n");
-    return;
   }
   FAKE_OBJECT;
   efun::set_this_player(obj);
@@ -161,7 +160,6 @@ public nomask void set_environment (object item, object dest)
 {
   if (!PRE || to_string(PRE)[0..6] != "/secure") {
     raise_error("Illegal attempt to use set_environment().\n");
-    return;
   }
   FAKE_OBJECT;
   efun::set_environment(item, dest);
@@ -351,7 +349,6 @@ private mixed process_value (string func)
   if (num > 8)
   {
     raise_error("Too many arguments ("+num+") in '"+func+":"+arg+"'.\n");
-    return 0;
   }
   if (num != 8)
     tmp = tmp + allocate(8-num);
@@ -416,7 +413,6 @@ call_out (mixed what, int delay, varargs mixed *args )
     if (num > 8)
     {
       raise_error("Too many arguments ("+num+") to call_out().\n");
-      return;
     }
     if (num != 8)
       args = args + allocate(8-num);

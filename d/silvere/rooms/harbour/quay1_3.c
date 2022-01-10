@@ -136,34 +136,27 @@ mixed look_shadows()
          return
             "The long shadows of the towers can be seen behind them "
             "on the water of the sea.\n";
-         break;
       case ND_LATE_MORNING:
          return
             "The shadows of the towers are somewhat shorter now, as "
             "the sun stands nearly at the middle of the sky.\n";
-         break;
       case ND_NOON:
          return
             "The shadows of the towers are very short, as the "
             "sun stands nearly above the towers.\n";
-         break;
       case ND_EARLY_AFTERNOON:
          return
             "The shadows of the towers can be seen on some parts "
             "of the quays.\n";
-         break;
       case ND_LATE_AFTERNOON:
       case ND_SUNSET:
          return
             "The shadows of the towers can be seen over almost the "
             "whole length of the quays. The vanishing sun makes it "
             "somewhat hard to see them in the twilight, though.\n";
-         break;
       default:
          return 0;
-         break;
    }
-   return 0;
 }
 
 varargs void create()

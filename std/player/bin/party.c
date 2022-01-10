@@ -575,25 +575,15 @@ int cmd_party(string arg)
   switch(query_verb())
   {
     case "party": return cmd_partyon(arg);
-    break;
     case "pstat": return cmd_pstat(arg);
-    break;
     case "apply": return cmd_apply(arg);
-    break;
     case "recruit": return cmd_recruit(arg);
-    break;
     case "leader": return cmd_leader(arg);
-    break;
     case "pemote": return cmd_pemote(arg);
-    break;
     case "ptell": return cmd_ptell(arg);
-    break;
     case "pname": return cmd_pname(arg);
-    break;
     case "dismiss": return cmd_dismiss(arg);
-    break;
     case "protect": return cmd_protect(arg);
-    break;
     default: return notify_fail("Unknown party command.\n");
   }
   return notify_fail("Unknown party command.\n");

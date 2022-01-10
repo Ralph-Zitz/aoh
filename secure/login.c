@@ -260,8 +260,8 @@ nomask void create ()
 
   if (explode(object_name(this_object()), "#")[0] != LOGIN)
   {
-    raise_error("Illegal attempt.\n");
     destruct (this_object());
+    raise_error("Illegal attempt.\n");
   }
   enforce = 0;
   checkedshut = 0;
@@ -404,8 +404,8 @@ protected void LoginError(string errmsg)
 
 {
   write("Sorry, you found an error in the login object.\n");
-  raise_error(errmsg);
   destruct(this_object());
+  raise_error(errmsg);
 }
 
 //---------------------------------------------------------------------------
@@ -876,7 +876,7 @@ InitialLogin(string input)
         destruct(this_object());
         return;
       }
-      lpassword == "";
+      lpassword = "";
       StartGuest();
       return;
     }
@@ -1293,7 +1293,7 @@ HtmlLogin (string input)
 
   seteuid("gopher");
   if (input) sscanf(input, "GET %s", input);
-  if (!input || input == "") input == "/";
+  if (!input || input == "") input = "/";
   /* clone a player object */
   ob = clone_object("/secure/net/www");
   if (!ob) {

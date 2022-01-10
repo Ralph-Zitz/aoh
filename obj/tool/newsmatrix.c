@@ -314,7 +314,7 @@ varargs string QueryLong() {
 void init() {
   if (!check_owner()) return 0;
   thing::init();
-  add_action ("read"      , "inspect");
+  add_action ("fread"      , "inspect");
   add_action ("_dispatch" , "", 1);
   _load_groupinfo();
   if (!actgroup && !_chg_act(DEFAULT_GROUP))

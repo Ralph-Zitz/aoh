@@ -477,7 +477,7 @@ public varargs int CompareSize (mixed with) {
                    , this_player(), this_interactive())
           );
 #endif
-  return 0; // For now disabled
+//  return 0; // For now disabled
   if (objectp(with))
     size2 = ({int})with->Query(P_SIZE);
   else if (intp(with))

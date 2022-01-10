@@ -270,7 +270,6 @@ string VerbToSkill(string skill_verb)
 	  if (!ids || sizeof(ids)-1 < idx)
 	  {
 	    raise_error("Skillserver: Verb-skill matching error for rooms.\n");
-	    return 0;
 	  }
 	  return ids[idx];
   }
@@ -285,7 +284,6 @@ string VerbToSkill(string skill_verb)
 	if (!ids || sizeof(ids)-1 < idx)
 	{
 	  raise_error("Skillserver: Verb-skill matching error for things.\n");
-	  return 0;
 	}
 	return ids[idx];
   }
@@ -300,14 +298,10 @@ string VerbToSkill(string skill_verb)
 	if (!ids || sizeof(ids)-1 < idx)
 	{
 	  raise_error("Skillserver: Verb-skill matching error for livings.\n");
-	  return 0;
 	}
 	return ids[idx];
   }
-
   raise_error("Skillserver: Skill not found corresponding to action.\n");
-  return 0;
-
 }
 
 
@@ -354,7 +348,6 @@ varargs string ValueToString(int skill,int flag)
      default:
       return "unknown"+s_end;
   }
-  return "unknown"+s_end;
 }
 
 

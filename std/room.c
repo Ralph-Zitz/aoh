@@ -109,7 +109,6 @@ int SetCoordinates(mixed args)
          {
             write("*** SetCoordinates(): Wrong size of coordinate set.\n");
             return -1;
-            break;
          }
       }
       case 2:
@@ -124,14 +123,12 @@ int SetCoordinates(mixed args)
          {
             write("SetCoordinates(): wrong size of first coordinate set.\n");
             return -1;
-            break;
          }
          if(sizeof(args[1])==3) rels=args[1];
          else
          {
             write("SetCoordinates(): wrong size of second coordinate set.\n");
             return -1;
-            break;
          }
          break;
       }
@@ -150,7 +147,6 @@ int SetCoordinates(mixed args)
             "        SetCoordinates( ({ ({ x,y,z }) }) );\n"
             "        SetCoordinates( ({ ({ x,y,z }),({ x,y,z }) );\n");
          return -1;
-         break;
       }
    }
    InitCoordinates(x,y,z,rels);

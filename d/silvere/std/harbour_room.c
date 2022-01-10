@@ -198,52 +198,42 @@ string look_sun()
          return
             "A faint glow appears at the eastern horizon. The sun is "
             "not visible, though.\n";
-         break;
       case ND_SUNRISE:
          return
             "The sun just appeared on the eastern horizon and makes"
             "the view of the city of Silvere just awesome. It proves "
             "once again that nature creates wonders every day.\n";
-         break;
       case ND_EARLY_MORNING:
          return
             "The sun stands above the city of Silvere. It shines down "
             "from the sky, lighting the harbour.\n";
-         break;
       case ND_LATE_MORNING:
          return
             "The sun stands high on the sky above Silvere and shines "
             "down at you.\n";
-         break;
       case ND_NOON:
          return
             "The sun seems to stand directly above you on the sky. It "
             "burns down, lighting everything.\n";
-         break;
       case ND_EARLY_AFTERNOON:
          return
             "The sun stands high on the sky beyond the towers and "
             "shines down at you.\n";
-         break;
       case ND_LATE_AFTERNOON:
          return
             "The sun stands on the sky, somewhere behind the towers. "
             "They are casting long shadows over the whole harbour.\n";
-         break;
       case ND_SUNSET:
          return
             "The sun touches the western horizon and fills the sea "
             "with an red glow. It somehow seems that the whole sea "
             "is made out of blood.\n";
-         break;
       case ND_TWILIGHT:
          return
             "The sun isn't visible anymore. Out on the sea of Shamyra "
             "is a faint glow of red filling the horizon.\n";
-         break;
-      default: return 0; break;
+      default: return 0;
    }
-   return 0;
 }
 
 /* -------------------------------------------------------
@@ -257,40 +247,30 @@ string look_horizon()
     case ND_NIGHT:
       return "The endless black of the churning sea reflects the "
              "light of the stars.\n";
-      break;
     case ND_PREDAWN:
       return "A faint line divides the blackness of the sea from the grey of the "
              "heavens.\n";
-      break;
     case ND_DAWN:  /* fall through */
     case ND_SUNRISE:
       return "The horizon becomes more distinct as the sky lightens with "
              "morning's arrival.\n";
-      break;
     case ND_EARLY_MORNING:
     case ND_LATE_MORNING:
       return "The sharp edge of the horizon sparkles in the early morning light.\n";
-      break;
     case ND_NOON:
       return "A spectacular view accross azure waves straight into infinity.\n";
-      break;
     case ND_EARLY_AFTERNOON:
     case ND_LATE_AFTERNOON:
       return "The lengthening afternoon shadows play accross the water.\n";
-      break;
     case ND_SUNSET:
       return "A spectacular display of red and gold streams out over the horizon.\n";
-      break;
     case ND_TWILIGHT:
       return "A reddish glow on the horizon marks where the sun has disappeared.\n";
-      break;
     case ND_EVENING:
       return "Strata of red and purple hang over the quickly darkening horizon.\n";
-      break;
     default:
       return "The horizon stretches endlessly out beyond the waves.\n";
   }
-  return "The horizon stretches endlessly out beyond the waves.\n";
 }
 
 /* -------------------------------------------------------

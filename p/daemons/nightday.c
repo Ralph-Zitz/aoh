@@ -159,10 +159,10 @@ public string QuerySeasonString()
 {
   switch( Query(P_SEASON))
   {
-     case WINTER: return WINTER_NAME;  break;
-     case SPRING: return SPRING_NAME;  break;
-     case SUMMER: return SUMMER_NAME;  break;
-     case AUTUMN: return AUTUMN_NAME;  break;
+     case WINTER: return WINTER_NAME;
+     case SPRING: return SPRING_NAME;
+     case SUMMER: return SUMMER_NAME;
+     case AUTUMN: return AUTUMN_NAME;
   }
   return "";
 }

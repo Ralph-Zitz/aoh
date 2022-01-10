@@ -37,11 +37,10 @@ public void create ()
 {
   if (member(object_name(this_object()), '#') != -1)
   {
-    raise_error(object_name(this_object())+" should not be cloned.\n");
+    string oname = object_name(this_object());
     destruct(this_object());
-    return;
+    raise_error(oname+" should not be cloned.\n");
   }
-
   StartBing();
 }
 

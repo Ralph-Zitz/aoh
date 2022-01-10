@@ -116,7 +116,6 @@ mixed debug_info(int what, varargs mixed* args)
             }
             else
                 return efun::objects(args[0], args[1]);
-            break;
         }
 
         case DINFO_MALLOC:
@@ -198,7 +197,6 @@ mixed debug_info(int what, varargs mixed* args)
 
                 default:
                     raise_error(sprintf("Bad argument '%s' to debug_info(DINFO_DUMP).\n", args[0]));
-                    return 0;
             }
 
             return efun::dump_driver_info(opt, args[1..1]...);

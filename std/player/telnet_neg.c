@@ -1693,7 +1693,6 @@ private void sb_line(int command, int option, int* optargs) {
       }
       return tel_error("SB LINEMODE DO/DONT FORWARDMASK not "
         "allowed for client");
-      return;
     // client is requested to use forwardmask
     case WILL:
       if (optargs[1] != LM_FORWARDMASK) {

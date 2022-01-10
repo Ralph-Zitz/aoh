@@ -72,7 +72,6 @@ public mixed random_select (mixed list)
   }
 
   raise_error(sprintf("Illegal argument '%O'.\n", list));
-  return 0;
 }
 
 /*-------------------------------------------------------------------------*/
@@ -117,7 +116,6 @@ public varargs int grandom(int nrdice)
   if (nrdice < 0)
   {
     raise_error("Illegal argument "+nrdice+" to grandom().\n");
-    return 0;
   }
 
   dicerange = 1001/nrdice;

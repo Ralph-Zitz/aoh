@@ -807,7 +807,7 @@ static int cmd_password(string str) {
 protected void password_entered(string str, int hidden) {
   if (hidden)
     write("\n");
-  if (!str) str == "";
+  if (!str) str = "";
   if (({int})MASTER->update_password(str,str) == 0)
     return msg_write(CMSG_GENERIC|MMSG_DIRECT, "Wrong password!\n");
   passwold = str;
@@ -1020,13 +1020,10 @@ public int cmd_kill(string str) {
     {
       case 0:
         return notify_fail("Ouch, that would hurt!\n", NOTIFY_NOT_VALID);
-        break;
       case 1:
         return notify_fail("You think suicide's an alternative? You might be sorry.\n", NOTIFY_NOT_VALID);
-        break;
       case 2:
         return notify_fail("Interesting concept.\n", NOTIFY_NOT_VALID);
-        break;
       default:
         return notify_fail("That's not logical.\n", NOTIFY_NOT_VALID);
     }
@@ -1572,7 +1569,6 @@ private int setstty(string str)
       "vt100, ansi, bsx or dumb.\n");
       return 0;
     }
-  return 0;
 }
 
 protected void output_wiz_news()
@@ -1965,7 +1961,7 @@ public void log_kill() {
 
   myname = QueryRealName();
   if (({int})TESTY_D->CheckTesty(ME))
-    myname + "testy "+myname;
+    myname = "testy "+myname;
   if (i = query_user_level(this_object()))
     mylevel = "w"+i;
   else

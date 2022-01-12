@@ -748,7 +748,6 @@ static string DomainName(string a) {
   case "sykorath":  return "The City of Sykorath";
   default: return capitalize(a);
   }
-  return capitalize(a);
 }
 
 static void log_questobj(string text,object pl) {

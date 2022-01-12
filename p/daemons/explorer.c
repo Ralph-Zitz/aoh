@@ -151,7 +151,7 @@ nomask varargs string SetExplored(string e,int delay) {
 
 /* --- */
 
-int clean_up() { destruct(ME); return ME && 1; } /* we are stateless , thus can easily save mem */
+int clean_up(int ref) { destruct(ME); return ME && 1; } /* we are stateless , thus can easily save mem */
 
 /* --- */
 

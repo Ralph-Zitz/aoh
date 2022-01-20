@@ -936,7 +936,13 @@ static int _create_fun (int clone, object prev, object this)
 
   // Using symbol_function() here is tempting, but leads to problems with
   // the this_object()/previous_object() relation on the actual call. *sigh*
-  fun = clone ? "create_clone" : "create_obj";
+  switch (clone) {
+    case 0: fun = "create_obj"; break;
+    case 1: fun = "create_clone"; break;
+    case 2: fun = "create_lwobject"; break;
+    default: fun = "create";
+  }
+//  fun = clone ? "create_clone" : "create_obj";
   if (!function_exists(fun, this))
     fun = "create";
 
@@ -1288,6 +1294,11 @@ void inaugurate_master (int arg)
         ({ #'_load_uids_fun, 'object_name, ({#'previous_object}) })           /*'*/
       )
     );
+    set_driver_hook(H_LWOBJECT_UIDS,
+      unbound_lambda( ({'object_name}),                                       /*'*/
+        ({ #'_load_uids_fun, 'object_name, ({#'previous_object}) })           /*'*/
+      )
+    );
     set_driver_hook(H_CLONE_UIDS,
       unbound_lambda( ({ 'blueprint, 'new_name}),                             /*'*/
         ({ #'_clone_uids_fun, 'blueprint, 'new_name, ({#'previous_object}) }) /*'*/
@@ -1305,6 +1316,11 @@ void inaugurate_master (int arg)
     set_driver_hook(H_CREATE_CLONE,
       unbound_lambda( 0,
         ({#'_create_fun, 1, ({#'previous_object}), ({#'this_object}) })       /*'*/
+      )
+    );
+    set_driver_hook(H_CREATE_LWOBJECT,
+      unbound_lambda( 0,
+        ({#'_create_fun, 2, ({#'previous_object}), ({#'this_object}) })       /*'*/
       )
     );
     set_driver_hook(H_RESET,

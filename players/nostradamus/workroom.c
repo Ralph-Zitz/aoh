@@ -51,6 +51,6 @@ static void my_test(string s) {
 }
 
 static int my_efun(string s) {
-  python_exec(s, #'my_test /*'*/);
+  python_shell(s, #'my_test /*'*/);
   return 1;
 }

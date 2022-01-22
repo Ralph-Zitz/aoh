@@ -309,7 +309,6 @@ public string LookupCityFromName(string ip_name)
     default:
       return 0;
   }
-  return 0;
 }
 
 /*-------------------------------------------------------------------------*/
@@ -333,7 +332,6 @@ public string LookupCountryFromName(string ip_name)
       str = GetCountryMapping()[parts[<1]];
       return str ? str : 0;
   }
-  return 0;
 }
 
 

@@ -27,6 +27,7 @@ int climb_wall(string str)
          "Sorry, but climbing there is not possible at the moment.\n");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

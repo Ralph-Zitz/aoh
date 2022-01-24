@@ -84,6 +84,7 @@ int log_pub(string me)
   }
   else
     return write_file(PUBLIST,me+"\n");
+  return 0;
 }
 
 /**

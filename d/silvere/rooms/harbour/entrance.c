@@ -65,24 +65,20 @@ string CheckIvy()
       case WINTER: return
          "The ivy is brown and without leaves. It doesn't look "
          "interesting.\n";
-         break;
       case SPRING: return
          "The ivy is hanging down from the citywall of Silvere. "
          "A few green leaves are showing up, but most of it is "
          "dry and brown. But time will fix that in a short time. "
          "Mother nature is very good at that.\n";
-         break;
       case SUMMER: return
          "The ivy is hanging down from the citywall. It is full "
          "of red leaves and looks pretty interesting. It seems "
          "to be strong enough to climb up on it, too.\n";
-         break;
       case AUTUMN: return
          "The ivy is hanging down from the citywall, but most of it's "
          "leaves are gone now. It's probably too cold for it during "
          "night. It looks brown and dry, except for a few dry leaves "
          "hanging nearly dead from it.\n";
-         break;
    }
    return 0;
 }

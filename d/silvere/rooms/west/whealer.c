@@ -31,6 +31,7 @@ int leave_healer(string str)
       TP->move(SIL_WEST("whealer1"),M_GO,"south");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

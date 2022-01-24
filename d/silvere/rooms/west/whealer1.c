@@ -25,6 +25,7 @@ int enter_healer(string str)
       TP->move(SIL_WEST("whealer"),M_GO,"north");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

@@ -46,6 +46,7 @@ int enter_office(string str)
       GoEast();
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

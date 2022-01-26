@@ -312,7 +312,7 @@ mixed elpromo;
 //     Error Handling
 //
 // string *error_logfile (string file)
-//   Return appropriate names( for an error logfile.
+//   Return appropriate names (for an error logfile).
 //
 // void dangling_lfun_closure ()
 //   Handle a dangling lfun-closure.
@@ -2388,20 +2388,18 @@ string *error_logfile (string file)
     lfile = ({ "/log/ERR/generic" });
   else if (file_size(WPATH+cuid) == -2)
     lfile = ({ WPATH+cuid+"/.err" });
-  else if (file_size(DPATH+cuid) == -2)
-    {
-      lfile = ({ DPATH+cuid+"/.err" });
-      puid = explode(file, "/")[2];
-      if (file_size(WPATH+puid) == -2)
-        lfile += ({ WPATH+puid+"/.err" });
-    }
-  else if (file_size(DPATH+cuid) == -2)
-    {
-      lfile = ({ PPATH+cuid+"/.err" });
-      puid = explode(file, "/")[2];
-      if (file_size(WPATH+puid) == -2)
-        lfile += ({ WPATH+puid+"/.err" });
-    }
+  else if (file_size(DPATH+cuid) == -2) {
+    lfile = ({ DPATH+cuid+"/.err" });
+    puid = explode(file, "/")[2];
+    if (file_size(WPATH+puid) == -2)
+      lfile += ({ WPATH+puid+"/.err" });
+  }
+  else if (file_size(DPATH+cuid) == -2) {
+    lfile = ({ PPATH+cuid+"/.err" });
+    puid = explode(file, "/")[2];
+    if (file_size(WPATH+puid) == -2)
+      lfile += ({ WPATH+puid+"/.err" });
+  }
   else {
     if (cuid == ROOTID) cuid = "root";
     lfile = ({ "/log/ERR/"+cuid });

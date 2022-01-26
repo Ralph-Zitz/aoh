@@ -443,11 +443,11 @@ static void who_reply(mixed data) {
 
   data[CWHO] = filter(data[CWHO], #'stringp /*'*/);
   if (!sizeof(data[CWHO])) {
-    tell_object(ob, "Niemand hoert auf '" + data[C_CHANNEL] +
-      "' im " + data[O_MUD] + ".\n");
+    tell_object(ob, "Nobody is listening to '" + data[C_CHANNEL] +
+      "' from " + data[O_MUD] + ".\n");
   }
   else {
-    tell_object(ob, "Auf '" + data[C_CHANNEL] +  "' lauschen im "
+    tell_object(ob, "Listeners on '" + data[C_CHANNEL] +  "' from "
       + data[O_MUD] + ": " + L_STRING->countup(data[CWHO]) + ".\n");
   }
 }
@@ -572,7 +572,7 @@ static string substitute_name(string msg, int gemote, int e_in_middle) {
 // outbound messages get here first (from channeld)
 public int ChannelSend(string chan, mixed sname, mixed msg, int cmd, mixed* temote) {
   if (!previous_object() || load_name(previous_object())!=CHANNEL_D)
-    RAISE_ERROR(sprintf("Unerlaubtes PO [%O] fuer ChannelSend()\n",
+    RAISE_ERROR(sprintf("Illegal PO [%O] for ChannelSend()\n",
       previous_object()));
 
   if (member(chans, chan) < 0) return 0;

@@ -77,7 +77,7 @@ static void mail_in(mixed* data, string mud, object conn, int dir,
     capitalize(mud), 1);
   data[MAIL_SUBJECT] = FILTER_TXT(data[MAIL_SUBJECT], 1);
   if (!k) data[MAIL_CONTENT] =
-    "[Mud "+mud+" hat sich nicht authentifiziert]\n\n" + data[MAIL_CONTENT];
+    "[Mud "+mud+" did not authenticate itself]\n\n" + data[MAIL_CONTENT];
   fails = ({});
 
   foreach (rec : recips) {
@@ -90,7 +90,7 @@ static void mail_in(mixed* data, string mud, object conn, int dir,
       data[MAIL_SUBJECT], data[MAIL_CONTENT]);
 
     r = find_player(rec);
-    if (r) tell_object(r, "Du hast neue Post!\n");
+    if (r) tell_object(r, "You have new mail!\n");
   }
 
   I3_TOOL("oob")->send_oob_reply(mud, io, ({
@@ -151,7 +151,7 @@ static void mail_ack(mixed* data, string mud, object conn, int dir,
       // That's allways the case because we send only to one user at a time
       fails -= oks;
       oks = map(oks, (: "'"+capitalize($1)+"'" :));
-      err = " Zustellung an " + L_STRING->countup(oks) + " erfolglos.";
+      err = " Delivery for " + L_STRING->countup(oks) + " failed.";
       if (sizeof(fails)) err += " (" + implode(fails, " ") + ")";
     }
 
@@ -162,17 +162,17 @@ static void mail_ack(mixed* data, string mud, object conn, int dir,
       if (sizeof(oks) + sizeof(fails) == all) {
         if (sizeof(oks)) {
           oks = map(oks, (: "'"+capitalize($1)+"'" :));
-          ok += " Zustellung an " + L_STRING->countup(oks) + " erfolgreich.";
+          ok += " Delivery for " + L_STRING->countup(oks) + " succesful.";
         }
         if (sizeof(fails)) {
           oks = map(fails, (: "'"+capitalize($1)+"'" :));
-          err = " Zustellung an " + L_STRING->countup(fails) + " erfolglos.";
+          err = " Delivery for " + L_STRING->countup(fails) + " failed.";
         }
       }
 
       // ok, Lima format, just report the failures
       else {
-        err = " Zustellung(en) erfolglos: " + implode(fails, " ");
+        err = " Deliver(y|ies) failed: " + implode(fails, " ");
       }
     }
 
@@ -187,9 +187,9 @@ static void mail_ack(mixed* data, string mud, object conn, int dir,
         DEBUGI3("mail_ack: cannot bounce mail to " + mails[i][1][MAIL_O_USER]);
       }
       else LOCAL_MAILER->deliver_mail(mails[i][1][MAIL_O_USER],
-        "Mailer@Wunderland", "Bounced Mail",
-        "Grund:" + err + "\n\nDie Original-Nachricht folgt:\n" +
-        "Titel: " + mails[i][1][MAIL_SUBJECT] + "\n\n" +
+        "Mailer@AoH", "Bounced Mail",
+        "Error:" + err + "\n\nOriginal message follows:\n" +
+        "Title: " + mails[i][1][MAIL_SUBJECT] + "\n\n" +
         mails[i][1][MAIL_CONTENT]);
     }
 
@@ -214,7 +214,7 @@ public void send_mail(string mud, string user, string sub,
   k = I3_TOOL("mudlist")->query_mud_info(mud)[MLI_SERVICES]["auth"];
   if (!k) {
     pl = find_player(who);
-    if (pl) tell_object(pl, "Sende unauthentifiziert an "+mud+"\n");
+    if (pl) tell_object(pl, "Sending unauthenticated to "+mud+"\n");
   }
 
   user = lower_case(user);
@@ -251,16 +251,16 @@ static void mail_cb(int id, string err) {
   pl = find_player(mails[i][1][MAIL_O_USER]);
 
   if (pl)
-    MSG_TO_PLAYER(pl, "Mailer@Wunderland: Zustellung schug fehl ("+err+")");
+    MSG_TO_PLAYER(pl, "Mailer@AoH: Delivery failed ("+err+")");
 
   // bounce mail
   if (!LOCAL_MAILER->query_recipient_ok(mails[i][1][MAIL_O_USER])) {
     DEBUGI3("mail_ack: cannot bounce mail to " + mails[i][1][MAIL_O_USER]);
   }
   LOCAL_MAILER->deliver_mail(mails[i][1][MAIL_O_USER],
-    "Mailer@Wunderland", "Bounced Mail",
-    "Grund:" + err + "\n\nDie Original-Nachricht folgt:\n" +
-    "Titel: " + mails[i][1][MAIL_SUBJECT] + "\n\n" +
+    "Mailer@AoH", "Bounced Mail",
+    "Error:" + err + "\n\nOriginal message follows:\n" +
+    "Title: " + mails[i][1][MAIL_SUBJECT] + "\n\n" +
     mails[i][1][MAIL_CONTENT]);
 
   mails[i..i] = ({});

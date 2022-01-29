@@ -347,10 +347,10 @@ nomask int logon ()
   if (query_mud_port() == 2348 && tls_available()) {
     string s = "LDMud " __VERSION__;
     tls_init_connection();
-    call_out(#'write, 0, "Gamedriver " + s +
+    call_out(#'write /*'*/, 0, "Gamedriver " + s +
              " -- Lib '" MUDNAME "' "+LIBVERSION+"."+LIBREVISION+"-"+LIBPATCHLEVEL+"\n");
-    call_out(#'PrintWelcome, 1);  // Print the title screen
-    call_out(#'TimeOut, 240);
+    call_out(#'PrintWelcome /*'*/, 1);  // Print the title screen
+    call_out(#'TimeOut /*'*/, 240);
     enforce = 0;
     newplayer = 0;
     doecho = 0;
@@ -373,9 +373,9 @@ nomask int logon ()
     write("Gamedriver " + s +
       " -- Lib '" MUDNAME "' "+LIBVERSION+"."+LIBREVISION+"-"+LIBPATCHLEVEL+"\n"
        );
-     call_out(#'PrintWelcome, 1);  // Print the title screen
+     call_out(#'PrintWelcome /*'*/, 1);  // Print the title screen
   }
-  call_out(#'TimeOut, query_mud_port() == WWW_PORT ? 600 : 240);
+  call_out(#'TimeOut /*'*/, query_mud_port() == WWW_PORT ? 600 : 240);
     // Terminate login after 4 resp. 10 minutes.
   enforce = 0;
   newplayer = 0;

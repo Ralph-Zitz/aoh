@@ -361,12 +361,7 @@ nomask int logon ()
   }
   if (query_mud_port() != WWW_PORT)
   {
-    string s;
-
-    if (-1 == member(__VERSION__, '@'))
-      s = "LDMud " __VERSION__;
-    else
-      s = "LPMud " __VERSION__ " (Amylaar)";
+    string s = "LDMud " __VERSION__;
     set_telnet(WILL, TELOPT_ECHO); // Start telnet machine
     set_telnet(WONT, TELOPT_ECHO);
     set_telnet(WILL, TELOPT_EOR);  // Fix for some clients
@@ -393,6 +388,8 @@ protected void TimeOut ()
 
 {
   if (interactive(this_object())) write("Time out\n");
+  if (tls_available() && tls_query_connection_state(this_object()))
+    tls_deinit_connection();
   destruct(this_object());
 }
 

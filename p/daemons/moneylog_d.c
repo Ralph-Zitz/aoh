@@ -103,7 +103,7 @@ public void new_money(string fun, int value)
 		       query_verb()||0,this_interactive()||this_player()));
     /* The money is cloned by a wizard */
   } else {
-    return; /* Wait for the new QueryCurrentItems() */
+//    return; /* Wait for the new QueryCurrentItems() */
     if(!(involved = ({object})shop->QueryCurrentObject())) {
       log_file(MONEY_ERRORLOG,
 	       sprintf("--\n%s: Can't find selled object in %O\n",

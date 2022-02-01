@@ -77,9 +77,6 @@ varargs string QuerySmell()
     "It fills the air with the terrible smell of capitalism and the unholy\n\
 greed for richness.\n";
   }
-  return
-  "It fills the air with the terrible smell of capitalism and the unholy\n\
-greed for richness.\n";
 }
 
 int SetValue(mixed arg) { return 0; }

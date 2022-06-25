@@ -186,7 +186,6 @@ public int CheckId(object ob, string pattern)
      default:
       return member(SearchObjects(pattern)||({}),ob)!=-1;
     }
-  return member(SearchObjects(pattern)||({}),ob)!=-1;
 }
 
 protected string build_short(object ob)

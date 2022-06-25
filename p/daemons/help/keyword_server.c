@@ -94,10 +94,7 @@ public int update_server()
   at_end = 0;
   
   if(file_size(KEYWORDS_FILE) <= 0) // no keywords database
-  {
     raise_error("Can't find help keywords file. Help daemon aborting");
-    return 0;
-  }
   
   keywords = ([ ]);  // empty out mapping in case we delete old entries
   
@@ -132,11 +129,8 @@ public int update_server()
     }
     
     if( file_size(strs[FILE]) <= 0 )  // does the help file exist?
-    {
       raise_error(
        "Non-existant help file in keywords database: '"+ strs[FILE]+"'\n");
-      return 0;
-    }
     
     keywords[strs[KEYWORD]] = strs[FILE];  // add this keyword to mapping
         

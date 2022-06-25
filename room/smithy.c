@@ -509,6 +509,7 @@ int CheckTrade(object ob)
 {
     if( ({mixed})ob->QueryWeaponType() || ({mixed})ob->QueryArmourType() )
         return 1;
+    return 0;
 }
 
 varargs string format_sign(string cmd,string desc,string help)

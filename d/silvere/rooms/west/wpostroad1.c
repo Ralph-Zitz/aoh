@@ -35,7 +35,7 @@ varargs void create()
    Set(P_INT_SHORT,"Westroad");
    Set(P_INT_LONG,
       "This is a road, that leads from north to south. The postoffice "
-      "is now located to the NORTH of here.\n");
+      "is located to the NORTH of here.\n");
 
    Set(P_INT_WIZMSG,
       " NORTH: to the postoffice.\n"
@@ -56,5 +56,4 @@ varargs void create()
  at you.\n");
    AddExit("north",  SIL_WEST("wpostroad2"));
    AddExit("south",  SIL_WEST("westroad5"));
-   AddExit("east",   SIL_WEST("wpostoffice"));
 }

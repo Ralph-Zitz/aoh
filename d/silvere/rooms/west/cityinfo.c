@@ -44,6 +44,7 @@ int leave_office(string str)
       TP->move(SIL_WEST("cityinfo1"),M_GO,"west");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

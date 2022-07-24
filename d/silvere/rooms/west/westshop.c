@@ -25,6 +25,7 @@ int leave_shop(string str)
       TP->move(SIL_WEST("westshop2"),M_GO,"north");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

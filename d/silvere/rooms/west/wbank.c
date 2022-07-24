@@ -27,6 +27,7 @@ int leave_bank(string str)
       TP->move(SIL_WEST("wpostroad2"),M_GO,"west");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

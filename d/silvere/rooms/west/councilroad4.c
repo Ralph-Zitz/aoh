@@ -37,19 +37,15 @@ string CheckTree()
    {
       case WINTER: return
 	"The branches are bare and covered with snow.\n";
-         break;
       case SPRING: return
 	"Pale green buds show on the branches, and between them myriads "
 	"of tiny pink blossoms bloom.\n";
-         break;
       case SUMMER: return
 	"Large, dark green leaves grow on the branches, rustling gently in "
 	"the light breeze.\n";
-         break;
       case AUTUMN: return
 	"The leaves have turned golden yellow and orange, making the branches "
 	"appear like they had been coated with gold.\n";
-	break;
    }
    return 0;
 }
@@ -60,10 +56,8 @@ string CheckBuds()
     {
     case WINTER: return
 		   "There are no buds showing yet.\n";
-    break;
     case SPRING: return
 		   "They are pale green, hiding the leaves inside.\n";
-    break;
     default: return
 	       "There are no buds, just leaves.\n";
     }
@@ -76,11 +70,9 @@ string CheckLeaves()
     {
     case SUMMER: return
 		   "The leaves are dark green and heart-shaped.\n";
-    break;
     case AUTUMN: return
 		   "The leaves seem to glow in fiery colours: golden yellow, "
 		   "orange and red.\n";
-    break;
     default: return
 	       "There are no leaves on the tree at this time of the year.\n";
     }

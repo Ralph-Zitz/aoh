@@ -44,7 +44,6 @@ string CheckPeople()
 	 "Brightly dressed people move about on their business everywhere "
 	 "around you.\n";
     default: return "It is night, and nobody is on the street.\n";
-      break;
     }
 }
 

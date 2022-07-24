@@ -14,7 +14,7 @@ inherit "/lib/string";
 string check_thorn();
 
 void create()
-  {
+{
   ::create();
 
   Set(P_AUTOOBJECT,1);
@@ -49,8 +49,6 @@ void create()
   "it's tip.\n"}));
 
   AddSubDetail(({"thorn","thorns"}),#'check_thorn /*'*/);
-
-
 }
 
 string check_thorn()
@@ -78,6 +76,5 @@ string check_thorn()
       "You are The Man in Black. It is your rose and "
       "the thorns can't hurt you.\n";
   }
-  return 0;
 }
 

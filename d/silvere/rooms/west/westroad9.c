@@ -21,19 +21,15 @@ string CheckNoise()
     case ND_SUNRISE: return // 3
 		       "You hear the sounds of shutters opening. Somewhere, "
 		       "a bird sings.\n";
-    break;
     case ND_SUNSET: return // 9
 		      "Slowly the noise around you dims a bit as the street "
 		      "gets emptier.\n";
-    break;
     case ND_EARLY_MORNING..ND_LATE_AFTERNOON: return // 4..8
 		   "The noise is awful. Everybody seems to be shouting at "
 		   "the top of their lungs. You feel slightly dizzy.\n";
-    break;
     case ND_NIGHT..ND_DAWN:
     case ND_TWILIGHT..ND_EVENING: return
 		     "Everything is silent.\n";
-    break;
     }
     return 0;
 }
@@ -44,11 +40,9 @@ string CheckShutters()
     {
     case ND_SUNRISE..ND_SUNSET: return // 3..9
 				  "They are open.\n";
-    break;
     case ND_NIGHT..ND_DAWN:  // 0..2
     case ND_TWILIGHT..ND_EVENING: return // 10..2
 				 "They are closed.\n";
-    break;
     }
     return 0;
 }
@@ -59,20 +53,16 @@ string CheckShops()
     {
     case ND_SUNRISE: return // 3
 		       "As the sun rises, the shops are opened.\n";
-    break;
     case ND_SUNSET: return // 9
 		      "As the sun sets, the shops are closed and shuttered "
 		      "for the night.\n";
-    break;
     case ND_EARLY_MORNING..ND_LATE_AFTERNOON: return // 4..8
 		  "The shops are open, and business is in full swing. "
 		  "Perhaps you feel like going on a shopping tour yourself?\n";
-    break;
     case ND_NIGHT..ND_DAWN: // 0..2
     case ND_TWILIGHT..ND_EVENING: return // 10..11
 		     "The shops are closed, their shutters down and locked "
 		     "securely for the night.\n";
-    break;
     }
     return 0;
 }
@@ -84,21 +74,17 @@ string CheckMerchants()
     case ND_SUNRISE: return // 3
 		       "You see the merchants opening their shops, getting "
 		       "ready for another day of business.\n";
-    break;
     case ND_SUNSET: return // 9
 		      "You see the merchants closing their shops for the "
 		      "night, then retreat inside to count their day's "
 		      "earnings.\n";
-    break;
     case ND_EARLY_MORNING..ND_LATE_AFTERNOON: return // 4..8
 		   "Most of the merchants are in their shops right now, and "
 		   "those you see on the street seem to be on some urgent "
 		   "business.\n";
-    break;
     case ND_NIGHT..ND_DAWN: // 0..2
     case ND_TWILIGHT..ND_EVENING: return // 10..11
 		     "You don't see any. It is night, after all.\n";
-    break;
     }
     return 0;
 }

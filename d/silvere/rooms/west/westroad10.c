@@ -41,19 +41,15 @@ string CheckNoise()
     case ND_SUNRISE: return // 3
 		       "You hear the sounds of shutters opening. Somewhere, "
 		       "a bird sings.\n";
-    break;
     case ND_SUNSET: return // 9
 		      "Slowly the noise around you dims a bit as the street "
 		      "gets emptier.\n";
-    break;
     case ND_EARLY_MORNING..ND_LATE_AFTERNOON: return // 4..8
 		   "The noise is awful. Everybody seems to be shouting at "
 		   "the top of their lungs. You feel slightly dizzy.\n";
-    break;
     case ND_NIGHT..ND_DAWN: // 0..2
     case ND_TWILIGHT..ND_EVENING: return // 10..11
 		     "Everything is silent.\n";
-    break;
     }
     return 0;
 }

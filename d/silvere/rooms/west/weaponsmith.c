@@ -24,6 +24,7 @@ int leave_smith(string str)
       TP->move(SIL_WEST("wsmithroad2"),M_GO,"north");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

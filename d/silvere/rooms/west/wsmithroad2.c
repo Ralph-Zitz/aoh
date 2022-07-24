@@ -23,6 +23,7 @@ int enter_smith(string str)
       TP->move(SIL_WEST("weaponsmith"),M_GO,"north");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

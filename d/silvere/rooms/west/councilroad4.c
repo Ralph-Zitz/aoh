@@ -61,7 +61,6 @@ string CheckBuds()
     default: return
 	       "There are no buds, just leaves.\n";
     }
-    return "There are no buds, just leaves.\n";
 }
 
 string CheckLeaves()
@@ -76,7 +75,6 @@ string CheckLeaves()
     default: return
 	       "There are no leaves on the tree at this time of the year.\n";
     }
-    return "There are no leaves on the tree at this time of the year.\n";
 }
 
 

@@ -63,13 +63,11 @@ string look_buildings()
           "Dim, dirty latticed windows glow yellow from the "
           "warm fires lit in brick hearths inside the homes "
           "along the grubby lane.\n";
-         break;
         case ND_NIGHT:
          return
           "A few solitary flickers in grubby windows indicate "
           "that a person here and there is still awake at this "
           "late hour.\n";
-         break;
         case ND_PREDAWN:
          return
           "The dim grey of early morning makes the lane appear "

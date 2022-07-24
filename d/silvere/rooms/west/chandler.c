@@ -66,4 +66,5 @@ int CheckTrade(object ob)
 {
    if( ({int})ob->id("candle") || ({int})ob->id("light") || ({int})ob->id("torch") || ({int})ob->id("lamp") )
         return 1;
+   return 0;
 }

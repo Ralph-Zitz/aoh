@@ -22,20 +22,16 @@ string CheckFlowerbed()
    {
       case WINTER: return
          "Snow covers the flowerbed, and no plants are to be seen.\n";
-         break;
       case SPRING: return
         "The first tender buds venture through the freshly "
               "thawed ground.\n";
-         break;
       case SUMMER: return
          "The flowers are in full bloom, displaying a myriad of colours "
               "and filling the air with a sweet fragrance.\n";
-         break;
       case AUTUMN: return
          "The summer flowers have withered, making room for asters and "
              "dahlias. They glow in golden, deep red and purple colours, "
              "transforming the flowerbed into a fiery carpet.\n";
-         break;
    }
    return 0;
 }
@@ -46,23 +42,19 @@ string CheckFlowers()
     {
     case WINTER: return
 	   "It is winter, and there are no flowers.\n";
-    break;
     case SPRING: return
 	   "The flowers are not yet in bloom. The first buds are "
 	   "just showing as a sprinkling of light green on the "
 	   "black soil.\n";
-    break;
     case SUMMER: return
 	   "The flowers are blooming in every colour imaginable. "
 	   "Their sweet fragrance fills the air, overlaying even "
 	   "the odour wafting over from the poorer quarters of the "
 	   "city.\n";
-    break;
     case AUTUMN: return
 	   "Asters and dahlias blossom in the flowerbed. They seem "
 	   "to virtually glow in all shades of gold, red and "
 	   "purple.\n";
-    break;
     }
    return 0;
 }
@@ -82,18 +74,14 @@ string SmellFlowers()
     {
     case WINTER: return
 	   "There are no flowers here to sniff at.\n";
-    break;
     case SPRING: return
 	   "The flowers are not yet in bloom, and the buds don't "
 	   "smell of anything.\n";
-    break;
     case SUMMER: return
 	   "You inhale deeply the wonderful scent of the flowers.\n";
-    break;
     case AUTUMN: return
 	   "The asters and dahlias, while vividly coloured, don't "
 	   "have the sweet scent of the flowers blooming in summer.\n";
-    break;
     }
    return 0;
 }
@@ -105,20 +93,16 @@ string SmellRoom()
     {
     case WINTER: return
 	   "The air is cold and smells of salt and snow.\n";
-    break;
     case SPRING: return
 	   "You smell the first traces of spring in the air.\n";
-    break;
     case SUMMER: return
 	   "The air is filled with the fragrance of the flowers "
 	   "growing here, and a less pleasant odour wafting over "
 	   "from the city's poorer quarters.\n";
-    break;
     case AUTUMN: return
 	   "You sense a smell of salt and fish from the harbour, "
 	   "as well as a decidedly unpleasant odour coming from the "
 	   "slums.\n";
-    break;
     }
     return 0;
 }

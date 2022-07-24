@@ -49,6 +49,7 @@ int leave_temple(string str)
       TP->move(SIL_WEST("templeroad3"),M_GO,"west");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

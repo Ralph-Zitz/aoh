@@ -24,6 +24,7 @@ int enter_temple(string str)
       TP->move(SIL_WEST("xal_temple"),M_GO,"east");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

@@ -25,6 +25,7 @@ int enter_building(string str)
       TP->move(SIL_WEST("wpostoffice"),M_GO,"east");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

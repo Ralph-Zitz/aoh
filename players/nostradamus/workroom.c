@@ -44,13 +44,6 @@ static int my_reg(string s) {
    return 1;
 }
 
-static void my_test(string s) {
-  if (s) {
-    write(s);
-  }
-}
-
 static int my_efun(string s) {
-  python_shell(s, #'my_test /*'*/);
   return 1;
 }

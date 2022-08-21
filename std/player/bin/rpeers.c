@@ -133,6 +133,6 @@ int main( string str ) {
     sprintf( "%|78'-'s\n", " Total number of intermud-3 peers is "+sizeof(muds)+" " );
 #endif
 
-  msg_write(CMSG_GENERIC|MMSG_MORE|MMSG_NOWRAP, res);
+  msg_write(CMSG_GENERIC|MMSG_MORE, res);
   return 1;
 }

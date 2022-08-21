@@ -1,6 +1,7 @@
 #ifndef MXP_H
 #include <mxp.h>
 #include <driver/regexp.h>
+#include <driver/debug_message.h>
 #endif
 
 /*
@@ -63,7 +64,6 @@ public varargs string process_mxp(string message, int does_mxp, int mode = 1) {
                     processed_lines[line] += ">";
                 } else if (original_lines[line][i..i] == MXP_AMP) {
                     inEntity = 1;
-
                     if (does_mxp) {
                         processed_lines[line] += "<";
                     }
@@ -72,10 +72,8 @@ public varargs string process_mxp(string message, int does_mxp, int mode = 1) {
                         processed_lines[line] += "&lt;";
                     } else if (original_lines[line][i..i] == ">") {
                         processed_lines[line] += "&gt;";
-		    } else if (original_lines[line][i..i] == "&") {
-		        processed_lines[line] += " ";
-//                    } else if (original_lines[line][i..i] == "&") {
-//                        processed_lines[line] += "&amp;";
+                    } else if (original_lines[line][i..i] == "&") {
+                        processed_lines[line] += "&amp;";
                     } else if (original_lines[line][i..i] == "\"") {
                         processed_lines[line] += "&quot;";
                     } else {

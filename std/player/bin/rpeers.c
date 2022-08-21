@@ -134,6 +134,6 @@ int main( string str ) {
     sprintf( "%|78'-'s\n", " Total number of intermud-3 peers is "+sizeof(muds)+" " );
 #endif
 
-  msg_write(CMSG_GENERIC|MMSG_MORE, process_mxp(res, TPMXP));
+  msg_write(CMSG_GENERIC|MMSG_MORE|MMSG_NOWRAP, process_mxp(res, TPMXP));
   return 1;
 }

@@ -398,7 +398,7 @@ public varargs void receive( string msg, int class, int indent, int time ) {
     }
 
     msg = translate( msg, class, indent );
-    efun::tell_object( this_object(), process_mxp(msg, TOMXP));
+    efun::tell_object( this_object(), process_mxp(msg, TOMXP, 1));
   }
 }
 
@@ -545,7 +545,8 @@ public varargs mixed print_prompt() {
     // value = sprintf("%s%s%s", (TOMXP ? MXPTAG2("Prompt") : ""), value, (TOMXP ? MXPTAG2("/Prompt") : ""));
     value = sprintf("%s%s%s", MXPTAG("Prompt"), value, MXPTAG("/Prompt"));
     /* translate the color macros and do the output */
-    efun::tell_object( this_object(), translate( process_mxp(value, TOMXP), CMSG_GENERIC, 0 ) );
+    value = translate(value, CMSG_GENERIC, 0);
+    efun::tell_object( this_object(), process_mxp(value, TOMXP, 1));
   }
   print_eor();
 

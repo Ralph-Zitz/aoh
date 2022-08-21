@@ -13,7 +13,7 @@
 **    Returns: string
 */
 
-public string process_mxp(string message, int does_mxp) {
+public varargs string process_mxp(string message, int does_mxp, int mode = 1) {
     int line = 0;
     int length = 0;
     int i = 0;
@@ -21,10 +21,15 @@ public string process_mxp(string message, int does_mxp) {
     int inEntity = 0;
 
     string *original_lines = explode(message, "\n");
+    if (mode == 3) {
+        original_lines = map(original_lines,
+	                     (: return (does_mxp ? MXPMODE(mode)+$1 : $1); :));
+        return implode(original_lines, "\n");
+    }
     string *processed_lines = allocate(sizeof(original_lines));
 
     for (line = 0; line < sizeof(original_lines); line++) {
-        processed_lines[line] = does_mxp ? MXPMODE(1) : "";
+        processed_lines[line] = does_mxp ? MXPMODE(mode) : "";
 
         length = sizeof(original_lines[line]);
 
@@ -67,8 +72,10 @@ public string process_mxp(string message, int does_mxp) {
                         processed_lines[line] += "&lt;";
                     } else if (original_lines[line][i..i] == ">") {
                         processed_lines[line] += "&gt;";
-                    } else if (original_lines[line][i..i] == "&") {
-                        processed_lines[line] += "&amp;";
+		    } else if (original_lines[line][i..i] == "&") {
+		        processed_lines[line] += " ";
+//                    } else if (original_lines[line][i..i] == "&") {
+//                        processed_lines[line] += "&amp;";
                     } else if (original_lines[line][i..i] == "\"") {
                         processed_lines[line] += "&quot;";
                     } else {

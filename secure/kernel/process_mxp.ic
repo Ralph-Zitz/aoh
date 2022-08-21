@@ -22,7 +22,7 @@ public varargs string process_mxp(string message, int does_mxp, int mode = 1) {
     int inEntity = 0;
 
     string *original_lines = explode(message, "\n");
-    if (mode == 3) {
+    if (mode == 2) {
         original_lines = map(original_lines,
 	                     (: return (does_mxp ? MXPMODE(mode)+$1 : $1); :));
         return implode(original_lines, "\n");

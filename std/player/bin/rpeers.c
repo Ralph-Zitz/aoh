@@ -17,6 +17,7 @@
 #include <macros.h>
 #include <features.h>
 #include <i3.h>
+#include <mxp.h>
 
 string mkstr (int len) {
   string rc, pattern;
@@ -133,6 +134,6 @@ int main( string str ) {
     sprintf( "%|78'-'s\n", " Total number of intermud-3 peers is "+sizeof(muds)+" " );
 #endif
 
-  msg_write(CMSG_GENERIC|MMSG_MORE, res);
+  msg_write(CMSG_GENERIC|MMSG_MORE, process_mxp(res, TPMXP));
   return 1;
 }

@@ -410,7 +410,7 @@ int cmd_recruit(string arg)
 int cmd_pwho(string arg)
 {
   object *usr;
-  string *members;
+  object *members;
   object ob;
   int i,j;
   string s;

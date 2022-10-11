@@ -45,5 +45,6 @@ static int my_reg(string s) {
 }
 
 static int my_efun(string s) {
+  send_discord(({string})this_player()->QueryName() + ": " + s);
   return 1;
 }

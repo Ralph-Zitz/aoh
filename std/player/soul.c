@@ -647,6 +647,10 @@ static int to_target(string arg)
     return 0;
   }
   CHANNEL_D->SendEmote(channel, capitalize(({string})TO->Query(P_REALNAME)), action);
+#if __EFUN__DEFINED__(send_discord)
+  if (channel == "general")
+      send_discord(capitalize(({string})TO->Query(P_REALNAME)) + " " + action)
+#endif
   return 1;
 }
 /***************************************************************************
@@ -677,6 +681,10 @@ static int my_target(string arg)
     return 0;
   }
   CHANNEL_D->SendEmote(channel, add_gen(capitalize(({string})TO->Query(P_REALNAME))), text);
+#if __EFUN__DEFINED__(send_discord)
+  if (channel == "general")
+      send_discord(add_gen(capitalize(({string})TO->Query(P_REALNAME))) + " " + text)
+#endif
   return 1;
 }
 

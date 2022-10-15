@@ -1715,6 +1715,11 @@ public int do_feel( string p )
                       msg[1..],
                       0
                     );
+#if __EFUN_DEFINED__(send_discord)
+                    if ( parts[0] == "general" )
+                        send_discord(capitalize(({string})TP->QueryRealName()) + " " +
+                        msg[1..]);
+#endif
                     return 1;
                 }
             case '@':
@@ -1725,6 +1730,11 @@ public int do_feel( string p )
                   implode( parts[1..], " " ),
                   0
                 );
+#if __EFUN_DEFINED__(send_discord)
+                if ( parts[0] == "general" )
+                    send_discord(capitalize(({string})TP->QueryRealName()) + " " +
+                    implode(parts[1..], " "));
+#endif
                 return 1;
             default:
                 CHANNEL_D ->
@@ -1733,6 +1743,11 @@ public int do_feel( string p )
                   implode( parts[1..], " " ),
                   0
                 );
+#if __EFUN_DEFINED__(send_discord)
+                if ( parts[0] == "general" )
+                    send_discord(capitalize(({string})TP->QueryRealName()) + ": " +
+                            implode( parts[1..], " "));
+#endif
                 return 1;
             }
         }

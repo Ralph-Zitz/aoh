@@ -40,6 +40,10 @@ int tell(string msg) {
 	if ( ch == "" ) ch = IS_IMMORTAL( this_player() ) ? "general" : "players";
 
 	CHANNEL_D->SendTell(ch, capitalize(({string})this_player()->Query(P_REALNAME)), msg);
+#if __EFUN_DEFINED__(send_discord)
+    if (ch == "general")
+        send_discord(capitalize(({string})this_player()->Query(P_REALNAME)) + ": " + msg);
+#endif
 	return 1;
 }
 
@@ -63,7 +67,10 @@ int emote(string msg) {
 	if ( ch == "" ) ch = IS_IMMORTAL( this_player() ) ? "general" : "players";
 
 	CHANNEL_D->SendEmote(ch, capitalize(({string})this_player()->Query(P_REALNAME)), msg);
-
+#if __EFUN_DEFINED__(send_discord)
+    if (ch == "general")
+        send_discord(capitalize(({string})this_player()->Query(P_REALNAME)) + msg);
+#endif
 	return 1;
 }
 

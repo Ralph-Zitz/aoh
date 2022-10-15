@@ -69,7 +69,7 @@ int emote(string msg) {
 	CHANNEL_D->SendEmote(ch, capitalize(({string})this_player()->Query(P_REALNAME)), msg);
 #if __EFUN_DEFINED__(send_discord)
     if (ch == "general")
-        send_discord(capitalize(({string})this_player()->Query(P_REALNAME)) + msg);
+        send_discord(capitalize(({string})this_player()->Query(P_REALNAME)) + " " + msg);
 #endif
 	return 1;
 }

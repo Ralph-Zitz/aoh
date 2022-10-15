@@ -2335,6 +2335,9 @@ void notify_shutdown ()
 
   filter(users(), #'tell_object,                                        /*'*/
     "Game driver shouts: LPmud shutting down immediately.\n");
+#if __EFUN_DEFINED__(disconnect_discord)
+  disconnect_discord();
+#endif
   /* Save the WIZLIST file */
   rm("/WIZLIST");
   catch(write_file(

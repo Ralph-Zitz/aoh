@@ -109,7 +109,7 @@ mapping query_muds() {
 
 string * query_mudnames()
 {
-  return m_indices(muds || ({}));
+  return m_indices(muds || ([]));
 }
 
 string mud_find(string mud) {

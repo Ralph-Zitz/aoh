@@ -104,12 +104,12 @@ static void handle(mixed* data) {
 
 // get list of all muds (raw)
 mapping query_muds() {
-  return deep_copy(muds) || ([]);
+  return deep_copy(muds || ([]));
 }
 
 string * query_mudnames()
 {
-  return m_indices(muds) || ({});
+  return m_indices(muds || ({}));
 }
 
 string mud_find(string mud) {

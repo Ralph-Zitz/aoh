@@ -33,7 +33,7 @@ mixed*  routers;
 nosave int             state;
 nosave object          i3_sock, debugger;
 nosave mapping         services;
-static nosave mapping  serv_cb;
+nosave mapping  serv_cb;
 
 void create() {
   string *fnames, file;

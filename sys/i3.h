@@ -53,8 +53,8 @@
 
 // Set ports to zero if not available
 #define PORT_MUD                2345
-#define PORT_FTP                0
-#define PORT_HTTP               0
+#define PORT_FTP                2346
+#define PORT_HTTP               8080
 #define WEBURL                  "http://aoh.zitz.dk"
 #define O_MUDLIB                MUDLIB
 #define BANNER "\n\

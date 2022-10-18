@@ -99,9 +99,9 @@ int main( string str ) {
 #ifdef FEATURES_INTERMUD3
   res += "\n";
 
-  muds = ({mixed})I3_TOOL("mudlist")->query_muds();
+  muds = ({mapping})I3_TOOL("mudlist")->query_muds();
 
-  k = sort_array( m_indices( muds ), SF(>) );
+  k = sort_array( m_indices( muds||([]) ), SF(>) );
 
   res += sprintf( "%|78'-'s\n%|78s\n%|78'-'s\n", "", "Intermud-3 peers", "" );
 

@@ -100,6 +100,8 @@ static void start_connection(string prefered_router) {
   while (remove_call_out("start_connection") >= 0);
 
   if (!i3_sock) {
+//    if (!prefered_router) prefered_router = "136.144.155.250 8080"; //"150.101.219.57 8080";
+//    if (!prefered_router) prefered_router = "45.64.56.66 8787"; //"150.101.219.57 8080";
     if (!prefered_router) prefered_router = "97.107.133.86 8787"; //"150.101.219.57 8080";
 
     log_error("start_connection", "opening new socket ("
@@ -197,7 +199,7 @@ static void s_startup() {
   s_state = i3_sock->State();
   // "*gjs" is just a guess. The protokoll is very bad here, you have
   // to know the router's name prior to connecting
-  routers = ({ ({ "*dalet" /* "*Kelly" */, s_state[S_HOST]+" "+s_state[S_PORT] }) });
+  routers = ({ ({ /* "*wpr" */ "*dalet" /*, "*Kelly" */, s_state[S_HOST]+" "+s_state[S_PORT] }) });
 
   send_i3( ({ "startup-req-3", 5, MUDNAME, 0, routers[0][0], 0,
     0,          // enter password from last run HERE if nessesary

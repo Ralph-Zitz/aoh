@@ -30,9 +30,9 @@ inherit __DIR__ "/i3/assert";
 mapping muds;
 mixed*  routers;
 
-nosave int             state;
-nosave object          i3_sock, debugger;
-nosave mapping         services;
+nosave int      state;
+nosave object   i3_sock, debugger;
+nosave mapping  services;
 nosave mapping  serv_cb;
 
 void create() {
@@ -100,9 +100,9 @@ static void start_connection(string prefered_router) {
   while (remove_call_out("start_connection") >= 0);
 
   if (!i3_sock) {
-//    if (!prefered_router) prefered_router = "136.144.155.250 8080"; //"150.101.219.57 8080";
-//    if (!prefered_router) prefered_router = "45.64.56.66 8787"; //"150.101.219.57 8080";
     if (!prefered_router) prefered_router = "97.107.133.86 8787"; //"150.101.219.57 8080";
+//    if (!prefered_router) prefered_router = "45.64.56.66 8787"; //"150.101.219.57 8080";
+//    if (!prefered_router) prefered_router = "97.107.133.86 8787"; //"150.101.219.57 8080";
 
     log_error("start_connection", "opening new socket ("
       + prefered_router + ")");
@@ -317,8 +317,9 @@ int remove() {
       }));
     i3_sock->Close();
   }
-  foreach (closure cb, string cbo : serv_cb)
-    catch(call_other(cbo, "DaemonShutdown"));
+  foreach (string k, mixed val : serv_cb) {
+    catch(call_other(serv_cb[k][1], "DaemonShutdown"));
+  }
   DEBUG("Cleanup ready... self destruct...");
   destruct(this_object());
   return 1;

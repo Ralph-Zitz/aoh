@@ -385,6 +385,10 @@ int remove() {
   return 1;
 }
 
+public void DaemonShutdown() {
+  remove();
+}
+
 string QueryService(string type) {
   mixed* x;
   x = serv_cb[type];

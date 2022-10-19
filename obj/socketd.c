@@ -402,7 +402,7 @@ int socket_close(int ufd) {
     if (!m_contains(&fd, used_fd, ufd) || PO != sockets[fd, S_SOCKOBJ]) {
         if (!m_contains(&fd, used_fd, ufd)) return 0; //vanished
     }
-    if (object_name(PO) != __MASTER_OBJECT__)
+    if (object_name(PO) != __MASTER_OBJECT__ && load_name(PO) != "/obj/socketd")
       RAISE_ERROR(sprintf("privilege violation: socket_close(), PO:%O\n", PO));
   } else {
     if (!m_contains(&fd, used_fd, ufd)) return 0; //vanished

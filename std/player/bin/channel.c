@@ -19,6 +19,7 @@
 #include <inetd.h>
 #include <features.h>
 #include <i3.h>
+#include <mxp.h>
 
 /* 'tell' something on a channel
  */
@@ -330,9 +331,9 @@ int channels(string str) {
 #endif
 		default:
 #ifdef FEATURES_INTERMUD3
-			return notify_fail("Usage: channels [<all>|<local>|<intermud>|<intermud-3>]\n" ), 0;
+			return notify_fail(process_mxp("Usage: channels [<all>|<local>|<intermud>|<intermud-3>]\n", TPMXP)), 0;
 #else
-			return notify_fail("Usage: channels [<all>|<local>|<intermud>]\n" ), 0;
+			return notify_fail(process_mxp("Usage: channels [<all>|<local>|<intermud>]\n", TPMXP)), 0;
 #endif
 	}
 

@@ -1119,7 +1119,6 @@ static string _notify_fail_fun (string cmd, object command_giver)
     if (!stringp(rc))
         raise_error(sprintf("Invalid notify_fail message '%O' for %O\n", rc, this_player()));
     return rc;
-//    return sprintf("%-78=s", rc);
   }
   return "What?\n";
 }

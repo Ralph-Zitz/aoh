@@ -163,15 +163,15 @@
  - Combat: Trefferzonen und -daten (Treff, Wahrscheinlichkeit, zug. Ruestung)
      So ist ein simples Limbs-Orientation mit Rassenunterschieden moeglich.
  - Props: Generisches Add(name, value), Sub(name, value), dass dann auch
-     Filterfunktionen ber?cksichtigt (thanks to Ulantris for this idea).
-   F?r das Add/Sub gleich allgemeine Funktion zum Addieren von Daten
-   schreiben. Mit dieser Funktion in Get() das tempor?re Erweitern von
+     Filterfunktionen berücksichtigt (thanks to Ulantris for this idea).
+   Für das Add/Sub gleich allgemeine Funktion zum Addieren von Daten
+   schreiben. Mit dieser Funktion in Get() das temporäre Erweitern von
    Daten implementieren (siehe NF: ExtraLong und Freunde).
  - Dynamische Strings per process_string() implementieren (?)
  - Alle Texte dem Spieler per ->message(string str, void|int nowrap))
-   mitteilen. Diese Funktion f?hrt dann ein process_string() durch und ein
+   mitteilen. Diese Funktion führt dann ein process_string() durch und ein
    Linewrap. Wrapperfunktionen ala receive(string type, mixed str, string nowrap)
-   k?nnen dann tell/see/hear etc unterscheiden, und fuer str entweder einen
+   können dann tell/see/hear etc unterscheiden, und fuer str entweder einen
    string oder ein Array von ({ filter_closure, string })-Tupeln
    akzeptieren (Dies evtl. auch bei message()).
    Hierzu nochmal das TubMud'sche Message-System angucken.

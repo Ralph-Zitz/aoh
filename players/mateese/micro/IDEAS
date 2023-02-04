@@ -144,7 +144,7 @@
  - "Wizard"-Sonderkommandos durch Spielen/Lehren vergeben.
  - Zufallsgenerator nach GURPS-Verteilung.
  - Ausweichmethodik im Props zulassen: Daten, die lokal nicht gefunden werden,
-     können in der Blueprint abgefragt werden. Damit braucht ein Clone nur die
+     koennen in der Blueprint abgefragt werden. Damit braucht ein Clone nur die
      Daten zu halten, die lokal sind. Neues Flag: ALWAYS_LOCAL, ALWAYS_GLOBAL.
      Nach Erzeugung eines Klones wird per call_out() eine Funktion gestartet,
      die alle wegwerfbaren Daten in dem Props wegwirft.
@@ -158,20 +158,20 @@
  - Newsserver: Extra-Subject-File im internen Format.
  - Keine XP, Playerlevel aus den Skills errechnen?
  - Wichtige NPC-Toetungen mitzaehlen, nur beim ersten Mal XP geben. In der Long
-   oder der Fame der Player mitführen.
+   oder der Fame der Player mitf?hren.
  - CmdData im player ueber sefuns zugreifen.
  - Combat: Trefferzonen und -daten (Treff, Wahrscheinlichkeit, zug. Ruestung)
      So ist ein simples Limbs-Orientation mit Rassenunterschieden moeglich.
  - Props: Generisches Add(name, value), Sub(name, value), dass dann auch
-     Filterfunktionen berücksichtigt (thanks to Ulantris for this idea).
-   Für das Add/Sub gleich allgemeine Funktion zum Addieren von Daten
-   schreiben. Mit dieser Funktion in Get() das temporäre Erweitern von
+     Filterfunktionen ber?cksichtigt (thanks to Ulantris for this idea).
+   F?r das Add/Sub gleich allgemeine Funktion zum Addieren von Daten
+   schreiben. Mit dieser Funktion in Get() das tempor?re Erweitern von
    Daten implementieren (siehe NF: ExtraLong und Freunde).
  - Dynamische Strings per process_string() implementieren (?)
  - Alle Texte dem Spieler per ->message(string str, void|int nowrap))
-   mitteilen. Diese Funktion führt dann ein process_string() durch und ein
+   mitteilen. Diese Funktion f?hrt dann ein process_string() durch und ein
    Linewrap. Wrapperfunktionen ala receive(string type, mixed str, string nowrap)
-   können dann tell/see/hear etc unterscheiden, und fuer str entweder einen
+   k?nnen dann tell/see/hear etc unterscheiden, und fuer str entweder einen
    string oder ein Array von ({ filter_closure, string })-Tupeln
    akzeptieren (Dies evtl. auch bei message()).
    Hierzu nochmal das TubMud'sche Message-System angucken.
@@ -198,7 +198,7 @@
  - Dinger bekommenein oder mehrere Flags (Invis, (natural) Frog, (natural)Ghost,
    NotRealThing) anhand dere u.a. ihre Short oder durchlaessigkeit geaendert wird.
  - Extra 'ShortShort()'?
- - Prop 'Elevation' fuer fliegende / erhoeht angebrachte Dinge..
+ - Prop 'Elevation'?fuer fliegende / erhoeht angebrachte Dinge..
    So koennen auch fliegende Player geschaffen werden, oder erhoehte Ausgaenge
    aus Fallgruben.
  - Anfang und Ende eines command()s muessen im this_player() mitgeteilt
@@ -259,7 +259,7 @@
    Suchroutine search() braucht dafuer dann auch flags
    SEARCH_NO_VIRTUAL und so. Alle Lokationsroutinen sollten mit
    virtual objects zurechtkommen.
- - Der Schaden eines Typs wird durch drei Werte repräsentiert:
+ - Der Schaden eines Typs wird durch drei Werte repr?sentiert:
      DAMAGE:   Basis-Schadenswert
      PHYS_REL: Wechselwirkung mit physikalischen Gegenstaenden, in %
      PHK_REL:  Wechselwirkung mit lebenden Gegenstaenden, in %
@@ -362,9 +362,9 @@
  - Von Tub (u.a.): events, skills, jobs, fakeitems, exits, place, simulefun/describe
    lib/language...,
  - player->RealName() muss mit dem echten Namen nix zu tun haben.
-   Setzt man hier einen ID-Code an (oder besser: dne Namen ohne Interpunktion wie ' oder -),
+   Setzt man hier einen ID-Code an (oder besser: dne Namen ohne Interpunktion wie '?oder -),
    kann man beliebige Namen zulassen, muss aber an allen moeglichen Stellen
-   übersetzungen zulassen.
+   ?bersetzungen zulassen.
  - Long/Short sollten von vorneherein einen Mapping-
    Mechanismus zulassen.
    desc  := string
@@ -372,17 +372,17 @@
          := '({' { [int|closure] string|closure } '})'
 
    Wenn gegeben, gibt der int (bzw. die Praedikatsclosure) an, unter welchen
-   Umstaenden der nachfolgende Text mit übernommen wird, z.B. PRED_BLIND,
+   Umstaenden der nachfolgende Text mit ?bernommen wird, z.B. PRED_BLIND,
    PRED_NONBLIND, PRED_VISION, PRED_IVISION. PRED_HEAR, PRED_ALWAYS, PRED_OBVIOUS
-   Die Props Long/Short/... stellen die Basisinformationen für die einzelnen
-   fünf Sinne (also auch P_TOUCH einführen), die dann durch Long()/Short()/...
-   passend abgewandelt werden können. Die Long-Prop hat dabei das Muster für eine
+   Die Props Long/Short/... stellen die Basisinformationen f?r die einzelnen
+   f?nf Sinne (also auch P_TOUCH einf?hren), die dann durch Long()/Short()/...
+   passend abgewandelt werden k?nnen. Die Long-Prop hat dabei das Muster f?r eine
    vollstaendige Beschreibung incl. Hear-Smell aber ohne Obvious exits und
    Inhalt zu enthalten.
    Describe(int 0=short, 1=long, 2=exalong) baut aus diesen Basisinformationen
    dann die Gesamtbeschreibung zusammen, haengt das Ergebnis von ->ExtraLong,
-   ->Exits, ->Doors und ->Content an, und führt einen Zeilenumbruch durch.
-   Extraflags für das Argument: NO_HEAR, NO_TOUCH, NO_SMELL schalten die
+   ->Exits, ->Doors und ->Content an, und f?hrt einen Zeilenumbruch durch.
+   Extraflags f?r das Argument: NO_HEAR, NO_TOUCH, NO_SMELL schalten die
    Interpretation der entsprechenden Eintraege im P_LONG aus, NO_EXTRA,
    NO_OBVIOUS, NO_CONTENT haengt betreffende Daten nicht an.  Enthaelt
    P_LONG keine Daten von P_TOUCH et al., werden sie vor ->ExtraLong automatisch

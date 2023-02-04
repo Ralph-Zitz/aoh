@@ -3,7 +3,7 @@
 **
 ** The description and identification of a thing.
 **
-** TODO: Use 'encumbrance' in parallel to weight, and restrict movement
+** TODO: Use 'encumbrance' in parallel to weight, and restrict movement
 **       to max. encumbrance.
 **
 ** 10-Sep-1993 [Mateese]

@@ -169,7 +169,6 @@ string full_direction_string(string str)
   case "se": return "southeast";
   default: return str;
   }
-  return str;
 }
 
 string opposite(string dir)

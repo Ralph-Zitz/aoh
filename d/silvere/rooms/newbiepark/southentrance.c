@@ -54,6 +54,7 @@ int check_ground(string str)
          "if you try again later?\n");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

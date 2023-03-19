@@ -75,6 +75,7 @@ int climb_ivy(string str)
       call_out("climb2",3);
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

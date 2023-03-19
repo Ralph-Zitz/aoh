@@ -225,7 +225,6 @@ void notify_enter(mixed oldenv, int method, mixed extra) {
  * all non-living objects are destructed
  */
 void clean() {
-  int    i, n;
   object ob, oldob;
 
   ::reset();

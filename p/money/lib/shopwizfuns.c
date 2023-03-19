@@ -256,7 +256,7 @@ public string itemlist(string file)
     return "Store-Error: "+error+"\n";
   if (!store)
     return "Shop has no store defined.\n";
-  return implode(map(map(m_values(({object *})store->QueryInventory()||([])),
+  return implode(map(map(m_values(({mapping})store->QueryInventory()||([])),
                                      lambda(({SYM(s)}),
                                             ({CL_BRACK,SYM(s),0})
                                            )

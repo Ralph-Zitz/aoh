@@ -77,7 +77,6 @@ private int exist(mixed *house,string homedir,string exit,string path)
 public varargs int AddProperty(string homedir, string exit, string path,
                                int price, string location, string cert_file)
 {
-  object cert;
 
   if (!houses)
     houses = ({({homedir,exit,path,price,location,cert_file})});

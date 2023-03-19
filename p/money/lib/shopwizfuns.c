@@ -119,7 +119,7 @@ public string int_short(string file)
   string error;
   
   if (shop = check_shop(file,&error))
-    return (shop->QueryIntShort()||"<no intshort>");
+    return (({string})shop->QueryIntShort()||"<no intshort>");
   return error;
 }
 
@@ -203,45 +203,45 @@ protected string itemcheck(object ob)
   string result,*inh,cr;
   object cob;
   if (!ob) return "<destructed>\n";
-  result = strip_article((string)ob->Short())+"\n"
+  result = strip_article(({string})ob->Short())+"\n"
            "  File: "+blueprint(ob)+".c\n";
   inh = inherit_list(ob);
   if (member(inh,"std/weapon.c")!=-1)
     {
       result +=
-        "  WType: "+wtype2string(ob->QueryWeaponType())+
-        ", WC: "+ob->QueryWC()+
-        ", Hands: "+ob->QueryNumberHands()+"\n"
-	"  Size: "+size2string(ob->QuerySize())+"\n";
+        "  WType: "+wtype2string(({int})ob->QueryWeaponType())+
+        ", WC: "+({int})ob->QueryWC()+
+        ", Hands: "+({int})ob->QueryNumberHands()+"\n"
+	"  Size: "+size2string(({int})ob->QuerySize())+"\n";
     }
   if (member(inh,"std/armour.c")!=-1)
     {
       result +=
-        "  AType: "+atype2string(ob->QueryArmourType())+
-        ", AC: "+ob->QueryAC()+
-        ", Hands: "+ob->QueryNumberHands()+"\n"
-        "  Size: "+size2string(ob->QuerySize())+"\n";
+        "  AType: "+atype2string(({int})ob->QueryArmourType())+
+        ", AC: "+({int})ob->QueryAC()+
+        ", Hands: "+({int})ob->QueryNumberHands()+"\n"
+        "  Size: "+size2string(({int})ob->QuerySize())+"\n";
     }
   if ((member(inh,"std/food.c") !=-1)
       ||(member(inh,"std/drink.c")!=-1))
     {
       result +=
-        "  Foodkind: "+ob->QueryFoodKind()+
-        "  Stuff: "+ob->QueryFoodStuff()+
-        "  Alc: "+ob->QueryFoodAlc()+
-        "  Soak: "+ob->QueryFoodSoak()+
-        "  Heal: "+ob->QueryFoodHeal()+"\n";
+        "  Foodkind: "+({string})ob->QueryFoodKind()+
+        "  Stuff: "+({int})ob->QueryFoodStuff()+
+        "  Alc: "+({int})ob->QueryFoodAlc()+
+        "  Soak: "+({int})ob->QueryFoodSoak()+
+        "  Heal: "+({int})ob->QueryFoodHeal()+"\n";
     }
-  cr = ob->QueryCreator();
+  cr = ({string})ob->QueryCreator();
   if (  (cob = find_object(cr))
-      &&cob->id_store())
+      &&({int})cob->id_store())
     if (cob==environment(ob))
       cr = "Shop";
     else
-      cr = cob->QueryCreator();
+      cr = ({string})cob->QueryCreator();
   result+=
     "  Creator: "+cr+"\n"
-    "  Weight: "+ob->QueryWeight()+", Value: "+ob->QueryValue()+"\n";
+    "  Weight: "+({int})ob->QueryWeight()+", Value: "+({int})ob->QueryValue()+"\n";
   return result; 
 }
 
@@ -252,11 +252,11 @@ public string itemlist(string file)
 
   if (!shop = check_shop(file,&error))
     return "Shop-Error: "+error+"\n";
-  if (error = catch(store = shop->GetStore()))
+  if (error = catch(store = ({object})shop->GetStore()))
     return "Store-Error: "+error+"\n";
   if (!store)
     return "Shop has no store defined.\n";
-  return implode(map(map(m_values(store->QueryInventory()||([])),
+  return implode(map(map(m_values(({object *})store->QueryInventory()||([])),
                                      lambda(({SYM(s)}),
                                             ({CL_BRACK,SYM(s),0})
                                            )
@@ -316,11 +316,11 @@ public string profile(string file,int last)
   if (!TP) return itemlist(file);
   if (!store = check_shop(file,&error))
     return "Shop-Error: "+error+"\n";
-  if (error = catch(store = store->GetStore()))
+  if (error = catch(store = ({object})store->GetStore()))
     return "Store-Error: "+error+"\n";
   if (!store)
     return "Shop has no store defined.\n";
-  inv = map(m_values(store->QueryInventory()||([])),
+  inv = map(m_values(({object *})store->QueryInventory()||([])),
                   lambda(({SYM(s)}),({CL_BRACK,SYM(s),0}))
                  )-({0});
   i = sizeof(inv);
@@ -337,11 +337,11 @@ public string profile(string file,int last)
           switch(member(ITEMS,inherit_list(inv[i])[pos]))
 	    {
 	     case POS_ARMOUR:
-	      oldq = inv[i]->QueryQuality();
+	      oldq = ({int})inv[i]->QueryQuality();
 	      inv[i]->SetQuality(100);
-	      val = inv[i]->QueryValue();
-              acwc = inv[i]->QueryAC();
-              type = atype2string(inv[i]->QueryArmourType());
+	      val = ({int})inv[i]->QueryValue();
+              acwc = ({int})inv[i]->QueryAC();
+              type = atype2string(({int})inv[i]->QueryArmourType());
 	      inv[i]->SetQuality(oldq);
 	      if (!member(plres,I_ARMOUR))
                 plres[I_ARMOUR] = ([]);
@@ -362,11 +362,11 @@ public string profile(string file,int last)
               items[getuid(TP)] = plres;
 	      break;
 	     case POS_WEAPON:
-	      oldq = inv[i]->QueryQuality();
+	      oldq = ({int})inv[i]->QueryQuality();
 	      inv[i]->SetQuality(100);
-	      val = inv[i]->QueryValue();
-              acwc = inv[i]->QueryWC();
-              type = wtype2string(inv[i]->QueryWeaponType());
+	      val = ({int})inv[i]->QueryValue();
+              acwc = ({int})inv[i]->QueryWC();
+              type = wtype2string(({int})inv[i]->QueryWeaponType());
 	      inv[i]->SetQuality(oldq);
 	      if (!member(plres,I_WEAPON))
                 plres[I_WEAPON] = ([]);
@@ -494,7 +494,7 @@ public int startfun(object player,string str,string regfile)
     }
   if (sscanf(str,"analyze %d",number)==1)
     {
-      files = m_indices(REGISTER->QueryRegister(regfile));
+      files = m_indices(({mapping})REGISTER->QueryRegister(regfile));
       if (!number||number>sizeof(files))
         return notify_fail("Range of shops from 1 to "+to_string(sizeof(files))
                            +".\n",NOTIFY_ILL_ARG),0;
@@ -506,8 +506,8 @@ public int startfun(object player,string str,string regfile)
     }
   if (sscanf(str,"analyze %s",file)==1)
     {
-      files = m_indices(REGISTER->QueryRegister(regfile));
-      file = TP->get_path(file);
+      files = m_indices(({mapping})REGISTER->QueryRegister(regfile));
+      file = ({string})TP->get_path(file);
       if (file[<2..]==".c")
         file = file[0..<3];
       if (member(files,file)==-1)

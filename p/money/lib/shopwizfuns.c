@@ -94,7 +94,7 @@ public varargs string analyze_shop(string ob,status err)
       "Coins per Reset (if < MinCash): "+
         radjust(to_string(min*dynamic/100),8)+" CU\n"+
       "List: "+(({string})shop->QueryList()?"yes":"no")+"  "+
-        "Ident.: "+(({int})shop->QueryIdentify()?"yes":"no")+"  "+
+        "Ident.: "+(({string})shop->QueryIdentify()?"yes":"no")+"  "+
         "Appr.: "+(({int})shop->QueryAppraise()?"yes":"no")+"  "+
         "Sell: "+(({int})shop->QuerySell()?"yes":"no")+"  "+
         "Buy: "+(({string})shop->QueryBuy()?"yes":"no")+"  "+

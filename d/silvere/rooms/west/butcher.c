@@ -113,7 +113,7 @@ void init()
 int do_trade(string str)
 {
    mixed found;
-   string msg, emsg;
+  // string msg, emsg;
 
    if(!str)
    {
@@ -131,7 +131,7 @@ int do_trade(string str)
    found = sort_findings(found, sort_f_prop(P_NODROP));
 
    dtell("tune", sprintf("Found is: %O\n\n", found));
-
+/*
    msg = found[-FOUND_SINGLE]
         ? "You don't have that many " + str + "s.\n"
         : "";
@@ -140,7 +140,7 @@ int do_trade(string str)
            " didn't find as many things as "+({string})TP->QueryPronoun()+
            " wanted to trade.\n"
          : "";
-
+*/
 
    return 1;
 }
@@ -172,6 +172,7 @@ int CheckTrade(object ob)
 {
    if( ({int})ob->id("corpse") || ({int})ob->id("meat") )
         return 1;
+   return 0;
 }
 
 // ----------------------------------------------------------------------

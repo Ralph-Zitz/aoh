@@ -40,7 +40,7 @@ inherit "/lib/string";
 #define I_MAX 2
 #define I_AVG 3
 
-private static mapping items;
+private nosave mapping items;
 // ([<this_player>:([<what>:([<awtype>:([<ac/wc>:<count>;<minvalue>;<maxvalue>;<avgvalue>])])])
 
 protected object check_shop(string shop,string error)
@@ -138,7 +138,6 @@ protected string size2string(int size)
      default:
       return "unknown";
     }
-    return "unknown";
 }
 
 protected string wtype2string(int wtype)
@@ -166,7 +165,6 @@ protected string wtype2string(int wtype)
      default:
       return "<unknown>";
     }
-    return "<unknown>";
 }
 
 protected string atype2string(int atype)
@@ -196,7 +194,6 @@ protected string atype2string(int atype)
      default:
       return "<unknown>";
     }
-    return "<unknown>";
 }
 
 protected string itemcheck(object ob)

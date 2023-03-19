@@ -95,8 +95,8 @@ public varargs string analyze_shop(string ob,status err)
         radjust(to_string(min*dynamic/100),8)+" CU\n"+
       "List: "+(({string})shop->QueryList()?"yes":"no")+"  "+
         "Ident.: "+(({string})shop->QueryIdentify()?"yes":"no")+"  "+
-        "Appr.: "+(({int})shop->QueryAppraise()?"yes":"no")+"  "+
-        "Sell: "+(({int})shop->QuerySell()?"yes":"no")+"  "+
+        "Appr.: "+(({string})shop->QueryAppraise()?"yes":"no")+"  "+
+        "Sell: "+(({string})shop->QuerySell()?"yes":"no")+"  "+
         "Buy: "+(({string})shop->QueryBuy()?"yes":"no")+"  "+
         "Liv.: "+(({int})shop->QueryLivingTrade()?"yes":"no")+"\n";
 
@@ -320,7 +320,7 @@ public string profile(string file,int last)
     return "Store-Error: "+error+"\n";
   if (!store)
     return "Shop has no store defined.\n";
-  inv = map(m_values(({object *})store->QueryInventory()||([])),
+  inv = map(m_values(({mapping})store->QueryInventory()||([])),
                   lambda(({SYM(s)}),({CL_BRACK,SYM(s),0}))
                  )-({0});
   i = sizeof(inv);

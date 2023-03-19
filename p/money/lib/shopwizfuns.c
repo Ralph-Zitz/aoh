@@ -84,23 +84,23 @@ public varargs string analyze_shop(string ob,status err)
     return "Error: "+error+"\n";
   else
     result =
-      (shop->QueryIntShort()||"<nameless room>")+".\n"+
-      "Cash: "+radjust(to_string(shop->QueryCash()),8)+
+      (({string})shop->QueryIntShort()||"<nameless room>")+".\n"+
+      "Cash: "+radjust(to_string(({int})shop->QueryCash()),8)+
         " CU, Minimal cash: "+
-        radjust(to_string(min = shop->QueryMinCash()),8)+" CU.\n"+
-      "Buy factor: "+radjust(to_string(shop->QueryBuyFactor()),4)+"  "+
-        "Dynamic factor: "+radjust(to_string(dynamic = shop->QueryDynamic()),3)
+        radjust(to_string(min = ({int})shop->QueryMinCash()),8)+" CU.\n"+
+      "Buy factor: "+radjust(to_string(({int})shop->QueryBuyFactor()),4)+"  "+
+        "Dynamic factor: "+radjust(to_string(dynamic = ({int})shop->QueryDynamic()),3)
         +"\n"
       "Coins per Reset (if < MinCash): "+
         radjust(to_string(min*dynamic/100),8)+" CU\n"+
-      "List: "+(shop->QueryList()?"yes":"no")+"  "+
-        "Ident.: "+(shop->QueryIdentify()?"yes":"no")+"  "+
-        "Appr.: "+(shop->QueryAppraise()?"yes":"no")+"  "+
-        "Sell: "+(shop->QuerySell()?"yes":"no")+"  "+
-        "Buy: "+(shop->QueryBuy()?"yes":"no")+"  "+
-        "Liv.: "+(shop->QueryLivingTrade()?"yes":"no")+"\n";
+      "List: "+(({string})shop->QueryList()?"yes":"no")+"  "+
+        "Ident.: "+(({int})shop->QueryIdentify()?"yes":"no")+"  "+
+        "Appr.: "+(({int})shop->QueryAppraise()?"yes":"no")+"  "+
+        "Sell: "+(({int})shop->QuerySell()?"yes":"no")+"  "+
+        "Buy: "+(({int})shop->QueryBuy()?"yes":"no")+"  "+
+        "Liv.: "+(({int})shop->QueryLivingTrade()?"yes":"no")+"\n";
 
-  if (shop&&(store = shop->GetStore())
+  if (shop&&(store = ({object})shop->GetStore())
       &&!sizeof(map(functionlist(store,RETURN_FUNCTION_FLAGS),
                           lambda(({SYM(x)}),
                                  ({SF(!),

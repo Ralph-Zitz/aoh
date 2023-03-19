@@ -66,8 +66,7 @@ varargs void wizlist(string name)
 
     if (!name) {
         name = ({string})this_player()->QueryRealName();
-        if (!name)
-        {
+        if (!name) {
             msg_write(CMSG_GENERIC, "Need to provide a name or 'ALL' to the wizlist function.\n");
             return;
         }

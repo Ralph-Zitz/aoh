@@ -97,7 +97,7 @@ public varargs string analyze_shop(string ob,status err)
         "Ident.: "+(({int})shop->QueryIdentify()?"yes":"no")+"  "+
         "Appr.: "+(({int})shop->QueryAppraise()?"yes":"no")+"  "+
         "Sell: "+(({int})shop->QuerySell()?"yes":"no")+"  "+
-        "Buy: "+(({int})shop->QueryBuy()?"yes":"no")+"  "+
+        "Buy: "+(({string})shop->QueryBuy()?"yes":"no")+"  "+
         "Liv.: "+(({int})shop->QueryLivingTrade()?"yes":"no")+"\n";
 
   if (shop&&(store = ({object})shop->GetStore())

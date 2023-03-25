@@ -36,7 +36,7 @@ string catapult_target, catapult_item;
 #define AIM_HARBOUR  3
 #define AIM_TOWER    4
 #define AIM_FORTRESS 5
-#define AIM_OTHER    6
+#define AIM_REST     6
 
 int PullHandle(string str)
 {
@@ -70,7 +70,7 @@ int PullHandle(string str)
             case AIM_HARBOUR: desc+="at the harbour.\n"; break;
             case AIM_FORTRESS: desc+="at the fortress.\n"; break;
             case AIM_TOWER: desc+="at the southern tower.\n"; break;
-            case AIM_OTHER: desc+="at "+CAP(catapult_target)+".\n";
+            case AIM_REST: desc+="at "+CAP(catapult_target)+".\n";
                             break;
          }
          msg_room(TO, CMSG_ROOM, desc);
@@ -98,7 +98,7 @@ int PullHandle(string str)
                case AIM_TOWER:
                   msg_room(CATAPULT_STOWER, CMSG_ROOM, desc);
                   break;
-               case AIM_OTHER:
+               case AIM_REST:
                {
                   liv=find_living(catapult_target);
                   if(liv)
@@ -169,7 +169,7 @@ int PullHandle(string str)
                   case AIM_TOWER:
                      msg_room(CATAPULT_STOWER, CMSG_ROOM, desc);
                      break;
-                  case AIM_OTHER:
+                  case AIM_REST:
                   {
                      if(player)
                      {
@@ -303,6 +303,7 @@ int LoadCatapult(string str)
          }
       }
    }
+   return 0;
 }
 
 int AimCatapult(string str)
@@ -330,9 +331,9 @@ int AimCatapult(string str)
                   NOTIFY_ILL_ARG);
                return 0;
             }
-            if(catapult_aim!=AIM_OTHER && catapult_target!=where)
+            if(catapult_aim!=AIM_REST && catapult_target!=where)
             {
-               catapult_aim=AIM_OTHER;
+               catapult_aim=AIM_REST;
                catapult_target=where;
                msg_write(CMSG_GENERIC,
                   "You look at the engine for a moment. Then you turn a "
@@ -482,6 +483,7 @@ int AimCatapult(string str)
       notify_fail("Aim WHAT?\n", NOTIFY_ILL_ARG);
       return 0;
    }
+   return 0;
 }
 
 string CheckStones()
@@ -519,7 +521,7 @@ string CheckCatapult()
       case AIM_FORTRESS: desc+="It points at the fortress to the "
                                "north.\n";
                          break;
-      case AIM_OTHER: desc="It points toward a strange place.\n"; break;
+      case AIM_REST: desc="It points toward a strange place.\n"; break;
       default:       desc+="It points toward the open sea."; break;
    }
    desc+=

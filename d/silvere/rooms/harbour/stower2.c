@@ -150,6 +150,7 @@ int PushHandle(string str)
       call_out("MoveChain",2);
       return 1;
    }
+   return 0;
 }
 
 int PullHandle(string str)
@@ -181,6 +182,7 @@ int PullHandle(string str)
       call_out("MoveChain",2);
       return 1;
    }
+   return 0;
 }
 
 int SearchCmd(string str)
@@ -227,6 +229,7 @@ int SearchCmd(string str)
          "successful in finding something.\n", ({TP}) );
       return 1;
    }
+   return 0;
 }
 
 string CheckTower()
@@ -268,7 +271,6 @@ mixed CheckTower2()
    {
       case ND_NIGHT:
          return 0;
-         break;
       case ND_PREDAWN..ND_SUNRISE:
       case ND_TWILIGHT..ND_EVENING:
          desc=
@@ -288,7 +290,6 @@ mixed CheckTower2()
          break;
       default:
          return 0;
-         break;
    }
    return desc;
 }
@@ -301,10 +302,8 @@ mixed CheckMirror()
          return
             "The mirror stands on top of the northern tower behind the "
             "battlements. It points southward.\n";
-         break;
       default:
          return 0;
-         break;
    }
    return 0;
 }
@@ -321,10 +320,8 @@ mixed CheckBattlements()
             "other hand, they can easily shoot back at the attackers "
             "at the same time. They also prevent people from falling "
             "down from the tower by accident.\n";
-         break;
       default:
          return 0;
-         break;
    }
    return 0;
 }
@@ -349,7 +346,6 @@ mixed CheckQuay()
          break;
       default:
          return 0;
-         break;
    }
    return desc;
 }
@@ -380,7 +376,6 @@ string CheckWorkers()
          break;
       default:
          return 0;
-         break;
    }
    return desc;
 }

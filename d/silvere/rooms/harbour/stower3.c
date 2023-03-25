@@ -57,6 +57,7 @@ int SearchCmd(string str)
          "successful in finding something.\n", ({TP}) );
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

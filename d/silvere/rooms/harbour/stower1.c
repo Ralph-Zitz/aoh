@@ -78,6 +78,7 @@ int search_dirt(string str)
          "successful in finding something.\n", ({TP}) );
       return 1;
    }
+   return 0;
 }
 
 string CheckOpening()

@@ -194,12 +194,12 @@ public varargs int move(mixed dest, int method, mixed extra) {
 
 public varargs int remove () {
   if (interactive()) {
-      tell_object(THIS, "Good bye! Come back soon!\n");
-#ifdef __TLS__
-      if (tls_available())
-          tls_deinit_connection(THIS);
-#endif
+    tell_object(THIS, "Good bye! Come back soon!\n");
   }
+#ifdef __TLS__
+  if (tls_available())
+    tls_deinit_connection(THIS);
+#endif
   destruct (THIS);
   return 1;
 }

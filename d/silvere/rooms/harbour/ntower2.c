@@ -160,6 +160,7 @@ int PushCommand(string str)
       call_out("MoveChain",2);
       return 1;
    }
+   return 0;
 }
 
 int PullCommand(string str)
@@ -200,6 +201,7 @@ int PullCommand(string str)
       call_out("MoveChain",2);
       return 1;
    }
+   return 0;
 }
 
 string CheckHandle()

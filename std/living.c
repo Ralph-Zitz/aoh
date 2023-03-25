@@ -207,7 +207,7 @@ public void init ()
   stats::init();
 }
 public varargs int remove(int arg) {
-  stats::remove(arg); // must stand before moveing !!
+  stats::remove(arg); // must stand before moving !!
   moving::remove();
   return ::remove();
 }

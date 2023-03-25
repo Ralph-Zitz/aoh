@@ -46,6 +46,7 @@ int GetThings(string str)
       notify_fail("There are no cards you could take.\n",NOTIFY_NOT_OBJ);
       return 0;
    }
+   return 0;
 }
 
 int CleanBed(string str)
@@ -95,6 +96,7 @@ int CleanBed(string str)
       }
       return 1;
    }
+   return 0;
 }
 
 int LockLocker(string str)
@@ -128,6 +130,7 @@ int LockLocker(string str)
       notify_fail("The locker is already locked.\n",NOTIFY_ILL_ARG);
       return 0;
    }
+   return 0;
 }
 
 int UnlockLocker(string str)
@@ -154,6 +157,7 @@ int UnlockLocker(string str)
       notify_fail("The locker is not locked.\n",NOTIFY_ILL_ARG);
       return 0;
    }
+   return 0;
 }
 
 int OpenLocker(string str)
@@ -187,6 +191,7 @@ int OpenLocker(string str)
       notify_fail("The locker is already open.\n",NOTIFY_ILL_ARG);
       return 0;
    }
+   return 0;
 }
 
 int CloseLocker(string str)
@@ -207,6 +212,7 @@ int CloseLocker(string str)
       notify_fail("The locker is already closed.\n",NOTIFY_ILL_ARG);
       return 0;
    }
+   return 0;
 }
 
 int SitDown(string str)
@@ -243,6 +249,7 @@ int SitDown(string str)
          msg_room(TO,CMSG_ROOM,"The chairs are all used now.\n");
       return 1;
    }
+   return 0;
 }
 
 int StandUp(string str)
@@ -267,6 +274,7 @@ int StandUp(string str)
             ({TP}) );
       return 1;
    }
+   return 0;
 }
 
 string CheckLocker()

@@ -232,6 +232,7 @@ int PushFunction(string str)
          " pushes at the handle, but nothing happens.\n", ({TP}) );
       return 1;
    }
+   return 0;
 }
 
 string CheckHandle()
@@ -271,7 +272,7 @@ string CheckPlatform()
             b=({int})room2->QueryPlatform();
             switch(b)
             {
-               case 0: return 0; break;
+               case 0: return 0;
                case 1:
                   ddesc+=
                      "There is a platform at the opening. It is made "

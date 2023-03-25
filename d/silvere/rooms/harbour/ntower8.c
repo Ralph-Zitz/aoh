@@ -100,6 +100,7 @@ int PullBoulder(string str)
          "move.\n", ({TP}) );
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

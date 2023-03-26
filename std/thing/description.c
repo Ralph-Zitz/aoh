@@ -75,7 +75,7 @@ private void map_add(mapping map, mixed key, mixed val) {
   else if (pointerp(val) && sizeof(val) >= 3 && val[0] == "#call_other")
   {
     val[0] = #'call_other /*'*/;
-    val = lambda(({'w}), val+({'w}));
+    val = lambda(({'w /*'*/}), val+({'w /*'*/}));
   }
   if (pointerp(key))
   {

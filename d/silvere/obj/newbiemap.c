@@ -42,6 +42,7 @@ int _read(string str)
       TP->more(SILVEREMAP);
       return 1;
    }
+   return 0;
 }
 
 void init()

@@ -59,11 +59,10 @@ protected object valid_ship(string ship)
 
 protected int get_ship_number(string ship)
 {
-  object ob;
   mapping ports;
   int *idx,pos;
   string *list;
-  if (ob = valid_ship(ship))
+  if (valid_ship(ship))
     {
       ports = ({mapping})ship->QueryPorts();
       list = m_values(ports);
@@ -86,7 +85,7 @@ public mapping QueryTable()
 // -1 is given as number.
 // The numbers start at 0.
 {
-  int i,*nrs;
+  int *nrs;
   string *ships;
   ships = QueryShips();
   nrs = map(ships,SF(get_ship_number));
@@ -104,7 +103,6 @@ protected string evaluate_course(int c)
   while(i--)
     {
       mixed idx;
-      object ship;
       mapping ports;
       int j;
 
@@ -194,8 +192,7 @@ public void CallShip(string file)
 // Tells the blueprint of the given ship, that the blueprint shall
 // tell the ship, that it soon shall visit this port.
 {
-  object ob;
-  if (ob = valid_ship(file))
+  if (valid_ship(file))
     file->CallShip();
 }
 

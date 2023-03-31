@@ -22,8 +22,8 @@ int QueryAlcohol() {
   return alc;
 }
 
-create() {
-  if (::create()) return;
+void create() {
+  ::create();
   SetName("Schluck");
   SetRace("human");
   SetShort("Schluck, the innkeeper");

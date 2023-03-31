@@ -15,8 +15,8 @@ inherit "/std/npc";
 //*******
 // create
 //*******
-create() {
-  if (::create()) return;
+void create() {
+  ::create();
   SetName("spider");
   SetRace("spider");
   SetShort("a small spider");

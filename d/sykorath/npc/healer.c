@@ -8,8 +8,8 @@
 
 inherit "/std/npc";
 
-create() {
-  if (::create()) return;
+void create() {
+  ::create();
   SetName("Ganimhar");
   SetRace("human");
   SetShort("Ganimhar, the healer");

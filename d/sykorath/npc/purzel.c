@@ -7,8 +7,8 @@
 
 inherit "/std/npc";
 
-create() {
-  if (::create()) return;
+void create() {
+  ::create();
   SetName("Purzel");
   SetRace("dwarf");
   SetShort("Purzel, the librarian");

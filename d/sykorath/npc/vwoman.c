@@ -8,8 +8,9 @@
 
 inherit "/std/npc";
 
-create() {
-  if (::create()) return;
+void create() {
+  ::create();
+  seteuid(getuid());
   SetName("Bruzelia");
   SetRace("witch");
   SetShort("Bruzelia");

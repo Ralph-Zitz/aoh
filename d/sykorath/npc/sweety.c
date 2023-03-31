@@ -7,8 +7,8 @@
 
 inherit "/std/npc";
 
-create() {
-  if (::create()) return;
+void create() {
+  ::create();
   SetName("Sweety");
   SetRace("human");
   SetShort("Sweety, the sweet girlie");

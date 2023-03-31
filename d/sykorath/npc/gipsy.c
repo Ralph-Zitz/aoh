@@ -45,7 +45,7 @@ string shrug_answer() {
 string answer_future() {
   string ret;
   int idx;
-  if (!TP->Query("__Zola_visit__")) {
+  if (!({int})TP->Query("__Zola_visit__")) {
     ret="Zola takes a deep view into her crystal ball, then she looks "
       "at you. She takes your hand and looks into it.\n"
       "Zola hmms.\n";
@@ -55,7 +55,7 @@ string answer_future() {
   } else {
     ret="Zola says: Hey you visited me already. I had told you the "
         "following:\n";
-    ret+=future[TP->Query("__Zola_visit__")-1];
+    ret+=future[({int})TP->Query("__Zola_visit__")-1];
   }
   return ret;
 }
@@ -63,8 +63,8 @@ string answer_future() {
 //*******
 // create
 //*******
-create() {
-  if (::create()) return;
+void create() {
+  ::create();
   SetName("Zola");
   SetRace("gipsy");
   SetShort("the red Zola");

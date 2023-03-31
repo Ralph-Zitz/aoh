@@ -7,8 +7,8 @@
 
 inherit "/std/npc";
 
-create() {
-  if (::create()) return;
+void create() {
+  ::create();
   SetName("Fluffy");
   SetRace("human");
   SetShort("Fluffy, the gardener");

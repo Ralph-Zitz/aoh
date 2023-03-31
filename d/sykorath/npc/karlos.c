@@ -6,8 +6,9 @@
 
 inherit "/std/npc";
 
-create() {
-  if (::create()) return;
+void create() {
+  ::create();
+  seteuid(getuid());
   SetName("Karlos");
   SetRace("gnome");
   SetShort("Karlos the shoemaker");
@@ -68,12 +69,12 @@ create() {
       // types
         ({"smiles","ruffles","tickles","arrives","looks","examines"}),
       // matches
-        ({    0,   "playfully the hair of you","you",0,"at sign.","sign." }),
+        ({    0,   "your hair playfully","you",0,"at sign.","sign." }),
       // delays
         ({    2,      2,                         2,  2,   2,        2}) );
   // matches to:
   // smiles
-  // ruffles playfully the hair of you
+  // ruffles your hair playfully
   // tickles you
   // arrives
 }
@@ -82,28 +83,28 @@ create() {
 //-------------------------
 
 // react to 'smile':
-smiles(str) {
+void smiles(string str) {
   say("Karlos sighs and says: You lucky one. Noone will buy my shoes, but "
      "they are the best in this world!\n");
 }
 
 // react to 'ruffle':
-ruffle(str) {
+void ruffle(string str) {
   say("Karlos grummels and sorts his hair.\n");
 }
 
 // react to 'tickle':
-tickles() {
+void tickles() {
   say("Karlos giggles happily.\n");
 }
 
 // react to new customers:
-arrives(str) {
+void arrives(string str) {
   say("Karlos looks around and says: Oh a new customer - nice - wanna buy "
      "some shoes?\n");
 }
 
-looks() {
+void looks() {
   say("Karlos looks around and says: Oh are you interested in buying "
       "some shoes?\n");
 }

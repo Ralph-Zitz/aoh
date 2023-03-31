@@ -7,8 +7,9 @@
 
 inherit "/std/npc";
 
-create() {
-  if (::create()) return;
+void create() {
+  ::create();
+  seteuid(getuid());
   SetName("Mafiosi");
   SetRace("italian");
   SetShort("Mafiosi");

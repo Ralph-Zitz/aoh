@@ -8,12 +8,13 @@ inherit "/std/npc";
 
 #define SHOP INNER("smithy") // This is smith's armoury
 
-private static int weldcount;
-private static object item;
+private nosave int weldcount;
+private nosave object item;
 
-create() 
+void create() 
 {
-  if (::create()) return;
+  ::create();
+  seteuid(getuid());
   SetName("Sylond");
   AddId("smith");
   AddId("weaponsmith");
@@ -40,16 +41,16 @@ create()
     "brought me the raw materials.\n");
 }
 
-weld() {
+void weld() {
   object env,store;
   int i;
-  if (!(env = environment())) return remove();
+  if (!(env = environment())) { remove(); return; }
   if (blueprint(env) != SHOP)
   {
     tell_room(env,QueryName()+" goes into his shop.\n");
     move(SHOP);
   }  
-  if (!(store = (env = environment())->GetStore())) return;
+  if (!(store = ({object})(env = environment())->GetStore())) return;
   if (sizeof(all_inventory(store))<10)
   {
     tell_room(env,"The smith starts to forge a new weapon.\n");
@@ -93,7 +94,7 @@ weld() {
                   
     }
     for (i=0; i<weldcount; i++)
-      item->SetValue((item->QueryValue() * 8) / 7);
+      item->SetValue((({int})item->QueryValue() * 8) / 7);
     weldcount += 5;
     call_out("weld1",random(2)+5);
   }
@@ -101,10 +102,9 @@ weld() {
     call_out("weld",random(10));
 }
 
-weld1() 
+void weld1() 
 {
-  object env,store;
-  int i;
+  object env;
   string *msgs;
   msgs = ({
      "Sylond heatens up a piece of iron in the fire.\n",
@@ -114,13 +114,13 @@ weld1()
      "The smith puts the hot iron into cold water.\n",
      "Sylond takes his shovel and throws more coal onto the forge.\n"});
 
-  if (!(env = environment())) return remove();
+  if (!(env = environment())) { remove(); return; }
   if (blueprint(env) != SHOP)
   {
     tell_room(env,QueryName()+" enters his shop.\n");
     move(SHOP);
   }  
-  if (!(store = (env = environment())->GetStore())) return;
+  if (!({object})(env = environment())->GetStore()) return;
   tell_room(environment(),msgs[random(sizeof(msgs))]);
   weldcount--;
   if (!weldcount)

@@ -67,7 +67,7 @@ int FireBurning()
    pFuel-=10;
    if(pFuel<10)
    {
-      pFuel==0;
+      pFuel=0;
       tell_room(environment(TO),
          "The fireplace burns up.\n");
       call_out("RemoveFireplace",50);
@@ -94,6 +94,7 @@ int cmd_light(string str)
       pBurning = 1;
       return 1;
    }
+   return 0;
 }
 
 int cmd_unlight(string str)

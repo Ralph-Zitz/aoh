@@ -35,7 +35,7 @@ public void start_death()
   // Just print out some comments and move the player into the deathroom.
   // The player is the one carrying us, and it must be a ghost already.
 {
-  object my_host, ob;
+  object my_host;
   my_host = environment();
 
   if (   !my_host

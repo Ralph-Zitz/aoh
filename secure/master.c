@@ -2392,7 +2392,10 @@ string *error_logfile (string file)
   else if (file_size(WPATH+cuid) == -2)
     lfile = ({ WPATH+cuid+"/.err" });
   else if (file_size(DPATH+cuid) == -2) {
-    lfile = ({ DPATH+cuid+"/.err" });
+    if (file_size(DPATH+cuid+"/log") == -2)
+      lfile = ({ DPATH+cuid+"/log/.err" });
+    else
+      lfile = ({ DPATH+cuid+"/.err" });
     puid = explode(file, "/")[2];
     if (file_size(WPATH+puid) == -2)
       lfile += ({ WPATH+puid+"/.err" });

@@ -38,7 +38,13 @@ void init() {
 
 /* hack alert */
 nosave private string lastid;
-int id(string s) { if (::id(s)) { lastid = s; return 1; } }
+int id(string s) {
+  if (::id(s)) {
+    lastid = s;
+    return 1;
+  }
+  return 0;
+}
 
 varargs string Long (string str) {
 

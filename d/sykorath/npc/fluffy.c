@@ -39,7 +39,7 @@ void create() {
       // types
         ({"ruffles","tickles","arrives","looks","examines"}),
       // matches
-        ({"playfully the hair of you","you",0,"at sign.","sign." }),
+        ({"your hair playfully","you",0,"at sign.","sign." }),
       // delays
         ({    2,                         2,  2,   2,        2}) );
   // matches to:
@@ -54,7 +54,7 @@ void create() {
 
 // react to 'ruffle':
 void ruffle(string str) {
-  say("Fuffy sorts his hair.\n");
+  say("Fluffy sorts his hair.\n");
 }
 
 // react to 'tickle':

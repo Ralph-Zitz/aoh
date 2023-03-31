@@ -80,6 +80,7 @@ int point_stick(string str)
          return 1;
       }
    }
+   return 0;
 }
 
 string print_list()
@@ -127,6 +128,7 @@ int show_list(string str)
          return 0;
       }
    }
+   return 0;
 }
 
 int check_list(string str)
@@ -140,6 +142,7 @@ int check_list(string str)
       write(print_list());
       return 1;
    }
+   return 0;
 }
 
 varargs mixed QueryLong(string what)

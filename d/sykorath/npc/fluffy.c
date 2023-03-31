@@ -7,14 +7,14 @@
 
 inherit "/std/npc";
 
-create() {
-  if (::create()) return;
+void create() {
+  ::create();
   SetName("Fluffy");
   SetRace("human");
   SetShort("Fluffy the pipemaker");
   SetLong(
     "It's Fluffy, wellknown in the whole area. "
-    "He provides you with best pipes and the pipe weed needed for it.\n");
+    "He provides you with the best pipes and the pipe weed needed for it.\n");
   AddId(({"shopkeeper","pipemaker"}));
   SetLevel(20);
   SetGender(GENDER_MALE);
@@ -22,12 +22,12 @@ create() {
   AddQuestion(({"fluffy","name"}),
     "Fluffy grummels: Yes, Fluffy is my real name - it's not a joke!\n");
   AddQuestion(({"pipe","pipes"}),
-    "Fluffy says: Oh I make the best pipes allover the world. They are "
+    "Fluffy says: Oh I make the best pipes in the world. They are "
     "beautiful, nice, best work you will ever see.\n"
     "Wanna buy some?\n");
   AddQuestion(({"weed","pipe weed"}),
     "Fluffy says: Well - I collect the best pipe weed all over the world. "
-    "I own different type of weed, ranging from sweet to strong weed. "
+    "I own different types of weed, ranging from sweet to strong weed. "
     "Wanna buy some weed?\n");
   // add questions about pipe and weed
 
@@ -53,21 +53,21 @@ create() {
 //-------------------------
 
 // react to 'ruffle':
-ruffle(str) {
+void ruffle(string str) {
   say("Fuffy sorts his hair.\n");
 }
 
 // react to 'tickle':
-tickles() {
+void tickles() {
   say("Fluffy giggles happily.\n");
 }
 
 // react to new customers:
-arrives(str) {
-  say("Fluffy looks around and says: Hidiho - wanna buy s good pipe?\n");
+void arrives(string str) {
+  say("Fluffy looks around and says: Hidiho - wanna buy a good pipe?\n");
 }
 
-looks() {
+void looks() {
   say("Fluffy looks around and says: Oh are you interested in buying "
       "a nice pipe or some weed? I can help you a bit maybe?\n");
 }

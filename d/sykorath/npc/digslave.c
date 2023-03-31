@@ -33,8 +33,9 @@ void open_exit() {
 //****************************
 // a 'nearly' normal create :)
 //****************************
-create() {
-  if (::create()) return;
+void create() {
+  ::create();
+  seteuid(getuid());
   SetRace("human");
   SetLevel(5);
   SetName("Slave");

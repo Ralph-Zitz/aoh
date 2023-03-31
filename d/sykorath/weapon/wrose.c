@@ -6,7 +6,7 @@
 
 inherit "/std/weapon";
 
-create() {
+void create() {
   ::create();
   SetStandard(WT_CLUB,4,PSIZE_GENERIC);
   SetShort("a red rose");

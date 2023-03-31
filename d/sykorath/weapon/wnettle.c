@@ -11,7 +11,7 @@
 
 inherit "/std/weapon";
 
-create() {
+void create() {
   ::create();
   SetStandard(WT_CLUB,4,PSIZE_GENERIC);
   SetShort("a stinging nettle");
@@ -23,19 +23,19 @@ create() {
 
 // return 1 for gloves
 int IsGloves(object armour) {
-  if (armour->QueryArmourType()==AT_GLOVES) return 1;
+  if (({int})armour->QueryArmourType()==AT_GLOVES) return 1;
   return 0;
 }
 
 // if not wearing gloves - burn the skin while wielding
-void NotifyWield(object living,object weapon,int flags) {
+varargs void NotifyWield(object living,object weapon,int flags) {
   object *armours;
   ::NotifyWield(living,weapon,flags);
   if (!living) return;
   if (!interactive(living)) return;
   if (!weapon) return;
   if (weapon!=TO) return;
-  armours=TP->QueryArmours();
+  armours=({object *})TP->QueryArmours();
   armours=filter(armours,"IsGloves");
   if (!sizeof(armours)) {
     write(
@@ -47,11 +47,11 @@ void NotifyWield(object living,object weapon,int flags) {
 
 // if move nettle into player checkk if player wears gloves
 // if not - burn skin of player
-int move (object dest,int method,mixed extra) {
+varargs int move (object dest,int method,mixed extra) {
   object *armours;
   if (!dest) return ::move(dest,method,extra);
-  if (!dest->QueryIsLiving()) return ::move(dest,method,extra);
-  armours=dest->QueryArmours()||({});
+  if (!({int})dest->QueryIsLiving()) return ::move(dest,method,extra);
+  armours=({object *})dest->QueryArmours()||({});
   armours=filter(armours,"IsGloves");
   if (!sizeof(armours)) {
     write(
@@ -69,15 +69,15 @@ int CalcDamage (object enemy) {
   if (!enemy) return 0;
   dam=::CalcDamage(enemy);
   if (random(10)<6) return dam;
-  armours=enemy->QueryArmours()||({});
+  armours=({object *})enemy->QueryArmours()||({});
   armours=filter(armours,"IsBodyArmour");
   if (!sizeof(armours)) {
-    write("You burn the skin of "+(enemy->QueryShort()||"Someone")+
+    write("You burn the skin of "+(({string})enemy->QueryShort()||"Someone")+
           " while touching it with the nettle.\n");
-    show(NAME+" burns the skin of "+(enemy->QueryShort()||"Someone")+
+    show(({string})NAME+" burns the skin of "+(({string})enemy->QueryShort()||"Someone")+
          " with the nettle.\n",enemy);
     tell_object(enemy,"Your skin is burned by a stinging nettle, wielded by "+
-         (NAME||"Someone")+".\n");
+         (({string})NAME||"Someone")+".\n");
     dam*=2;
   }
   return dam;

@@ -14,7 +14,7 @@
 
 inherit "/std/weapon";
 
-create() {
+void create() {
   ::create();
   SetStandard(WT_STAFF,8,PSIZE_LARGE);
   SetShort("a staff of power");
@@ -31,7 +31,7 @@ create() {
   AddAdjective(({"long"}));
 }
 
-init() {
+void init() {
   ::init();
   add_action("cmd_release","release");
 }
@@ -41,8 +41,8 @@ init() {
 //****************
 void DoAttack(object wolf) 
 {
-  int dam;
-  if (wolf && living(wolf) && wolf->QueryIsNPC()) 
+//  int dam;
+  if (wolf && living(wolf) && ({int})wolf->QueryIsNPC()) 
   {
 /*
     if (Repulse(wolf, this_player())) return;

@@ -6,7 +6,7 @@
 
 inherit "/std/weapon";
 
-create() {
+void create() {
   ::create();
   SetStandard(WT_WHIP,4,PSIZE_LARGE);
   SetShort("a long whip");

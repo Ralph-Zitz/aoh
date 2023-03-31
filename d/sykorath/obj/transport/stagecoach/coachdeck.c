@@ -21,7 +21,7 @@ int cmd_leave(string str) {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   ::create();
   SetIntShort("In the stage coach");
   SetIntLong(

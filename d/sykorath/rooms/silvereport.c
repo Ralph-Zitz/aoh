@@ -12,7 +12,7 @@ inherit "/room/port";
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   port::create();
   SetIntShort("A stage coach station");
   SetIntLong(
@@ -28,7 +28,7 @@ create() {
 }
 
 // needed for the ship handling
-init() {
+void init() {
   port::init();
 }
 

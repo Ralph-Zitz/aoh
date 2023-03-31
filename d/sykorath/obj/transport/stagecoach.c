@@ -19,7 +19,7 @@ inherit "/obj/ship";
 //*******
 // create
 //*******
-create() {
+void create() {
   ::create();
   SetShort("a stage coach");
   SetLong("A nice stage coach which connects the cities.\n");

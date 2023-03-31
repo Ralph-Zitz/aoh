@@ -35,7 +35,7 @@ int QueryFinished() { return finished; }        // read only!
 // carpenters are finished
 //************************
 // called by the patrician room, if the carpenters are finished their work
-int SetFinished(int f) {
+void SetFinished(int f) {
   finished=1;
   call_out("burn_down",6);
 }
@@ -57,7 +57,7 @@ void burn_down() {
 //************************
 // we need a special short
 //************************
-string QueryShort() {
+varargs string QueryShort() {
   if (!state) return 0;
   if (!finished)
     return "a partly finished house";
@@ -67,7 +67,7 @@ string QueryShort() {
 //*******************
 // and a special long
 //*******************
-string QueryLong() {
+varargs string QueryLong() {
   if (!state) return 0;
   if (!finished)
     return
@@ -106,7 +106,7 @@ int enter_house(string str) {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   ::create();
   SetIntShort("Inside the new house");
   SetIntLong("This is the new built house.\n");

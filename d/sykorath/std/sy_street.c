@@ -34,7 +34,7 @@
 inherit BASEROOM;
 
 // animalmsgs while moving (time delayed)
-static * animal_msg = ({
+nosave string * animal_msg = ({
   "A small mouse appears, looks at you and disappears in the next "
     "mouse-hole.\n",
   "A small bat flies around your head.\n",
@@ -73,7 +73,7 @@ void notify_enter(object oldenv,int method,mixed extra) {
  */
 
 int QueryBright() {
-  if ( !NIGHTDAY->IsDay() )
+  if ( !({int})NIGHTDAY->IsDay() )
     return (::QueryBright())+Query(P_SKULL_BRIGHTNESS);
   else
     return (::QueryBright());
@@ -85,7 +85,7 @@ int QueryBright() {
  */
 
 string skull_vitem_long() {
-  if ( !NIGHTDAY->IsDay() )
+  if ( !({int})NIGHTDAY->IsDay() )
     return Query( P_SKULL_NIGHT_DETAIL );
   else
     return Query( P_SKULL_DAY_DETAIL );
@@ -97,7 +97,7 @@ string skull_vitem_long() {
  */
 
 string skull_extra_int_long() {
-  if ( !NIGHTDAY->IsDay() )
+  if ( !({int})NIGHTDAY->IsDay() )
     return Query( P_SKULL_NIGHT_EXTRA )||"";
   else
     return Query( P_SKULL_DAY_EXTRA )||"";
@@ -108,7 +108,7 @@ string skull_extra_int_long() {
  * -------------------------------------------------------------------------
  */
 
-create() {
+public varargs void create() {
   ::create();
   
   AddVItem( ([ 

@@ -12,14 +12,14 @@
 // some defines
 #define TP this_player()
 #define TO this_object()
-#define NAME this_player()->QueryName()
+#define NAME ({string})this_player()->QueryName()
 
 // private variables
-static int page;                      // actual page
-static int maxpage;                   // number of pages of the book
-static int last_read;                 // last read page
-static string bookfile;               // ASCII-file that contains the book
-static mixed content;                 // for usage in SetPageContent
+nosave int page;                      // actual page
+nosave int maxpage;                   // number of pages of the book
+nosave int last_read;                 // last read page
+nosave string bookfile;               // ASCII-file that contains the book
+nosave mixed content;                 // for usage in SetPageContent
 
 inherit "/obj/chest";                 // useful for open/close
 
@@ -133,6 +133,7 @@ nomask string SetReadMsg(string str) {
           "Illegal usage of SetReadMsg() in object "+
           object_name(this_object())+"\n"+
           "Object will not work as expected!\n");
+  return 0;
 }
 
 //************
@@ -170,14 +171,14 @@ int cmd_turn(string str) {
   if (sizeof(exp)==2) {                    // we have an "in" found ->
                                            // let's check for the right book
 
-    book=TP->Search(exp[1],SEARCH_INV|SM_OBJECT);
+    book=({object})TP->Search(exp[1],SEARCH_INV|SM_OBJECT);
                                            // find the book inside the player
     if (!book) {
-      notify_fail("Turn what?\n");
+      notify_fail("Turn what?\n", NOTIFY_NOT_VALID);
       return 0;                            // no book found
     }
     if (book!=TO) {
-      notify_fail("Turn what?\n");
+      notify_fail("Turn what?\n", NOTIFY_NOT_OBJ);
       return 0;                            // another book ?
     }
   }
@@ -232,7 +233,7 @@ int cmd_turn(string str) {
     return 1;
   }
   notify_fail("The range of the new page must be between 1 and "+
-    maxpage+".\n");
+    maxpage+".\n", NOTIFY_NOT_VALID);
   return 0;
 }
 
@@ -265,7 +266,7 @@ string QueryIntShort() { return QueryShort(); }
 //*******
 // create
 //*******
-create() {
+public void create() {
   ::create();
   page=1;                             // default one page
   maxpage=1;                          // default one page
@@ -285,7 +286,7 @@ create() {
 //*****
 // init
 //*****
-init() {
+public void init() {
   ::init();
   add_action("cmd_turn","turn");
 }
@@ -293,7 +294,7 @@ init() {
 //****************************************
 // reset the book when it is opened/closed
 //****************************************
-int fopen (string str,int where) {
+public varargs int fopen (string str,int where) {
   int ret;
   ret=::fopen(str,where);
   if (ret==1) { page=1; }          // reset page

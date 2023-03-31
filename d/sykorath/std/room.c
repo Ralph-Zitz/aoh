@@ -18,14 +18,6 @@
 #include <sykorath.h>
 
 inherit "/std/room";
-/*
-inherit "/d/sykorath/std/vget";          // get support
-inherit "/d/sykorath/std/vdrink";        // drink support
-inherit "/d/sykorath/std/vfood";         // food support
-*/
-
-// replaced by maproom:
-//inherit "/d/sykorath/std/maproom";
 
 /* -------------------------------------------------------------------------
  * IntLong handles P_INT_WIZMSG property
@@ -40,7 +32,7 @@ public varargs string IntLong(string what)  {
   
   if ( ( TP ) &&
        ( query_user_level( TP ) ) &&
-       ( ! TP->Query( P_NOWIZ ) ) &&
+       ( ! ({int})TP->Query( P_NOWIZ ) ) &&
        ( w = Query( P_INT_WIZMSG ) ) )
     return s + "\n" + w;
   else
@@ -58,11 +50,11 @@ public string TimeMsg() {
   int state;
   string s;
   
-  state = NIGHTDAY->QueryState();
+  state = ({int})NIGHTDAY->QueryState();
   
   if(s = Query(P_TIME_MSG)[state])
     return s;
-  else if(NIGHTDAY->IsDay() && (s = Query(P_TIME_MSG)[DAY_DEFAULT_MSG]))
+  else if(({int})NIGHTDAY->IsDay() && (s = Query(P_TIME_MSG)[DAY_DEFAULT_MSG]))
     return s;
   else if(s = Query(P_TIME_MSG)[NIGHT_DEFAULT_MSG])
     return s;
@@ -71,23 +63,12 @@ public string TimeMsg() {
 
 /* ********************************************************************** */
 
-create() {
+public varargs void create() {
   ::create();
-/*
-  AddRoomCmd("get",  "cmd_get_vitem");
-  AddRoomCmd("take", "cmd_get_vitem");
-  AddRoomCmd("drink","cmd_drink_vitem");
-  AddRoomCmd("eat",  "cmd_eat_vitem");
-*/
 }
 
 // special reset
-reset() {
-  "room"::reset();
-/*
-  "vget"::reset();
-  "vdrink"::reset();
-  "vfood"::reset();
-*/
+public void reset() {
+  ::reset();
 }
 

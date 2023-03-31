@@ -26,7 +26,7 @@ inherit "/lib/string";
 private string add_map_to_long(string l) {
   string *exp,*map;
   string *exits;
-  int size,i;
+  int i;
 
   // wrap the long and split it into single strings
   l=wrap(l,75-MAPSPACE);
@@ -125,7 +125,7 @@ public varargs string IntLong(string what)  {
   if (!long) return long;
 
   // if player switched off ma, don't draw it!
-  if (TP->QueryAttr(NOT_SHOW_SHORT_MAP))
+  if (({mixed})TP->QueryAttr(NOT_SHOW_SHORT_MAP))
     return long;                             // no map is shown
 
   // if property is set to any value, map is discarded
@@ -139,8 +139,8 @@ public varargs string IntLong(string what)  {
 // allows switch off/on for any player
 //************************************
 int showmap(string str) {
-  int shown;
-  shown=TP->QueryAttr(NOT_SHOW_SHORT_MAP);
+  mixed shown;
+  shown=({mixed})TP->QueryAttr(NOT_SHOW_SHORT_MAP);
   if (!str) {
     if (!shown)
       write("Map is shown.\n");
@@ -174,7 +174,7 @@ int showmap(string str) {
 //************************
 // create to add a command
 //************************
-create() {
+public varargs void create() {
   ::create();
   AddRoomCmd("showmap",#'showmap);
 }

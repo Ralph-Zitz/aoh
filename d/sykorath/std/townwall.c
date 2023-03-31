@@ -91,7 +91,7 @@ int unlight_torch(string str) {
 //*******
 // create
 //*******
-create() {
+public varargs void create() {
   ::create();
   SetIntLight(0);                  // two torches are not burning!
 
@@ -120,14 +120,14 @@ create() {
 // don't remove this!!!
 //*********************
 // needed for exit handling! (noway-msg)
-init() {
+public void init() {
   ::init();
 }
 
 //************************
 // we need a special reset
 //************************
-reset() {
+public void reset() {
   if (VQuery(vitem_torch,P_AMOUNT) !=2 ) {
     show_room(TO,"An old gnome comes along and replaces the missing "
       "torches. Then he walks away.\n");

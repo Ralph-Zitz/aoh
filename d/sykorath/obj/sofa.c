@@ -6,7 +6,7 @@
 
 inherit "/std/thing";
 
-create(){
+void create(){
  ::create();
  SetShort("a comfy couch");
  SetLong("It looks very comfortable!\n");
@@ -18,7 +18,7 @@ create(){
  SetNoGet("You can't steal the cow-ch!\n");
 }
 
-QueryLong() {
+varargs string QueryLong() {
   return "\n\
        ______________(__)_________________    \n\
      /_______________(oo)_______________ /    \n\
@@ -33,14 +33,14 @@ QueryLong() {
 The cow-ch looks very comfortable.\n";
 }
 
-init() {
+void init() {
  ::init();
  add_action("rest","sit");
 }
 
-rest() {
+int rest() {
   write("You sit down on the comfortable couch.\n");
-  show(NAME+" sits down on the couch.\n");
+  show(({string})NAME+" sits down on the couch.\n");
   return 1;
 }
 

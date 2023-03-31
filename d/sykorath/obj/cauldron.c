@@ -30,7 +30,7 @@ int SetHeated(int h) { heated=h; return heated; }
 //**************
 // overload long
 //**************
-string QueryLong() {
+varargs string QueryLong() {
   string ret;
   ret="This is a big black witch's cauldron. It is used to brew potions.\n";
   if (!heated) ret+="It is not heated yet.\n";
@@ -41,7 +41,7 @@ string QueryLong() {
 //*******
 // create
 //*******
-create() {
+void create() {
   ::create();
   heated=0;
   SetShort("a large cauldron");
@@ -57,7 +57,7 @@ create() {
 //******
 // reset
 //******
-reset() {
+void reset() {
   if (heated) {
     show_room(TO,"The cauldron cools down.\n");
     heated=0;

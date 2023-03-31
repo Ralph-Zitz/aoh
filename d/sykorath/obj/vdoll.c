@@ -30,12 +30,12 @@ string QueryVoodooName() { return name; }
 //***********************
 // special short and long
 //***********************
-string QueryShort() {
+varargs string QueryShort() {
   if (name=="") return "a voodoo doll";
   return "a voodoo doll of "+name;
 }
 
-string QueryLong() {
+varargs string QueryLong() {
   string ret;
   ret="It is a special doll - a voodoo doll.\n"
   "You can prick the doll with a special needle. Normally the magic works\n"
@@ -64,17 +64,17 @@ int cmd_prick(string str) {
   exp=explode(str," with ");              // search for 'with'
   if (sizeof(exp)!=2) return 0;
   // check for the needle:
-  needle=TP->Search(exp[1],SEARCH_INV|SM_OBJECT);
+  needle=({object})TP->Search(exp[1],SEARCH_INV|SM_OBJECT);
   if (!needle) return 0;
-  if (!(needle->id("vneedle"))) { 
+  if (!(({int})needle->id("vneedle"))) { 
     notify_fail("You need a special needle to do this.\n");
     return 0;
   }
   // okay needle is okay - but the doll?
-  doll=TP->Search(exp[0],SEARCH_INV|SM_OBJECT);
+  doll=({object})TP->Search(exp[0],SEARCH_INV|SM_OBJECT);
   if (!doll) return 0;
   if (doll!=TO) return 0;       // maybe another doll?
-  if (!(doll->id("vdoll"))) {
+  if (!(({int})doll->id("vdoll"))) {
     notify_fail("You need a special voodoo doll to do this.\n");
     return 0;
   }
@@ -92,7 +92,7 @@ int cmd_prick(string str) {
   }
   write("You prick the "+exp[0]+" of "+name+" with the "+exp[1]+".\n"+
         name+" cries in pain.\n");
-  shout(name+" cries in pain as "+NAME+
+  shout(name+" cries in pain as "+({string})NAME+
         " pricks the voodoo doll with a needle.\n");
   needle->move(TO,M_SILENT);
 // reduce HP if it is a player/npc near???
@@ -111,17 +111,17 @@ int cmd_attach(string str) {
   exp=explode(str," to ");              // search for 'to'
   if (sizeof(exp)!=2) return 0;
   // check for the doll:
-  doll=TP->Search(exp[1],SEARCH_INV|SM_OBJECT);
+  doll=({object})TP->Search(exp[1],SEARCH_INV|SM_OBJECT);
   if (!doll) return 0;
   if (doll!=TO) return 0;             // maybe another doll?
-  if (!(doll->id("vdoll"))) { 
+  if (!(({int})doll->id("vdoll"))) { 
     notify_fail("You need a special voodoo doll to do this.\n");
     return 0;
   }
   // okay doll is okay - but the hair/nail ?
-  hair=TP->Search(exp[0],SEARCH_INV|SM_OBJECT);
+  hair=({object})TP->Search(exp[0],SEARCH_INV|SM_OBJECT);
   if (!hair) return 0;
-  if (!(hair->id("vhair") || hair->id("vnail"))) {
+  if (!(({int})hair->id("vhair") || ({int})hair->id("vnail"))) {
     notify_fail("You need something from a player/monster to do this.\n");
     return 0;
   }
@@ -131,7 +131,7 @@ int cmd_attach(string str) {
     "This doll has already something attached to it. Buy a new clear doll!\n");
     return 1;
   }
-  name=hair->QueryVoodooName();
+  name=({string})hair->QueryVoodooName();
   write("You attach "+exp[0]+" to the doll. It looks like a doll of "+name+
         " yet.\n");
   hair->remove();
@@ -152,28 +152,28 @@ int cmd_cut(string str) {
     notify_fail("You can't cut "+exp[0]+" from "+exp[1]+".\n");
     return 0;
   }
-  who=TP->Search(exp[1],SEARCH_ENV|SM_OBJECT);
+  who=({object})TP->Search(exp[1],SEARCH_ENV|SM_OBJECT);
   if (!who) return 0;
   if (!interactive(who)) {                 // players are allowed (ever)
     if (!who) {
       notify_fail(CAP(exp[1])+" isn't here!\n");
       return 0;
     }
-    if (!(who->QueryIsLiving())) {
+    if (!(({int})who->QueryIsLiving())) {
       write(CAP(exp[1])+" is not alive!\n");
       return 1;
     }
-    if (who->QueryIsFollower() || who->QueryIsPet()) {
-      write("You can't cut hair from "+who->QueryShort()+".\n");
+    if (({int})who->QueryIsFollower() || ({int})who->QueryIsPet()) {
+      write("You can't cut hair from "+({string})who->QueryShort()+".\n");
       return 1;
     }
   }
-  hname=CAP(who->QueryRealName());
+  hname=CAP(({string})who->QueryRealName());
   hair=clone_object(OBJ("vhair"));
   hair->SetVoodooName(hname);
   hair->move(TP,M_SILENT);                    // move without check!
   write("You cut some hair from "+hname+".\n");
-  show(NAME+" cuts some hair from "+hname+".\n");
+  show(({string})NAME+" cuts some hair from "+hname+".\n");
   return 1;
 }
 
@@ -181,7 +181,7 @@ int cmd_cut(string str) {
 //****************
 // create the doll
 //****************
-create() {
+void create() {
   ::create();
   name="";
   num_needles=0;
@@ -192,7 +192,7 @@ create() {
   SetTransparency(0);     // not transparent !!
 }
 
-init() {
+void init() {
   ::init();
   add_action("cmd_prick","prick");
   add_action("cmd_attach","attach");
@@ -202,14 +202,14 @@ init() {
 //***************************************
 // enter/leave - only vneedles can enter!
 //***************************************
-int allow_enter(int method,mixed extra) {
+varargs int allow_enter(int method,mixed extra) {
   if (!PO) return 0;
-  if (PO->id("vneedle")) { num_needles++; return ME_OK; }
+  if (({int})PO->id("vneedle")) { num_needles++; return ME_OK; }
   return 0;
 }
 
-notify_leave(object dest,int method,mixed extra) {
+varargs void notify_leave(object dest,int method,mixed extra) {
   if (!PO) return;
-  if (PO->id("vneedle")) num_needles--;
+  if (({int})PO->id("vneedle")) num_needles--;
 }
 

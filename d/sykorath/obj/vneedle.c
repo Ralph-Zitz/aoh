@@ -7,7 +7,7 @@
 
 inherit "/std/thing";
 
-create() {
+void create() {
   ::create();
   SetShort("a needle");
   SetLong("A long but special needle. You can prick voodoo dolls with it.\n");

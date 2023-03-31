@@ -6,7 +6,7 @@
 
 inherit "/std/thing";
 
-create() {
+void create() {
   ::create();
   AddId("mahagony table");
   AddId("table");

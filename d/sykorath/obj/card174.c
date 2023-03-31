@@ -65,7 +65,7 @@ string printcard(string card) {
 }
 
 // calculates the number of points
-// returns an string as output
+// returns a string as output
 string calc_points(string *c) {
   int i,points,numace,acepoints;
   points=0;
@@ -154,7 +154,7 @@ int cmd_play(string str) {
     write("The dealer says: Uhh sorry - I play actually with someone else.\n");
     return 1;
   }
-  iplayer=TP->QueryRealName();
+  iplayer=({string})TP->QueryRealName();
   write("You start to play the game.\n"
     "You will start with two cards from the stack. The goal is to get 21 "
     "points. If you got more than 21 you lost the game. Exact 21 points and "
@@ -165,7 +165,7 @@ int cmd_play(string str) {
     "will win the game, else you will win it.\n"
     "Btw. the Ace can be calculated as 1 point or 11 points!\n"
     "Ah yes and a double Ace on start of game will win too.\n"); 
-  show(NAME+" starts a new game.\n");
+  show(({string})NAME+" starts a new game.\n");
   TP->Set("card174",1);                 // store temp  prop in player
   call_out("give_first_cards",1,TP);    // give first cards to player & dealer
   return 1;
@@ -183,7 +183,7 @@ void give_first_cards(object pl) {
     mix_cards();
   }
   write("The dealer gives you a card. It is a "+printcard(cards[0])+".\n");
-  c=pl->Query("cards")+({cards[0]});
+  c=({string *})pl->Query("cards")+({cards[0]});
   pl->Set("cards",c);
   cards-=({ cards[0] });                 // remove card from stack
   write("The dealer gives himself a card. It is a "+printcard(cards[0])+".\n");
@@ -191,11 +191,11 @@ void give_first_cards(object pl) {
   cards-=({ cards[0] });
   write("The dealer gives you a second card. It is a "+
     printcard(cards[0])+".\n");
-  c=pl->Query("cards")+({cards[0]});
+  c=({string *})pl->Query("cards")+({cards[0]});
   pl->Set("cards",c);
   cards-=({ cards[0] });
-  write("You have now : "+calc_points(pl->Query("cards"))+".\n");
-  if (check_won(pl->Query("cards"))>=21) {
+  write("You have now : "+calc_points(({string *})pl->Query("cards"))+".\n");
+  if (check_won(({string *})pl->Query("cards"))>=21) {
     write("The dealer says: Wow you are a lucky man. You won this game with "
       "the first two cards!\n");
     iplayer=0;
@@ -214,7 +214,7 @@ int cmd_card(string str) {
   if (str) { notify_fail("Use a simple 'card' to get an additional card.\n");
              return 0; }
   // player who is playing wants a new card?
-  if (iplayer!=TP->QueryRealName()) {
+  if (iplayer!=({string})TP->QueryRealName()) {
     if (iplayer==0) {
       notify_fail("Start a new game with 'play game'.\n");
       return 0;
@@ -228,7 +228,7 @@ int cmd_card(string str) {
   }
   write("The dealer gives you an additional card. It is a "+
     printcard(cards[0])+".\n");
-  c=TP->Query("cards")+({cards[0]});
+  c=({string *})TP->Query("cards")+({cards[0]});
   TP->Set("cards",c);
   cards-=({ cards[0] });                 // remove card from stack
   write("You hold now:\n");
@@ -237,8 +237,8 @@ int cmd_card(string str) {
   }
   write(printcard(c[i])+" and ");
   write(printcard(c[i+1])+".\n");
-  write("You have now : "+calc_points(TP->Query("cards"))+".\n");
-  if (check_won(TP->Query("cards"))>21) {
+  write("You have now : "+calc_points(({string *})TP->Query("cards"))+".\n");
+  if (check_won(({string *})TP->Query("cards"))>21) {
     write("The dealer says: Oh sorry, you have lost the game.\n");
     iplayer=0; 
   }
@@ -254,7 +254,7 @@ int cmd_enough(string str) {
   if (!TP) return 0;                      // don't deal with no objects
   if (str) { notify_fail("Use a simple 'enough' to let the dealer "
              "finishs the game.\n"); return 0; }
-  if (iplayer!=TP->QueryRealName()) {
+  if (iplayer!=({string})TP->QueryRealName()) {
     if (iplayer==0) {
       notify_fail("Start a new game with 'play game'.\n");
       return 0;
@@ -266,7 +266,7 @@ int cmd_enough(string str) {
   iplayer=0;                // no game is running
   write("The dealer checks his cards.\n");
   // store the amount of the player
-  playercards=calc_int_points(TP->Query("cards"));
+  playercards=calc_int_points(({string *})TP->Query("cards"));
   own=calc_int_points(dealcard);
 //  write("player: "+playercards+", own: "+own+"\n");
   if (own>=playercards) {
@@ -297,7 +297,7 @@ int cmd_enough(string str) {
 //**************************************************************
 // overloaded the QueryLong function to allow looking at 'cards'
 //**************************************************************
-string QueryLong() {
+varargs string QueryLong() {
   if (!TP) return 0;
   if (strstr(QueryLastId()||"","cards")!=-1) {
     return "You see 32 cards of a normal card game.\n";
@@ -311,7 +311,7 @@ string QueryLong() {
 //*******
 // create
 //*******
-create() {
+void create() {
   ::create();
   SetShort("a card game");
 //  SetNoGet("The card game belongs to this table.\n");
@@ -334,7 +334,7 @@ create() {
 //*****
 // init
 //*****
-init() {
+void init() {
   ::init();
   add_action("cmd_play","play");
   add_action("cmd_enough","enough");

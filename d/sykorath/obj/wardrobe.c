@@ -12,7 +12,7 @@ int is_open;
 //*******
 // create
 //*******
-create() {
+void create() {
   ::create();
   SetIntShort("a wardrobe");
   SetIntLong("You are inside a wardrobe. It is quite comfortable!\n");
@@ -28,7 +28,7 @@ create() {
 //****************
 // a special short
 //****************
-string QueryShort() {
+varargs string QueryShort() {
   if (is_open)
     return "a wardrobe (open)";
   return "a wardrobe";
@@ -37,7 +37,7 @@ string QueryShort() {
 //***************
 // a special long
 //***************
-string QueryLong() {
+varargs string QueryLong() {
   if (is_open)
     return "This heavy wardrobe is open. You can look into it.\n";
   return "The wardrobe is closed.\n";
@@ -52,11 +52,11 @@ int l_into(string str) {
   if (sscanf(str,"into %s",a)<1) return 0;
   safe=present(a,environment());
   if (safe!=this_object()) return 0;
-  show(NAME+" looks into "+QueryShort()+".\n");
+  show(({string})NAME+" looks into "+QueryShort()+".\n");
   write("Inside the wardrobe you see: \n");
   itm=first_inventory(TO);
   while (itm) {
-     write(CAP(itm->QueryShort())+"\n");
+     write(CAP(({string})itm->QueryShort())+"\n");
      itm=next_inventory(itm);
   }
   return 1;
@@ -67,10 +67,10 @@ int l_into(string str) {
 //**********************
 int sput(string str) {
   int test;
-  string a,b;
+  string b;
   if (!str) return 0;
-  test=sscanf(str,"%s into %s",a,b);
-  if (test<1) test=sscanf(str,"%s in %s",a,b);
+  test=sscanf(str,"%~s into %s",b);
+  if (test<1) test=sscanf(str,"%~s in %s",b);
   if (test==2) {
      if (!id(b)) return 0;
      if (is_open) return 0;
@@ -85,10 +85,10 @@ int sput(string str) {
 //********************************
 int sget(string str) {
   int test;
-  string a,b;
+  string b;
   if (!str) return 0;
-  test=sscanf(str,"%s from %s",a,b);
-  if (test<1) test=sscanf(str,"%s of %s",a,b);
+  test=sscanf(str,"%~s from %s",b);
+  if (test<1) test=sscanf(str,"%~s of %s",b);
   if (test==2) {
      if (!id(b)) return 0;
      if (is_open) return 0;
@@ -105,7 +105,7 @@ int open(string str) {
   if (!str || !id(str)) return 0;
   if (is_open) { write("It is open.\n"); return 1; }
   write("You open the wardrobe.\n");
-  show(NAME+" opens a wardrobe.\n");
+  show(({string})NAME+" opens a wardrobe.\n");
   is_open=1;
   return 1;
 }
@@ -117,7 +117,7 @@ int close(string str) {
   if (!str || !id(str)) return 0;
   if (!is_open) { write("It is already closed!\n"); return 1; }
   write("You close the wardrobe.\n");
-  show(NAME+" closes a wardrobe.\n");
+  show(({string})NAME+" closes a wardrobe.\n");
   is_open=0;
   return 1;
 }
@@ -147,7 +147,7 @@ int leave(string str) {
 //*************
 // add adctions
 //*************
-init() {
+void init() {
   ::init();
   add_action("sget","get");
   add_action("sget","take");

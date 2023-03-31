@@ -23,17 +23,17 @@ string QueryVoodooName() { return name; }
 //********************
 // short/lpng handling
 //********************
-string QueryShort() {
+varargs string QueryShort() {
   if (name=="") return "hair";
   return "hair of "+name;
 }
 
-string QueryLong() {
+varargs string QueryLong() {
   if (name=="") return "Some useless hair.\n";
   return "Some hair of "+name+". You can attach it to an empty voodoo doll.\n";
 }
 
-create() {
+void create() {
   ::create();
   name="";
   SetHelpMsg("You can attach it to a voodoo doll.\n");

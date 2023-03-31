@@ -14,7 +14,7 @@
 
 inherit "/std/thing";
 
-create() {
+void create() {
   ::create();
   SetShort("a stone dragon");
   SetLong(

@@ -6,7 +6,7 @@
 
 inherit "/std/thing";
 
-create() {
+void create() {
   ::create();
   AddId("cross");
   AddAdjective("silver");

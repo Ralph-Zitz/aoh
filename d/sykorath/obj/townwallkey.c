@@ -8,7 +8,7 @@
 
 inherit "/obj/key";
 
-create() {
+void create() {
   ::create();
   SetShort("a small steel key");
   SetLong(

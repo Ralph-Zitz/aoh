@@ -33,7 +33,7 @@ string QueryThemeLong() { return theme_long; }
 // used by readscroll (smore)
 void close_scroll() {
   if (TP) {
-    show(NAME+" closes the scroll.\n");
+    show(({string})NAME+" closes the scroll.\n");
     write("You close the scroll.\n");
   }
 }
@@ -44,28 +44,28 @@ string readscroll() {
   ret="You open the scroll.\n"
       "You read the scroll.\n";
   ret+=read_file(file,1);
-  smore(ret,TP->QueryPageSize(),TO,"close_scroll");
+  smore(ret,({int})TP->QueryPageSize(),TO,"close_scroll");
   return "\n";         // needed for the SetReadMsg :(
 }
 
 //******************************
 // short and long are overloaded
 //******************************
-string QueryLong() {
+varargs string QueryLong() {
   return
   "The scroll contains information about:\n"
   "-> "+theme_long+" <-.\n"
   "You can read it.\n";
 }
 
-string QueryShort() {
+varargs string QueryShort() {
   return "a scroll of "+add_a(theme_short);
 }
 
 //*******
 // create
 //*******
-create() {
+void create() {
   ::create();
   theme_short="";
   theme_long="";

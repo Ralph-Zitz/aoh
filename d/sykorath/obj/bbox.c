@@ -15,7 +15,7 @@ int num_items;
 int QueryNumItems() { return num_items; }
 int SetNumItems(int c) { num_items=c; return num_items; }
 
-string QueryLong() {
+varargs string QueryLong() {
   string ret;
   ret=
   "This black box will move all items dropped into it into another "
@@ -32,7 +32,7 @@ string QueryLong() {
 //*******
 // create
 //*******
-create() {
+void create() {
   ::create();
   num_items=0;
   SetIntShort("inside a black box");

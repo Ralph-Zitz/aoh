@@ -22,7 +22,7 @@ private nosave string Plastid, Plastverb;
 private nosave object Plastpl;
 private nosave mapping Pextra, Psubdetails, Psubread;
 private nosave mixed Plong, Pmagic, Phelpmsg, Pnobuy, Pnosell;
-private nosave string Pshort, Psmell, Pnoise, Preadmsg;
+private nosave mixed Pshort, Psmell, Pnoise, Preadmsg;
 private nosave string Pinfo, Pidpattern, Pclasspattern;
 private nosave int Pvalue, Psize;
 
@@ -318,31 +318,31 @@ public mixed QueryNoBuy()         { return Pnobuy; }
 public mixed SetNoBuy(mixed s)   { return Pnobuy = s; }
 
 #if __VERSION__ > "3.5.0"
-public varargs string QueryNoise(string|int what) { return Pnoise; }
+public varargs mixed QueryNoise(string|int what) { return Pnoise; }
 #else
 public varargs string QueryNoise(string what) { return Pnoise; }
 #endif
-public string SetNoise(string s)   { return Pnoise = s; }
+public mixed SetNoise(mixed s)   { return Pnoise = s; }
 
 public mixed QueryNoSell()         { return Pnosell; }
 public mixed SetNoSell(mixed s)   { return Pnosell = s; }
 
-public string QueryReadMsg()       { return Preadmsg; }
-public string SetReadMsg(string s) { return Preadmsg = s; }
+public mixed QueryReadMsg()       { return Preadmsg; }
+public mixed SetReadMsg(mixed s) { return Preadmsg = s; }
 
 #if __VERSION__ > "3.5.0"
-public varargs string QueryShort(string|int what) { return Pshort; }
+public varargs mixed QueryShort(string|int what) { return Pshort; }
 #else
 public varargs string QueryShort(string what) { return Pshort; }
 #endif
-public string SetShort(string s)   { return Pshort = s; }
+public mixed SetShort(mixed s)   { return Pshort = s; }
 
 #if __VERSION__ > "3.5.0"
-public varargs string QuerySmell(string|int what) { return Psmell; }
+public varargs mixed QuerySmell(string|int what) { return Psmell; }
 #else
 public varargs string QuerySmell(string what) { return Psmell; }
 #endif
-public string SetSmell(string s)   { return Psmell = s; }
+public mixed SetSmell(mixed s)   { return Psmell = s; }
 
 public varargs mapping QuerySubDetails() { return Psubdetails; }
 public mapping SetSubDetails(mapping m)  { clear_subcache(); return Psubdetails = flat_keys(m); }

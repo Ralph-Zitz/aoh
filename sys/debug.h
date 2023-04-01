@@ -7,9 +7,6 @@
  * LPC debug options
  */
 
-#ifndef DEBUG
-#define DEBUG(x) if(find_player("nostradamus")) tell_object(find_player("nostradamus"), x)
-#endif
 #define NODEBUG			/* all debugging modes disabled */
 
 #ifndef NODEBUG

@@ -19,7 +19,7 @@
 #include <msgclass.h>
 #include <herbs.h>
 #include <nightday.h>
-
+#include <debug.h>
 
 inherit "/std/room";
 
@@ -36,11 +36,10 @@ inherit "/std/room";
 // the 1/10 precent value how well the player passed the skill test
 // 1:very poor and 1000:superb..you might want to return different
 // strings depending on this value
-varargs string FindLetter(string secret,object who,int skillvalue)
+varargs string FindLetter(string secret,object|mixed who,int skillvalue)
 {
   string s;
   object ob;
-  
   // a hack to use the same function for Secrets and Details
   // as the argument 2 of the special detail function is no object
   // but an vitem object

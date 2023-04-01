@@ -38,8 +38,8 @@ inherit "/std/room";
 // strings depending on this value
 varargs string FindLetter(string secret,object who,int skillvalue)
 {
-string s;
-object ob;
+  string s;
+  object ob;
   
   // a hack to use the same function for Secrets and Details
   // as the argument 2 of the special detail function is no object
@@ -55,7 +55,7 @@ object ob;
 
 
   // Show this to the player
-  s="Wow "+ capitalize(who->QueryName())+", in one of the chairs you see "
+  s="Wow "+ capitalize(({string})who->QueryName())+", in one of the chairs you see "
 	"a bit of paper,\n might be an old and important letter.\n";
 
   // clone the letter
@@ -75,7 +75,7 @@ object ob;
 //************************************************************************ 
 //                   Main create
 //************************************************************************ 
-create()
+varargs void create()
 {
   ::create();
   SetIntShort("inside a small hut");
@@ -86,7 +86,7 @@ create()
 
   // We demosntrate how to reuse the same function for special details
   // and secrets
-  AddDetail(({"chair","chairs"}),#'FindLetter);
+  AddDetail(({"chair","chairs"}),#'FindLetter /*'*/);
   AddDetail(({"floor","ground"}),
     "An ordinary floor, but below one of the chairs might be a trap door.\n");
   AddDetail(({"trap door"}),
@@ -101,7 +101,7 @@ create()
   // Adds a secret 'hidden letter' to this room. Its difficulty to find
   // is 250 (1/10 percetn=medium easy) and the text the players sees when
   // finding the secret is provided by the Function "Find Letter"
-  AddSecret("hidden letter",250,#'FindLetter);
+  AddSecret("hidden letter",250,#'FindLetter /*'*/);
 
   // Adds a secret 'trap door' to this room. Its difficulty to find is
   // 750 (1/10 precent=hard) and the text the player sees when detecting
@@ -122,8 +122,7 @@ create()
 
 }
 // reset the letter to reappear every room reset
-reset()
-{
+void reset() {
  ::reset();
  Set("already_found",0);
 }

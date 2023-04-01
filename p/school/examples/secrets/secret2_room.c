@@ -7,7 +7,7 @@
 
 inherit "/std/room";
 
-create()
+varargs void create()
 {
   ::create();
   SetIntShort("outside a hut");

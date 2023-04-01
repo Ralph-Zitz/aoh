@@ -19,7 +19,7 @@ string look_bridge() {
 // another for the crack
 string look_crack() {
   if (TP) {
-    if (TP->Query("Has_looked_at_bridge")) {
+    if (({mixed})TP->Query("Has_looked_at_bridge")) {
       TP->Set("Has_looked_at_crack",1);
       return "A small crack is there. Maybe you can search it?\n";
     }
@@ -30,7 +30,7 @@ string look_crack() {
 // and one for the coin:
 string look_coin() {
   if (TP) {
-    if (TP->Query("Has_searched_crack")) {
+    if (({mixed})TP->Query("Has_searched_crack")) {
       TP->Set("Has_looked_at_coin",1);
       return "There is a coin inside the crack.\n";
     }
@@ -42,7 +42,7 @@ string look_coin() {
 object clone_coin() {
   object c;
   if (TP) {
-    if (TP->Query("Has_looked_at_coin")) {
+    if (({mixed})TP->Query("Has_looked_at_coin")) {
       c=clone_object("/std/thing");
       c->SetProperties( ([
         P_IDS: ({"coin"}),
@@ -56,13 +56,14 @@ object clone_coin() {
 }
 
 // search functions:
-OnSucceedSearchingCrack() {
+int OnSucceedSearchingCrack() {
   if (TP) TP->Set("Has_searched_crack",1);
   write("You search the crack and find a coin there.\n");
   return 1;
 }
-create() {
-  string vitem_bridge,vitem_coin,vitem_crack;
+
+varargs void create() {
+  string vitem_crack;
   ::create();
   SetIntShort("A testroom");
   SetIntLong(
@@ -70,21 +71,21 @@ create() {
     "search the crack, try to get the coins and and and...\n");
 
   // now the vitems:
-  vitem_bridge=AddVItem( ([
+  AddVItem( ([
     P_IDS:  ({"drawbridge","bridge"}),
-    P_LONG: #'look_bridge
+    P_LONG: #'look_bridge /*'*/
   ]) );
 
   vitem_crack=AddVItem( ([
     P_IDS:  ({"crack"}),
     P_ADS:  ({"small"}),
-    P_LONG: #'look_crack
+    P_LONG: #'look_crack /*'*/
   ]) );
 
-  vitem_coin=AddVItem( ([
+  AddVItem( ([
     P_IDS:  ({"coin"}),
-    P_LONG: #'look_coin,
-    PV_ITEM_LOCATION: #'clone_coin
+    P_LONG: #'look_coin /*'*/,
+    PV_ITEM_LOCATION: #'clone_coin /*'*/
   ]) );
   AddSkill(SK_SEARCH,"crack",20,vitem_crack);
 }

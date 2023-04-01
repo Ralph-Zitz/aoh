@@ -64,7 +64,7 @@ object clone_water() {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   string v_well;
   ::create();
   SetIntShort("Example room 1");
@@ -85,7 +85,7 @@ create() {
     P_LONG: "It's an old well. You see some water.\n"]) );
   AddVItem( ([
     P_IDS:  ({"water"}),
-    P_DRINK: #'clone_water,       // can be a mapping too!
+    P_DRINK: #'clone_water /*'*/,  // can be a mapping too!
     P_LONG: "Some clear water, you can drink it.\n"]),v_well);
 
   /* Exits */

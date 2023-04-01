@@ -93,7 +93,7 @@ string look_well() {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   ::create();
   SetIntShort("Example room 1");
   SetIntLong("Example room1:\n"
@@ -111,13 +111,13 @@ create() {
     P_IDS:  ({"well"}),
     P_ADS:  ({"old"}),
     P_PREPS: ({"of","from"}),
-    P_LONG: #'look_well ]) );
+    P_LONG: #'look_well /*'*/ ]) );
   v_water=AddVItem( ([
     P_IDS:  ({"water"}),
-    P_DRINK: #'clone_water,       // can be a mapping too!
+    P_DRINK: #'clone_water /*'*/, // can be a mapping too!
     P_AMOUNT: 5,                  // you can drink 5 times here, then the
                                   // well will dry out!
-    P_LONG: #'look_water_of_well ]),v_well);
+    P_LONG: #'look_water_of_well /*'*/ ]),v_well);
 
   /* Exits */
   AddExit("west","./drink1");

@@ -89,7 +89,7 @@ string look_berry() {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   ::create();
   SetIntShort("Example room 2");
   SetIntLong("Example room2:\n"
@@ -106,13 +106,13 @@ create() {
   v_bush=AddVItem( ([
     P_IDS:  ({"bush"}),
     P_PREPS: ({"of","from"}),
-    P_LONG: #'look_bush ]) );
+    P_LONG: #'look_bush /*'*/ ]) );
   v_berry=AddVItem( ([
     P_IDS:  ({"berry","berries"}),
     P_ADS:  ({"red"}),
-    P_FOOD: #'clone_berry,       // can be a mapping too!
+    P_FOOD: #'clone_berry /*'*/, // can be a mapping too!
     P_AMOUNT: 10,                // we want limit the number of berries!!!
-    P_LONG: #'look_berry ]),v_bush);
+    P_LONG: #'look_berry /*'*/ ]),v_bush);
 
   /* Exits */
   AddExit("west","./food1");

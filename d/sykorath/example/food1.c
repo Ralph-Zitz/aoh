@@ -66,7 +66,7 @@ object clone_berry() {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   string v_bush;
   ::create();
   SetIntShort("Example room 1");
@@ -87,7 +87,7 @@ create() {
   AddVItem( ([
     P_IDS:  ({"berry","berries"}),
     P_ADS:  ({"red"}),
-    P_FOOD: #'clone_berry,       // can be a mapping too!
+    P_FOOD: #'clone_berry /*'*/,     // can be a mapping too!
     P_LONG: "Some red berries, you can eat them.\n"]),v_bush);
 
   /* Exits */

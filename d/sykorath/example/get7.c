@@ -54,7 +54,7 @@ object clone_a_leaf() {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   ::create();
   SetIntShort("Example7");
   SetIntLong("Example room7:\n"
@@ -68,8 +68,8 @@ create() {
   /* details */
   AddVItem( ([
     P_IDS:  ({"leaf","leaves"}),
-    PV_ITEM_LOCATION: #'clone_a_leaf,   // closure_to_clone_object
-    P_MAX_AMOUNT: -1,                   // unlimited !!
+    PV_ITEM_LOCATION: #'clone_a_leaf /*'*/, // closure_to_clone_object
+    P_MAX_AMOUNT: -1,                       // unlimited !!
     P_LONG: "Leaves are lying around.\n" ]));
 
   /* Exits */

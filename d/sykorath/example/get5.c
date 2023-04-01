@@ -34,7 +34,7 @@ inherit BASEROOM;
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   string v_table;
   ::create();
   SetIntShort("Example5");

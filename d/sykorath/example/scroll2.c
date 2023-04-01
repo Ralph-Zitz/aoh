@@ -17,12 +17,12 @@ inherit "/d/sykorath/std/book";       // changed later
 // example:
 string QueryPageContent() {
   return
-  "Dear "+this_player()->QueryName()+"\n"
+  "Dear "+({string})this_player()->QueryName()+"\n"
   "This is the content of our scroll.\n"
   "You can use as many lines you want.\n";
 }
 
-create() {
+void create() {
   ::create();
   SetShort("an old scroll");
   SetLong("It's an old scroll. You can open/close it and you can read it.\n");

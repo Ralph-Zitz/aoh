@@ -62,7 +62,7 @@ string look_table() {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   string v_table;
   ::create();
   SetIntShort("Example2");
@@ -80,12 +80,12 @@ create() {
     P_IDS:  ({"table"}),
     P_ADS:  ({"old"}),
     P_PREPS: ({"on","from"}),
-    P_LONG: #'look_table ]) );
+    P_LONG: #'look_table /*'*/ ]) );
   vitem_knife=AddVItem( ([
     P_IDS:  ({"knife"}),
     PV_ITEM_LOCATION: "/std/weapon",  // file to clone,two knives
     P_AMOUNT: 2,                      // 2 knives available
-    P_LONG: #'look_knife ]),v_table);
+    P_LONG: #'look_knife /*'*/ ]),v_table);
 
   /* Exits */
   AddExit("east","./get3");

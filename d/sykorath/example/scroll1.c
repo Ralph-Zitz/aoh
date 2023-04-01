@@ -10,7 +10,7 @@
 
 inherit "/d/sykorath/std/book";       // changed later
 
-create() {
+void create() {
   ::create();
   SetShort("an old scroll");
   SetLong("It's an old scroll. You can open/close it and you can read it.\n");

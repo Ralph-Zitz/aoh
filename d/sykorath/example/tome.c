@@ -49,7 +49,7 @@ text for page number2
 
 inherit "/d/sykorath/std/book";       // changed later
 
-create() {
+void create() {
   ::create();
   SetShort("an old tome");
   SetLong("It's an old tome. You can open/close it and you can read it. "

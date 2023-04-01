@@ -13,19 +13,19 @@ inherit "/std/shop";
 // check if something for breads
 //******************************
 int CheckTrade(object obj) {
-  if (obj->id("bread")) return 1;
-  if (obj->id("id_bread")) return 1;
-  if (obj->id("flour")) return 1;
-  if (obj->id("milk")) return 1;
-  if (obj->id("sugar")) return 1;
-  if (obj->id("egg")) return 1;
+  if (({int})obj->id("bread")) return 1;
+  if (({int})obj->id("id_bread")) return 1;
+  if (({int})obj->id("flour")) return 1;
+  if (({int})obj->id("milk")) return 1;
+  if (({int})obj->id("sugar")) return 1;
+  if (({int})obj->id("egg")) return 1;
   return 0;
 }
 
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   ::create();
   SetIntShort("The elf-bakery");
   SetIntLong(
@@ -36,7 +36,7 @@ create() {
 
 
   /* details */
-  AddDetail(({"bakery"}),#'IntLong);
+  AddDetail(({"bakery"}),#'IntLong /*'*/);
 
   SetIndoors(1);
   SetBuyFactor(200);

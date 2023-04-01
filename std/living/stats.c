@@ -53,7 +53,7 @@ string RemoveC(string s)
 // forward remove() to all talents
 void RemoveTalent(string name,int value,string filename,mixed extradata)
 {
-string file;
+  string file;
   if (!filename) file="/std/living/talents/"+name;
   else file=filename;
   call_other(file,"RemoveTalent",this_object(),value,extradata);
@@ -62,9 +62,9 @@ string file;
 // distpach the command actions to the approriate files
 int dispatchtalent(string str)
 {
-string verb,file,name;
-string *cmds;
-int i,tmp,flag;
+  string verb,file,name;
+  string *cmds;
+  int i,tmp,flag;
 
   verb=query_verb();
   if (!member(mCmdIdx,verb)) return 0; // not defined
@@ -101,10 +101,10 @@ int i,tmp,flag;
 // Add the add_actions for the talents
 void AddTalentCommands(string name,int value,string filename,mixed extradata)
 {
-string *cmds;
-string file;
-int i;
-object ob;
+  string *cmds;
+  string file;
+  int i;
+  object ob;
 
   if (!mCmdIdx) mCmdIdx=([]);
   if (!interactive()) return;  // no actions for NPC's
@@ -148,7 +148,7 @@ object ob;
 // forward the init() to all slave talents
 void InitTalent(string name,int value,string filename,mixed extradata)
 {
-string file;
+  string file;
   if (!filename) file="/std/living/talents/"+name;
   else file=filename;
   call_other(file,"InitTalent",this_object(),value,extradata);
@@ -160,7 +160,7 @@ string file;
 // i.e. make SetTalent call to slave object and inti the talent
 void LoadTalent(string name,int value,string filename,mixed extradata)
 {
-string file;
+  string file;
   if (!filename) file="/std/living/talents/"+name;
   else file=filename;
   call_other(file,"SetTalent",this_object(),value,extradata);
@@ -313,6 +313,7 @@ int SetSkill(string skill, int value)
   SetAttr(A_SKILLS,sk);
   return res;
 }
+
 mapping QuerySkills() {return QueryAttr(A_SKILLS)||([]);}
 
 // Return the value of a spell
@@ -362,7 +363,7 @@ mapping QuerySpells() {return QueryAttr(A_SPELLS)||([]);}
 // is not processed but forwarded to all talent functions
 varargs int SetTalent(string name,int value,string filename,mixed extra)
 {
-string file;
+  string file;
 
   if (!Talents || !defTalents) CreateTalents();
 
@@ -456,6 +457,7 @@ public void init()
 {
   if (Talents && sizeof(Talents) ) walk_mapping(Talents,#'InitTalent);
 }
+
 public varargs int remove(int arg)
 {
  if (Talents || sizeof(Talents) ) walk_mapping(Talents,#'RemoveTalent);
@@ -468,6 +470,7 @@ int UseSkill(string skill,int diff)
 {
    return ({int})call_other(SKILLSERVER,"UseSkill",this_object(),skill,diff);
 }
+
 varargs int ApplySkill(string skill,int diff, mixed p)
 {
    return ({int})call_other(SKILLSERVER,"ApplySkill",this_object(),skill,diff,p);
@@ -498,6 +501,7 @@ public int ApplyValue(int value, int diff)
 public int ApplyStat(string name, int diff) {
   return ApplyValue(STAT_SCALE * QueryAttr(name), diff);
 }
+
 public int ApplySkill(string name, int diff) {
   if (!QueryAttr(name, 1))
     SetSkill(name, 0);

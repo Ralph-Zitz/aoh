@@ -51,7 +51,7 @@ varargs void create() {
   SetShopkeeper(NPC("baker"));
 
   /* Exits */
-  AddExit("","");
+  //TODO AddExit("","");
 
   /* articles */
   AddArticle("/std/food",REFRESH_REMOVE,2,

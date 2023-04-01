@@ -16,15 +16,15 @@ inherit "/std/shop";
 // check if candy
 //***************
 int CheckTrade(object obj) {
-  if (obj->id("sugar")) return 1;
-  if (obj->id("id_sweet")) return 1;
+  if (({int})obj->id("sugar")) return 1;
+  if (({int})obj->id("id_sweet")) return 1;
   return 0;
 }
 
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   ::create();
   SetIntShort("The candy shop");
   SetIntLong(
@@ -35,7 +35,7 @@ create() {
   Set(P_REGION,REGION_CITY);
 
   /* details */
-  AddDetail(({"candy shop"}),#'IntLong);
+  AddDetail(({"candy shop"}),#'IntLong /*'*/);
 
   SetIndoors(1);
   SetBuyFactor(200);

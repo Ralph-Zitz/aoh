@@ -17,8 +17,8 @@ inherit BASEROOM;
 // enter bridge
 //*************
 int enterbridge() {
-  if (call_other(SYKORATH("westgate"),"QueryBridge")=="closed") {
-    show(NAME+" tries to go east, but fails.\n");
+  if (({string})call_other(SYKORATH("westgate"),"QueryBridge")=="closed") {
+    show(({string})NAME+" tries to go east, but fails.\n");
     return 0;
   }
   write("You step onto the drawbridge.\n");
@@ -35,8 +35,8 @@ int ring(string str) {
   if (member(({"bell","copper bell","bell on staff","copper bell on staff",
     "bell of wodden staff","copper bell of wooden staff"}),str)!=-1) {
     write("You ring the bell: Ding Ding - a very clear sound.\n");
-    show(NAME+" rings the bell.\n");
-    if (call_other(SYKORATH("westgate"),"QueryBridge")!="closed") {
+    show(({string})NAME+" rings the bell.\n");
+    if (({string})call_other(SYKORATH("westgate"),"QueryBridge")!="closed") {
       write("But nothing happens.\n");
       return 1;
     }
@@ -53,7 +53,7 @@ int ring(string str) {
 //********
 string lookbridge() {
   string closed;
-  closed=call_other(SYKORATH("westgate"),"QueryBridge");
+  closed=({string})call_other(SYKORATH("westgate"),"QueryBridge");
   return "A huge drawbridge leads into Sykorath.\n"
     "The drawbridge is "+closed+".\n";
 }
@@ -61,7 +61,7 @@ string lookbridge() {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   ::create();
   SetIntShort("On a path.\n");
   SetIntLong(
@@ -72,8 +72,8 @@ create() {
   Set(P_REGION,REGION_CITY);
 
   /* details */
-  AddDetail(({"path","small path"}),#'IntLong);
-  AddDetail("drawbridge",#'lookbridge);
+  AddDetail(({"path","small path"}),#'IntLong /*'*/);
+  AddDetail("drawbridge",#'lookbridge /*'*/);
   AddDetail("east",
     "To the east lies Sykorath, one of the oldest cities in this world. You\n"
     "can go there by using the drawbridge.\n");
@@ -97,7 +97,7 @@ create() {
   AddRoomCmd("ring","ring");
 
   /* exits */
-  AddExit("east",#'enterbridge);
+  AddExit("east",#'enterbridge /*'*/);
   AddNowayMsg("east","You can't go east. The drawbridge is pulled up.\n");
 }
 

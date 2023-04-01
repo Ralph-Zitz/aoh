@@ -42,7 +42,7 @@ int climbup(string str) {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   ::create();
   SetIntShort("The second story");
   SetIntLong(
@@ -53,7 +53,7 @@ create() {
   Set(P_REGION,REGION_CITY);
 
   /* details */
-  AddDetail(({"house","huge house"}),#'IntLong);
+  AddDetail(({"house","huge house"}),#'IntLong /*'*/);
   AddDetail(({"second story","story"}),
     "This is the second story of the house.\n");
   AddDetail("up",

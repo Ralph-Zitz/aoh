@@ -11,7 +11,7 @@
 
 inherit "/room/pub";
 
-create() {
+varargs void create() {
   ::create();
   SetIntShort("the city pub");
   SetIntLong(
@@ -25,7 +25,7 @@ create() {
   Set(P_REGION,REGION_CITY);
 
   /* details */
-  AddDetail(({"pub","city pub","biggest pub","biggest city pub"}),#'IntLong);
+  AddDetail(({"pub","city pub","biggest pub","biggest city pub"}),#'IntLong /*'*/);
   AddDetail("wall",
     "A wooden sign is attached to the wall.\n");
   AddDetail("walls",
@@ -59,6 +59,6 @@ create() {
   AddItem(NPC("schluck"),REFRESH_HOME);
 
   /* exits */
-  AddExit();
+  //TODO AddExit();
 }
 

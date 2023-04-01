@@ -14,9 +14,8 @@ inherit BASEROOM;
 //****************************************
 // close the bridge (called from westgate)
 //****************************************
-int CloseBridge() {
+void CloseBridge() {
   object *objs;
-  int i;
   objs=all_inventory();         // find all objects here
   tell_room(TO,
     "Uhh what's this? The drawbridge moves sligthly to the east.\n"
@@ -49,19 +48,19 @@ int falldown() {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   ::create();
   SetIntShort("On a drawbrdige");
   SetIntLong(
-    "You are standing on a drawbridge. If you look down you see a trench.\n"
-    "To the east is the westgate of Sykorath. The path west leads directly\n"
+    "You are standing on a drawbridge. If you look down you see a trench. "
+    "To the east is the westgate of Sykorath. The path west leads directly "
     "to Silvere.\n");
   SetIndoors(0);
   SetCoordinates( ({ ({0,0,0}), C_SYKORATH }));
   Set(P_REGION,REGION_CITY);
 
   /* details */
-  AddDetail("drawbridge",#'IntLong);
+  AddDetail("drawbridge",#'IntLong /*'*/);
   AddDetail(({"sykorath","Sykorath"}),
     "It is the city to the east.\n");
   AddDetail(({"path","path west","west"}),
@@ -73,14 +72,14 @@ create() {
   AddDetail("down","It is not recommended to jump down into the trench.\n");
 
   /* commands */
-  AddRoomCmd("jump",#'jump);
+  AddRoomCmd("jump",#'jump /*'*/);
 
   /* exits */
   AddExit("east","./westgate");
   AddExit("west","./silpath1");
-  AddExit("north",#'falldown);
+  AddExit("north",#'falldown /*'*/);
   HideExit("north",1);
-  AddExit("south",#'falldown);
+  AddExit("south",#'falldown /*'*/);
   HideExit("south",1);
 }
 

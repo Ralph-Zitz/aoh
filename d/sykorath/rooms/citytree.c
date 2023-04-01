@@ -28,12 +28,12 @@ int carve(string str) {
   if (!str) return 0;
   if (member(({"oak","huge oak","very huge oak","city oak","tree"}),str)!=-1) {
     write("You carve your name into the tree.\n");
-    show(NAME+" carves a name into the tree.\n");
+    show(({string})NAME+" carves a name into the tree.\n");
     if (names==0) {
-      names=({TP->QueryName()});
+      names=({({string})TP->QueryName()});
     } else {
-      if (member(names,TP->QueryName())==-1) {
-        names+=({TP->QueryName()});
+      if (member(names,({string})TP->QueryName())==-1) {
+        names+=({({string})TP->QueryName()});
       }
     }
     return 1;
@@ -45,7 +45,7 @@ int carve(string str) {
 // climb tree
 //***********
 int climb(string str) {
-  int suc,percentage;
+  int suc,percentage = 0;
   string ret;
   notify_fail("Climb tree\n");
   if (member(({"oak","huge oak","very huge oak","city oak","tree"}),str)!=-1) {
@@ -66,7 +66,7 @@ int climb(string str) {
                          "smooth and you slide down to the earth.\n";
       }
       write(ret);
-      show(NAME+" tries to climb the tree, but fails.\n");
+      show(({string})NAME+" tries to climb the tree, but fails.\n");
       return 1;
     }
   }
@@ -89,7 +89,7 @@ string looknames()  {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   ::create();
   SetIntShort("The city oak");
   SetIntLong(
@@ -100,7 +100,7 @@ create() {
   Set(P_REGION,REGION_CITY);
 
   /* details */
-  AddDetail("city","Well you are standing in it.ßn");
+  AddDetail("city","Well you are standing in it.\n");
   AddDetail(({"oak","huge oak","very huge oak","city oak","tree","older tree",
     "oldest tree"}),
     "The oak is a very old tree. It is standing here since centuries.\n"
@@ -113,15 +113,15 @@ create() {
     "people carved their name into the tree). You can take a closer look to\n"
     "the names.\n");
   AddDetail(({"names","name","names of tree","names in tree","name of tree",
-    "name in tree"}),#'looknames);
+    "name in tree"}),#'looknames /*'*/);
   AddReadMsg(({"names","name","names of tree","names in tree","name of tree",
-    "name in tree"}),#'looknames);
+    "name in tree"}),#'looknames /*'*/);
 
   AddRoomCmd("carve","carve");
-  AddRoomCmd("climb",#'climb);
+  AddRoomCmd("climb",#'climb /*'*/);
 
   /* exits */
-  AddExit();
+  // TODO AddExit();
 }
 
 /*

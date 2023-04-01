@@ -52,7 +52,7 @@ int movelever(string str) {
       write("You move the lever into the upper position.\n");
       bridge="open";
     }
-    show(NAME+" operates with the lever.\n");
+    show(({string})NAME+" operates with the lever.\n");
     call_out("openbridge",1);
     return 1;
   }
@@ -79,7 +79,7 @@ string looklever() {
 //*******
 // create
 //*******
-create() {
+varargs void create() {
   ::create();
   bridge="closed";
   SetIntShort("The west gate.\n");
@@ -92,23 +92,23 @@ create() {
   Set(P_REGION,REGION_CITY);
 
   /* details */
-  AddDetail(({"gate","west gate"}),#'IntLong);
+  AddDetail(({"gate","west gate"}),#'IntLong /*'*/);
   AddDetail(({"city","outer city"}),
     "The outer city is more to the east.\n");
-  AddDetail(({"drawbridge","huge drawbridge"}),#'lookdrawbridge);
-  AddDetail("lever",#'looklever);
+  AddDetail(({"drawbridge","huge drawbridge"}),#'lookdrawbridge /*'*/);
+  AddDetail("lever",#'looklever /*'*/);
 
   /* commands */
-  AddRoomCmd("move",#'movelever);
+  AddRoomCmd("move",#'movelever /*'*/);
 
   /* exits */
   AddNowayMsg("west",
     "You bump against the closed drawbridge. Ouch, that hurts.\n");
-  AddExit("west",#'enterbridge);
+  AddExit("west",#'enterbridge /*'*/);
   AddExit("east","./roadw1");
 }
 
-reset() {
+void reset() {
   ::reset();
   if (bridge=="open") {
     tell_room(TO,"The drawbridge closes.\n");

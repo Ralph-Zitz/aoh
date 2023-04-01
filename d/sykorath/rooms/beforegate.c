@@ -17,10 +17,10 @@ inherit BASEROOM;
 //*******
 int goeast() {
   // check the gate if it is open!
-  if (call_other(GATEROOM,"QueryGate") == "open") {
-    tell_room(TO,"The gate closes behind "+NAME+".\n");
+  if (({string})call_other(GATEROOM,"QueryGate") == "open") {
+    tell_room(TO,"The gate closes behind "+({string})NAME+".\n");
     call_other(GATEROOM,"SetGate","closed");
-    return TP->move(SYKORATH("maingate"),M_GO,"through the gate");
+    return ({int})TP->move(SYKORATH("maingate"),M_GO,"through the gate");
   }
   return ME_NO_MOVE;       // use Nowaymsg for "east" !
 }
@@ -33,7 +33,7 @@ int pull(string str) {
   if (member(({"rope","the rope"}),str) != -1) {
     write("You pull the rope.\n"
       "Doing doing.\n");
-    show(NAME+" pulls the rope.\n");
+    show(({string})NAME+" pulls the rope.\n");
     call_out("view_man",2);
     return 1;
   }
@@ -43,7 +43,7 @@ int pull(string str) {
 
 void view_man() {
   string gate;
-  gate=call_other(GATEROOM,"QueryGate");
+  gate=({string})call_other(GATEROOM,"QueryGate");
   if (gate=="closed") {
     tell_room(TO,
     "An bent old man appears and asks about your business:\n"
@@ -85,10 +85,10 @@ int gettake(string str) {
 string lookgate() {
   return
   "It's a huge gate made of oak wood and it is "+
-    call_other(GATEROOM,"QueryGate")+".\n";
+    ({string})call_other(GATEROOM,"QueryGate")+".\n";
 }
 
-create() {
+varargs void create() {
   ::create();
   SetIntShort("Before a huge gate");
   SetIntLong(
@@ -99,7 +99,7 @@ create() {
   Set(P_REGION,REGION_CITY);
 
   /* details */
-  AddDetail(({"gate","huge gate"}),#'lookgate);
+  AddDetail(({"gate","huge gate"}),#'lookgate /*'*/);
   AddDetail(({"two towers","two huge towers"}),
     "Yes - two towers, one to the left, one to the right.\n");
   AddDetail(({"towers","watchtowers"}),
@@ -119,16 +119,16 @@ create() {
     "golden bell"}),
     "The bell is made of pure gold. The bell will give a clear sound if you\n"
     "pull the rope.\n");
-  AddDetail("town",#'IntLong);
+  AddDetail("town",#'IntLong /*'*/);
 
   /* commands */
-  AddRoomCmd("pull",#'pull);
-  AddRoomCmd("get",#'gettake);
-  AddRoomCmd("take",#'gettake);
+  AddRoomCmd("pull",#'pull /*'*/);
+  AddRoomCmd("get",#'gettake /*'*/);
+  AddRoomCmd("take",#'gettake /*'*/);
 
   /* exits */
   AddNowayMsg("east","You bump against the closed gate. Ouch, that hurts.\n");
-  AddExit("east",#'goeast);
+  AddExit("east",#'goeast /*'*/);
   AddExit("west","./roadw3");
 }
 

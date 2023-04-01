@@ -11,7 +11,7 @@
 
 inherit BASEROOM;
 
-create() {
+varargs void create() {
   ::create();
   SetIntShort("In a huge house");
   SetIntLong(
@@ -23,7 +23,7 @@ create() {
   Set(P_REGION,REGION_CITY);
 
   /* details */
-  AddDetail(({"house","huge house"}),#'IntLong);
+  AddDetail(({"house","huge house"}),#'IntLong /*'*/);
 
   /* exits */
   AddDoor("south","./beforehugehouse",
@@ -45,12 +45,12 @@ create() {
 //***************
 // close the door
 //***************
-reset() {
+void reset() {
   object door;
   ::reset();
   door=present("door");
   if (door) {
-    if (door->QueryLockState()==LOCK_OPEN) {
+    if (({int})door->QueryLockState()==LOCK_OPEN) {
       tell_room(TO,"You hear a loud BUMM as the door is closed.\n");
       door->SetLockState(LOCK_CLOSED);
     }

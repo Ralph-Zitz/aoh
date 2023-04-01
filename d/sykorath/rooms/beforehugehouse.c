@@ -13,7 +13,7 @@
 
 inherit BASEROOM;
 
-create() {
+varargs void create() {
   ::create();
   SetIntShort("Right before a house");
   SetIntLong(
@@ -24,7 +24,7 @@ create() {
   Set(P_REGION,REGION_CITY);
 
   /* details */
-  AddDetail(({"road","north south road","north-south road"}),#'IntLong);
+  AddDetail(({"road","north south road","north-south road"}),#'IntLong /*'*/);
   AddDetail(({"house","huge house"}),
     "There is a door in the wall of the house.\n");
   AddDetail(({"wall","wall of house","wall of the house"}),
@@ -56,12 +56,12 @@ create() {
 //***************
 // close the door
 //***************
-reset() {
+void reset() {
   object door;
   ::reset();
   door=present("door");
   if (door) {
-    if (door->QueryLockState()==LOCK_OPEN) {
+    if (({int})door->QueryLockState()==LOCK_OPEN) {
       tell_room(TO,"You hear a loud BUMM as the door is closed.\n");
       door->SetLockState(LOCK_CLOSED);
     }

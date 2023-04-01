@@ -21,8 +21,8 @@ int QueryIsSolved() { return is_solved; }     // read only
 //*******
 // create
 //*******
-create(){
-  if (::create()) return 1;
+void create(){
+  ::create();
   SetName("Go player");
   AddId("player");
   AddAdjective("go");
@@ -50,14 +50,14 @@ create(){
 //**************************
 // one game after each reset
 //**************************
-reset() {
+varargs void reset() {
   ::reset();
   current_problem = random(6);
   is_solved = 0;
 }
 
 // add some special hacks to allow looking at the board and the problem
-init(){
+void init(){
   ::init();
   add_action("examine","examine");
   add_action("examine","look");
@@ -69,12 +69,12 @@ init(){
 //**************************
 // return the actual problem
 //**************************
-show_problem(){
+string show_problem(){
   if (is_solved) {
-    show(NAME+" tries to examine the go problem.\n");
+    show(({string})NAME+" tries to examine the go problem.\n");
     return "THe Go player looks a little bit tired.\n";
   }
-  show(NAME+" examines the go problem.\n");
+  show(({string})NAME+" examines the go problem.\n");
   return "The board looks like this:\n\n"
     + ({ "5|.........\n"
          "4|....OOO..\n"
@@ -181,8 +181,8 @@ int play(string arg){
   if(is_solved){
     tell_room(environment(),
       "The Go Player says: Great idea!  That solves this problem.\n");
-    show(NAME+" solves the go players problem.\n");
-    if(QUESTMASTER->QueryQuestSolved("go_problem",TP) == 0){
+    show(({string})NAME+" solves the go players problem.\n");
+    if(({int})QUESTMASTER->QueryQuestSolved("go_problem",TP) == 0){
        QUESTMASTER->SetPlayerQuest("go_problem",TP);
        TP->AddXP(100);
        write("You feel more experienced now.\n");

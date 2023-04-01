@@ -9,7 +9,7 @@ inherit "/std/thing";
 //*******
 // create
 //*******
-create() {
+void create() {
   ::create();
   SetShort("Go rules");
   SetLong("A list of the rules for playing Go.\n"
@@ -24,7 +24,7 @@ create() {
 //********************
 // add special command
 //********************
-init() {
+void init() {
   ::init();
   add_action("cmd_rule", "rule");
 }
@@ -39,7 +39,7 @@ int cmd_rule(string str) {
     return 0; }
   if (sscanf(str, "%d", n) != 1) return 0;
   if (n < 1 || n > 5) { write("Not that many rules.\n"); return 1; }
-  show(NAME+ " reads rule " + n + "\n");
+  show(({string})NAME+ " reads rule " + n + "\n");
   write("You read rule "+n+":\n");
   cat("/d/sykorath/quests/go/rule" + n);
   return 1;

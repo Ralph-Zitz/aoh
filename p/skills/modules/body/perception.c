@@ -16,6 +16,7 @@
 
 #define TO this_object()
 #define TP this_player()
+#define DBG(x) if(find_player("nostradamus")) tell_object(find_player("nostradamus"), x)
 
 public mixed Query(string arg); // std/base
 public varargs mixed Set(string pn, mixed arg, int sc); // std/base
@@ -30,8 +31,6 @@ private void CheckSecret(string secret,mixed desc,int difficulty,
   int value;
   int nr;
   string s;
-
-  printf("CheckSecret\n");
 
   if (member(finder, who)>=0)
   {
@@ -52,7 +51,7 @@ private void CheckSecret(string secret,mixed desc,int difficulty,
   }
   else if (closurep(desc))
   {
-    s=funcall(desc,secret,value,who);
+    s=funcall(desc,secret,who,value);
   }
   else if (pointerp(desc) )
   {

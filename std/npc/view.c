@@ -370,7 +370,7 @@ public varargs mixed Sense (mixed what, string type, int flags)
   det = ({});
   k = 0; // hidden flag
   if (env && sizeof(what) && -1 != member(what, env)) {
-    det = ({mixed *})env->QueryIndoors() ? ({ "floor", "ground" }) : ({ "ground" });
+    det = ({int})env->QueryIndoors() ? ({ "floor", "ground" }) : ({ "ground" });
     det = det & tmp2;
     k = sizeof(det); // Hidden flag
   }

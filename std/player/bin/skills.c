@@ -21,7 +21,6 @@
 #define TP this_player()
 #define SLIB "/lib/string"
 
-
 private string skillfun( string skill ) {
   int val;
 
@@ -29,13 +28,12 @@ private string skillfun( string skill ) {
   if (val==0) return sprintf("%15.15s: unknown",capitalize(skill));
   return sprintf("%15.15s: %-d",capitalize(skill),val);
 }
+
 private string simple( string class ) {
 
   return sprintf("----- %s (%s)",
         capitalize(class),({string})SKILLSERVER->QueryClassInfo(class));
 }
-
-
 
 public int main( string arg ) {
   string s;
@@ -55,7 +53,8 @@ public int main( string arg ) {
   s_classes = map( classes, #'simple /*'*/ );
 
   s="";
-  s+=({string})SLIB->cadjust(" "+({string})TP->QueryShort()+"'s skills ",75,"-=")+"\n";
+  s+=({string})SLIB->cadjust(" "+add_gen(({string})TP->QueryShort())+
+		  " skills ",({int})TP->QueryPageWidth(),"-=")+"\n";
 
   for (i=0;i<sizeof(classes);i++)
   {
@@ -78,7 +77,7 @@ public int main( string arg ) {
     }
     if (i+1<sizeof(classes)) s+="\n";
   }
-  s+=({string})SLIB->mkstr(75,"-=")+"\n";
+  s+=({string})SLIB->mkstr(({int})TP->QueryPageWidth(),"-=")+"\n";
   msg_write( CMSG_GENERIC|MMSG_MORE,s);
   seteuid(0);
 

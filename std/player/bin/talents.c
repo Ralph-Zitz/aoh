@@ -51,7 +51,9 @@ public int main( string arg ) {
   }
   else 
   {
-    s=({string})SLIB->cadjust(" "+({string})TP->QueryShort()+"'s talents ",75,"-=")+"\n";  }
+    s=({string})SLIB->cadjust(" "+add_gen(({string})TP->QueryShort())+
+		    " talents ",({int})TP->QueryPageWidth(),"-=")+"\n";
+  }
 
   for (i=0;i<sizeof(idx);i+=3)
   {
@@ -68,7 +70,7 @@ public int main( string arg ) {
           s+=sprintf("   %-24.24s\n",GetTString(idx[i]));
   }
 
-  s+=({string})SLIB->mkstr(75,"-=")+"\n";  msg_write( CMSG_GENERIC|MMSG_MORE,s);  seteuid(0);
+  s+=({string})SLIB->mkstr(({int})TP->QueryPageWidth(),"-=")+"\n";  msg_write( CMSG_GENERIC|MMSG_MORE,s);  seteuid(0);
   return 1;
 }
 

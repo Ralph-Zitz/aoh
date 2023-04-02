@@ -455,14 +455,14 @@ public void create()
 
 public void init()
 {
-  if (Talents && sizeof(Talents) ) walk_mapping(Talents,#'InitTalent);
+  if (Talents && sizeof(Talents) ) walk_mapping(Talents,#'InitTalent /*'*/);
 }
 
 public varargs int remove(int arg)
 {
- if (Talents || sizeof(Talents) ) walk_mapping(Talents,#'RemoveTalent);
- Talents=([]);
- return 0;
+  if (Talents || sizeof(Talents) ) walk_mapping(Talents,#'RemoveTalent /*'*/);
+  Talents=([]);
+  return 0;
 }
 
 //-------- Skill forwarding -------------------------------------------------

@@ -45,18 +45,14 @@ public int main( string arg ) {
   seteuid(getuid());
   idx=({string *})TP->QueryTalents()||({});
 
-  if (!idx || !sizeof(idx))
-  {
+  if (!idx || !sizeof(idx)) {
     s="Seems, you have no talents.\n";
-  }
-  else 
-  {
+  } else {
     s=({string})SLIB->cadjust(" "+add_gen(({string})TP->QueryShort())+
 		    " talents ",({int})TP->QueryPageWidth(),"-=")+"\n";
   }
 
-  for (i=0;i<sizeof(idx);i+=3)
-  {
+  for (i=0;i<sizeof(idx);i+=3) {
       if (i+2<sizeof(idx))
           s+=sprintf("   %-24.24s %-24.24s %-24.24s\n",
              GetTString(idx[i]),
@@ -70,10 +66,9 @@ public int main( string arg ) {
           s+=sprintf("   %-24.24s\n",GetTString(idx[i]));
   }
 
-  s+=({string})SLIB->mkstr(({int})TP->QueryPageWidth(),"-=")+"\n";  msg_write( CMSG_GENERIC|MMSG_MORE,s);  seteuid(0);
+  s+=({string})SLIB->mkstr(({int})TP->QueryPageWidth(),"-=")+"\n";
+  msg_write( CMSG_GENERIC|MMSG_MORE,s);
+  seteuid(0);
   return 1;
 }
-
-
-
 

@@ -6,7 +6,7 @@
 #endif
 
 #include <stdrooms.h>
-#include <properties.h>
+#include <macros.h>
 #include <msgclass.h>
 #include <mxp.h>
 #include <config.h>
@@ -19,6 +19,9 @@ inherit "/std/room";
 static int my_efun(string s);
 static int my_reg(string s);
 static void my_test(string s);
+static int my_skill(string s);
+public int ApproxValue(int x, int y0, int app, int dcc);
+public varargs int LearnAttr(string aname, string skill, int app, int dcc, int sc);
 
 public varargs void create () {
   ::create();
@@ -29,6 +32,7 @@ public varargs void create () {
   );
   AddRoomCmd("efun", #'my_efun /*'*/);
   AddRoomCmd("reg", #'my_reg /*'*/);
+  AddRoomCmd("sk", #'my_skill /*'*/);
   AddExit("out", STARTROOM);
 }
 
@@ -47,4 +51,38 @@ static int my_reg(string s) {
 static int my_efun(string s) {
   send_discord(({string})this_player()->QueryName() + ": " + s);
   return 1;
+}
+
+static int my_skill(string s) {
+  
+  int i = 1;
+//  for (int u = 0; u < 500; u++) {
+//    i += LearnAttr("skills", "climbing", 1000, i, 0);
+    i = ApproxValue(1, 1, 1000, 300);
+    msg_write(CMSG_GENERIC, sprintf("Skill-level: %d\n", i));
+//  }
+  return 1;
+}
+
+public varargs int LearnAttr(string aname, string skill, int app, int dcc, int sc) {
+  int i;
+  if (!m_contains(&i, ({mapping})TP->QueryAttr(aname), skill))
+     return notify_fail("Skill is unknown\n", NOTIFY_ILL_ARG);
+  i += (app - i + dcc + 1) / dcc;
+  return i;
+  //return SetAttr(aname, i, sc);
+}
+
+public int ApproxValue(int x, int y0, int app, int dcc) {
+  float fx, fapp, fdcc, t1, t2;
+
+  if(y0 == app) return x;
+  fx   = to_float(x);
+  fapp = to_float(app);
+  fdcc = to_float(dcc);
+  t1    = fapp + fdcc / 2.0;
+  t2    = t1 - t1 * exp(fx / dcc - log(1.0 - y0 / t1));
+  printf("fx=%f, fapp=%f, fdcc=%f, t1=%f, t2=%f\n",fx,fapp,fdcc,t1,t2);
+  if(y0 < app) return t2 < fapp ? to_int(-t2) : app;
+  else         return t2 > fapp ? to_int(t2) : app;
 }

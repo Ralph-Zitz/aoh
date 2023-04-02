@@ -132,7 +132,7 @@ public string get_skill(string str)
   else
     amnt = "";
   switch(val)
-    {
+  {
      case 100:
       return "absolutely perfect"+amnt;
      case 95..99:
@@ -163,9 +163,8 @@ public string get_skill(string str)
       return "hopeless"+amnt;
      default:
       return "unknown"+amnt;
-    }
-    return "unknown"+amnt;
   }
+}
 
 public int cmd_skills(string str)
 // May be added to list the general skills

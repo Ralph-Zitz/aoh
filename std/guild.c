@@ -58,10 +58,10 @@ inherit GUILD_PATH("level");
 #define SYM(x) 'x //'
 #define CL_PROGN #', //'
 
-private static string guildobject, // the filename of the guildobject
+private nosave string guildobject, // the filename of the guildobject
                       guildclass,  // e. g. Cleric
                       guildname;   // e. g. Cleric's Guild
-private static mixed  sign,list;   // ({({<ids>}),<descr>,<room>})
+private nosave mixed  sign,list;   // ({({<ids>}),<descr>,<room>})
 
 protected int check_for_guildob(object ob)
 {

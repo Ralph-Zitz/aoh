@@ -246,8 +246,8 @@ int cmd_skills(string str) {
                             "but nothing happens...\n",NOTIFY_NOT_OBJ);
             }
             // if we get a string returned we notify_fail it !
-            if (erg && stringp(erg)) return notify_fail(erg,
-                    NOTIFY_NOT_VALID);
+            if (erg && stringp(erg))
+                return notify_fail(erg, NOTIFY_NOT_VALID);
         }
         else {
             // call our room first

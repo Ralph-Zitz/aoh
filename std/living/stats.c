@@ -443,9 +443,6 @@ string *QueryDefTalents() {return defTalents;}
 
 mapping QueryCmdIdx() {return mCmdIdx;}
 
-
-
-
 //---------------------------------------------------------------------------
 // Main functions
 public void create()
@@ -475,7 +472,6 @@ varargs int ApplySkill(string skill,int diff, mixed p)
 {
    return ({int})call_other(SKILLSERVER,"ApplySkill",this_object(),skill,diff,p);
 }
-
 
 #ifdef NF
 //---------------------------------------------------------------------------

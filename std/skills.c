@@ -124,7 +124,6 @@ int cmd_skills(string str) {
         return notify_fail("BUG: This skill is not yet available.\n",
                 NOTIFY_NOT_VALID);
 
-
     sk_map=m_skills[skill];
 
     if (!sk_map) {
@@ -135,7 +134,6 @@ int cmd_skills(string str) {
             return notify_fail("Seems you can not do that now.\n",
                     NOTIFY_NOT_OBJ);
     }
-
 
     idx=m_indices(sk_map);
 
@@ -151,7 +149,6 @@ int cmd_skills(string str) {
             null_p=i;
             continue;
         }
-
 
         // printf("i=%d idx[i]=%s ids=%O\n",i,idx[i],ids);
 

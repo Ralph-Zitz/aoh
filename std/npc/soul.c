@@ -1624,7 +1624,7 @@ public int do_feel( string p )
 
     remoteFeel = 0;
     // Emote
-    if ( v && v[ 0 ] == ':' )
+    if ( v && sizeof(v) > 0 && v[ 0 ] == ':' )
         return do_emote( ( v[ 1.. ] + (  p ? " " + p : "" ) ) );
     if ( uncertain_part )
     {

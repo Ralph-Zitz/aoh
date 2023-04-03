@@ -103,7 +103,7 @@ public varargs status UseSkill(object pl,
                                string name,
                                int chance,
                                int percentage,
-			       int maxlearn)
+                               int maxlearn)
 // Same as CheckSkill, but the skill might advance.
 {
   int p;

@@ -30,6 +30,9 @@ inherit "/std/base";
 inherit "/std/room/vget";         // get support
 inherit "/std/room/vdrink";       // drink support
 inherit "/std/room/vfood";        // food support
+#ifdef __SQLITE__
+inherit "/p/daemons/room_d";      // room_d 
+#endif /* __SQLITE__ */
 
 /* -------------------------------------------------------------------------
  * Region handling
@@ -183,10 +186,11 @@ private int pNumID;
 
 public int QueryNumID() {
   if (!pNumID)
-    return pNumID = ({int})ROOM_D->QueryRoomID(TO);
+    return pNumID = QueryRoomID(TO);
   return pNumID;
 }
 
+/*
 public int SetNumID(int i)
 {
   if (!QueryNumID() || i < 1)
@@ -196,6 +200,7 @@ public int SetNumID(int i)
   else
     return pNumID = ({int})ROOM_D->InsertRoomID(i, TO);
 }
+*/
 
 public varargs void create(int noreplace) {
   if (!noreplace &&
@@ -207,6 +212,11 @@ public varargs void create(int noreplace) {
   AddClassId(C_ROOM);
   skills::create();  // must be AFTER AddClassId
   seteuid(getuid());
+#ifdef __SQLITE__
+  room_d::create();
+  if (load_name(TO) != "/std/room")
+      pNumID = InsertRoom(TO);
+#endif /* __SQLITE__ */
   Set(P_HELP_MSG, "There is nothing special about this room.\n");
   pIntMap="/d/silvere/doc/maps/harbour.map";
   // support for new commands: - Magictcs - 21 apr 98
@@ -224,7 +234,13 @@ public int class_id (string try_id) {
   return norm_id(try_id) == C_ROOM;
 }
 
-public varargs int remove (int arg) { return cleaning::remove(arg); }
+public varargs int remove (int arg) {
+#ifdef __SQLITE__
+    if (load_name(TO) != "/std/room")
+        room_d::remove();
+#endif /* __SQLITE__ */
+    return cleaning::remove(arg);
+}
 
 public int clean_up (int ref) { return cleaning::clean_up(ref); }
 

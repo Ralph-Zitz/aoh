@@ -23,7 +23,6 @@ public varargs void create(int repl)
    string dawnmsg;
    HARBOUR_BASEROOM::create(repl);
    port::create();
-   Set(P_NUM_ID, 1);
    Set(P_INDOORS,0);
 
    Set(P_INT_SHORT,"The docks");

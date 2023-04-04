@@ -72,7 +72,6 @@ varargs void create()
 {
    ::create();
    Set(P_INDOORS,1);
-   Set(P_NUM_ID, 4);
    Set(P_INT_SHORT,"Tower entrance");
    Set(P_INT_LONG,
 "This is a large room at the basement of the tower and you are "

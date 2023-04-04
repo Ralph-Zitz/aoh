@@ -163,7 +163,6 @@ varargs void create()
 {
    ::create();
    Set(P_INDOORS,0);
-   Set(P_NUM_ID, 2);
    Set(P_INT_SHORT,"The quay at Silvere");
    Set(P_INT_LONG,
       "The quay runs along the murky water out to one of the towers "

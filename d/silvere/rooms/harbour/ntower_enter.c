@@ -190,7 +190,6 @@ varargs void create()
 {
    ::create();
    Set(P_INDOORS,0);
-   Set(P_NUM_ID, 3);
    Set(P_INT_SHORT,"Before a high tower");
    Set(P_INT_LONG,
       "The easterly side of the quay ends abruptly before a square, stone "

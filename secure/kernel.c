@@ -82,6 +82,7 @@
 #include "/secure/kernel/query_editing.ic"
 #include "/secure/kernel/query_input_pending.ic"
 #include "/secure/kernel/query_idle.ic"
+#include "/secure/kernel/set_buffer_size.ic"
 #else
 #include "/secure/sparekernel/terminal_colour.ic"
 #include "/secure/sparekernel/comm.ic"
@@ -112,6 +113,7 @@
 #include "/secure/sparekernel/query_editing.ic"
 #include "/secure/sparekernel/query_input_pending.ic"
 #include "/secure/sparekernel/query_idle.ic"
+#include "/secure/sparekernel/set_buffer_size.ic"
 #endif
 
 /*-------------------------------------------------------------------------*/

@@ -175,7 +175,7 @@ public void Bing (int when) {
     for ( ; i < sizeof(u); i++)
         msg_object( u[i], CMSG_ROOM,
                 "Another hour has passed. You hear the Silvere clocktower in "
-                "the distance.\n It's now "  + h + /* " o'clock "+ */
+                "the distance.\nIt's now "  + h + /* " o'clock "+ */
                 ampm+dayt+".\n");
 }
 

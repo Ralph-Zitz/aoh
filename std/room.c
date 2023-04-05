@@ -186,8 +186,12 @@ private int pNumID;
 
 public int QueryNumID() {
   if (!pNumID)
+#if __SQLITE__
     return pNumID = QueryRoomID(TO);
   return pNumID;
+#else
+  return pNumID = 0;
+#endif
 }
 
 /*

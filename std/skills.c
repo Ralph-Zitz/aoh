@@ -111,7 +111,6 @@ int cmd_skills(string str) {
     mixed skill,ids,erg;
 
     skill_verb=query_verb();
-    //write("cmd_skills:: skill="+skill_verb+"\n");
 
     if (!TP || !skill_verb)
         return 0;
@@ -190,11 +189,6 @@ int cmd_skills(string str) {
             }
         }
     } // end for loop
-
-    //  write("skills:: found_p="+found_p+" null_p="+null_p+"\n");
-    //  printf("         str=[%s] id_str=[%s] extra_str=[%s]\n",
-    //    str,id_str||"NULL",extra_str||"NULL");
-
 
     // Only the NULL entry is found
     if (found_p<0 && null_p>=0)
@@ -285,7 +279,6 @@ public void create() {
     // Find out what we are and add the correct actions
     // TODO: Maybe this idendification has to be improved later on
     cids=({string *})TO->QueryClassIds()||({});
-    //printf("Classids=%O\n",cids);
     m_verbs=({});
     // Loop over all class_ids to add all skills of the object
     for (i=0;i<sizeof(cids);i++) {
@@ -307,19 +300,14 @@ public void create() {
         foreach(string v : new_verbs)
             if (member(m_verbs, v) == -1)
                 m_verbs += ({v});
-        //    sect=intersect_alist(m_verbs,new_verbs);
-        //    m_verbs=m_verbs+new_verbs-sect+sect;
     }
 }
 
 public void init() {
     int i;
 
-    // if (!is_clone(this_object())) return;
-
     // Add the skill actions
     for (i=0;i<sizeof(m_verbs);i++) {
         add_action("cmd_skills",m_verbs[i]);
-        // write("Action:"+object_name(this_object())+": "+m_verbs[i]+" added\n");
     }
 }

@@ -78,7 +78,8 @@ public void more_prompt (int m_line, int m_chunk) {
   msg_write( CMSG_GENERIC|MMSG_DIRECT|MMSG_NOWRAP,
 	     "=== More: Lines "+m_line+".."+(m_line+m_chunk-1)
        +" [CR,u,f,l,q,/<regexp>,<line>,?] " );
-  this_player()->print_eor();
+//  this_player()->print_eor();
+  this_player()->print_ga();
 }
 
 /*--------------------------------------------------------------------------

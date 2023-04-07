@@ -204,6 +204,7 @@ static int has_telnet_option(int option, int remote);
 public void init_mxp();
 public mixed *query_terminal();
 public int QueryWantsMXP();
+public int query_prompt_iacga();
 
 // TODO: it's not quite complete
 private string telnet_to_text(int command, int option, int* args) {
@@ -811,11 +812,11 @@ nosave int pending_noecho;
 nosave int last_noecho;
 nosave int iacga;
 
-int query_prompt_iacga() {
+public int query_prompt_iacga() {
     return iacga;
 }
 
-int set_prompt_iacga(int i) {
+public int set_prompt_iacga(int i) {
     return iacga = i;
 }
 
@@ -950,6 +951,11 @@ void print_eor() {
   int state = Q_LOCAL(ts[TELOPT_EOR, TS_STATE]);
   if (state == YES || state == WANT_NO)
 	  efun::binary_message(({ IAC, EOR }), 1);
+}
+
+void print_ga() {
+  if (query_prompt_iacga())
+    efun::binary_message(({ IAC, GA }), 2);
 }
 
 // H_PRINT_PROMPT driver hook.

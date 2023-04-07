@@ -24,6 +24,7 @@
 #include <driver/regexp.h>
 #include <driver/input_to.h>
 #include <driver/driver_info.h>
+#include <driver/telnet.h>
 
 /* the max. size of the editing-buffer */
 #define MAX_BUFFER 5000
@@ -43,7 +44,10 @@ static varargs void buffer_more_handler( string arg, int left );  /* fwd */
 public varargs void receive( string msg, int class, int indent, int time );
 public varargs int CanSee( object env );       /* std/living/description */
 void print_eor();                              /* std/player/telnet_neg  */
+void print_ga();                               /* std/player/telnet_neg  */
 public mixed query_terminal();                 /* std/player/telnet_neg  */
+int set_prompt_iacga(int i);                   /* std/player/telnet_neg  */
+int query_prompt_iacga();                      /* std/player/telnet_neg  */
 public mixed QueryMXP();                       /* std/player/mxp         */
 protected string process_mxp(string msg, mapping attributes);
 private string calc_item_id(int arg, mapping attributes);
@@ -134,6 +138,8 @@ public string SetTerminal(string str) {
     terminal = term[1][0];
   else
     terminal = str;
+  if (strstr(terminal, "mudlet") == 0)
+    set_prompt_iacga(1);
   return terminal;
 }
 public string QueryTerminal() { return terminal; }
@@ -568,9 +574,14 @@ public varargs mixed print_prompt() {
     value = process_mxp(MSG_PROMPT(value), ([]));
     /* translate the color macros and do the output */
     value = translate(value, CMSG_GENERIC, 0);
-    efun::tell_object(this_object(), value);
+    if (query_prompt_iacga()) {
+        binary_message(to_bytes(value, "UTF-8"), 1);
+        print_ga();
+    }
+    else
+        efun::tell_object(this_object(), value);
   }
-  print_eor();
+  //print_eor();
 
   /* the gd expects string return value for prompt closure, but we return
    * 0. That results in no prompt beeing printed.
@@ -632,7 +643,8 @@ static varargs void buffer_more_handler( string arg, int left ) {
 		       sprintf( "=== BMore: %d lines left [CR,p,q,?] ",
 			        left ) );
     input_to( "buffer_more_handler", 0, left, INPUT_PROMPT );
-    print_eor();
+    //print_eor();
+    print_ga();
     return;
   }
   else {
@@ -640,7 +652,8 @@ static varargs void buffer_more_handler( string arg, int left ) {
 		       sprintf( "=== BMore: %d lines left [CR,p,q,?] ",
 			        left ) );
     input_to( "buffer_more_handler", 0, left, INPUT_PROMPT );
-    print_eor();
+    //print_eor();
+    print_ga();
     return;
   }
 
@@ -652,7 +665,8 @@ static varargs void buffer_more_handler( string arg, int left ) {
 		       sprintf( "=== BMore: %d lines left [CR,p,q,?] ",
 				ts ) );
     input_to( "buffer_more_handler", 0, ts, INPUT_PROMPT );
-    print_eor();
+    //print_eor();
+    print_ga();
     return;
   }
 }

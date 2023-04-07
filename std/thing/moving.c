@@ -15,7 +15,6 @@
 #define THIS  this_object()
 #define ENV   environment
 #define PREV  previous_object()
-#define DBG(x)  if(find_player("nostradamus")) tell_object(find_player("nostradamus"), x)
 
 //--- global variables ------------------------------------------------------
 
@@ -210,7 +209,6 @@ public void follow (mixed dest, int method, mixed extra) {
 
 public int clean_up(int ref) {
   mixed rc;
-//  DBG(sprintf("%O->clean_up(ref:%O)\n", this_object(), ref));
   if ((call_resolved(&rc, THIS, "QueryProp", P_CLEAN_UP) && !rc)
       || (ENV() && query_once_interactive(ENV()))
      )

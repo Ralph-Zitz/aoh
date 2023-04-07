@@ -331,9 +331,9 @@ int channels(string str) {
 #endif
 		default:
 #ifdef FEATURES_INTERMUD3
-			return notify_fail(process_mxp("Usage: channels [<all>|<local>|<intermud>|<intermud-3>]\n", TPMXP)), 0;
+			return notify_fail("Usage: channels [<all>|<local>|<intermud>|<intermud-3>]\n"), 0;
 #else
-			return notify_fail(process_mxp("Usage: channels [<all>|<local>|<intermud>]\n", TPMXP)), 0;
+			return notify_fail("Usage: channels [<all>|<local>|<intermud>]\n"), 0;
 #endif
 	}
 

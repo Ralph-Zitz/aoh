@@ -45,7 +45,7 @@ public varargs int CanSee( object env );       /* std/living/description */
 void print_eor();                              /* std/player/telnet_neg  */
 public mixed query_terminal();                 /* std/player/telnet_neg  */
 public mixed QueryMXP();                       /* std/player/mxp         */
-protected string new_process_mxp(string msg, mapping attributes);
+protected string process_mxp(string msg, mapping attributes);
 private string calc_item_id(int arg, mapping attributes);
 /* -------------------------------------------------------------------------
  * Global vars - saved
@@ -420,9 +420,8 @@ public varargs void receive( string msg, int class, int indent, int time ) {
     }
 
     msg = translate( msg, class, indent );
-    msg = new_process_mxp(msg, ([]));
+    msg = process_mxp(msg, ([]));
     efun::tell_object(this_object(), msg);
-    //efun::tell_object( this_object(), process_mxp(msg, TOMXP, 1));
   }
 }
 
@@ -566,7 +565,7 @@ public varargs mixed print_prompt() {
       value = incmsg + "\n" + value;
       incmsg = 0;
     }
-    value = new_process_mxp(MSG_PROMPT(value), ([]));
+    value = process_mxp(MSG_PROMPT(value), ([]));
     /* translate the color macros and do the output */
     value = translate(value, CMSG_GENERIC, 0);
     efun::tell_object(this_object(), value);
@@ -919,8 +918,7 @@ public void InitColourTranslation() {
     ({mapping})COLOUR_D->QueryClassTrans( pClassColors, "ansi" );
 }
 
-protected string new_process_mxp(string msg, mapping attributes) {
-#if 1
+protected string process_mxp(string msg, mapping attributes) {
     msg = regreplace(msg, VT_ESC "\\[![0-9]+(;[0-9]+)*[st]",
             function string(string sub) {
                 if (!QueryMXP())
@@ -958,7 +956,6 @@ protected string new_process_mxp(string msg, mapping attributes) {
                 return ret;
             },
     RE_GLOBAL|RE_PCRE);
-#endif
     return msg;
 }
 

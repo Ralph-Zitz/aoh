@@ -26,7 +26,7 @@ public string QueryName();                  // std/living/description
 public int QueryLState();                   // std/living/description
 public string QueryPossessive();            // std/living/description
 public int QueryInvis();                    // std/living/description
-public void AddHeart(mixed hook);          // std/living/heart
+public void AddHeart(mixed hook);           // std/living/heart
 public int QueryStr();                      // std/living/stats
 #ifdef NF
 public int UseStat(string name, int diff);  // std/living/stats

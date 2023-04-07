@@ -637,14 +637,18 @@ void MoreFile(string str) {
     W("*** More: q,u,U,d,D,/<regexp>,<line> ["+(moreoffset-1)+"] *** ");
     if(term) W("\e[39;49m\e[0m");
 //    if(term) W("\e[39;49m\e[0;10m");
-    //cloner->print_eor();
-    cloner->print_ga();
+    if (({int})cloner->query_prompt_iacga())
+      cloner->print_ga();
+    else
+      cloner->print_eor();
   } else {
     W("*** More: q,u,U,d,D,/<regexp>,<line> ["+(moreoffset-1)+"=EOF] *** ");
     if(term) W("\e[39;49m\e[0m");
 //    if(term) W("\e[39;49m\e[0;10m");
-    //cloner->print_eor();
-    cloner->print_ga();
+    if (({int})cloner->query_prompt_iacga())
+      cloner->print_ga();
+    else
+      cloner->print_eor();
     moreflag=TRUE;
   }
   input_to("MoreFile");

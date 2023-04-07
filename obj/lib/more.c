@@ -50,7 +50,7 @@ private void add_data( int quiet, string regexp, string file,
 private void remove_data() {
   if ( ! data )
     return;
-  m_delete( data, this_player()->Query(P_REALNAME) );
+  m_delete( data, ({string})this_player()->Query(P_REALNAME) );
   if ( ! sizeof( data ) )
     data = 0;
 }
@@ -78,8 +78,10 @@ public void more_prompt (int m_line, int m_chunk) {
   msg_write( CMSG_GENERIC|MMSG_DIRECT|MMSG_NOWRAP,
 	     "=== More: Lines "+m_line+".."+(m_line+m_chunk-1)
        +" [CR,u,f,l,q,/<regexp>,<line>,?] " );
-//  this_player()->print_eor();
-  this_player()->print_ga();
+  if (({int})this_player()->query_prompt_iacga())
+    this_player()->print_ga();
+  else
+    this_player()->print_eor();
 }
 
 /*--------------------------------------------------------------------------
@@ -90,7 +92,7 @@ public void more_prompt (int m_line, int m_chunk) {
 
 void skip_to_end_of_more( int itrans ) {
   string foo;
-  int step, nline;
+  int step;
 
   step = 0;
   while ((foo = read_file( get_data( MORE_FILE ),
@@ -117,7 +119,7 @@ void skip_to_end_of_more( int itrans ) {
 
     if (! get_data( MORE_QUIET ) ) {
       msg_say( CMSG_ROOM,
-	       this_player()->Query(P_NAME)+
+	       ({string})this_player()->Query(P_NAME)+
 	       "'s view focuses again on this reality.\n" );
     }
     remove_data();
@@ -141,10 +143,9 @@ void skip_to_end_of_more( int itrans ) {
  */
 
 varargs int more( string fname, int quiet, int chunk, int itrans ) {
-  int nline;
   string tmp;
 
-  if ( this_player()->Query(P_EDITING) ) {
+  if ( ({int})this_player()->Query(P_EDITING) ) {
     msg_write( CMSG_GENERIC|MMSG_DIRECT, 
 	       "Error: more cannot be used while editing.\n" );
     return 0;
@@ -156,12 +157,12 @@ varargs int more( string fname, int quiet, int chunk, int itrans ) {
   }
 
   if (!chunk) 
-    chunk = this_player()->Query( P_PAGESIZE );
+    chunk = ({int})this_player()->Query( P_PAGESIZE );
 
   if ( itrans )
     itrans = MMSG_IDENT_TRANS;
 
-  fname = this_player()->get_path( fname, 0, this_player() );
+  fname = ({string})this_player()->get_path( fname, 0, this_player() );
 
   if ( file_size( fname ) < 0 ) {
     msg_write( CMSG_GENERIC,
@@ -194,7 +195,7 @@ varargs int more( string fname, int quiet, int chunk, int itrans ) {
 
   if ( ! quiet ) {
     msg_say( CMSG_ROOM,
-	     this_player()->Query(P_NAME)+
+	     ({string})this_player()->Query(P_NAME)+
 	     " looks at a completely different reality.\n" );
   }
 
@@ -300,7 +301,7 @@ public void even_more( string str, int itrans ) {
       
       if (! get_data( MORE_QUIET ) ) {
 	      msg_say( CMSG_ROOM,
-	      this_player()->Query(P_NAME)+ "'s view focuses again on this reality.\n" );
+	      ({string})this_player()->Query(P_NAME)+ "'s view focuses again on this reality.\n" );
       }
       remove_data();
       return;

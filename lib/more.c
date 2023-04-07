@@ -400,8 +400,10 @@ public void more_prompt (int nlines)
          " "+sline+".."+eline+
          (partial?" ["+partial[0]+".."+(partial[1]-1)+"]":"")+
        " [CR,u,f,l,q,/<regexp>,<page>,?] " );
-  //this_player()->print_eor();
-  this_player()->print_ga();
+  if (({int})this_player()->query_prompt_iacga())
+    this_player()->print_ga();
+  else
+    this_player()->print_eor();
 }
 
 /*--------------------------------------------------------------------------

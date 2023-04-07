@@ -578,10 +578,11 @@ public varargs mixed print_prompt() {
         binary_message(to_bytes(value, "UTF-8"), 1);
         print_ga();
     }
-    else
+    else {
         efun::tell_object(this_object(), value);
+        print_eor();
+    }
   }
-  //print_eor();
 
   /* the gd expects string return value for prompt closure, but we return
    * 0. That results in no prompt beeing printed.
@@ -643,8 +644,10 @@ static varargs void buffer_more_handler( string arg, int left ) {
 		       sprintf( "=== BMore: %d lines left [CR,p,q,?] ",
 			        left ) );
     input_to( "buffer_more_handler", 0, left, INPUT_PROMPT );
-    //print_eor();
-    print_ga();
+    if (query_prompt_iacga())
+        print_ga();
+    else
+        print_eor();
     return;
   }
   else {
@@ -652,8 +655,10 @@ static varargs void buffer_more_handler( string arg, int left ) {
 		       sprintf( "=== BMore: %d lines left [CR,p,q,?] ",
 			        left ) );
     input_to( "buffer_more_handler", 0, left, INPUT_PROMPT );
-    //print_eor();
-    print_ga();
+    if (query_prompt_iacga())
+      print_ga();
+    else
+      print_eor();
     return;
   }
 
@@ -665,8 +670,10 @@ static varargs void buffer_more_handler( string arg, int left ) {
 		       sprintf( "=== BMore: %d lines left [CR,p,q,?] ",
 				ts ) );
     input_to( "buffer_more_handler", 0, ts, INPUT_PROMPT );
-    //print_eor();
-    print_ga();
+    if (query_prompt_iacga())
+      print_ga();
+    else
+      print_eor();
     return;
   }
 }

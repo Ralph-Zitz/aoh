@@ -336,12 +336,7 @@ nomask int logon ()
 
 {
   //start_telnetneg();
-#if 0
-    if (this_interactive() && tls_available()) {
-        tls_init_connection(this_interactive());
-    }
-#endif
-  input_to("InitialLogin", 0); // let the user be able to type ahead.
+  efun::input_to("InitialLogin", 0); // let the user be able to type ahead.
   log_file("ENTER", ctime()[4..15]+" login \t"+query_ip_name()+" \t"
                             +to_string(this_object())+"\n");
   if (query_mud_port() == 2348 && tls_available()) {
@@ -590,6 +585,10 @@ PrintWelcome ()
      return;
   }
   write(INITIAL);
+  if (({int})this_player()->query_prompt_iacga())
+    this_player()->print_ga();
+  else
+    this_player()->print_eor();
 }
 
 //---------------------------------------------------------------------------

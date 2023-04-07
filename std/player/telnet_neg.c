@@ -809,6 +809,15 @@ mapping transfer_ts(mapping old_ts) {
 nosave int* tm_t;
 nosave int pending_noecho;
 nosave int last_noecho;
+nosave int iacga;
+
+int query_prompt_iacga() {
+    return iacga;
+}
+
+int set_prompt_iacga(int i) {
+    return iacga = i;
+}
 
 // Bits used for the charmode and noecho state of the connection
 // Bits 0 + 1 used for TSE_NOECHO (set for noecho mode)

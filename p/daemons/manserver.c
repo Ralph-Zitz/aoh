@@ -84,7 +84,7 @@ void create()
   mandirs = ({ "applied", "concepts", "driver", "efun", "efun.de", "helpdir", "intro"
            , "lfun", "prop", "lib", "LPC", "master", "obj", "sefun", "std", "examples"
            , "w", "daemons", "hook", "internals", "man", "obsolete", "old", "other"
-           , "papers", "3.3vs3.5"});
+           , "papers", "3.3vs3.5", "deprecated"});
 
   mandirs=sort_array(mandirs,#'> /*'*/);
 

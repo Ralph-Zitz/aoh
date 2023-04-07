@@ -9,6 +9,7 @@
 #include <macros.h>
 #include <msgclass.h>
 #include <mxp.h>
+#include <newmxp.h>
 #include <config.h>
 #include <daemons.h>
 #include <inetd.h>
@@ -28,7 +29,7 @@ public varargs void create () {
     Set(P_INT_SHORT, "The workroom of " NAME);
     Set(P_INT_LONG,
             "This is the workroom of " NAME " 😃.\n"
-            "Nothing " + MXPTAG("b") + "to" + MXPTAG("/b") + " see here, move along.\n"
+            "Nothing to see here, move along.\n"
        );
     AddRoomCmd("efun", #'my_efun /*'*/);
     AddRoomCmd("reg", #'my_reg /*'*/);

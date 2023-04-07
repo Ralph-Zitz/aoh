@@ -16,6 +16,7 @@
 
 #include <msgclass.h>
 #include <mxp.h>
+#include <newmxp.h>
 #include <properties.h>
 #include <secure/wizlevels.h>
 #include <daemons.h>
@@ -43,6 +44,9 @@ public varargs void receive( string msg, int class, int indent, int time );
 public varargs int CanSee( object env );       /* std/living/description */
 void print_eor();                              /* std/player/telnet_neg  */
 public mixed query_terminal();                 /* std/player/telnet_neg  */
+public mixed QueryMXP();                       /* std/player/mxp         */
+protected string new_process_mxp(string msg, mapping attributes);
+private string calc_item_id(int arg, mapping attributes);
 /* -------------------------------------------------------------------------
  * Global vars - saved
  * -------------------------------------------------------------------------
@@ -70,6 +74,21 @@ nosave mixed ** msgbuf;             /* buffer for output */
 nosave int editing;                 /* editing flag for user editors */
 nosave mapping pColorTranslations;  /* the color map including class colors */
 
+private nosave mapping mxp_tag_names = ([
+    VT_MXP_ROOM_NAME:    "rname";      0,
+    VT_MXP_ROOM_DESC:    "rdesc";      0,
+    VT_MXP_ROOM_EXITS:   "rexits";     0,
+    VT_MXP_ROOM_NUM:     "rnum";       0,
+    VT_MXP_ROOM_EXP:     "rexpire";    0,
+    VT_MXP_PROMPT:       "prompt";     0,
+    VT_MXP_EX:           "ex";         0,
+    VT_MXP_VERSION:      "version";    0,
+    VT_MXP_SUPPORT:      "support";    0,
+    VT_MXP_IROOMCONTENT: "ircontent";  #'calc_item_id, /*'*/
+    VT_MXP_LROOMCONTENT: "lrcontent";  #'calc_item_id, /*'*/
+    VT_MXP_IINVENTORY:   "iinventory"; #'calc_item_id, /*'*/
+]);
+
 /* -------------------------------------------------------------------------
  * Builtin properties
  * -------------------------------------------------------------------------
@@ -94,7 +113,10 @@ public int QueryNewChannelStyle() { return pNewChannelStyle; }
 
 /* ---------------------------------------------------------------------- */
 
-public string SetPrompt(string s) { return pPrompt = s; }
+public string SetPrompt(string s) {
+
+    return pPrompt = s;
+}
 public string QueryPrompt() { return pPrompt||"> "; }
 
 /* ---------------------------------------------------------------------- */
@@ -398,7 +420,9 @@ public varargs void receive( string msg, int class, int indent, int time ) {
     }
 
     msg = translate( msg, class, indent );
-    efun::tell_object( this_object(), process_mxp(msg, TOMXP, 1));
+    msg = new_process_mxp(msg, ([]));
+    efun::tell_object(this_object(), msg);
+    //efun::tell_object( this_object(), process_mxp(msg, TOMXP, 1));
   }
 }
 
@@ -542,11 +566,10 @@ public varargs mixed print_prompt() {
       value = incmsg + "\n" + value;
       incmsg = 0;
     }
-    // value = sprintf("%s%s%s", (TOMXP ? MXPTAG2("Prompt") : ""), value, (TOMXP ? MXPTAG2("/Prompt") : ""));
-    value = sprintf("%s%s%s", MXPTAG("Prompt"), value, MXPTAG("/Prompt"));
+    value = new_process_mxp(MSG_PROMPT(value), ([]));
     /* translate the color macros and do the output */
     value = translate(value, CMSG_GENERIC, 0);
-    efun::tell_object( this_object(), process_mxp(value, TOMXP, 1));
+    efun::tell_object(this_object(), value);
   }
   print_eor();
 
@@ -894,6 +917,53 @@ public void InitColourTranslation() {
   pColorTranslations["ansi"] =
     ({mapping})COLOUR_D->QueryTTYTrans("ansi") +
     ({mapping})COLOUR_D->QueryClassTrans( pClassColors, "ansi" );
+}
+
+protected string new_process_mxp(string msg, mapping attributes) {
+#if 1
+    msg = regreplace(msg, VT_ESC "\\[![0-9]+(;[0-9]+)*[st]",
+            function string(string sub) {
+                if (!QueryMXP())
+                    return "";
+                int typ_char = sub[<1];
+                int is_close;
+
+                if (typ_char == VT_MXP_OPEN_CHAR)
+                    is_close = 0;
+                else if (typ_char == VT_MXP_CLOSE_CHAR)
+                    is_close = 1;
+                else
+                    return sub;
+
+                int *args = map(explode(sub[3..<2], ";"), #'to_int /*'*/);
+                int code = args[0];
+                string tag_name = mxp_tag_names[code];
+                closure tag_arg_fun = mxp_tag_names[code, 1];
+
+                if (!tag_name)
+                    return "";
+
+                string tag_arg = "";
+                if (!is_close && sizeof(args) > 1) {
+                    tag_arg = funcall(tag_arg_fun, args[1], attributes);
+                    if (!tag_arg)
+                        return 0;
+                }
+                string ret = VT_MXP_TEMP_SECURE_MODE
+                    + (is_close ? "</" : "<")
+                    + tag_name
+                    + tag_arg
+                    + ">"
+                    + VT_MXP_LOCK_LOCKED_MODE;
+                return ret;
+            },
+    RE_GLOBAL|RE_PCRE);
+#endif
+    return msg;
+}
+
+private string calc_item_id(int arg, mapping attributes) {
+    return " id=\"sword\"";
 }
 
 /* -------------------------------------------------------------------------

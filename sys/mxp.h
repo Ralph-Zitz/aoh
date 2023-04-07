@@ -1,6 +1,9 @@
 #ifndef MXP_H
 #define MXP_H
 
+#include <features.h>
+
+#ifdef MXP_ENABLED
 #define MXP_SUPPORT_ENABLED  "mxp_enabled_features"
 #define MXP_SUPPORT_DISABLED "mxp_disabled_features"
 #ifndef TPMXP
@@ -30,5 +33,33 @@
 #define ESC "\x1B"  /* esc character */
 
 #define MXPMODE(arg) sprintf("%s[%dz", ESC, arg)
+#else  // !MXP_ENABLED
+#define MXP_SUPPORT_ENABLED  "mxp_enabled_features"
+#define MXP_SUPPORT_DISABLED "mxp_disabled_features"
+#ifndef TPMXP
+#define TPMXP 0
+#endif
+#ifndef TOMXP
+#define TOMXP 0
+#endif
 
+/* strings */
+#define MXP_BEG ""
+#define MXP_END ""
+#define MXP_AMP ""
+
+/* characters */
+#define MXP_BEGc ''
+#define MXP_ENDc ''
+#define MXP_AMPc ''
+
+/* constructs an MXP tag with < and > around it */
+#define MXPTAG(arg) ""
+#define MXPTAG2(arg) ""
+
+#define ESC ""
+
+#define MXPMODE(arg) ""
+
+#endif // MXP_ENABLED
 #endif // MXP_H

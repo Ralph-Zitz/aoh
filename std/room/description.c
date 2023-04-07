@@ -10,6 +10,7 @@
 #include <msgclass.h>
 #include <daemons.h>
 #include <mxp.h>
+#include <newmxp.h>
 
 #define TO this_object()
 #define TP this_player()
@@ -75,20 +76,9 @@ public varargs string IntLong(string what)  {
   d = ({string})THIS->Doors(0, TP);
   if (sizeof(d) && res[<1] == '\n')
     res = res[..<2];
-  return
-    MXPTAG("RDesc") + res + (sizeof(d) ? " " + d : "") +
-/*
-      process_string((pointerp(rc = QueryIntLong()) ? rc[0]: rc) +
-      implode(filterExtra(P_INT_LONG), "")) +
-*/
-    MXPTAG("/RDesc");
-
-#if 0
-  return   (TPMXP ? MXPTAG2("RDesc") : "") +
-           process_string((pointerp(rc = QueryIntLong()) ? rc[0]: rc) +
-           implode(filterExtra(P_INT_LONG), "")) +
-           (TPMXP ? MXPTAG2("/RDesc") : "");
-#endif
+  if (res[<1] == '\n')
+    res = res[..<2];
+  return MSG_RDESC(res + (sizeof(d) ? " " + d : "")) + "\n";
 }
 
 public varargs string ExaIntLong(string what)  {
@@ -101,30 +91,16 @@ public varargs string ExaIntLong(string what)  {
   d = ({string})THIS->Doors(0, TP);
   if (sizeof(d) && res[<1] == '\n')
     res = res[..<2];
-
-  return
-    MXPTAG("RDesc") + res + (sizeof(d) ? " " + d : "") +
-/*
-      process_string((pointerp(rc = QueryIntLong()) ? rc[1]
-                                  : "You see nothing special.\n"+rc) +
-      implode(filterExtra(P_INT_LONG), "")) +
-*/
-      MXPTAG("/RDesc");
-
-#if 0
-  return   (TPMXP ? MXPTAG2("RDesc") : "") +
-           process_string((pointerp(rc = QueryIntLong()) ? rc[1]
-                                       : "You see nothing special.\n"+rc) +
-           implode(filterExtra(P_INT_LONG), "")) +
-           (TPMXP ? MXPTAG2("/RDesc") : "");
-#endif
+  if (res[<1] == '\n')
+    res = res[..<2];
+  return MSG_RDESC(res + (sizeof(d) ? " " + d : "")) + "\n";
 }
 
 public varargs string IntShort(string what) {
   string sh;
   if (!(sh = QueryIntShort()) || sh == "")
     return sh;
-  return sh+implode(filterExtra(P_INT_SHORT), "");
+  return MSG_RNAME(sh+implode(filterExtra(P_INT_SHORT), ""));
 }
 
 /* IntNoise/IntSmell, with closure handling (hopefully)

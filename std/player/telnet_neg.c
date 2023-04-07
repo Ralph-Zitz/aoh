@@ -115,6 +115,7 @@
 #include <driver/regexp.h>
 #include <properties.h>
 #include <msgclass.h>
+#include <features.h>
 
 // ******************** Telnet State Machine ********************
 //
@@ -1788,16 +1789,17 @@ private void sb_line(int command, int option, int* optargs) {
   }
 }
 
+//#ifdef MXP_ENABLED
 private void start_mxp(int command, int option)
 {
     if (command != WILL)
         return;
     ts[TS_EXTRA, TSE_LOG] += "* Sending MXP initialization\n";
     send(({ IAC, SB, TELOPT_MXP, IAC, SE }));
-//    efun::binary_message(to_array("\e[7z")); // Lock to locked mode for now.
-//    init_mxp();
+    efun::binary_message(to_array("\e[7z"));
     this_object()->init_mxp();
 }
+//#endif
 
 private void start_gmcp(int command, int option)
 {
@@ -1905,7 +1907,9 @@ void create() {
   }
 #endif
   set_callback(TELOPT_MSSP,      DONT,             WILL,             #'start_mssp /*'*/, 0);
+//#ifdef MXP_ENABLED
   set_callback(TELOPT_MXP,       DO,               WONT,             #'start_mxp /*'*/,  0);
+//#endif
 #if __EFUN_DEFINED__(json_serialize)
   set_callback(TELOPT_GMCP,      DONT,             WILL,             #'start_gmcp /*'*/, #'sb_gmcp /*'*/);
 #endif

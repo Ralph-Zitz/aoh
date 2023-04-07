@@ -25,6 +25,7 @@
 #include <moving.h>
 #include <features.h>
 #include <mxp.h>
+#include <newmxp.h>
 
 #define TO           this_object()
 #define TP           this_player()
@@ -748,9 +749,8 @@ public varargs string MakeExitString (int brief, string * dirs, string kind) {
 
   if (brief) {
     dirs = map(dirs, #'map_brief_exit /*'*/);
-    if (TPMXP)
-      dirs = map(dirs, (: MXPTAG("Ex") + $1 + MXPTAG("/Ex") :));
-    return (TPMXP ? MXPTAG("RExits") : "") + implode(dirs, ",") + (TPMXP ? MXPTAG("/RExits") : "");
+    dirs = map(dirs, (: MSG_EX($1) :));
+    return MSG_REXITS(implode(dirs, ","));
   }
 
   tok = QueryExitStrings() || ({});
@@ -758,21 +758,17 @@ public varargs string MakeExitString (int brief, string * dirs, string kind) {
     tok += ({"There is", "exit", "There are", "exits"})[sizeof(tok)..];
 
   switch(s = sizeof(dirs)) {
-    case 0: return (TPMXP ? MXPTAG("RExits") : "") +
-              tok[2]+" no "+kind+tok[3]+"." +
-              (TPMXP ? MXPTAG("/RExits") : "") + "\n";
-    case 1: return (TPMXP ? MXPTAG("RExits") : "") +
-              tok[0]+" one "+kind+tok[1]+": " + (TPMXP ? MXPTAG("Ex") : "") + dirs[0] + (TPMXP ? MXPTAG("/Ex") : "") + "." +
-              (TPMXP ? MXPTAG("/RExits") : "") + "\n";
-    case 2..10:
-      str = tok[2]+" "+NUMBER(s)+" "+kind+tok[3]+": ";
-      break;
-    default:
-      str = tok[2]+" many "+kind+tok[3]+": ";
+    case 0:
+        return MSG_REXITS(tok[2] + " no "+kind+tok[3])+".\n";
+    case 1:
+        return MSG_REXITS(tok[0]+" one "+kind+tok[1]+": "+
+               MSG_EX(dirs[0]))+ ".\n";
+    case 2: str = tok[2] + " " + NUMBER(s) + " " + kind + tok[3] + ": ";
+            break;
+    default: str = tok[2] + " many " + kind + tok[3] + ": ";
   }
-  if (TPMXP)
-    dirs = map(dirs, (: MXPTAG("Ex") + $1 + MXPTAG("/Ex") :));
-  return str+implode(dirs[0..<2], ", ")+" and "+dirs[<1]+".\n";
+  dirs = map(dirs, (: MSG_EX($1) :));
+  return MSG_REXITS(str+implode(dirs[0..<2], ", ")+" and "+dirs[<1])+".\n";
 }
 
 public varargs string MakeDoorString(int brief, object * doors, string kind) {

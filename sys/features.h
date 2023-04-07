@@ -15,6 +15,7 @@
 /* define this for left-right exits
  */
 #define FEATURES_LREXITS
+#define MXP_ENABLED
 
 /* define this for intermud-3 support
  */

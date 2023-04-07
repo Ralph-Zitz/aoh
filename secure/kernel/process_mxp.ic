@@ -1,3 +1,5 @@
+#include <features.h>
+#ifdef MXP_ENABLED
 #ifndef MXP_H
 #include <mxp.h>
 #include <driver/regexp.h>
@@ -87,3 +89,8 @@ public varargs string process_mxp(string message, int does_mxp, int mode = 1) {
     }
     return implode(processed_lines, "\n");
 }
+#else // !MXP_ENABLED
+public varargs string process_mxp(string message, int does_mxp, int mode = 1) {
+    return message;
+}
+#endif // MXP_ENABLED

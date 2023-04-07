@@ -1498,15 +1498,6 @@ public void restart_player(string name) {
   autosave(1);
   log_file("ENTER", ctime()[4..15]+" restart \t"+query_ip_name()+" \t"
                     +getuid(this_object())+"\n");
-  //NOSTY
-#if 0
-#if __EFUN_DEFINED__(set_prompt)
-  efun::set_prompt( #'print_prompt /*'*/, this_object() );
-#else
-  set_prompt( #'print_prompt /*'*/, this_object() );
-#endif
-#endif
-  // set_prompt("> ", this_object() );
   promptpend = 1; /* we need to print a prompt here sometimes */
   GAMECLOCK->StartBing();
 
@@ -1613,14 +1604,6 @@ protected void move_player_to_start4(string where)
 #endif
 
   set_no_buffering( 0 ); /* Paranoia .) */
-  // NOSTY
-#if 0
-#if __EFUN_DEFINED__(set_prompt)
-  efun::set_prompt( #'print_prompt /*'*/, this_object() );
-#else
-  set_prompt( #'print_prompt /*'*/, this_object() );
-#endif
-#endif
   AddHeart(HEART_BODY); // to be sure
   ValidizeHeart();
 /*  config_soul(); */

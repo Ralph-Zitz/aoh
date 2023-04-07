@@ -138,7 +138,7 @@ public string SetTerminal(string str) {
     terminal = term[1][0];
   else
     terminal = str;
-  if (strstr(terminal, "mudlet") == 0)
+  if (terminal && sizeof(terminal) && strstr(terminal, "mudlet") == 0)
     set_prompt_iacga(1);
   return terminal;
 }

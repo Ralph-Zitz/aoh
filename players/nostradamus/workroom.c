@@ -42,6 +42,7 @@ static int my_reg(string s) {
     mixed res;
     if (!s)
         return notify_fail("Illegal URL to match!\n", NOTIFY_ILL_ARG);
+    // TODO
     if ((res = regmatch(s, mat, RE_PCRE|RE_GLOBAL)) && stringp(res) && sizeof(res) > 0)
         msg_write(CMSG_GENERIC, "Matched: " + MXPTAG("a href=\"" + res + "\"") + res + MXPTAG("/a")+ "\n");
     else

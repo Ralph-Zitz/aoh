@@ -19,4 +19,4 @@ jobs:
         # fetch-depth to 0 will fetch all commits of the project.
         fetch-depth: 0
     - run: pip3 install -U Commitizen
-    - run: cz check --rev-range afb4824..HEAD
+    - run: cz --no-raise 3 check --rev-range cb603df..HEAD

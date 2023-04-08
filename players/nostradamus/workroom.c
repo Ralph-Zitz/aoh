@@ -40,7 +40,6 @@ public varargs void create () {
 static int my_reg(string s) {
     string mat = "https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)";
     mixed res;
-    // TODO
     if (!s)
         return notify_fail("Illegal URL to match!\n", NOTIFY_ILL_ARG);
     if ((res = regmatch(s, mat, RE_PCRE|RE_GLOBAL)) && stringp(res) && sizeof(res) > 0)

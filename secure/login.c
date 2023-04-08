@@ -343,7 +343,7 @@ nomask int logon ()
     string s = "LDMud " __VERSION__;
     tls_init_connection();
     call_out(#'write /*'*/, 0, "Gamedriver " + s +
-             " -- Lib '" MUDNAME "' "+LIBVERSION+"."+LIBREVISION+"-"+LIBPATCHLEVEL+"\n");
+             " -- Lib '" MUDNAME "' "+LIBVERSION+"."+LIBREVISION+"."+LIBPATCHLEVEL+"\n");
     call_out(#'PrintWelcome /*'*/, 1);  // Print the title screen
     call_out(#'TimeOut /*'*/, 240);
     enforce = 0;
@@ -361,7 +361,7 @@ nomask int logon ()
     set_telnet(WONT, TELOPT_ECHO);
     set_telnet(WILL, TELOPT_EOR);  // Fix for some clients
     write("Gamedriver " + s +
-      " -- Lib '" MUDNAME "' "+LIBVERSION+"."+LIBREVISION+"-"+LIBPATCHLEVEL+"\n"
+      " -- Lib '" MUDNAME "' "+LIBVERSION+"."+LIBREVISION+"."+LIBPATCHLEVEL+"\n"
        );
      call_out(#'PrintWelcome /*'*/, 1);  // Print the title screen
   }

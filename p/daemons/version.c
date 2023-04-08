@@ -66,7 +66,7 @@ MudlibVersion ()
 {
   if (program_time() < file_date("/sys/secure/version.h"))
     call_out( #'destruct_us, 1 );
-  return LIBVERSION+"."+LIBREVISION+"-"+LIBPATCHLEVEL;
+  return LIBVERSION+"."+LIBREVISION+"."+LIBPATCHLEVEL;
 }
 
 /***************************************************************************/

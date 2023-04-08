@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_call:
+
+jobs:
+  conventional-commits:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        # By default, checkout only fetches the latest commit. We need more history, setting
+        # fetch-depth to 0 will fetch all commits of the project.
+        fetch-depth: 0
+    - run: pip3 install -U Commitizen
+    - run: cz check --rev-range afb4824..HEAD

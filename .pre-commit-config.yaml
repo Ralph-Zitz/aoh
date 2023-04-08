@@ -2,7 +2,6 @@ repos:
 - hooks:
   - id: commitizen
   - id: commitizen-branch
-    args: ['--branch', 'master']
     stages:
     - push
   repo: https://github.com/commitizen-tools/commitizen

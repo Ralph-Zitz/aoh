@@ -3,9 +3,9 @@
 #include <secure/config.h>
 #define DB_PATH DAEMONSAVEPATH "room_ids.sqlite3"
 
+#ifdef __SQLITE__
 private nosave int db_open;
 
-#ifdef __SQLITE__
 private mixed init_table();
 private int insert_record(string fname);
 public int QueryRoomID(string|object|int name);
@@ -14,8 +14,8 @@ public int QueryRoomID(string|object|int name);
 void create() {
     seteuid(getuid());
 #ifdef __SQLITE__
-    db_open = sl_open(DB_PATH);
-    init_table();
+    if (db_open = sl_open(DB_PATH))
+        init_table();
 #else
     raise_error("Room Daemon requires __SQLITE__\n");
 #endif
@@ -31,6 +31,8 @@ public int remove() {
 
 #ifdef __SQLITE__
 private mixed init_table() {
+    if (!db_open)
+        raise_error("Error: SQLite is not connected.\n");
     string create_t_statement =
         "CREATE TABLE IF NOT EXISTS room_ids ("
         "  id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -46,6 +48,8 @@ private int insert_record(string fname) {
     string insert_statement =
         "INSERT INTO room_ids (filename) "
         "VALUES (?1);";
+    if (!db_open)
+        raise_error("Error: SQLite is not connected.\n");
     sl_exec(insert_statement, fname); 
     return sl_insert_id();
 }
@@ -54,13 +58,16 @@ private int insert_id_record(int id, string fname) {
     string insert_statement =
         "INSERT INTO room_ids (id, filename) "
         "VALUES (?1, ?2);";
+    if (!db_open)
+        raise_error("Error: SQLite is not connected.\n");
     sl_exec(insert_statement, id, fname); 
     return sl_insert_id();
 }
 
 private mixed *read_record(int|string ident) {
     string query;
-
+    if (!db_open)
+        raise_error("Error: SQLite is not connected.\n");
     if (stringp(ident) && sizeof(ident) > 0) {
         query =
             "SELECT * FROM room_ids "
@@ -112,5 +119,4 @@ public mixed * QueryRoomRecord(int|string|object ident) {
         ident = load_name(ident);
     return read_record(ident);
 }
-
 #endif

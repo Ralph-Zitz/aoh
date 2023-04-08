@@ -115,7 +115,6 @@ public int main( string arg ) {
     else
       msg_write( CMSG_GENERIC,
                  "Usage: config pagewidth <number>.\n" );
-
     break;
 
   case "email":
@@ -123,7 +122,6 @@ public int main( string arg ) {
     msg_write( CMSG_GENERIC, "Your email address is now: '"+
                ({string})this_player()->Query(P_MAILADDR)+"'\n" );
     return 1;
-    break;
 
   case "channel-style":
     if ( how == "old" )

@@ -15,11 +15,11 @@
  */
 
 /* The major version of the mudlib */
-#define MAJOR      0
+#define MAJOR 0
 #define LIBVERSION MAJOR
 
 /* The minor version of the mudlib */
-#define MINOR       5
+#define MINOR 5
 #define LIBREVISION MINOR
 
 /* The current level within prcs. Increment this level with every change
@@ -30,7 +30,7 @@
 /* The current patchlevel, incremented at every checkin.
  * The next line is magic: */
 /* $Format: "#define LIBPATCHLEVEL $ProjectMinorVersion$"$ */
-#define PATCH         6
+#define PATCH 6
 #define LIBPATCHLEVEL PATCH
 
 #endif /* _SECURE_VERSION_ */

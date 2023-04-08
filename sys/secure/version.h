@@ -28,7 +28,7 @@
 /* The current patchlevel, incremented at every checkin.
  * The next line is magic: */
 /* $Format: "#define LIBPATCHLEVEL $ProjectMinorVersion$"$ */
-#define LIBPATCHLEVEL 5
+#define LIBPATCHLEVEL 6
 
 #endif /* _SECURE_VERSION_ */
 

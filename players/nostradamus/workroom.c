@@ -30,7 +30,7 @@ public varargs void create () {
     Set(P_INT_LONG,
             "This is the workroom of " NAME " 😃.\n"
             "Nothing to see here, move along.\n"
-       );
+    );
     AddRoomCmd("efun", #'my_efun /*'*/);
     AddRoomCmd("reg", #'my_reg /*'*/);
     AddRoomCmd("sk", #'my_skill /*'*/);
@@ -44,7 +44,9 @@ static int my_reg(string s) {
         return notify_fail("Illegal URL to match!\n", NOTIFY_ILL_ARG);
     // TODO - re-implement
     if ((res = regmatch(s, mat, RE_PCRE|RE_GLOBAL)) && stringp(res) && sizeof(res) > 0)
-        msg_write(CMSG_GENERIC, "Matched: " + MXPTAG("a href=\"" + res + "\"") + res + MXPTAG("/a")+ "\n");
+          msg_write(CMSG_GENERIC, "Matched: " + MSG_LINK("link"));
+//        msg_write(CMSG_GENERIC, "Matched: " + MSG_LINK(res));
+//        msg_write(CMSG_GENERIC, "Matched: " + MXPTAG("a href=\"" + res + "\"") + res + MXPTAG("/a")+ "\n");
     else
         return notify_fail(sprintf("Failed to match the URL: %s\n", s), NOTIFY_ILL_ARG);
     return 1;

@@ -305,7 +305,6 @@ mixed CheckMirror()
       default:
          return 0;
    }
-   return 0;
 }
 
 mixed CheckBattlements()
@@ -323,7 +322,6 @@ mixed CheckBattlements()
       default:
          return 0;
    }
-   return 0;
 }
 
 mixed CheckQuay()

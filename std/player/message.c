@@ -51,6 +51,7 @@ int query_prompt_iacga();                      /* std/player/telnet_neg  */
 public mixed QueryMXP();                       /* std/player/mxp         */
 protected string process_mxp(string msg, mapping attributes);
 private string calc_item_id(int arg, mapping attributes);
+private string link_id(int arg, mapping attributes);
 /* -------------------------------------------------------------------------
  * Global vars - saved
  * -------------------------------------------------------------------------
@@ -84,10 +85,12 @@ private nosave mapping mxp_tag_names = ([
     VT_MXP_ROOM_EXITS:   "rexits";     0,
     VT_MXP_ROOM_NUM:     "rnum";       0,
     VT_MXP_ROOM_EXP:     "rexpire";    0,
+    VT_MXP_HTML_EXP:     "hexpire";    0,
     VT_MXP_PROMPT:       "prompt";     0,
     VT_MXP_EX:           "ex";         0,
     VT_MXP_VERSION:      "version";    0,
     VT_MXP_SUPPORT:      "support";    0,
+    VT_MXP_LINK:         "link";       #'link_id,      /*'*/
     VT_MXP_IROOMCONTENT: "ircontent";  #'calc_item_id, /*'*/
     VT_MXP_LROOMCONTENT: "lrcontent";  #'calc_item_id, /*'*/
     VT_MXP_IINVENTORY:   "iinventory"; #'calc_item_id, /*'*/
@@ -940,6 +943,7 @@ public void InitColourTranslation() {
 }
 
 protected string process_mxp(string msg, mapping attributes) {
+    // MXP Elements
     msg = regreplace(msg, VT_ESC "\\[![0-9]+(;[0-9]+)*[st]",
             function string(string sub) {
                 if (!QueryMXP())
@@ -977,7 +981,27 @@ protected string process_mxp(string msg, mapping attributes) {
                 return ret;
             },
     RE_GLOBAL|RE_PCRE);
+    // MXP Entities
+    msg = regreplace(msg, VT_ESC "\\[![0-9]+[uv]",
+            function string(string sub) {
+                if (!QueryMXP())
+                    return "";
+                int typ_char = sub[<1];
+
+                if (typ_char == VT_MXP_ENTITY_OPEN_CHAR)
+                  return VT_MXP_TEMP_SECURE_MODE + "\\&";
+                else if (typ_char == VT_MXP_ENTITY_CLOSE_CHAR)
+                  return ";" + VT_MXP_LOCK_LOCKED_MODE;
+                else {
+                    return sub;
+                }
+            },
+    RE_GLOBAL|RE_PCRE);
     return msg;
+}
+
+private string link_id(int arg, mapping attributes) {
+    return " url=\"link here\"";
 }
 
 private string calc_item_id(int arg, mapping attributes) {

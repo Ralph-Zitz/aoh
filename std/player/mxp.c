@@ -45,13 +45,15 @@ public void init_mxp() {
     PublishMXPStats();
     Receive(
         VT_MXP_LINE_SECURE_MODE
-        "<!ELEMENT rnum    '' FLAG=RoomNum ATT=id EMPTY>"
+        "<!ELEMENT rnum    '' FLAG=RoomNum>"
         "<!ELEMENT rname   '' FLAG=RoomName>"
         "<!ELEMENT rdesc   '' FLAG=RoomDesc>"
         "<!ELEMENT rexits  '' FLAG=RoomExit>"
-        "<!ELEMENT rexpire '<expire name=\"exits\">'>"
+        "<!ELEMENT rexpire '<expire exits>'>"
+        "<!ELEMENT hexpire '<expire html>'>"
         "<!ELEMENT prompt  '' FLAG=Prompt>"
         "<!ELEMENT ex      '<send expire=\"exits\">'>"
+        "<!ELEMENT link    '<a href=&url;>' ATT='url'>"
         "<stat hp max=maxhp caption=\"HP:\">"
         "<stat sp max=maxsp caption=\"SP:\">"
         VT_MXP_LOCK_LOCKED_MODE

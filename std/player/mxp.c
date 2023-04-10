@@ -41,7 +41,8 @@ public void init_mxp() {
     Receive(
         VT_MXP_LINE_SECURE_MODE
         VT_MXP_OPEN(VT_MXP_VERSION)
-        VT_MXP_OPEN(VT_MXP_SUPPORT));
+        VT_MXP_OPEN(VT_MXP_SUPPORT)
+        VT_MXP_LOCK_LOCKED_MODE);
     PublishMXPStats();
     Receive(
         VT_MXP_LINE_SECURE_MODE
@@ -54,6 +55,7 @@ public void init_mxp() {
         "<!ELEMENT prompt  '' FLAG=Prompt>"
         "<!ELEMENT ex      '<send expire=\"exits\">'>"
         "<!ELEMENT link    '<a href=&url;>' ATT='url'>"
+        "<!ELEMENT hp      '' FLAG=\"Set hp\">"
         "<stat hp max=maxhp caption=\"HP:\">"
         "<stat sp max=maxsp caption=\"SP:\">"
         VT_MXP_LOCK_LOCKED_MODE
@@ -65,10 +67,11 @@ public void PublishMXPStats() {
         return;
     Receive(
         sprintf(
-VT_MXP_TEMP_SECURE_MODE "<!ENTITY hp \"%d\" DESC=\"Hit points\" PUBLISH>"
-VT_MXP_TEMP_SECURE_MODE "<!ENTITY maxhp \"%d\" DESC=\"Maximum hit points\" PUBLISH>"
-VT_MXP_TEMP_SECURE_MODE "<!ENTITY sp \"%d\" DESC=\"Spell points\" PUBLISH>"
-VT_MXP_TEMP_SECURE_MODE "<!ENTITY maxsp \"%d\" DESC=\"Maximum spell points\" PUBLISH>"
+VT_MXP_LINE_SECURE_MODE
+"<!ENTITY hp %d DESC=\"Hit points\" PUBLISH>"
+"<!ENTITY maxhp %d DESC=\"Maximum hit points\" PUBLISH>"
+"<!ENTITY sp %d DESC=\"Spell points\" PUBLISH>"
+"<!ENTITY maxsp %d DESC=\"Maximum spell points\" PUBLISH>"
 "%s",
 ({int})TO->QueryHP(),
 ({int})TO->QueryMaxHP(),

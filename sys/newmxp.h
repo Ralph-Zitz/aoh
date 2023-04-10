@@ -23,12 +23,13 @@
 #define VT_MXP_VERSION           8
 #define VT_MXP_SUPPORT           9
 #define VT_MXP_LINK             10
-#define VT_MXP_HTML_EXP         11
 
+#define VT_MXP_HTML_EXP         11
 #define VT_MXP_IROOMCONTENT     12
 #define VT_MXP_LROOMCONTENT     13
 #define VT_MXP_IINVENTORY       14
 #define VT_MXP_ENTITY           15
+#define VT_MXP_HP               16
 
 #define MSG_MXP(n, txt)            (VT_MXP_OPEN(n) + txt + VT_MXP_CLOSE(n))
 #define MSG_MXP_ENTITY(n, txt)     (VT_MXP_ENTITY_OPEN(n) + txt + VT_MXP_ENTITY_CLOSE(n))
@@ -36,6 +37,7 @@
 
 #define MSG_REXITS(dir)             MSG_MXP(VT_MXP_ROOM_EXITS, dir)
 #define MSG_RNAME(dir)              MSG_MXP(VT_MXP_ROOM_NAME, dir)
+#define MSG_HP(h)                   MSG_MXP(VT_MXP_HP, h)
 #define MSG_RDESC(dir)              MSG_MXP(VT_MXP_ROOM_DESC, dir)
 #define MSG_ROOMN(dir)              MSG_MXP(VT_MXP_ROOM_NUM, dir)
 #define MSG_ENTITY(e)               MSG_MXP_ENTITY(VT_MXP_ENTITY, e)

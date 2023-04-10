@@ -90,6 +90,7 @@ private nosave mapping mxp_tag_names = ([
     VT_MXP_EX:           "ex";         0,
     VT_MXP_VERSION:      "version";    0,
     VT_MXP_SUPPORT:      "support";    0,
+    VT_MXP_HP:           "hp";         0,
     VT_MXP_LINK:         "link";       #'link_id,      /*'*/
     VT_MXP_IROOMCONTENT: "ircontent";  #'calc_item_id, /*'*/
     VT_MXP_LROOMCONTENT: "lrcontent";  #'calc_item_id, /*'*/

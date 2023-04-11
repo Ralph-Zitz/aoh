@@ -70,7 +70,7 @@ varargs void create()
    Set(P_INT_MAP,"harbour");
    Set(P_REGION, REGION_CITY|REGION_HARBOUR);
    Set(P_COORDINATES, ({ ({ -230,10,0 }), C_SILVERE }) );
-   Set(P_NOWAY_MSG,"You run silly around and nearly fall in the water.\n");
+   Set(P_NOWAY_MSG,"You run around and nearly fall in the water.\n");
 
    AddExit("east",      SIL_HARBOUR("street2"));
    AddExit("northwest", SIL_HARBOUR("quay1_1"));

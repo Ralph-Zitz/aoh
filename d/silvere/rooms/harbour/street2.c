@@ -33,7 +33,7 @@ varargs void create()
    Set(P_INT_MAP,"harbour");
    Set(P_REGION, REGION_CITY|REGION_HARBOUR);
    Set(P_COORDINATES, ({ ({ -220,10,0 }), C_SILVERE }) );
-   Set(P_NOWAY_MSG,"You run in a wall.\n");
+   Set(P_NOWAY_MSG,"You run into a wall.\n");
    AddExit("east",SIL_HARBOUR("street1"));
    AddExit("west",SIL_HARBOUR("street3"));
 

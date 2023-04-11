@@ -306,6 +306,7 @@ int cmd_search(string str)
          ({ TP}) );
       return 1;
    }
+   return 0;
 }
 
 int cmd_meditate(string str)

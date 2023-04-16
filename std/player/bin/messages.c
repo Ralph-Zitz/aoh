@@ -114,5 +114,4 @@ public int main( mixed arg ) {
 
     return 1;
   }
-  return 1;
 }

@@ -22,7 +22,6 @@ private string translate_class( int class ) {
   default:
     return "<"+to_string(class)+">";
   }
-  return 0;
 }
 
 public int main( string arg ) {

@@ -42,9 +42,9 @@ string SetGate(string str) {
 //***********
 int go_west() {
   if (gate=="open") {
-    return TP->move(SYKORATH("beforegate"),M_GO,"west");
+    return ({int})TP->move(SYKORATH("beforegate"),M_GO,"west");
   }
-  show(NAME+" tries to leave the inner town, but fails.\n");
+  show(({string})NAME+" tries to leave the inner town, but fails.\n");
   return ME_NO_MOVE;
 }
 
@@ -56,7 +56,7 @@ int pull(string str) {
   if (!str) { notify_fail("Pull what?\n"); return 0; }
   if (str=="pullchain") {
     write("You pull the pullchain.\n");
-    show(NAME+" pulls the pullchain.\n");
+    show(({string})NAME+" pulls the pullchain.\n");
     if (gate=="open") {
       tell_room(TO,"The gate closes.\n");
       tell_room(BEFOREROOM,"The gate closes.\n");
@@ -81,7 +81,7 @@ string lookgate() {
   "A pullchain can be seen on the left side.\n";
 }
 
-create() {
+varargs void create() {
   ::create();
   gate="closed";
   SetIntShort("The inner town gate");
@@ -96,12 +96,12 @@ create() {
   AddDetail(({"town"}),
     "The townwall belongs to the town as each other place here.\n");
   AddDetail(({"city","inner city"}),
-    "You are in the inner city. You can leave it by passing the huge gate\n"
+    "You are in the inner city. You can leave it by passing the huge gate "
     "to the west.\n");
   AddDetail("exit","The exit from the inner city is to the west.\n");
   AddDetail(({"townwall"}),
-    "You are standing in it. It is a very old townwall. You can surround the\n"
-    "town inside the townwall by going north or south.\n"
+    "You are standing in it. It is a very old townwall. You can surround the "
+    "town inside the townwall by going north or south. "
     "Two towers are standing north and south beside the gate.\n");
   AddDetail(({"north","south"}),"One tower is there.\n");
   AddDetail(({"towers","two towers"}),
@@ -128,7 +128,7 @@ create() {
   AddExit("south","./towers");
 }
 
-reset() {
+void reset() {
   ::reset();
   gate="closed";
 }

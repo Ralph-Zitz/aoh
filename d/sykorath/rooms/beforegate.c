@@ -92,8 +92,8 @@ varargs void create() {
   ::create();
   SetIntShort("Before a huge gate");
   SetIntLong(
-    "You are standing right before a huge gate to the east. It is the gate\n"
-    "to the inner city of the town. A rope hangs on the left side of the gate.\n"
+    "You are standing right before a huge gate to the east. It is the gate "
+    "to the inner city of the town. A rope hangs on the left side of the gate. "
     "Two huge tower frame the gate on either side.\n");
   SetCoordinates( ({ ({0,0,0}), C_SYKORATH }));
   Set(P_REGION,REGION_CITY);
@@ -105,19 +105,19 @@ varargs void create() {
   AddDetail(({"towers","watchtowers"}),
     "They have to be the watchtowers of the inner city.\n");
   AddDetail(({"left tower","tower left","tower to the left"}),
-    "It is one of the watchtowers of the inner city. It is used to check the\n"
+    "It is one of the watchtowers of the inner city. It is used to check the "
     "north part of the town.\n");
   AddDetail(({"right tower","tower right","tower to the right"}),
-    "It is one of the watchtowers of the inner city. It is used to check the\n"
+    "It is one of the watchtowers of the inner city. It is used to check the "
     "south part of the town.\n");
   AddDetail(({"city","inner city","outer city"}),
-    "You are standing in the outer city. Behind the gate lies well the\n"
+    "You are standing in the outer city. Behind the gate lies well the "
     "protected inner city.\n");
   AddDetail("rope",
     "The rope is connected to a small bell above you.\n");
   AddDetail(({"bell","small bell","gold bell","small golden bell",
     "golden bell"}),
-    "The bell is made of pure gold. The bell will give a clear sound if you\n"
+    "The bell is made of pure gold. The bell will give a clear sound if you "
     "pull the rope.\n");
   AddDetail("town",#'IntLong /*'*/);
 

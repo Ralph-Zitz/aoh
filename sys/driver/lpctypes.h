@@ -3,36 +3,44 @@
 
 /* compile time types, from functionlist() */
 
-#define TYPE_UNKNOWN      0       /* This type must be casted */
-#define TYPE_NUMBER       1
-#define TYPE_STRING       2
-#define TYPE_VOID         3
-#define TYPE_OBJECT       4
-#define TYPE_MAPPING      5
-#define TYPE_FLOAT        6
-#define TYPE_ANY          7       /* Will match any type */
-#define TYPE_CLOSURE      8
-#define TYPE_SYMBOL       9
+#define TYPE_UNKNOWN    0       /* This type must be casted */
+#define TYPE_NUMBER     1
+#define TYPE_STRING     2
+#define TYPE_VOID       3
+#define TYPE_OBJECT     4
+#define TYPE_MAPPING    5
+#define TYPE_FLOAT      6
+#define TYPE_ANY        7       /* Will match any type */
+#define TYPE_CLOSURE    8
+#define TYPE_SYMBOL     9
 #define TYPE_QUOTED_ARRAY 10
-#define TYPE_STRUCT       11
+#define TYPE_STRUCT     11
+#define TYPE_BYTES      12
+#define TYPE_LWOBJECT   13
+#define TYPE_COROUTINE  14
+#define TYPE_LPCTYPE    15
 
-#define TYPE_MOD_POINTER  0x0040  /* Pointer to a basic type        */
+#define TYPE_MOD_POINTER        0x0040  /* Pointer to a basic type        */
 
 /* runtime types, from typeof() */
 
-#define T_INVALID         0x0
-#define T_LVALUE          0x1
-#define T_NUMBER          0x2
-#define T_STRING          0x3
-#define T_POINTER         0x4
-#define T_OBJECT          0x5
-#define T_MAPPING         0x6
-#define T_FLOAT           0x7
-#define T_CLOSURE         0x8
-#define T_SYMBOL          0x9
-#define T_QUOTED_ARRAY    0xa
-#define T_STRUCT          0xb
-#define T_BYTES           0xc
+#define T_INVALID       0x0
+#define T_LVALUE        0x1
+#define T_NUMBER        0x2
+#define T_STRING        0x3
+#define T_POINTER       0x4
+#define T_OBJECT        0x5
+#define T_MAPPING       0x6
+#define T_FLOAT         0x7
+#define T_CLOSURE       0x8
+#define T_SYMBOL        0x9
+#define T_QUOTED_ARRAY  0xa
+#define T_STRUCT        0xb
+#define T_BYTES         0xc
+#define T_LWOBJECT      0xd
+#define T_COROUTINE     0xe
+#define T_PYTHON        0xf
+#define T_LPCTYPE       0x10
 
 /* Closure types, stored as secondary type info */
 

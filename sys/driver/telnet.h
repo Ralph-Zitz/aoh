@@ -259,8 +259,4 @@ char *telopts[NTELOPTS]
 #define  SLC_FLUSHIN      0x40
 #define  SLC_FLUSHOUT     0x20
 
-#ifndef __LOCAL_TELNET_H__
-#include <driver/local_telnet.h>
-#endif
-
 #endif  /* TELNET_H__ */

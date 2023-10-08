@@ -14,6 +14,7 @@
 #include <daemons.h>
 #include <inetd.h>
 #include <driver/regexp.h>
+#include <driver/input_to.h>
 
 inherit "/std/room";
 
@@ -21,6 +22,8 @@ static int my_efun(string s);
 static int my_reg(string s);
 static void my_test(string s);
 static int my_skill(string s);
+static int python(string s);
+static void python_input(string s, int inloop);
 public int ApproxValue(int x, int y0, int app, int dcc);
 public varargs int LearnAttr(string aname, string skill, int app, int dcc, int sc);
 
@@ -34,8 +37,21 @@ public varargs void create () {
     AddRoomCmd("efun", #'my_efun /*'*/);
     AddRoomCmd("reg", #'my_reg /*'*/);
     AddRoomCmd("sk", #'my_skill /*'*/);
+    AddRoomCmd("python", #'python /*'*/);
     AddExit("out", STARTROOM);
 }
+
+static void python_input(string s, int inloop) {
+    string *result = python_console(s || "");
+    msg_write(CMSG_GENERIC, result[0]);
+    if (inloop && result[1])
+        input_to(#'python_input /*'*/, INPUT_PROMPT, result[1], 1);
+}
+
+static int python(string s) {
+    python_input(s, !sizeof(s));
+    return 1;
+} 
 
 static int my_reg(string s) {
     string mat = "https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)";

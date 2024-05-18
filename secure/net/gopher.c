@@ -41,32 +41,34 @@
 #define NAMEANDPORT "134.2.62.161\t4250"
 #endif
 
-IsServiceDaemon() { return 1; }
-QueryShort() { return "Nightfall Gopher Services Daemon (deaf)"; }
-QueryName() { return "GOPHER"; }
-QueryRealName() { return "gopher"; }
-QueryPlayer() { return 1; }
+int IsServiceDaemon() { return 1; }
+string QueryShort() { return "Age of Heroes Gopher Services Daemon (deaf)"; }
+string QueryName() { return "GOPHER"; }
+string QueryRealName() { return "gopher"; }
+int QueryPlayer() { return 1; }
 
-query_prevent_shadow() { return 1; }
-
-IsServiceDemon() { return 1; }
+int query_prevent_shadow() { return 1; }
+void listdir(string desc, string fname);
+void listfile(string desc, string fname);
+void nightfall_status(); 
+int who_list();
+int IsServiceDemon() { return 1; }
 
 /*
  * This is the function that gets called by /secure/login after name and
  * password is verified and this object is loaded.
  */
-start_player(str) {
+int start_player(string str) {
   object p;
-  string file;
     /*
     log_file("GOPHER","Restarting the GOPHER player\n");
     */
     /*myself = this_player();*/
 
 
-  if (p=find_player("deepthought")) {
-    tell_object(p,"gopher: ["+str+"/"+query_mud_port()+"/"+query_ip_name()+"]\n");
-  }
+    if (p=find_player("nostradamus")) {
+        tell_object(p,"gopher: ["+str+"/"+query_mud_port()+"/"+query_ip_name()+"]\n");
+    }
     switch(str) {
 	case "root":
 	    listfile("What is Nightfall","what");
@@ -127,7 +129,7 @@ listfile("Copyright",				"lpcbooks/intermediate/Copyright");
 	default:
 	    if (str[0..8] == "lpcbooks/") {
 		int siz,pos;
-		str = MASTER->full_path(str[8..]);
+		str = ({string})MASTER->full_path(str[8..]);
 		siz = file_size("/doc/LpcBooks"+str);
 		if (siz > 0) {
 			for (pos = 0; pos < siz; pos += 200)
@@ -141,7 +143,7 @@ listfile("Copyright",				"lpcbooks/intermediate/Copyright");
 	    }
 	    if (str[0..3] == "doc/") {
 		int siz1,pos1;
-		str = MASTER->full_path(str[3..]);
+		str = ({string})MASTER->full_path(str[3..]);
 		siz1 = file_size("/doc/papers"+str);
 		if (siz1 > 0) {
 			for (pos1 = 0; pos1 < siz1; pos1 += 200)
@@ -165,48 +167,46 @@ listfile("Copyright",				"lpcbooks/intermediate/Copyright");
  * used to return a best guess of the country name from the
  * ip name (usually the top level domain is quite descriptive).
  */
-where(ob) { return COUNTRY_D->country(lower_case(query_ip_name(ob))); }
+string where(object ob) {
+    return ({string})COUNTRY_D->country(lower_case(query_ip_name(ob)));
+}
 
 /*
  * We are called from the info-serv by the command @mudwho and
  * should return a list of players. Edit /secure/net/RWHO_BANNER
  * for the top lines to be sent before the player list.
  */
-who_list() {
-    string a, b;
+int who_list() {
     int i, nu;
-    string *lines;
     object *list;
 
     list = users();
     nu = 0;
     for (i = 0; i < sizeof(list); i++) {
-	string sh;
-	sh = list[i]->QueryShort();
-	if (sh) {
-	    write(capitalize(sh)+" [" +where(list[i])+"]\n");
-	    nu++;
-	}
+	    string sh;
+	    sh = ({string})list[i]->QueryShort();
+	    if (sh) {
+	        write(capitalize(sh)+" [" +where(list[i])+"]\n");
+	        nu++;
+	    }
     }
     if (nu) 
-	write("*** There are "+nu+" users connected.\n");
+	    write("*** There are "+nu+" users connected.\n");
     else
-	write("*** There are no users connected.\n");
+	    write("*** There are no users connected.\n");
     return 1;
 }
 
 
-nightfall_status() 
-{
-  write("/d/archwiz/common/room/tower/center"->clock());
+void nightfall_status() {
+  write(({string})"/d/archwiz/common/room/tower/center"->clock());
 }
 
-listfile(desc, fname)
-{
+void listfile(string desc, string fname) {
     write("0"+desc+"\tgopher:"+fname+"\t"+NAMEANDPORT+"\n");
 }
 
-listdir(desc, fname)
-{
+
+void listdir(string desc, string fname) {
     write("1"+desc+"\tgopher:"+fname+"\t"+NAMEANDPORT+"\n");
 }

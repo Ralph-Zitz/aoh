@@ -171,7 +171,7 @@ static void call_service(mixed* data) {
   if (err) {
     DEBUG(err);
     log_error("call_service", err + " " + MIXED2STR(data));
-    return;
+    //return;
   }
 
   if (!to_object(handler[0])) {

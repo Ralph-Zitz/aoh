@@ -2533,8 +2533,7 @@ mixed heart_beat_error (object culprit, string err,
 
 #define CWRITE(s) tell_object(culprit, s)
 
-  if (err == "Illegal use of save_object()\n" && last_save_fname)
-  {
+  if (err == "Illegal use of save_object()\n" && last_save_fname) {
     err = err[0..<2] + " to '"+last_save_fname+"'\n";
     last_save_fname = 0;
   }
@@ -2545,8 +2544,7 @@ mixed heart_beat_error (object culprit, string err,
       message += " in "+object_name(causer);
     message += ", File: "+prg+", Line: "+line;
     file = error_logfile(curobj);
-    if (time() > last_heart_time+59 || file[0] != last_heart_file[0])
-    {
+    if (time() > last_heart_time+59 || file[0] != last_heart_file[0]) {
       last_heart_time = time();
       last_heart_file = file;
       catch(map(file, #'write_file, " -- "+ctime()+" --\n"+message+"\n  "+err)); /*'*/
@@ -2561,8 +2559,7 @@ mixed heart_beat_error (object culprit, string err,
   }
 
   rc = 1;
-  if (objectp(culprit) && interactive(culprit))
-  {
+  if (objectp(culprit) && interactive(culprit)) {
     flag = 0;
     if (!catch(flag = IS_IMMORTAL(culprit)) && flag) {
       CWRITE(
@@ -2696,8 +2693,7 @@ static void handle_runtime_error (string err, string prg, string curobj, int lin
   int flag;
   object theobj;
 
-  if (err == "Illegal use of save_object()\n" && last_save_fname)
-  {
+  if (err == "Illegal use of save_object()\n" && last_save_fname) {
     err = err[0..<2] + " to '"+last_save_fname+"'\n";
     last_save_fname = 0;
   }
@@ -2706,8 +2702,7 @@ static void handle_runtime_error (string err, string prg, string curobj, int lin
   if (code = expand_define("__FILE__"))
     message += sprintf("\nCompiling %s, Line %s", code, expand_define("__LINE__"));
 #endif
-  if (last_loader)
-  {
+  if (last_loader) {
     message += "\n"+last_loader;
     if (last_lived && last_env)
       message += " in "+last_env;
@@ -2716,19 +2711,16 @@ static void handle_runtime_error (string err, string prg, string curobj, int lin
   last_loader = 0;
   last_filename = 0;
   file = error_logfile(curobj);
-  if (!stringp(curobj) || !(theobj = find_object(curobj)))
-  {
+  if (!stringp(curobj) || !(theobj = find_object(curobj))) {
     theobj = 0;
     code = 0;
     message += sprintf("\nCreator can't be found, curobj is %O.", curobj);
   }
-  else if (stringp(code = ({string})theobj->QueryCreator()))
-  {
+  else if (stringp(code = ({string})theobj->QueryCreator())) {
     file += error_logfile(code);
     message += "\nCreated by "+code;
   }
-  if (time() > last_runt_time+59 || file[0] != last_runt_file[0])
-    {
+  if (time() > last_runt_time+59 || file[0] != last_runt_file[0]) {
     last_runt_time = time();
     last_runt_file = file;
     catch(map(file, #'write_file, " -- "+ctime()+" --\n"+message+"\n  "+err)); /*'*/
@@ -2736,8 +2728,7 @@ static void handle_runtime_error (string err, string prg, string curobj, int lin
   else
     catch(map(file, #'write_file, message+"\n  "+err));                        /*'*/
 
-  if (TI)
-  {
+  if (TI) {
     if (!catch(flag = IS_IMMORTAL(TI)) && flag) {
       write(
         "---------------------------------------------------------------\n");
@@ -3017,8 +3008,7 @@ int valid_exec (string name, object ob, object obfrom)
   {
     case LOGIN ".c":
     case MASTER ".c":
-    if (!interactive(ob))
-    {
+    if (!interactive(ob)) {
       mapping tsfrom = ({mapping})obfrom->transfer_ts();
 #if 0
 #ifdef MUDWHO
@@ -3031,7 +3021,7 @@ int valid_exec (string name, object ob, object obfrom)
 #endif
       if (tsfrom)
         ob->transfer_ts(tsfrom);
-	  ob->SetTerminal();
+      ob->SetTerminal();
       return 1;
     }
     else {
@@ -3041,7 +3031,7 @@ int valid_exec (string name, object ob, object obfrom)
         ob->transfer_ts(tsfrom);
       if (tsto)
         obfrom->transfer_ts(tsto);
-	  ob->SetTerminal();
+      ob->SetTerminal();
       return 1;
     }
   }
@@ -3600,10 +3590,8 @@ string show_dir (string wo, string user)
   tim=time();
   isdir=(file_size(wo)==-2);
   ret="";
-  for (dir=get_dir(isdir?wo+"/*":wo,7);sizeof(dir)>2;dir=dir[3..])
-  {
-    if (member(({".","..",".ftp"}), dir[0])==-1)
-    {
+  for (dir=get_dir(isdir?wo+"/*":wo,7);sizeof(dir)>2;dir=dir[3..]) {
+    if (member(({".","..",".ftp"}), dir[0])==-1) {
       if (dir[0][<2..<1]!=".c")
         x='-';
       else
@@ -3627,8 +3615,7 @@ string show_dir (string wo, string user)
             tmp="none";
       fname=wo+"/"+dir[0];
       farr=explode(fname,"/")-({"."});
-      switch (farr[0])
-      {
+      switch (farr[0]) {
         case WDIR:
         group="wizard";
         break;
@@ -3684,8 +3671,7 @@ void FtpAccess(string host, string message, int port)
 #define FTP_ARG2 5
 #define FTP_ARG3 6
 
-  if (sizeof(comp) <= FTP_CMD || lower_case(comp[FTP_TAG]) != "req")
-  {
+  if (sizeof(comp) <= FTP_CMD || lower_case(comp[FTP_TAG]) != "req") {
     log_file("IMP_MSGS","Host: "+host+":"+port+" - '"+message+"'\n");
     return;
   }
@@ -3693,8 +3679,7 @@ void FtpAccess(string host, string message, int port)
   reply = "INVALID";
   head = sprintf("%s\t%s\tRPLY\t%s\t", comp[FTP_ID], comp[FTP_SEQ], comp[FTP_CMD]);
 
-  switch (lower_case(comp[FTP_CMD]))
-  {
+  switch (lower_case(comp[FTP_CMD])) {
     case "ping":
       if (sizeof(comp) <= FTP_CMD)
         break;
@@ -3758,13 +3743,12 @@ void FtpAccess(string host, string message, int port)
         break;
       dir = explode(show_dir(comp[FTP_ARG2], comp[FTP_ARG1]),"\n");
       // Note: dir[<1] is "" and can be ignored.
-      for (i = 0; i < sizeof(dir)-1; i += 20)
-      {
-	int j;
-	j = i+20;
-	if (j >= sizeof(dir)-1)
-	  j = sizeof(dir)-2;
-	reply = "LINE\t"+implode(dir[i..j], "\r\n")+"\r\n";
+      for (i = 0; i < sizeof(dir)-1; i += 20) {
+        int j;
+        j = i+20;
+        if (j >= sizeof(dir)-1)
+          j = sizeof(dir)-2;
+        reply = "LINE\t"+implode(dir[i..j], "\r\n")+"\r\n";
 #if __VERSION__ > "3.5.2"
         send_udp(host, port, to_bytes(head+reply, "UTF-8"));
 #else
@@ -3992,19 +3976,17 @@ void _cleanup_uinfo()
   }
   /* Remove idle players */
   u = users();
-  for (i = 0; i < sizeof(u); i++)
-  {
+  for (i = 0; i < sizeof(u); i++) {
     _nr_processed++;
     _nr_unprocessed--;
     if (u[i] && interactive(u[i])
              && QIDLE(u[i]) >= (sizeof(u) > 35 ? 3600 : 18000)
-             && object_name(u[i]) != "/Mudlink")
-      {
-        tell_object( u[i]
-                   , "Sorry, but you have been idle for too long time.\n"
-                    +"Please relogin to continue mudding.\n\n");
-        efun::remove_interactive(u[i]);
-      }
+             && object_name(u[i]) != "/Mudlink") {
+      tell_object( u[i]
+                 , "Sorry, but you have been idle for too long time.\n"
+                  +"Please relogin to continue mudding.\n\n");
+      efun::remove_interactive(u[i]);
+    }
   }
 }
 

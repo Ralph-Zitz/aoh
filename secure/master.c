@@ -678,7 +678,7 @@ string full_path (string path, string user)
 //   The <path> absolutized.
 
 {
-  return "/"+implode(full_path_array(path, user), "/");
+  return "/" + implode(full_path_array(path, user), "/");
 }
 
 
@@ -757,8 +757,7 @@ static void unwind_cmd_stack(object pl)
   if (_mutex_unwind) return;
   _mutex_unwind++;
 
-  while (pl)
-  {
+  while (pl) {
     prev_pl = ({object})pl->QueryCmdData("PreviousPlayer");
     catch(pl->PopCmdData(1));
     pl = prev_pl;
@@ -803,11 +802,9 @@ static string _include_dirs_hook (string include_name, string current_file)
   name = "sys/"+include_name;
   if (file_size("/"+name) >= 0)
     return name;
-  if ("d/" == current_file[0..1] || "p/" == current_file[0..1])
-  {
+  if ("d/" == current_file[0..1] || "p/" == current_file[0..1]) {
     pos = member(current_file[2..], '/');
-    if (pos > 0)
-    {
+    if (pos > 0) {
       name = current_file[0..pos+2]+"sys/"+include_name;
       if (file_size("/"+name) >= 0)
         return name;
@@ -845,8 +842,7 @@ static void _move_hook_fun (object item, object dest)
       return;
   }
   others = all_inventory(dest) - ({item});
-  for (i = 0; i < sizeof(others); i++)
-  {
+  for (i = 0; i < sizeof(others); i++) {
     if (living(others[i])) {
       efun::set_this_player(others[i]);
       item->init();
@@ -946,8 +942,7 @@ static int _create_fun (int clone, object prev, object this)
   if (!function_exists(fun, this))
     fun = "create";
 
-  if (prev)
-  {
+  if (prev) {
     // The call to fun must be in from the prev object, so bind the call-lambda
     // to it.
     cl = bind_lambda(unbound_lambda(0, ({ #'call_other, this, fun })), prev); /*'*/
@@ -988,10 +983,8 @@ static int _reset_fun (object prev, object this)
 //debug_message(sprintf("DEBUG: %s reset: prev %O, this %O\n", ctime(), prev, this));
   // TODO: Extend the profiling onto create() and call_out() and whatever
   // TODO: Introduce a hb in master, taking care of the flushing.
-  if (time() != timereset)
-  {
-    if (timereset && 0)
-    {
+  if (time() != timereset) {
+    if (timereset && 0) {
       log_file("PROFILE", sprintf("%s: RESET-STAT: %d objs %d ticks: %d..%d..%d\n"
 				 , ctime(timereset), nrresets, rsumcost
 				 , rmincost, rsumcost / (nrresets || 1), rmaxcost
@@ -1005,8 +998,7 @@ static int _reset_fun (object prev, object this)
   }
 
   maxcost = get_eval_cost();
-  if (prev && this)
-  {
+  if (prev && this) {
     cl = bind_lambda(unbound_lambda(0, ({#'call_other, this, "reset", 0 })), prev); /*'*/
     funcall(cl);
   }
@@ -1052,8 +1044,7 @@ static mixed _modify_cmd_fun (string cmd, object player)
 // lifetime variables, message buffers).
 
 {
-  if (caller_stack_depth() < 2)
-  {
+  if (caller_stack_depth() < 2) {
     // We need one stacked command level to be able to run the
     // registered command functions.
     // Damn! :-(
@@ -1064,10 +1055,6 @@ static mixed _modify_cmd_fun (string cmd, object player)
     // player might got destructed in the command_me(), e.g. by cmd == 'quit'
     if (player)
       player->FlushReceive();
-/*
-    if (player && QOI(player))
-      player->PrintPrompt();
-*/
     return 1;
   }
   player->PushCmdData();
@@ -1113,8 +1100,7 @@ static string _notify_fail_fun (string cmd, object command_giver)
 {
   mixed rc;
   rc = (({mapping})this_player()->PopCmdData() || ([]))["NotifyFail"];
-  if (pointerp(rc))
-  {
+  if (pointerp(rc)) {
     rc = funcall(rc[0]);
     if (!stringp(rc))
         raise_error(sprintf("Invalid notify_fail message '%O' for %O\n", rc, this_player()));
@@ -1211,8 +1197,7 @@ void inaugurate_master (int arg)
 
 {
 
-  if (!arg) // Mud started - one-time inits
-  {
+  if (!arg) { // Mud started - one-time inits
     mixed *info;
     int   i;
     string abc;
@@ -1234,8 +1219,7 @@ void inaugurate_master (int arg)
     NEWDIR(SECURESAVEPATH);
     NEWDIR(WPATH);
     abc = "abcdefghijklmnopqrstuvwxyz";
-    for (i = 0; i < sizeof(abc); i++)
-    {
+    for (i = 0; i < sizeof(abc); i++) {
       NEWDIR(SAVEPATH+abc[i..i]);
       NEWDIR(MAILPATH+abc[i..i]);
       NEWDIR(SECURESAVEPATH+abc[i..i]);
@@ -1275,8 +1259,7 @@ void inaugurate_master (int arg)
   if (find_call_out("wiz_decay") < 0)
     call_out("wiz_decay", 3600);
 
-  if (!HookSet)
-  {
+  if (!HookSet) {
 #if __VERSION__ > "3.5.2"
     set_driver_hook(H_FILE_ENCODING, "UTF-8");
     configure_interactive(0, IC_ENCODING, "UTF-8");
@@ -1408,13 +1391,11 @@ void flag (string arg)
 {
   string obj, fun, rest;
 
-  if (arg == "shutdown")
-  {
+  if (arg == "shutdown") {
     shutdown();
     return;
   }
-  if (sscanf(arg, "call %s %s %s", obj, fun, rest) >= 2)
-  {
+  if (sscanf(arg, "call %s %s %s", obj, fun, rest) >= 2) {
     write(obj+"->"+fun+"(\""+rest+"\") = ");
     write(({string})call_other(obj, fun, rest));
     write("\n");
@@ -1678,9 +1659,9 @@ void send_mudwho_info()
 // Update the mudwho server.
 
 {
-    send_udp(MUDWHO_SERVER, MUDWHOPORT, sprintf(mudwho_ping, time()));
-    walk_mapping(mudwho_info, send_mudwho_info);
-    call_out("send_mudwho_info", MUDWHO_REFRESH_TIME);
+  send_udp(MUDWHO_SERVER, MUDWHOPORT, sprintf(mudwho_ping, time()));
+  walk_mapping(mudwho_info, send_mudwho_info);
+  call_out("send_mudwho_info", MUDWHO_REFRESH_TIME);
 }
 
 
@@ -1689,12 +1670,12 @@ void adjust_mudwho(object ob)
 // Adjust the mudwho server.
 
 {
-    if (ob && interactive(ob)) {
-        if (mudwho_info[ob][<5..] == "login") {
-            mudwho_info[ob][<5..] = ((string)ob->QueryRealName())[0..24];
-            send_udp(MUDWHO_SERVER, MUDWHOPORT, mudwho_info[ob]);
-        }
+  if (ob && interactive(ob)) {
+    if (mudwho_info[ob][<5..] == "login") {
+      mudwho_info[ob][<5..] = ((string)ob->QueryRealName())[0..24];
+      send_udp(MUDWHO_SERVER, MUDWHOPORT, mudwho_info[ob]);
     }
+  }
 }
 #endif /* MUDWHO */
 #endif
@@ -1705,14 +1686,14 @@ static void wiz_decay()
 // Decay the wizlist info.
 
 {
-    mixed *wl;
-    int i;
+  mixed *wl;
+  int i;
 
-    wl = wizlist_info();
-    for (i=sizeof(wl); i--; ) {
-        set_extra_wizinfo(wl[i][WL_NAME], wl[i][WL_EXTRA] * 99 / 100);
-    }
-    call_out("wiz_decay", 3600);
+  wl = wizlist_info();
+  for (i=sizeof(wl); i--; ) {
+    set_extra_wizinfo(wl[i][WL_NAME], wl[i][WL_EXTRA] * 99 / 100);
+  }
+  call_out("wiz_decay", 3600);
 }
 
 
@@ -1781,8 +1762,7 @@ void disconnect (object obj)
 // a true user and no daemon).
 
 {
-  if (getuid(obj) != ROOTID && !({int})obj->IsServiceDemon() )
-  {
+  if (getuid(obj) != ROOTID && !({int})obj->IsServiceDemon() ) {
     if (IS_WIZARD(obj) && ({int})obj->QueryInvis())
       catch(load_obj(CHANNEL_D)->SendEmote("general", capitalize(getuid(obj)),"is netdead",1));
     else
@@ -1922,13 +1902,11 @@ object compile_object (string filename)
   //   return 0;
   vmaster = ({mixed})(PREV->Query(SP_VMASTER))|| PREV;
   room = ({object})vmaster->compile_object(filename);
-  if (!room && (obj = environment(PREV)))
-  {
+  if (!room && (obj = environment(PREV))) {
     vmaster = ({mixed})(obj->Query(SP_VMASTER)) || obj;
     room = ({object})vmaster->compile_object(filename);
   }
-  if (!room)
-  {
+  if (!room) {
     filepath = implode(explode(filename,"/")[0..<2],"/");
     vmaster = filepath+"/vmaster";
     if (0 <= file_size(vmaster+".c"))
@@ -2139,8 +2117,8 @@ mixed prepare_destruct (object obj)
     }
     catch(load_obj(CHANNEL_D)->UnregisterUser(obj));
 
-/* To find out about the strange destructions of wizards... */
-if (!catch(i = ({int})obj->QueryIsPlayer()) && i
+    /* To find out about the strange destructions of wizards... */
+    if (!catch(i = ({int})obj->QueryIsPlayer()) && i
     && (    obj != TP || obj != TI
          || TP != previous_object(caller_stack_depth()-1)
          || TP != TI
@@ -2151,28 +2129,27 @@ if (!catch(i = ({int})obj->QueryIsPlayer()) && i
             && object_name(previous_object(1)) != "/"+capitalize(getuid(previous_object(1)))
            )
        )
-   ) {
-  str = (rname) || ("NPC '"+name+"'");
-  str = ctime(time())+" "+capitalize(str)
-        +(str != getuid(obj) ? (" ["+getuid(obj)+"] "):" ")
-        +query_user_level(obj);
-  if (!interactive(obj))
-    str += " netdead.";
-  else if (QIDLE(obj))
-    str += " idle "+QIDLE(obj)+" sec.";
-  else
-    str += " active.";
-  str += backtrace();
-  if (file_size("/log/DESTRUCT") >= 50000)
-    catch(rename("/log/DESTRUCT", "/log/DESTRUCT.old"));
-  log_file("DESTRUCT", str);
-}
+    ) {
+      str = (rname) || ("NPC '"+name+"'");
+      str = ctime(time())+" "+capitalize(str)
+          +(str != getuid(obj) ? (" ["+getuid(obj)+"] "):" ")
+          +query_user_level(obj);
+      if (!interactive(obj))
+        str += " netdead.";
+      else if (QIDLE(obj))
+        str += " idle "+QIDLE(obj)+" sec.";
+      else
+        str += " active.";
+      str += backtrace();
+      if (file_size("/log/DESTRUCT") >= 50000)
+        catch(rename("/log/DESTRUCT", "/log/DESTRUCT.old"));
+      log_file("DESTRUCT", str);
+    }
   } /* if (is gopher) */
 
   /* Destruct all shadows of obj. This was in the driver formerly. */
   if (!QSHADOWING(obj))
-    for (sh = SHADOW(obj, 0); sh; sh = next)
-    {
+    for (sh = SHADOW(obj, 0); sh; sh = next) {
       next = SHADOW(sh, 0);
       funcall(bind_lambda(#'unshadow, sh)); /* Avoid deep recursion */ /*'*/
       destruct(sh);
@@ -2301,7 +2278,7 @@ void slow_shut_down (int minutes)
 	       , armageddon_ob = find_object(SHUTDEMON));
     SETEUID(ROOTID);
     if (err)
-          return;
+      return;
     filter(users(), lambda(({'u}),({#'&&,                                          /*'*/
       ({#'environment, 'u}),                                                       /*'*/
       ({#'!=, 'u, ({#'this_player})}),                                             /*'*/
@@ -2309,8 +2286,7 @@ void slow_shut_down (int minutes)
     })));
     armageddon_ob->set_reason("Game is out of memory.");
     armageddon_ob->shut(minutes);
-  }
-  else {
+  } else {
     log_file("GAME_LOG", "  Armageddon already active\n");
   }
 }
@@ -2399,14 +2375,12 @@ string *error_logfile (string file)
     puid = explode(file, "/")[2];
     if (file_size(WPATH+puid) == -2)
       lfile += ({ WPATH+puid+"/.err" });
-  }
-  else if (file_size(DPATH+cuid) == -2) {
+  } else if (file_size(DPATH+cuid) == -2) {
     lfile = ({ PPATH+cuid+"/.err" });
     puid = explode(file, "/")[2];
     if (file_size(WPATH+puid) == -2)
       lfile += ({ WPATH+puid+"/.err" });
-  }
-  else {
+  } else {
     if (cuid == ROOTID) cuid = "root";
     lfile = ({ "/log/ERR/"+cuid });
   }
@@ -2476,8 +2450,7 @@ void log_error (string file, string err, int warn, int line)
   if (IS_IMMORTAL(TI))
     write (err);
   lfile = error_logfile(file);
-  if (time() > last_log_time+59 || lfile[0] != last_log_file[0])
-  {
+  if (time() > last_log_time+59 || lfile[0] != last_log_file[0]) {
     last_log_time = time();
     last_log_file = lfile;
     err = " -- "+ctime()+
@@ -2552,8 +2525,7 @@ mixed heart_beat_error (object culprit, string err,
     else
       catch(map(file, #'write_file, message+"\n  "+err));                        /*'*/
     causer = find_object(curobj);
-  }
-  else {
+  } else {
     message = "Offending object not locatable (maybe destructed).\n";
     causer = 0;
   }
@@ -2603,11 +2575,10 @@ mixed heart_beat_error (object culprit, string err,
           catch(load_obj(CHANNEL_D)->SendTell("error", "MASTER",
             "Heartbeat of "+capitalize(getuid(culprit))+" turned off.\n",1));
           CWRITE("A wrongness in the fabric of space stops your heart!\n");
-        }
-        else {
-        catch(load_obj(CHANNEL_D)->SendTell("error", "MASTER",
-          "Heartbeat of "+capitalize(getuid(culprit))+" continues.\n",1));
-          CWRITE("Shortly you notice a wrongness in the fabric of space.\n");
+        } else {
+          catch(load_obj(CHANNEL_D)->SendTell("error", "MASTER",
+            "Heartbeat of "+capitalize(getuid(culprit))+" continues.\n",1));
+            CWRITE("Shortly you notice a wrongness in the fabric of space.\n");
         }
       }
     }

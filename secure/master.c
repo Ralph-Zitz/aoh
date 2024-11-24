@@ -1112,14 +1112,14 @@ static string _notify_fail_fun (string cmd, object command_giver)
 protected void _telnet_negot_fun( int action, int option, int * opts, object prev )
 {
   if (!prev)
-	  return;
+    return;
   prev->got_telnet(action, option, opts);
 }
 
 protected void _no_echo_fun (int flag, object user)
 {
   if (!user)
-  	return;
+    return;
   user->set_noecho( flag );
 }
 

@@ -3,6 +3,7 @@
 *.back
 *.err
 *.swp
+._*
 .DS_Store
 .vscode*
 *.code-workspace

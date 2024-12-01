@@ -12,7 +12,7 @@
 */
 
 #include <secure/config.h>
-#include <driver/debug_info.h>
+#include <debug_info.h>
 
 #define DELAY 600
 

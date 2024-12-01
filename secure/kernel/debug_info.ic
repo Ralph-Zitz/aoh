@@ -3,7 +3,7 @@
 #define __DEBUG_INFO__
 
 #include <driver/driver_info.h>
-#include <driver/debug_info.h>
+#include <debug_info.h>
 #include <driver/object_info.h>
 
 mixed debug_info(int what, varargs mixed* args)

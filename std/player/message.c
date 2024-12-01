@@ -25,6 +25,7 @@
 #include <driver/input_to.h>
 #include <driver/driver_info.h>
 #include <driver/telnet.h>
+#include <local_telnet.h>
 
 /* the max. size of the editing-buffer */
 #define MAX_BUFFER 5000

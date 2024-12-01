@@ -107,6 +107,7 @@
 #pragma no_range_check
 #include <driver/input_to.h>            // INPUT_*
 #include <driver/telnet.h>
+#include <local_telnet.h>
 #include <driver/configuration.h>
 #include <secure/config.h>
 #include <secure/wizlevels.h>

@@ -2,6 +2,7 @@
 #include <newmxp.h>
 #include <macros.h>
 #include <driver/telnet.h>
+#include <local_telnet.h>
 
 private nosave mapping mxp_version_info;
 private nosave mapping mxp_support_info;

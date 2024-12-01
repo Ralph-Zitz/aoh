@@ -30,6 +30,7 @@
 #include <stats.h>
 #include <driver/tls.h>
 #include <driver/telnet.h>
+#include <local_telnet.h>
 #include <driver/time.h>
 #include <player.h>
 #include <macros.h>

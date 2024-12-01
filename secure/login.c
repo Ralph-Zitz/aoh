@@ -180,6 +180,7 @@
 #include <secure/wizlevels.h>
 #include <driver/debug_message.h>
 #include <driver/telnet.h>
+#include <local_telnet.h>
 
 #define STDPLAYER   "/std/player"  // The initial player object.
 #define STDWIZARD   "/std/wizard"  // The initial wizard object.

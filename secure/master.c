@@ -731,7 +731,7 @@ object load_obj (mixed obj)
       SETEUID(NULLID);
     else
       SETEUID(ROOTID);
-    catch(call_other(obj, "???"));
+    catch(load_object(obj));
     SETEUID(ROOTID);
   }
   return find_object(obj);
@@ -1575,10 +1575,10 @@ mixed get_simul_efun ()
 // an immediate shutdown should occur.
 
 {
-  if(!catch(call_other(SIMUL_EFUN_FILE, "???")))
+  if(!catch(load_object(SIMUL_EFUN_FILE)))
     return SIMUL_EFUN_FILE;
   efun::write("Failed to load " + SIMUL_EFUN_FILE + "\n");
-  if(!catch(call_other(SPARE_SIMUL_EFUN_FILE, "???")))
+  if(!catch(load_object(SPARE_SIMUL_EFUN_FILE)))
     return SPARE_SIMUL_EFUN_FILE;
   efun::write("Failed to load " + SPARE_SIMUL_EFUN_FILE + "\n");
   efun::shutdown();
@@ -2274,7 +2274,7 @@ void slow_shut_down (int minutes)
       || minutes < ({int})armageddon_ob->query_time_left() / 60
       || ({int})armageddon_ob->query_time_left() <= 0
      ) {
-    err = catch(call_other(SHUTDEMON, "???")
+    err = catch(load_object(SHUTDEMON)
 	       , armageddon_ob = find_object(SHUTDEMON));
     SETEUID(ROOTID);
     if (err)

@@ -99,7 +99,7 @@ public varargs string ExaIntLong(string what)  {
 public varargs string IntShort(string what) {
   string sh;
   if (!(sh = QueryIntShort()) || sh == "")
-    return sh;
+    return MSG_RNAME(sh);
   return MSG_RNAME(sh+implode(filterExtra(P_INT_SHORT), ""));
 }
 

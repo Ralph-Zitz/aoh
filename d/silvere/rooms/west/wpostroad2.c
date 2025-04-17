@@ -75,9 +75,8 @@ varargs void create()
    Set(P_REGION,REGION_CITY);
    Set(P_COORDINATES, ({ ({ -140,-10,0 }), C_SILVERE }) );
 
-   Set(P_NOWAY_MSG,
-"You run silly around. Somehow you have the feeling, that everyone laughs\
- at you.\n");
+   Set(P_NOWAY_MSG, "You run silly around. Somehow you have the feeling, that "
+                    "everyone laughs at you.\n");
    AddExit("east",   SIL_WEST("wbank"));
    AddExit("south",  SIL_WEST("wpostroad1"));
    AddExit("west",   SIL_WEST("wpostoffice"));

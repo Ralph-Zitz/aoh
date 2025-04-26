@@ -72,6 +72,7 @@ int enter_palace2(string str)
        enter_palace();
        return 1;
     }
+    return 0;
 }
 
 varargs void create()

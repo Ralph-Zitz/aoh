@@ -23,6 +23,7 @@ int leave_throneroom(string str)
       TP->move(SIL_PALACE("palenter"),M_GO);
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

@@ -24,6 +24,7 @@ int enter_throneroom(string str)
       TP->move(SIL_PALACE("throneroom"),M_GO);
       return 1;
    }
+   return 0;
 }
 
 int leave_palace(string str)
@@ -40,6 +41,7 @@ int leave_palace(string str)
       TP->move(SIL_CENTER("palplace5"),M_GO,"south");
       return 1;
    }
+   return 0;
 }
 
 varargs void create()

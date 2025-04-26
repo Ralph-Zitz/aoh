@@ -1,6 +1,7 @@
 #include <macros.h>
 #include <msgclass.h>
 #include <secure/config.h>
+#include <driver/tls.h>
 #define DB_PATH DAEMONSAVEPATH "room_ids.sqlite3"
 
 #ifdef __SQLITE__
@@ -36,7 +37,8 @@ private mixed init_table() {
     string create_t_statement =
         "CREATE TABLE IF NOT EXISTS room_ids ("
         "  id INTEGER PRIMARY KEY AUTOINCREMENT,"
-        "  filename TEXT UNIQUE NOT NULL"
+        "  filename TEXT UNIQUE NOT NULL,"
+        "  hash TEXT UNIQUE NOT NULL"
         ");";
     string create_i_statement =
         "CREATE UNIQUE INDEX IF NOT EXISTS idx_room_ids_filename "
@@ -45,22 +47,24 @@ private mixed init_table() {
 }
 
 private int insert_record(string fname) {
+    string h = hash(TLS_HASH_MD5, fname);
     string insert_statement =
-        "INSERT INTO room_ids (filename) "
-        "VALUES (?1);";
+        "INSERT INTO room_ids (filename, hash) "
+        "VALUES (?1, ?2);";
     if (!db_open)
         raise_error("Error: SQLite is not connected.\n");
-    sl_exec(insert_statement, fname); 
+    sl_exec(insert_statement, fname, h); 
     return sl_insert_id();
 }
 
 private int insert_id_record(int id, string fname) {
+    string h = hash(TLS_HASH_MD5, fname);
     string insert_statement =
-        "INSERT INTO room_ids (id, filename) "
-        "VALUES (?1, ?2);";
+        "INSERT INTO room_ids (id, filename, hash) "
+        "VALUES (?1, ?2, ?3);";
     if (!db_open)
         raise_error("Error: SQLite is not connected.\n");
-    sl_exec(insert_statement, id, fname); 
+    sl_exec(insert_statement, id, fname, h); 
     return sl_insert_id();
 }
 

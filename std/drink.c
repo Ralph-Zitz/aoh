@@ -87,6 +87,7 @@ inherit "std/thing";
 #include <config.h>
 #include <search.h>
 #include <classes.h>
+#include <msgclass.h>
 
 #define PL this_player()
 #define TP this_player()
@@ -112,38 +113,38 @@ int	fill_vessel(int n);
 void	log_drink(string me);
 
 void create() {
-    string *myname;
+  string *myname;
 
-    /* log new stuff */
-    if (sizeof(myname = explode(object_name(this_object()), "#")) == 1)
-        log_drink(myname[0]);
+  /* log new stuff */
+  if (sizeof(myname = explode(object_name(this_object()), "#")) == 1)
+    log_drink(myname[0]);
 
-    if (::create()) return;	/* what is this good for? */
+  if (::create()) return;	/* what is this good for? */
 
-    kind = "drink";
-    alc  = heal = 0;
-    dvolume = 0;
-    vname   = "bottle";
-    vvolume = 500;
-    vweight = 500;
-    vvalue  = 10;
-    SetIds(({C_DRINK,C_VESSEL}));
+  kind = "drink";
+  alc  = heal = 0;
+  dvolume = 0;
+  vname   = "bottle";
+  vvolume = 500;
+  vweight = 500;
+  vvalue  = 10;
+  SetIds(({C_DRINK,C_VESSEL}));
 
-    Set(P_HELP_MSG,
-"A vessel to hold a drink. Simply drink it to quench your thirst.\n"
-"If there is liquid in your vicinity, refilling the vessel might work, too.\n"
-       );
+  Set(P_HELP_MSG,
+      "A vessel to hold a drink. Simply drink it to quench your thirst. "
+      "If there is liquid in your vicinity, refilling the vessel might work, "
+      "too.\n"
+  );
 }
 
 /*
  * public functions
  */
-void init()
-{
-    ::init();
-    add_action("_drink","drink");
-    add_action("_refill","refill");
-    add_action("_refill","fill");
+void init() {
+  ::init();
+  add_action("_drink","drink");
+  add_action("_refill","refill");
+  add_action("_refill","fill");
 }
 
 /*********************************************
@@ -158,9 +159,9 @@ string QueryFoodMsg2()		{ return msg2; }
 /* I think this is not optimal --- Organimedes */
 string SetLong(string desc)	{ return long_desc = desc; }
 varargs string QueryLong() {
-    if (!dvolume) return("An empty "+vname+".\n");
-    else if (long_desc && long_desc != "") return(long_desc);
-    else return ("This "+vname+" is filled with "+dname+".\n");
+  if (!dvolume) return("An empty "+vname+".\n");
+  else if (long_desc && long_desc != "") return(long_desc);
+  else return ("This "+vname+" is filled with "+dname+".\n");
 }
 int SetFoodAlc(int n)		{ return alc = n; }
 int QueryFoodAlc()		{ return alc; }
@@ -171,20 +172,20 @@ int QueryFoodHeal()		{ return heal; }
  * the following properties cannot be set directly
  */
 varargs string QueryShort() {
-    if (!dvolume) return("a "+vname);
-    else return ("a "+vname+" filled with "+dname);
+  if (!dvolume) return("a "+vname);
+  else return ("a "+vname+" filled with "+dname);
 }
 
 varargs int QueryWeight()	{ return (vweight + dvolume); }
 
 varargs int QueryValue() {
-    int min_value, value;
+  int min_value, value;
 
-    value = ::QueryValue();
-    min_value = MIN_FOOD_COST(dvolume/14, 0, alc, heal, QueryWeight());
-		/* dvolume/14 is approx. equal to soak value of liquid */
-    if (value < min_value) value = min_value;
-    return (value + vvalue);
+  value = ::QueryValue();
+  min_value = MIN_FOOD_COST(dvolume/14, 0, alc, heal, QueryWeight());
+	/* dvolume/14 is approx. equal to soak value of liquid */
+  if (value < min_value) value = min_value;
+  return (value + vvalue);
 }
 
 /* QueryFoodSoak() returns the soak value of one draught */
@@ -213,160 +214,154 @@ int QueryMaxFull()	{ return (dvolume == vvolume); }
  * new functions; with "_" to avoid built-in properties
  */
 string Set_Drink_Name(string str)	{
-    AddId(str); return dname = str;
+  AddId(str); return dname = str;
 }
+
 string Set_Vessel_Name(string str)	{
-    AddId(str); return vname = str;
+  AddId(str); return vname = str;
 }
+
 int Set_Vessel_Value(int n)	{ return vvalue = n; }
 int Set_Vessel_Weight(int n) 	{ return vweight = n; }
 int Set_Vessel_Volume(int n) {
-    if (n < 0) n = 0;
-    vvolume = n;
-    dvolume = n;		/* fill vessel automagically */
-    return n;
+  if (n < 0) n = 0;
+  vvolume = n;
+  dvolume = n;		/* fill vessel automagically */
+  return n;
 }
 
 /**********************************Action*********************************/
 
 /* drink something */
 int _drink(string str) {
-    int    p_soak, p_intox, value;
-    int    factor, alc_factor, old_weight;
-    string p_name;
-    string a,b;
-    int n;
+  int    p_soak, p_intox, value;
+  int    factor, alc_factor, old_weight;
+  string p_name;
+  string a,b;
+  int n;
 
-    if ( ! str )
-      return notify_fail("Drink what?\n", NOTIFY_NOT_OBJ), 0;
+  if ( ! str )
+    return notify_fail("Drink what?\n", NOTIFY_NOT_OBJ), 0;
 
-    str = norm_id( str ); n = 0;
-    if ( sscanf( str, "%s from %s", a, b ) != 2 ) {
-      if ( sscanf( str, "from %s", b ) == 1 ) {
-	a = dname;
-	notify_fail( "Drink from what?\n", NOTIFY_NOT_OBJ );
-      }
-      else {
-	a = str;
-	b = vname;
-	n = 1;
-	notify_fail( "Drink what?\n", NOTIFY_NOT_OBJ );
-      }
+  str = norm_id( str ); n = 0;
+  if ( sscanf( str, "%s from %s", a, b ) != 2 ) {
+    if ( sscanf( str, "from %s", b ) == 1 ) {
+	    a = dname;
+	    notify_fail( "Drink from what?\n", NOTIFY_NOT_OBJ );
+    } else {
+	    a = str;
+	    b = vname;
+	    n = 1;
+	    notify_fail( "Drink what?\n", NOTIFY_NOT_OBJ );
     }
-    else
+  } else
       notify_fail( "Drink what from what?\n", NOTIFY_NOT_OBJ );
 
-    if ( a == "from" )
-      return notify_fail( "Drink from what?\n", NOTIFY_NOT_VALID ), 0;
+  if ( a == "from" )
+    return notify_fail( "Drink from what?\n", NOTIFY_NOT_VALID ), 0;
 
-    if ( ( search( PL, b, SEARCH_INV_ENV|SM_OBJECT ) ) != TO )
-      return 0;
+  if ( ( search( PL, b, SEARCH_INV_ENV|SM_OBJECT ) ) != TO )
+    return 0;
 
-    if ( a == vname )
-      return notify_fail( "You cannnot drink "+add_a(a)+", try to drink from it.\n" ), 0;
+  if ( a == vname )
+    return notify_fail( "You cannnot drink "+add_a(a)+", try to drink from it.\n" ), 0;
 
-    if ( a != dname ) {
-      if ( ! n )
-	return notify_fail( "There is no "+a+" inside the "+b+".\n",
-			    NOTIFY_NOT_OBJ ), 0;
-      else
-	return 0;
-    }
-
-    if (environment() != PL)
-      return notify_fail("You have to get it first!\n", NOTIFY_NOT_VALID ), 0;
-
-    if (dvolume <= 0) {
-	notify_fail("The "+vname+" is empty!\n");
-	return 0;
-    }
-
-    p_intox = ({int})PL->Query(P_ALCOHOL);
-    p_soak  = ({int})PL->Query(P_DRINK);
-    p_name  = ({string})PL->QueryName();
-    if (dvolume - DRAUGHT <= 0)
-	factor = 1000;
+  if ( a != dname ) {
+    if ( ! n )
+	    return notify_fail( "There is no "+a+" inside the "+b+".\n",
+			                    NOTIFY_NOT_OBJ ), 0;
     else
-	factor = DRAUGHT * 1000 / dvolume;	/* avoid rounding errors */
-    alc_factor = alc * factor / 1000;
-    if ((p_soak + QueryFoodSoak() <= ({int})PL->Query(P_MAX_DRINK)) &&
-	(p_intox + alc_factor <= ({int})PL->Query(P_MAX_ALCOHOL))) {
+	    return 0;
+  }
 
-	if (msg1 && msg1 != "")
-	    write(msg1+"\n");
-	else
-	    write("You drink some "+dname+".\n");
+  if (environment() != PL)
+    return notify_fail("You have to get it first!\n", NOTIFY_NOT_VALID ), 0;
 
-	if (msg2 && msg2 != "")
-	    say(p_name + " " + process_string(msg2)+"\n");
-	else
-	    say(p_name + " drinks some " + dname + ".\n");
+  if (dvolume <= 0) {
+	  notify_fail("The "+vname+" is empty!\n");
+	  return 0;
+  }
 
-	/* remember weight before drinking: */
-	old_weight = QueryWeight();
+  p_intox = ({int})PL->Query(P_ALCOHOL);
+  p_soak  = ({int})PL->Query(P_DRINK);
+  p_name  = ({string})PL->QueryName();
+  if (dvolume - DRAUGHT <= 0)
+	  factor = 1000;
+  else
+	  factor = DRAUGHT * 1000 / dvolume;	/* avoid rounding errors */
+  alc_factor = alc * factor / 1000;
+  if ((p_soak + QueryFoodSoak() <= ({int})PL->Query(P_MAX_DRINK)) &&
+	    (p_intox + alc_factor <= ({int})PL->Query(P_MAX_ALCOHOL))) {
+    if (msg1 && msg1 != "")
+	    msg_write(CMSG_GENERIC, msg1+"\n");
+	  else
+	    msg_write(CMSG_GENERIC, "You drink some "+dname+".\n");
 
-	PL->AddDrink(QueryFoodSoak());
-	PL->AddAlcohol(alc_factor);
-	PL->Heal(heal*factor/1000);
+	  if (msg2 && msg2 != "")
+	    msg_say(CMSG_SAY, p_name + " " + process_string(msg2)+"\n");
+	  else
+	    msg_say(CMSG_SAY, p_name + " drinks some " + dname + ".\n");
 
-        value = QueryValue();
-	SetValue(value - value*factor/1000);
-	alc     = alc   - alc  *factor/1000;
-	heal    = heal  - heal *factor/1000;
-	dvolume = dvolume - DRAUGHT;
-	if (dvolume <= 0) empty_vessel();
+	  /* remember weight before drinking: */
+	  old_weight = QueryWeight();
 
-        /* Notify us that we had been drunk */
-        this_object()->NotifyDrink(this_player());
-	/* update weight information for environment: */
-	environment()->AddWeight(QueryWeight()-old_weight);
+	  PL->AddDrink(QueryFoodSoak());
+	  PL->AddAlcohol(alc_factor);
+	  PL->Heal(heal*factor/1000);
 
-    }
-    else if (p_intox + alc_factor > ({int})PL->Query(P_MAX_ALCOHOL)) {
-	write("You fail to reach the "+dname+" with your mouth!\n");
-	say(p_name + " tries to drink a "+dname+" but fails.\n");
-    }
-    else if (p_soak + QueryFoodSoak() > ({int})PL->Query(P_MAX_DRINK)) {
-	write("You can't possibly drink that much right now!\n"+
-	      "You feel crosslegged enough as it is.\n");
-	say(p_name + " tries to drink a "+dname+" but fails.\n");
-    }
+    value = QueryValue();
+	  SetValue(value - value*factor/1000);
+	  alc     = alc   - alc  *factor/1000;
+	  heal    = heal  - heal *factor/1000;
+	  dvolume = dvolume - DRAUGHT;
+	  if (dvolume <= 0)
+      empty_vessel();
 
-    return 1;
+    /* Notify us that we had been drunk */
+    this_object()->NotifyDrink(this_player());
+	  /* update weight information for environment: */
+	  environment()->AddWeight(QueryWeight()-old_weight);
+  } else if (p_intox + alc_factor > ({int})PL->Query(P_MAX_ALCOHOL)) {
+	  msg_write(CMSG_GENERIC, "You fail to reach the "+dname+" with your mouth!\n");
+	  msg_say(CMSG_SAY, p_name + " tries to drink a "+dname+" but fails.\n");
+  } else if (p_soak + QueryFoodSoak() > ({int})PL->Query(P_MAX_DRINK)) {
+	  msg_write(CMSG_GENERIC, "You can't possibly drink that much right now!\n"+
+	            "You feel crosslegged enough as it is.\n");
+	  msg_say(CMSG_SAY, p_name + " tries to drink a "+dname+" but fails.\n");
+  }
+  return 1;
 }
 
 /* refill vessel */
 int _refill(string str) {
-    object room;
-    string empty_vessel, liquid;
+  object room;
+  string empty_vessel, liquid;
 
-    if (!str || sscanf(str,"%s with %s",empty_vessel,liquid) != 2) {
-	notify_fail("Refill <vessel> with <liquid>.\n");
-	return 0;
-    }
-    if (present(empty_vessel,PL) != this_object()) {
-	notify_fail("You don't have a "+empty_vessel+".\n");
-	return 0;
-    }
-    if (dvolume > 0 && (lower_case(dname) != lower_case(liquid))) {
-	notify_fail("You can't mix different liquids.\n");
-	return 0;
-    }
+  if (!str || sscanf(str,"%s with %s",empty_vessel,liquid) != 2) {
+	  notify_fail("Refill <vessel> with <liquid>.\n");
+	  return 0;
+  }
+  if (present(empty_vessel,PL) != this_object()) {
+	  notify_fail("You don't have a "+empty_vessel+".\n");
+	  return 0;
+  }
+  if (dvolume > 0 && (lower_case(dname) != lower_case(liquid))) {
+	  notify_fail("You can't mix different liquids.\n");
+	  return 0;
+  }
 
-    room = environment(PL);
-    if (lower_case(({string})room->Query(P_REFILL)||"") != lower_case(liquid)
-     && !present(lower_case(liquid), room)
-       )
-    {
-	write("There is no "+liquid+" here.\n");
-	return 1;
-    }
-    write("You fill "+QueryShort()+" with "+liquid+".\n");
-    say(({string})PL->QueryName()+ " fills "+QueryShort()+" with "+liquid+".\n");
+  room = environment(PL);
+  if (lower_case(({string})room->Query(P_REFILL)||"") != lower_case(liquid)
+     && !present(lower_case(liquid), room)) {
+	  msg_write(CMSG_GENERIC, "There is no "+liquid+" here.\n");
+	  return 1;
+  }
+  msg_write(CMSG_GENERIC, "You fill "+QueryShort()+" with "+liquid+".\n");
+  msg_say(CMSG_SAY, ({string})PL->QueryName()+ " fills "+QueryShort()+" with "+liquid+".\n");
 
-    fill_vessel(vvolume);		/* fill vessel completely */
-    Set_Drink_Name(liquid);
-    return 1;
+  fill_vessel(vvolume);		/* fill vessel completely */
+  Set_Drink_Name(liquid);
+  return 1;
 }
 
 /******* Internal procedures *********/
@@ -377,17 +372,17 @@ int _refill(string str) {
  * The user may overload a long description.
  */
 void empty_vessel() {
-    SetFoodMsg1("");
-    SetFoodMsg2("");
-    SetFoodAlc(0);
-    SetFoodHeal(0);
-    SetValue(0);
-    fill_vessel(0);
+  SetFoodMsg1("");
+  SetFoodMsg2("");
+  SetFoodAlc(0);
+  SetFoodHeal(0);
+  SetValue(0);
+  fill_vessel(0);
 
-    /* do the naming */
-    SetIds(({"drink","vessel",vname}));		/* delete old ids */
-    SetLong("");				/* delete old long desc */
-    AddAdjective("empty");
+  /* do the naming */
+  SetIds(({"drink","vessel",vname}));		/* delete old ids */
+  SetLong("");				/* delete old long desc */
+  AddAdjective("empty");
 }
 
 /*
@@ -395,14 +390,14 @@ void empty_vessel() {
  */
 
 int fill_vessel(int volume) {
-    SetAds(({ }));
-    if (volume > vvolume)
-	dvolume = vvolume;
-    else if (volume > 0)
-	dvolume = volume;
-   else
-	dvolume = 0;
-    return dvolume;
+  SetAds(({ }));
+  if (volume > vvolume)
+	  dvolume = vvolume;
+  else if (volume > 0)
+	  dvolume = volume;
+  else
+	  dvolume = 0;
+  return dvolume;
 }
 
 /*
@@ -410,15 +405,13 @@ int fill_vessel(int volume) {
  */
 
 void log_drink(string me) {
-    string list;
+  string list;
 
-    if (file_size(DRINKLIST) > 0) {
-	list = read_file(DRINKLIST);
-	if (!sscanf(list,"%~s"+me+"%~s"))
+  if (file_size(DRINKLIST) > 0) {
+	  list = read_file(DRINKLIST);
+	  if (!sscanf(list,"%~s"+me+"%~s"))
 	    write_file(DRINKLIST,me+"\n");
-    }
-    else
-	write_file(DRINKLIST,me+"\n");
+  } else write_file(DRINKLIST,me+"\n");
 }
 
 public string Pl_Name() { return capitalize(({string})TP->QueryName()); }

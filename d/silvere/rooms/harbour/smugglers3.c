@@ -7,6 +7,7 @@
 #include <regions.h>
 #include <moving.h>
 #include <macros.h>
+#include <msgclass.h>
 inherit BASEROOM;
 
 void opened_leave_msg();
@@ -28,28 +29,32 @@ int leave_cave(){
 }
 
 void opened_leave_msg(){
-  write("You leave the cave through the thigh tunnel. "
+  msg_write(CMSG_GENERIC,"You leave the cave through the thigh tunnel. "
    "A fresh breeze welcomes you outside.\n");
-  show_room(SIL_HARBOUR("smugglers2"),NAME(TP)+" comes out of "
-   "the dark opening in the dune suddenly.\n","Somehow you feel "
-   "that someone enters the room.\n");
-  show_room(this_object(),NAME(TP)+" leaves the chamber through "
-   "the tunnel.\n","You hear someone leaving the chamber through "
-   "the tunnel.\n",({TP}));
+  msg_room(SIL_HARBOUR("smugglers2"),CMSG_ROOM|MMSG_SEE,
+    ({ NAME(TP)+" comes out of "
+       "the dark opening in the dune suddenly.\n","Somehow you feel "
+       "that someone enters the room.\n"}));
+  msg_room(this_object(),CMSG_ROOM|MMSG_SEE,
+    ({ NAME(TP)+" leaves the chamber through "
+       "the tunnel.\n","You hear someone leaving the chamber through "
+       "the tunnel.\n"}),({TP}));
 }
 
 void closed_leave_msg(){
-  write("You leave the cave through the thigh tunnel. With a "
+  msg_write(CMSG_GENERIC,"You leave the cave through the thigh tunnel. With a "
    "strenuous push, you remove the metal sheet from the "
    "exit and get outside. Ahhhh... finally fresh air again.\n");
-  show_room(SIL_HARBOUR("smugglers2"),"You think you've got a "
-   "hallicunation - but truly! There's someone coming right out "
-   "of the inside of a dune! Looking closer, you see that it's "
-   +NAME(TP),"You hear something heavy sliding over the sand. "
-   "The noise stops. Now you hear someone breathing.\n");
-  show_room(this_object(),NAME(TP)+" leaves the chamber through "
-   "the tunnel.\n","You hear someone leaving the chamber through "
-   "the tunnel.\n",({TP}));
+  msg_room(SIL_HARBOUR("smugglers2"),CMSG_ROOM|MMSG_SEE,
+   ({ "You think you've got a "
+      "hallicunation - but truly! There's someone coming right out "
+      "of the inside of a dune! Looking closer, you see that it's "
+      +NAME(TP),"You hear something heavy sliding over the sand. "
+      "The noise stops. Now you hear someone breathing.\n"}));
+  msg_room(this_object(),CMSG_ROOM|MMSG_SEE,
+  ({ NAME(TP)+" leaves the chamber through "
+     "the tunnel.\n","You hear someone leaving the chamber through "
+     "the tunnel.\n"}),({TP}));
 }
 
 varargs void create()

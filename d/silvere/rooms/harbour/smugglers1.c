@@ -10,6 +10,7 @@
 #include <moving.h>
 #include <macros.h>
 #include <rooms.h>
+#include <msgclass.h>
 inherit BASEROOM;
 
 int squeeze_through(string str);
@@ -29,7 +30,7 @@ varargs void create()
      "chain of pearls through the sand.\n");
 
    Set(P_INT_WIZMSG,
-     "Squeeze <living|myself|me> through the bushes to harbour area.\n"
+     "Squeeze <living|myself|me> through the bushes to harbour area. "
      "Follow the footsteps to smugglers nest.\n");
 
    AddVItem(([
@@ -112,41 +113,43 @@ int squeeze_through(string str)
      if(environment(somebody)!=TO) return 0;
    }
    if(somebody!=TP){
-     write("With an unexpected movement and a mischievous grin on your "
+     msg_write(CMSG_GENERIC, "With an unexpected movement and a mischievous grin on your "
       "face, you push "+CAP(NAME(somebody))+" into the thorny bushes. "
       "Cursing and struggling wildly with the thorns, "+HESHE(somebody)+
       " disappears through the gap.\n");
-     tell_object(somebody,"With an unexpected movement and a mischievous "
+     msg_object(somebody,CMSG_GENERIC, "With an unexpected movement and a mischievous "
       "grin on "+HISHER(TP)+" face, "+CAP(NAME(TP))+" pushes you into the "
       "thorny bushes. Ouch! Struggling wildly, you finally reach the other "
       "side of the bushrow.\n");
-     show_room(TO,"With an unexpected movement and a mischievous grin on "+
-       HISHER(TP)+" face, "+CAP(NAME(TP))+" pushes "+CAP(NAME(somebody))+
-      " into the thorny bushes. Cursing and struggling wildly with the "
-      "thorns, "+HESHE(somebody)+" disappears through the gap.\n",
-      "Someone chuckles mischievously. ",({TP,somebody}));
+     msg_room(TO,CMSG_ROOM|MMSG_SEE,
+       ({ "With an unexpected movement and a mischievous grin on "+
+          HISHER(TP)+" face, "+CAP(NAME(TP))+" pushes "+CAP(NAME(somebody))+
+          " into the thorny bushes. Cursing and struggling wildly with the "
+          "thorns, "+HESHE(somebody)+" disappears through the gap.\n",
+          "Someone chuckles mischievously. "}),({TP,somebody}));
    }
    else{
-     write("You take a deep breath and squeeze yourself through these "
+     msg_write(CMSG_GENERIC, "You take a deep breath and squeeze yourself through these "
       "thorny bushes, carefully trying to avoid the sharp "
       "bloodlusty thorns. Ouch! Struggling wildly.. Ouch! Ouch! ... "
       "you finally... OUCH! ... get through. \"Phew!!!\" - You wipe the "
       "sweat from your forehead. You are back in the harbour now.\n");
-   show_room(TO,
-    "Cursing and struggling wildly with the thorns, "+CAP(NAME(somebody))+
-    " disappears through the bushes.\n",
-    "You hear someone cursing and the sound of breaking "
-    "branches.\n",({somebody}));
+   msg_room(TO,CMSG_ROOM|MMSG_SEE,
+    ({ "Cursing and struggling wildly with the thorns, "+CAP(NAME(somebody))+
+       " disappears through the bushes.\n",
+       "You hear someone cursing and the sound of breaking "
+       "branches.\n"}),({somebody}));
    }
-   show_room(SIL_HARBOUR("quay2_3"),"There's a sudden noise in "
-    "the bushes to the north! Branches are cracking with a "
-    "sound as if something huuuge breaks through the bushes! "
-    "Suddenly, "+CAP(NAME(somebody))+" appears. Wiping the sweat from "
-    +HISHER(somebody)+" forehead, "+HESHE(somebody)+" goes: \"Phew!!!\"\n",
-    "There's a sudden noise in the bushes to your south! "
-    "Branches are cracking with a sound as if something huuge "
-    "breaks through the bushes! Finally you hear someone "
-    "saying: \"Phew!!!\"\n");
+   msg_room(SIL_HARBOUR("quay2_3"),CMSG_ROOM|MMSG_SEE,
+    ({ "There's a sudden noise in "
+       "the bushes to the north! Branches are cracking with a "
+       "sound as if something huuuge breaks through the bushes! "
+       "Suddenly, "+CAP(NAME(somebody))+" appears. Wiping the sweat from "
+       +HISHER(somebody)+" forehead, "+HESHE(somebody)+" goes: \"Phew!!!\"\n",
+       "There's a sudden noise in the bushes to your south! "
+       "Branches are cracking with a sound as if something huuge "
+       "breaks through the bushes! Finally you hear someone "
+       "saying: \"Phew!!!\"\n"}));
    somebody->move(SIL_HARBOUR("quay2_3"),M_GO);
 // reduce HP a bit here if you like to *grin evilly*
    return 1;
@@ -164,22 +167,23 @@ int follow_prints(string str)
    if (sizeof(exp)!=1) return 0;
    if ((strstr(lower_case(exp[0]),"step")==-1) &&
        (strstr(lower_case(exp[0]),"print")==-1)) return 0;
-   write("You start to follow the footprints. Having passed several "
+   msg_write(CMSG_GENERIC,"You start to follow the footprints. Having passed several "
     "dunes, sand valleys and seagull's nests, the trace of footprints "
     "suddenly comes to an end.\n"
     "The wind has blown so much sand into your eyes that they are "
     "quite encrusted now, making it difficult for you to see the "
     "surroundings.\n");
-   show_room(TO,
-     CAP(NAME(TP))+" starts to stomp along the line of footprints, "
-    "watching them attentively. Finally "+HESHE(TP)+" disappears "
-    "behind a dune.\n",
-    "You hear someone stomping away through the sand.\n",({TP}));
-   show_room(SIL_HARBOUR("smugglers2"),"Suddenly, "+CAP(NAME(TP))+
-    " comes along and stops here, staring at the sand-floor "
-    "as if he misses something.\n",
-    "You hear someone (or something?!?) stomping through the "
-    "sand moving towards you. Suddenly there's silence.\n");
+   msg_room(TO,CMSG_ROOM|MMSG_SEE,
+     ({ CAP(NAME(TP))+" starts to stomp along the line of footprints, "
+        "watching them attentively. Finally "+HESHE(TP)+" disappears "
+        "behind a dune.\n",
+        "You hear someone stomping away through the sand.\n"}),({TP}));
+   msg_room(SIL_HARBOUR("smugglers2"),CMSG_ROOM|MMSG_SEE,
+    ({ "Suddenly, "+CAP(NAME(TP))+
+       " comes along and stops here, staring at the sand-floor "
+       "as if he misses something.\n",
+       "You hear someone (or something?!?) stomping through the "
+       "sand moving towards you. Suddenly there's silence.\n"}));
    if (!deep_present("blinder")){
      sand = clone_object(OBJ("sandy_eyes"));
      if (({int})sand->move(TP,M_SILENT) != ME_OK){

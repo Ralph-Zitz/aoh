@@ -327,5 +327,4 @@ int enter_cave(){
     TP->move(SIL_HARBOUR("smugglers3"),M_GO);
     return 1;
   }
-  return 0;
 }

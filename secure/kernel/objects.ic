@@ -394,8 +394,10 @@ public varargs object deep_present(mixed what, object where)
       for (i = 0; i < sizeof(objs); i++)
         if (({int})objs[i]->id(what))
           break;
-      if (i < sizeof(objs))
-        objs = objs[i..];
+        if (i == sizeof(objs))
+          objs = ({});
+        else
+          objs = objs[i..];
     }
     rc = sizeof(objs) ? objs[0] : 0;
   }

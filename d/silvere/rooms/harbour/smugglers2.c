@@ -13,6 +13,7 @@
 #include <regions.h>
 #include <moving.h>
 #include <macros.h>
+#include <msgclass.h>
 inherit BASEROOM;
 
 
@@ -156,44 +157,44 @@ varargs void create()
 
 string check_prints(){
   string str;
-  str = "These footprints are leading down from a large sandhill and "+
+  str = "These footprints are leading down from a large sandhill and "
         "meander exactly to this place. ";
-  if (is_open) str += "From here, they lead on towards that dark "+
+  if (is_open) str += "From here, they lead on towards that dark "
                       "opening in one of the dunes.\n";
-  else str += "But strangely, the prints are suddenly ending in front "+
-              "of a dune. It seems as if the sand simply swallowed the "+
+  else str += "But strangely, the prints are suddenly ending in front "
+              "of a dune. It seems as if the sand simply swallowed the "
               "rest of the footprints.\n";
   return str;
 }
 
 string check_opening(){
   if (is_open) return
-    "You wonder where this creepy dark opening leads to - Perhaps "+
+    "You wonder where this creepy dark opening leads to - Perhaps "
     "you should just enter it and investigate it from inside.\n";
   else return 0;
 }
 
 string check_rope(){
   if (is_open) return
-    "The rope is tied to a large metal sheet that was used to hide the "+
-    "entrance to that strange cave in the dune. Someone removed the sheet "+
+    "The rope is tied to a large metal sheet that was used to hide the "
+    "entrance to that strange cave in the dune. Someone removed the sheet "
     "recently.\n";
   else return
-    "That rope is covered with sand, it's almost completely sunken in it. "+
-    "But the thing could still be useful. So why not just pull it out "+
+    "That rope is covered with sand, it's almost completely sunken in it. "
+    "But the thing could still be useful. So why not just pull it out "
     "of the sand?\n";
 }
 
 string check_sheet(){
   if (is_open) return
-    "It's a large rusty metal sheet, used to close the opening that leads "+
+    "It's a large rusty metal sheet, used to close the opening that leads "
     "into the dune here. It was pulled away and the opening was uncovered.\n";
   else return 0;
 }
 
 string check_flotsam(){
   if (is_open) return
-    "Old rotten planks, torn fishnets, shoes and other unidentifiable "+
+    "Old rotten planks, torn fishnets, shoes and other unidentifiable "
     "stuff. Nothing useful, except you like to ignite a little fire.\n";
   else return
     "Old rotten planks, torn fishnets, shoes and other unidentifiable "
@@ -216,19 +217,20 @@ int follow_prints(string str)
    if (sizeof(exp)!=1) return 0;
    if ((strstr(lower_case(exp[0]),"step")==-1) &&
        (strstr(lower_case(exp[0]),"print")==-1)) return 0;
-   write("You start to follow the footprints. Having passed several "
+   msg_write(CMSG_GENERIC,"You start to follow the footprints. Having passed several "
          "dunes, sand-valleys and seagull-nests, you finally come "
          "to a row of bushes. The footprints end here.\n");
-   show_room(this_object(),
-         CAP(NAME(TP))+" starts to stomp along the line of footprints, "
-         "watching them attentively. Finally "+HESHE(TP)+" disappears "
-         "behind a dune.\n",
-         "You hear someone stomping away through the sand.\n",({TP}));
-   show_room(SIL_HARBOUR("smugglers1"),"Suddenly, "+CAP(NAME(TP))+
+   msg_room(this_object(), CMSG_ROOM|MMSG_SEE,
+         ({ CAP(NAME(TP))+" starts to stomp along the line of footprints, "
+            "watching them attentively. Finally "+HESHE(TP)+" disappears "
+            "behind a dune.\n",
+            "You hear someone stomping away through the sand.\n"}),({TP}));
+   msg_room(SIL_HARBOUR("smugglers1"),CMSG_ROOM|MMSG_SEE,
+      ({ "Suddenly, "+CAP(NAME(TP))+
          " comes along over a dune. "+CAP(HESHE(TP))+" almost crashes "
          "into the bushes and stops moving.\n",
          "You hear someone (or something?!?) stomping through the "
-         "sand moving towards you. Suddenly there's silence.\n");
+         "sand moving towards you. Suddenly there's silence.\n"}));
    TP->move(SIL_HARBOUR("smugglers1"),M_GO);
    return 1;
 }
@@ -242,7 +244,7 @@ int pull_rope(string str)
   arr = norm_id(str,1);
   if (is_open)
   {
-    write("Someone already pulled the rope. The dark opening "
+    msg_write(CMSG_GENERIC, "Someone already pulled the rope. The dark opening "
           "is uncovered, so why don't you just enter?\n");
     return 1;
   }
@@ -259,20 +261,20 @@ int pull_rope(string str)
       (member(arr,"out")<member(arr,"of"))&&
       (member(arr,"of")<member(arr,"sand")))
   {
-    write("You pull hard, but nothing moves. Something heavy must be "
+    msg_write(CMSG_GENERIC, "You pull hard, but nothing moves. Something heavy must be "
           "connected to the other end of the rope. You concentrate to "
           "focus all your power in your arms and pull again. This "
           "time you succeed! But, oops, what's that? Seems as if you "
           "removed a huge metal sheet from a dark opening. That's "
           "why this task was so hard.\n");
-    show_room(TO,
-           CAP(NAME(TP))+" tries to pull that rope out of the sand. Sweat "
-          "drips down from "+HISHER(TP)+" face, but finally it's done. "
-          "Errmmm... huh? It seems as if "+CAP(NAME(TP))+" did not only pull "
-          "that rope, "+HESHE(TP)+" has also freed the way to a hidden "
-          "opening in the dune!\n","You hear someone groaning under "
-          "a tremendous strain. Suddenly, there's the noise of something "
-          "heavy sliding through the sand.\n",({TP}));
+    msg_room(TO, CMSG_ROOM|MMSG_SEE,
+          ({ CAP(NAME(TP))+" tries to pull that rope out of the sand. Sweat "
+            "drips down from "+HISHER(TP)+" face, but finally it's done. "
+            "Errmmm... huh? It seems as if "+CAP(NAME(TP))+" did not only pull "
+            "that rope, "+HESHE(TP)+" has also freed the way to a hidden "
+            "opening in the dune!\n","You hear someone groaning under "
+            "a tremendous strain. Suddenly, there's the noise of something "
+            "heavy sliding through the sand.\n"}),({TP}));
     is_open = 1;
     HideExit("enter",HIDE_NOT);
     SetExtraEntry("hidden entrance", P_INT_LONG,
@@ -290,7 +292,7 @@ int pull_rope(string str)
 
 void close_opening()
 {
-  show_room(this_object(),
+  msg_room(this_object(), CMSG_ROOM,
         "Suddenly a hand comes out from the darkness of the opening "
         "and pulls the metal sheet quickly back to its original position. "
         "A flush of sand rushes down from the dune and "
@@ -299,7 +301,7 @@ void close_opening()
   SetExtraEntry ("hidden entrance", P_INT_LONG,
      "But still, these footprints awaken your curiousity. Something "
      "about them is really odd.\n");
-  show_room(SIL_HARBOUR("smugglers3"),"You hear someone cursing: "
+  msg_room(SIL_HARBOUR("smugglers3"),CMSG_ROOM,"You hear someone cursing: "
      "\"WHO THE HELL HAS FORGOTTEN TO CLOSE THE ENTRANCE AGAIN?!?\""
      "Suddenly an old ugly smuggler scurries to the opening without "
      "noticing you and closes the metal sheet.\n");
@@ -312,18 +314,20 @@ int enter_cave(){
   if (!TP) return 0;
   if (!is_open) return 0;
   else {
-    write("You enter the strange opening. Darkness surrounds you, as you "
+    msg_write(CMSG_GENERIC,"You enter the strange opening. Darkness surrounds you, as you "
           "walk through a tight tunnel into the dune. Finally you arrive "
-          "in a small subterran chamber.\n\n");
-    show_room(TO,CAP(NAME(TP))+" enters the opening. "+CAP(HESHE(TP))+
-	  " The darkness swallows him instantly.\n",
-          "You hear someone stomping away through the sand. ",({TP}));
-    show_room(SIL_HARBOUR("smugglers3"),"You hear muffled noises of "
-          "steps from inside the entrance-tunnel. The sound comes "
-          "closer and out of a sudden, "+CAP(NAME(TP))+" appears, "
-          "looking around warily.\n",
-          "You hear muffled noises of steps from inside the "
-          "entrance-tunnel. Someone (or something?!?) enters the chamber.\n");
+          "in a small subterran chamber.\n");
+    msg_room(TO,CMSG_ROOM|MMSG_SEE,
+            ({ CAP(NAME(TP))+" enters the opening. "
+	             " The darkness swallows "+HESHE(TP)+" instantly.\n",
+               "You hear someone stomping away through the sand.\n"}),({TP}));
+    msg_room(SIL_HARBOUR("smugglers3"),CMSG_ROOM|MMSG_SEE,
+          ({ "You hear muffled noises of "
+             "steps from inside the entrance-tunnel. The sound comes "
+             "closer and out of a sudden, "+CAP(NAME(TP))+" appears, "
+             "looking around warily.\n",
+             "You hear muffled noises of steps from inside the "
+             "entrance-tunnel. Someone (or something?!?) enters the chamber.\n"}));
     TP->move(SIL_HARBOUR("smugglers3"),M_GO);
     return 1;
   }

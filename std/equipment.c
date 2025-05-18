@@ -55,13 +55,13 @@ public int SetResetQuality (int i) {
 public int QueryUsage()            { return pMode; }
 public int SetUsage(int i)         { return pMode = i; }
 
-public string * QueryWieldData() { return pWieldData; }
-public string * SetWieldData(string * d) {
+public mixed * QueryWieldData() { return pWieldData; }
+public mixed * SetWieldData(mixed * d) {
   return pWieldData = d || ({ "wield", "unwield", "wielded" });
 }
 
-public string * QueryWearData() { return pWearData; }
-public string * SetWearData(string * d) {
+public mixed * QueryWearData() { return pWearData; }
+public mixed * SetWearData(mixed * d) {
   return pWearData = d || ({ "wear", ({ "unwear", "remove" }), "worn" });
 }
 
